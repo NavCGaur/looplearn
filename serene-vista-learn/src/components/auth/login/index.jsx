@@ -438,7 +438,7 @@ const Login = () => {
             WebkitTextFillColor: "transparent",
           }}
         >
-          LinguaLearn
+          LoopLearn
         </Typography>
 
        {/* <Typography 
@@ -470,7 +470,7 @@ const Login = () => {
             sx={{
               py: 1,
               fontSize: '0.75rem',
-              width: '30%',
+              width: '45%',
               textWrap: 'nowrap',
               background: "rgba(255, 255, 255, 0.05)",
               backdropFilter: "blur(4px)",
@@ -501,7 +501,7 @@ const Login = () => {
             sx={{
               py: 1,
               fontSize: '0.75rem',
-              width: '30%',
+              width: '45%',
               textWrap: 'nowrap',
               background: "rgba(255, 255, 255, 0.05)",
               backdropFilter: "blur(4px)",
