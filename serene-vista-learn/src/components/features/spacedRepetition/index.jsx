@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Card, CardContent, Typography, Button, Collapse, useMediaQuery, useTheme } from '@mui/material';
 import { useSubmitRatingsMutation } from '../../../state/api/vocabApi.ts';
@@ -15,8 +15,32 @@ const SpacedRepetition = () => {
   const [ratings, setRatings] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const userId = useSelector((state) => state.auth?.user?.uid); 
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioError, setAudioError] = useState(false);
+
+  const audioRef = useRef(null);
+
 
   const [submitRatings, { isLoading, isSuccess, isError }] = useSubmitRatingsMutation();
+
+  // Clean up audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  // Preload first audio
+  useEffect(() => {
+    if (words.length > 0) {
+      const audio = new Audio(words[0].pronunciationUrl);
+      audio.preload = 'auto';
+    }
+  }, [words]);
+
 
   if (!words || words.length === 0) {
     return (
@@ -52,8 +76,51 @@ const SpacedRepetition = () => {
     }
   };
 
+  const handleAudioPlay = async (e) => {
+    e.stopPropagation();
+    setAudioError(false);
+    
+    try {
+      // Pause and reset any existing audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      
+      // Create new audio instance
+      audioRef.current = new Audio(current.pronunciationUrl);
+      setIsPlaying(true);
+      
+      // Set up event listeners
+      audioRef.current.onended = () => setIsPlaying(false);
+      audioRef.current.onerror = () => {
+        setIsPlaying(false);
+        setAudioError(true);
+      };
+      
+      // Small delay to avoid race conditions
+      await new Promise(resolve => setTimeout(resolve, 50));
+      
+      // Play the audio
+      const playPromise = audioRef.current.play();
+      
+      if (playPromise !== undefined) {
+        await playPromise.catch(err => {
+          console.error("Playback failed:", err);
+          setIsPlaying(false);
+          setAudioError(true);
+        });
+      }
+    } catch (err) {
+      console.error("Audio error:", err);
+      setIsPlaying(false);
+      setAudioError(true);
+    }
+  };
+
+
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" gap={3} width="100%" >
+    <Box display="flex" flexDirection="column" alignItems="center" gap={3} width="100%">
       {/* Added the gradient background effect */}
       <Box sx={{ 
         position: 'relative', 
@@ -126,15 +193,11 @@ const SpacedRepetition = () => {
                     {current.word}
                   </Typography>
                   <Volume2 
-                    color="#eab308" 
-                    size={isMobile ? 20 : 24} 
-                    style={{ marginLeft: '8px', cursor: 'pointer' }} 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      const audio = new Audio(current.pronunciationUrl);
-                      audio.play();
-                    }}
-                  />
+                      color={isPlaying ? "#176DC2" : audioError ? "red" : "#eab308"} 
+                      size={isMobile ? 20 : 24} 
+                      style={{ cursor: 'pointer', marginLeft: '8px', marginTop: '2px' }} 
+                      onClick={handleAudioPlay}
+                    />
                 </Box>
 
                 {/* Definition Section */}
