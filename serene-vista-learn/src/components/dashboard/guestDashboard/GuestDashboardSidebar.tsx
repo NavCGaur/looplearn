@@ -46,7 +46,7 @@ const GuestDashboardSidebar = () => {
 
       <SidebarContent className="relative z-10">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sm font-medium px-4 pb-1 text-gray-500">
+          <SidebarGroupLabel className="text-md font-medium px-4 pb-1 text-gray-500">
             Features
           </SidebarGroupLabel>
           <SidebarGroupContent>
