@@ -1,0 +1,93 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 221 83% 53%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  .waveform-line {
+    @apply fill-none stroke-langlearn-orange stroke-2;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: path-animation 3s ease-in-out forwards;
+  }
+
+  .praat-graph-line {
+    @apply fill-none stroke-langlearn-blue stroke-2;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: path-animation 3s ease-in-out forwards;
+  }
+
+  .feature-icon {
+    @apply w-16 h-16 mb-4 text-langlearn-blue p-3 rounded-full bg-blue-50 shadow-sm;
+  }
+
+  .path-line {
+    @apply stroke-langlearn-blue stroke-2;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: path-animation 5s ease-in-out forwards;
+  }
+
+  .path-node {
+    @apply fill-white stroke-langlearn-blue stroke-2;
+    animation: pulse-slow 4s ease-in-out infinite;
+  }
+}
+
+@keyframes path-animation {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}

@@ -1,0 +1,115 @@
+[
+    {
+      "word": "book",
+      "definition": "a written or printed work consisting of pages glued or sewn together and bound in covers.",
+      "exampleSentence": "I am reading a very interesting book.",
+      "difficulty": 1,
+      "partOfSpeech": "noun"
+    },
+    {
+      "word": "run",
+      "definition": "move at a speed faster than a walk, never having both or all the feet on the ground at the same time.",
+      "exampleSentence": "He likes to run in the park every morning.",
+      "difficulty": 1,
+      "partOfSpeech": "verb"
+    },
+    {
+      "word": "happy",
+      "definition": "feeling or showing pleasure or contentment.",
+      "exampleSentence": "The children were happy to receive presents.",
+      "difficulty": 1,
+      "partOfSpeech": "adjective"
+    },
+    {
+      "word": "table",
+      "definition": "a piece of furniture with a flat top supported by one or more legs, providing a surface for working at, eating from, or placing things on.",
+      "exampleSentence": "Please put the vase on the table.",
+      "difficulty": 1,
+      "partOfSpeech": "noun"
+    },
+    {
+      "word": "speak",
+      "definition": "say something in order to convey information, an opinion, or a feeling.",
+      "exampleSentence": "Can you speak English?",
+      "difficulty": 2,
+      "partOfSpeech": "verb"
+    },
+    {
+      "word": "beautiful",
+      "definition": "pleasing the senses or mind aesthetically.",
+      "exampleSentence": "The sunset was absolutely beautiful.",
+      "difficulty": 2,
+      "partOfSpeech": "adjective"
+    },
+    {
+      "word": "create",
+      "definition": "bring (something) into existence.",
+      "exampleSentence": "She wants to create a new website.",
+      "difficulty": 2,
+      "partOfSpeech": "verb"
+    },
+    {
+      "word": "understand",
+      "definition": "perceive the intended meaning of (words, a language, or a speaker).",
+      "exampleSentence": "I don't understand this question.",
+      "difficulty": 3,
+      "partOfSpeech": "verb"
+    },
+    {
+      "word": "significant",
+      "definition": "sufficiently great or important to be worthy of attention; noteworthy.",
+      "exampleSentence": "There has been a significant increase in sales.",
+      "difficulty": 3,
+      "partOfSpeech": "adjective"
+    },
+    {
+      "word": "analyze",
+      "definition": "examine methodically and in detail the constitution or structure of (something, especially information), typically for purposes of explanation and interpretation.",
+      "exampleSentence": "The scientists will analyze the data collected from the experiment.",
+      "difficulty": 4,
+      "partOfSpeech": "verb"
+    }
+  ,
+    {
+      "word": "flower",
+      "definition": "the reproductive structure found in flowering plants (plants of the division Angiospermae).",
+      "exampleSentence": "She received a bouquet of beautiful flowers.",
+      "difficulty": 1,
+      "partOfSpeech": "noun"
+    },
+    {
+      "word": "walk",
+      "definition": "move at a regular and fairly slow pace by lifting and setting down each foot in turn, never having both feet off the ground at once.",
+      "exampleSentence": "They decided to take a walk in the woods.",
+      "difficulty": 1,
+      "partOfSpeech": "verb"
+    },
+    {
+      "word": "kind",
+      "definition": "having or showing a friendly, generous, and considerate nature.",
+      "exampleSentence": "It was very kind of you to help me.",
+      "difficulty": 1,
+      "partOfSpeech": "adjective"
+    },
+    {
+      "word": "listen",
+      "definition": "give one's attention to a sound.",
+      "exampleSentence": "Please listen carefully to the instructions.",
+      "difficulty": 2,
+      "partOfSpeech": "verb"
+    },
+    {
+      "word": "interesting",
+      "definition": "arousing curiosity or interest; holding the attention.",
+      "exampleSentence": "That's a very interesting story.",
+      "difficulty": 2,
+      "partOfSpeech": "adjective"
+    },
+    {
+      "word": "develop",
+      "definition": "grow or cause to grow and become more mature, advanced, or elaborate.",
+      "exampleSentence": "The company plans to develop new software.",
+      "difficulty": 3,
+      "partOfSpeech": "verb"
+    }
+  ]
