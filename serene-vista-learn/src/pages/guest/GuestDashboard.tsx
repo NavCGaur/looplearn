@@ -13,7 +13,7 @@ const GuestDashboard = () => {
     const dispatch = useDispatch();
   // @ts-ignore
     const userId = useSelector((state) => state.auth?.user?.uid);
-   // Use the manual user ID for testing
+
     
    const { 
     data: words, 

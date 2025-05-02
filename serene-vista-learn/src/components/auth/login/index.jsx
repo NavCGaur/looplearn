@@ -131,7 +131,7 @@ const Login = () => {
           rolePath = "/subscriber/dashboard";
           break;
         case "Guest":
-          rolePath = "/guest/dashboard";
+          rolePath = "/guest/dashboard/spaced";
           break;
     }
 

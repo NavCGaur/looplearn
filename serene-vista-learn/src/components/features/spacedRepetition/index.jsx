@@ -121,6 +121,10 @@ const SpacedRepetition = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={3} width="100%">
+
+    <Typography variant="subtitle1" sx={{ color: '#6b7280', fontWeight:600 }}>
+      🌟 Word {currentIndex + 1} of {words.length}
+    </Typography>
       {/* Added the gradient background effect */}
       <Box sx={{ 
         position: 'relative', 
@@ -128,16 +132,16 @@ const SpacedRepetition = () => {
         display: 'flex', 
         justifyContent: 'center'
       }}>
-        <Box sx={{
-          position: 'absolute',
-          inset: 0,
-          background: 'radial-gradient(circle, rgba(30,136,229,0.3) 0%, transparent 70%)',
-          borderRadius: '50%',
-          filter: 'blur(32px)',
-          zIndex: 0,
-          width: '100%',
-          height: '100%'
-        }} />
+         <Box sx={{
+        position: 'absolute',
+        inset: 0,
+        background: 'radial-gradient(circle, rgba(255,223,186,0.4) 0%, transparent 80%)',
+        borderRadius: '50%',
+        filter: 'blur(28px)',
+        zIndex: 0,
+        width: '100%',
+        height: '100%',
+      }} />
         
         <Card sx={{ 
           position: 'relative',
@@ -388,13 +392,21 @@ const SpacedRepetition = () => {
               </Collapse>
 
               {!showDetails && (
-                <Box height="100%" display="flex" alignItems="center" justifyContent="center">
+                <Box height="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="space-around">
+                  <Typography variant="h2" align="center" sx={{ 
+                    fontWeight: 'bold', 
+                    color: 'text.primary',
+                    fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+                  }}>
+                    {current.word}
+                  </Typography>
+
                   <Typography variant="body2" sx={{ 
                     color: 'text.secondary',
                     fontStyle: 'italic',
                     fontSize: { xs: '0.875rem', sm: '1rem' }
                   }}>
-                    Click to reveal vocabulary details
+                  👆 Click the card to flip and see the meaning, example!
                   </Typography>
                 </Box>
               )}

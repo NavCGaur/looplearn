@@ -57,7 +57,7 @@ const GuestDashboardSidebar = () => {
                     <Link 
                       to={item.path}
                       onClick={isMobile ? toggleSidebar : undefined}
-                      className={`flex items-center gap-3 px-3 py-6 ${
+                      className={`flex items-center gap-3 px-3 py-6 cursor-pointer ${
                         location.pathname === item.path 
                           ? "bg-langlearn-blue/10 text-langlearn-blue font-medium" 
                           : "hover:bg-gray-100/80"

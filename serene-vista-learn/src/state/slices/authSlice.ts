@@ -6,7 +6,9 @@ const initialState = {
   isAuthenticated: Boolean(localStorage.getItem("token")),
   token: localStorage.getItem("token"),
   user: JSON.parse(localStorage.getItem("user")), 
-  loading: false
+  loading: false,
+  initialized: true // Add this flag
+
 
 };
 
