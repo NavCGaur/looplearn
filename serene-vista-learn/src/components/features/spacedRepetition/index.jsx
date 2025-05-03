@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Card, CardContent, Typography, Button, Collapse, useMediaQuery, useTheme } from '@mui/material';
 import { useSubmitRatingsMutation } from '../../../state/api/vocabApi.ts';
-import { Volume2 } from 'lucide-react'; 
+import { Volume2 } from 'lucide-react';
+import { Howl } from 'howler';
 
 const SpacedRepetition = () => {
   const theme = useTheme();
@@ -18,29 +19,48 @@ const SpacedRepetition = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioError, setAudioError] = useState(false);
 
-  const audioRef = useRef(null);
-
+  // Use ref to store current sound object
+  const soundRef = useRef(null);
 
   const [submitRatings, { isLoading, isSuccess, isError }] = useSubmitRatingsMutation();
 
   // Clean up audio on unmount
   useEffect(() => {
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
+      if (soundRef.current) {
+        soundRef.current.stop();
+        soundRef.current.unload();
+        soundRef.current = null;
       }
     };
   }, []);
 
   // Preload first audio
   useEffect(() => {
-    if (words.length > 0) {
-      const audio = new Audio(words[0].pronunciationUrl);
-      audio.preload = 'auto';
+    if (words.length > 0 && words[0].pronunciationUrl) {
+      preloadAudio(words[0].pronunciationUrl);
     }
   }, [words]);
 
+  // Preload next audio when changing cards
+  useEffect(() => {
+    if (words.length > 0 && currentIndex < words.length && words[currentIndex].pronunciationUrl) {
+      preloadAudio(words[currentIndex].pronunciationUrl);
+    }
+  }, [currentIndex, words]);
+
+  const preloadAudio = (url) => {
+    // Create a new Howl instance but don't play it yet
+    try {
+      new Howl({
+        src: [url],
+        preload: true,
+        html5: true, // Force HTML5 Audio to handle streaming audio better
+      });
+    } catch (error) {
+      console.error("Error preloading audio:", error);
+    }
+  };
 
   if (!words || words.length === 0) {
     return (
@@ -76,48 +96,71 @@ const SpacedRepetition = () => {
     }
   };
 
-  const handleAudioPlay = async (e) => {
-    e.stopPropagation();
+  const handleAudioPlay = (e) => {
+    e.stopPropagation(); // Prevent card flip when clicking audio button
     setAudioError(false);
     
+    // Stop and unload any existing sound
+    if (soundRef.current) {
+      soundRef.current.stop();
+      soundRef.current.unload();
+      soundRef.current = null;
+    }
+    
+    // Don't proceed if URL is invalid
+    if (!current.pronunciationUrl) {
+      setAudioError(true);
+      return;
+    }
+    
     try {
-      // Pause and reset any existing audio
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-      
-      // Create new audio instance
-      audioRef.current = new Audio(current.pronunciationUrl);
-      setIsPlaying(true);
-      
-      // Set up event listeners
-      audioRef.current.onended = () => setIsPlaying(false);
-      audioRef.current.onerror = () => {
-        setIsPlaying(false);
-        setAudioError(true);
-      };
-      
-      // Small delay to avoid race conditions
-      await new Promise(resolve => setTimeout(resolve, 50));
-      
-      // Play the audio
-      const playPromise = audioRef.current.play();
-      
-      if (playPromise !== undefined) {
-        await playPromise.catch(err => {
-          console.error("Playback failed:", err);
+      // Create new Howl instance with enhanced error handling
+      const sound = new Howl({
+        src: [current.pronunciationUrl],
+        html5: true, // Better for streaming audio
+        volume: 1.0,
+        onplay: () => {
+          setIsPlaying(true);
+        },
+        onend: () => {
+          setIsPlaying(false);
+        },
+        onloaderror: () => {
+          console.error("Howler: Loading error");
           setIsPlaying(false);
           setAudioError(true);
-        });
-      }
+          soundRef.current = null;
+        },
+        onplayerror: () => {
+          console.error("Howler: Play error - trying to recover");
+          setIsPlaying(false);
+          
+          // Try to recover with a forced play
+          sound._unlockAudio();
+          
+          // If still can't play, mark as error
+          if (!sound.playing()) {
+            setAudioError(true);
+            soundRef.current = null;
+          }
+        },
+        onstop: () => {
+          setIsPlaying(false);
+        }
+      });
+      
+      // Keep reference to control sound
+      soundRef.current = sound;
+      
+      // Play the sound
+      sound.play();
+      
     } catch (err) {
-      console.error("Audio error:", err);
+      console.error("Audio setup error:", err);
       setIsPlaying(false);
       setAudioError(true);
     }
   };
-
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={3} width="100%">
@@ -196,12 +239,28 @@ const SpacedRepetition = () => {
                   }}>
                     {current.word}
                   </Typography>
-                  <Volume2 
+                  <Box 
+                    component="div" 
+                    role="button"
+                    onClick={handleAudioPlay}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      ml: 1,
+                      cursor: 'pointer',
+                      p: 0.5,
+                      borderRadius: '50%',
+                      '&:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                      }
+                    }}
+                  >
+                    <Volume2 
                       color={isPlaying ? "#176DC2" : audioError ? "red" : "#eab308"} 
                       size={isMobile ? 20 : 24} 
-                      style={{ cursor: 'pointer', marginLeft: '8px', marginTop: '2px' }} 
-                      onClick={handleAudioPlay}
                     />
+                  </Box>
                 </Box>
 
                 {/* Definition Section */}
