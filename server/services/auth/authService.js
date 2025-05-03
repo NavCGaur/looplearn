@@ -6,10 +6,7 @@ import Word from "../../models/wordSchema.js";
 
 dotenv.config(); // Load environment variables
 
-// ---- MongoDB Initialization ----
-mongoose.connect(process.env.MONGO_URL)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+
 
 // Define User model
 const User = mongoose.model('User', UserSchema, 'NeurolingvaUsers');
