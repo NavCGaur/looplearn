@@ -20,6 +20,14 @@ import {
   TableCell,
   
 } from "../../../components/ui/table";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
@@ -43,6 +51,140 @@ import  useMediaQuery  from '../../../hooks/use-media-query.ts';
 
 import StudentAssignedWords from "./StudentAssignedWords";
 
+
+const formatActivityData = (user) => {
+  // Define all possible features with display names
+  const features = [
+    { id: 'vocabSpacedRepetition', name: 'Spaced Repetition' },
+    { id: 'vocabQuiz', name: 'Vocabulary Quiz' },
+    // Add more features as they're implemented
+  ];
+  
+  // Create array of feature activities with timestamps
+  const activities = features.map(feature => ({
+    featureId: feature.id,
+    featureName: feature.name,
+    timestamp: user.latestFeatureAccess?.[feature.id] || null
+  }));
+  
+  // Filter out null timestamps and sort by most recent
+  const validActivities = activities
+    .filter(activity => activity.timestamp !== null)
+    .sort(//@ts-ignore
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+    );
+    
+  // Return the most recent activity or null if none
+  return validActivities.length > 0 ? validActivities[0] : null;
+};
+
+// Step 2: Format relative time (from your existing code)
+const formatRelativeTime = (dateString) => {
+  if (!dateString) return "Never used";
+  
+  const date = new Date(dateString);
+  
+  // Check if date is valid
+  if (isNaN(date.getTime())) return "Invalid date";
+  
+  const now = new Date();
+  //@ts-ignore
+  const diffInSeconds = Math.floor((now - date) / 1000);
+  
+  // Less than a minute
+  if (diffInSeconds < 60) {
+    return 'Just now';
+  }
+  
+  // Less than an hour
+  if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60);
+    return `${minutes}m ago`;
+  }
+  
+  // Less than a day
+  if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600);
+    return `${hours}h ago`;
+  }
+  
+  // Less than a week
+  if (diffInSeconds < 604800) {
+    const days = Math.floor(diffInSeconds / 86400);
+    return `${days}d ago`;
+  }
+  
+  // Default: standard date format
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric'
+  });
+};
+
+// Step 3: Format exact time for tooltip
+const formatExactTime = (dateString) => {
+  if (!dateString) return "";
+  
+  const date = new Date(dateString);
+  
+  // Check if date is valid
+  if (isNaN(date.getTime())) return "";
+  
+  return date.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+};
+
+
+const ActivityCell = ({ user }) => {
+  const activity = formatActivityData(user);
+  
+  if (!activity) {
+    return <span className="text-gray-400">No activity</span>;
+  }
+  
+  const tooltipContent = `Feature: ${activity.featureName}\nAccessed: ${formatExactTime(activity.timestamp)}`;
+  
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        {/* Changed from asChild to direct control */}
+        <TooltipTrigger className="inline-flex">
+          {/* Mobile-friendly click target */}
+          <button 
+            className="text-left appearance-none focus:outline-none"
+            aria-label="View activity details"
+          >
+            <span className="flex items-center">
+              <span className="font-medium">{activity.featureName}</span>
+              <span className="mx-1 text-gray-400">•</span>
+              <span className="text-gray-500">
+                {formatRelativeTime(activity.timestamp)}
+              </span>
+            </span>
+          </button>
+        </TooltipTrigger>
+        
+        <TooltipContent 
+          side="top" 
+          className="text-sm bg-white shadow-lg border p-3"
+        >
+          <div className="whitespace-pre-line">
+            {tooltipContent}
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+
+
+
 const StudentVocabManager = () => {
   const dispatch = useDispatch();
   
@@ -61,6 +203,8 @@ const StudentVocabManager = () => {
   
   //@ts-ignore
   const {     data: users = [],     isLoading,     isError,    error   } = useGetUsersQuery();
+
+  console.log("RTK Query state:", users);
   
   const [assignWord, { isLoading: isAssigning, error: assignError }] = useAssignWordToUserMutation();
   
@@ -126,7 +270,8 @@ const StudentVocabManager = () => {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
-                  <TableHead>Assigned Words Count</TableHead>
+                  <TableHead>Last Activity</TableHead>
+                  <TableHead>Words Count</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -139,6 +284,9 @@ const StudentVocabManager = () => {
                   >
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
+                    <TableCell>
+                      <ActivityCell user={user} />
+                    </TableCell>
                     <TableCell>
                       <Badge variant="secondary">
                         {user.assignedWords?.length || 0} words
@@ -163,6 +311,7 @@ const StudentVocabManager = () => {
           )}
 
           {/* Mobile view - Accordion */}
+         {/* Mobile view - Accordion */}
           {isMobile && (
             <div className="space-y-2">
               {users.map((user) => (
@@ -175,6 +324,12 @@ const StudentVocabManager = () => {
                       <div className="grid grid-cols-2 gap-2 p-4">
                         <div className="font-medium">Email:</div>
                         <div>{user.email}</div>
+                        
+                        {/* Add Last Activity row */}
+                        <div className="font-medium">Last Activity:</div>
+                        <div>
+                          <ActivityCell user={user} />
+                        </div>
                         
                         <div className="font-medium">Assigned Words:</div>
                         <div>
@@ -209,6 +364,7 @@ const StudentVocabManager = () => {
               ))}
             </div>
           )}
+          
         </>
       )}
 

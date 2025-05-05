@@ -23,11 +23,16 @@ export const UserSchema = new mongoose.Schema({
   // Subscription related fields
   role: { type: String, enum: ['Guest', 'Admin', 'Subscriber'], default: 'Guest' },
   stripeCustomerId: { type: String },
-  stripeSubscriptionId: { type: String },
+  stripeSubscriptionId: { type: String }, 
   planId: { type: String, enum: ['free', 'pro'], default: 'free' },
   subscriptionStatus: { type: String, enum: ['active', 'trialing', 'past_due', 'canceled', 'unpaid', 'incomplete', 'incomplete_expired', null], default: null },
   currentPeriodEnd: { type: Date },
   cancelAtPeriodEnd: { type: Boolean, default: false },
+
+  latestFeatureAccess: {
+    vocabSpacedRepetition: Date,
+    vocabQuiz: Date
+  },
   
   createdAt: { type: Date, default: Date.now }
 });

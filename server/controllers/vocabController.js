@@ -6,13 +6,11 @@ const vocabController= {
 
     getPracticeWords : async (req, res) => {
 
-      console.log("Fetching practice words for user in controller:", req.query.userId);
         const {userId} = req.query; 
         if (!userId) return res.status(400).json({ error: 'User ID is required' });
 
         try {
           const words = await fetchUserWordsDue(userId);
-          console.log("Fetched words in controller:", words);
           res.json(words);
         } catch (err) {
           res.status(500).json({ message: 'Error fetching words' });

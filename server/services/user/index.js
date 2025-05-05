@@ -155,15 +155,16 @@ const getTranslations = async (word, definition, exampleSentence) => {
 export const getAllUsers = async () => {
   try {
     const users = await User.find()
-      .select('uid email displayName vocabulary')
+      .select('uid email displayName vocabulary latestFeatureAccess')
       .lean();
-    
-    // Transform users to include count of assigned words
+      
+    // Transform users to include count of assigned words and feature access
     return users.map(user => ({
       id: user.uid,
       name: user.displayName || 'Unnamed User',
       email: user.email,
-      assignedWords: user.vocabulary || []
+      assignedWords: user.vocabulary || [],
+      latestFeatureAccess: user.latestFeatureAccess || {}
     }));
   } catch (error) {
     throw new Error(`Error fetching users: ${error.message}`);

@@ -4,23 +4,29 @@ import mongoose from 'mongoose';
 const User = mongoose.model('User', UserSchema);
 
 export const fetchUserWordsDue = async (userId) => {
-
   try {
     const user = await User.findOne({ uid: userId }).populate('vocabulary.wordId');
-
+    
     if (!user) {
       console.log("No user found with id:", userId);
       throw new Error('User not found');
     }
-    console.log("User found in service:", userId, user.vocabulary.length, user.vocabulary[0].wordId.word);
-
+    
+    // Add validation before logging to prevent null reference errors
+    if (user.vocabulary && user.vocabulary.length > 0 && user.vocabulary[0].wordId) {
+      console.log("User found in service:", userId, user.vocabulary.length, user.vocabulary[0].wordId.word);
+    } else {
+      console.log("User found in service:", userId, "but vocabulary is empty or contains invalid entries");
+    }
+    
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0); // Normalize to start of the day
-
+    
     return user.vocabulary
       .filter(v => {
+        // First filter out any entries with null/undefined wordId
         return (
-          v.wordId &&
+          v && v.wordId && 
           (!v.nextReviewDate || new Date(v.nextReviewDate).getTime() <= today.getTime())
         );
       })
@@ -34,7 +40,6 @@ export const fetchUserWordsDue = async (userId) => {
         pronunciationUrl: v.wordId.pronunciationUrl,
         difficulty: v.wordId.difficulty,
         partOfSpeech: v.wordId.partOfSpeech,
-        // Optional: add rating/nextReviewDate info if needed
         rating: v.rating,
         nextReviewDate: v.nextReviewDate,
       }));
