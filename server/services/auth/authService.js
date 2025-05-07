@@ -44,33 +44,70 @@ const authService = {
    */
   verifyFirebaseToken: async (token) => {
     if (!token) throw new Error('Token is required');
-
+  
     try {
       const decodedToken = await admin.auth().verifyIdToken(token);
       let userFromDB = await User.findOne({ uid: decodedToken.uid });
-
-      // If user doesn't exist in MongoDB, create them with default role
+  
       if (!userFromDB) {
         userFromDB = await User.create({
           uid: decodedToken.uid,
           email: decodedToken.email,
           displayName: decodedToken.name,
           photoURL: decodedToken.picture,
-          role: 'Guest' // Default role
+          role: 'Guest'
         });
-
         await assignInitialWords(userFromDB._id);
+        userFromDB = await User.findById(userFromDB._id).populate('vocabulary.wordId');
       }
-
-      // Return user data, including role for RBAC
+  
+      // Populate with all word fields, filtering out null wordIds
+      const populatedUser = await User.findById(userFromDB._id)
+        .populate({
+          path: 'vocabulary.wordId',
+          model: 'Word',
+          select: 'word definition wordHindi definitionHindi exampleSentence exampleSentenceHindi difficulty partOfSpeech pronunciationUrl _id'
+        })
+        .lean()
+        .exec();
+  
+      // Safely transform vocabulary, filtering out items with null wordId
+      const transformedVocabulary = populatedUser.vocabulary
+        .filter(item => item.wordId !== null && item.wordId !== undefined) // Filter out null wordIds
+        .map(item => ({
+          _id: item._id,
+          rating: item.rating,
+          lastReviewed: item.lastReviewed,
+          nextReviewDate: item.nextReviewDate,
+          addedAt: item.addedAt,
+          wordId: {
+            _id: item.wordId._id,
+            word: item.wordId.word,
+            definition: item.wordId.definition,
+            wordHindi: item.wordId.wordHindi,
+            definitionHindi: item.wordId.definitionHindi,
+            exampleSentence: item.wordId.exampleSentence,
+            exampleSentenceHindi: item.wordId.exampleSentenceHindi,
+            difficulty: item.wordId.difficulty,
+            partOfSpeech: item.wordId.partOfSpeech,
+            pronunciationUrl: item.wordId.pronunciationUrl
+          }
+        }));
+  
+      console.log('Successfully populated user vocabulary');
+      
       return {
         uid: decodedToken.uid,
         email: decodedToken.email,
         emailVerified: decodedToken.email_verified,
-        displayName: decodedToken.name || userFromDB.displayName,
-        photoURL: decodedToken.picture || userFromDB.photoURL,
-        role: userFromDB.role,
-        createdAt: userFromDB.createdAt
+        displayName: decodedToken.name || populatedUser.displayName,
+        photoURL: decodedToken.picture || populatedUser.photoURL,
+        vocabulary: transformedVocabulary,
+        role: populatedUser.role,
+        createdAt: populatedUser.createdAt,
+        planId: populatedUser.planId,
+        subscriptionStatus: populatedUser.subscriptionStatus,
+        currentPeriodEnd: populatedUser.currentPeriodEnd
       };
     } catch (error) {
       console.error('Firebase token verification error:', error);

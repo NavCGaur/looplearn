@@ -4,12 +4,14 @@ import {
   DialogContent,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useMediaQuery } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Box } from '@mui/material';
 import VocabCardDetail from './VocabCardDetail';
 
 const VocabDetailModal = ({ word, open, onClose }) => {
-  const isMobile = useMediaQuery('(max-width: 640px)');
+    const isMobile = useIsMobile();
+
+    console.log("VocabDetailModal word:", word);
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>

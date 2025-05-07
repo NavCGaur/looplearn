@@ -21,6 +21,8 @@ import VocabQuiz from './components/features/vocabQuiz/index';
 import GrammarQuiz from './components/features/grammerQuiz/index';
 import SpacedRepetition from './components/features/spacedRepetition/index';
 import Login from './components/auth/login';
+import MyWordList from './components/features/spacedRepetition/MyWordList.tsx';
+import HangmanGame from './components/features/spacedRepetition/HangmanGame.tsx';
 
 
 
@@ -43,6 +45,8 @@ const App = () => (
               <Route path="grammar" element={<GrammarQuiz />} />
               <Route path="spaced" element={<SpacedRepetition />} />
               <Route path="stats" element={<StatsOverview />} />
+              <Route path="my-word-list" element={<MyWordList />} />
+              <Route path="hangman-game" element={<HangmanGame />} />
             </Route>   
 
             <Route path="/admin/dashboard" element={<AdminDashboard />}>
