@@ -39,7 +39,7 @@ const AdminDashboard = () => {
     <div className="flex">
       <AdminDashboardSidebar />
       <main className="flex-1 mt-16 flex items-center justify-center min-h-[calc(100vh-4rem)] p-6">
-        <Outlet />
+        <Outlet />  
       </main>
     </div>
   </div>

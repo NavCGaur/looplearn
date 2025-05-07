@@ -62,8 +62,17 @@ export const updateMultipleUserWordRatings = async (userId, ratings) => {
       vocabEntry.rating = rating;
       vocabEntry.lastReviewed = now;
       vocabEntry.nextReviewDate = calculateNextReviewDate(rating, now);
+
     }
   }
+
+  // ✅ Update the latestFeatureAccess timestamp, safe for older users
+  user.latestFeatureAccess = {
+    ...(user.latestFeatureAccess || {}),  // fallback if undefined
+    vocabSpacedRepetition: now
+  };
+
+  
 
   await user.save();
 };

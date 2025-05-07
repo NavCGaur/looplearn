@@ -7,7 +7,6 @@ import Word from "../../models/wordSchema.js";
 dotenv.config(); // Load environment variables
 
 
-
 // Define User model
 const User = mongoose.model('User', UserSchema, 'NeurolingvaUsers');
 
