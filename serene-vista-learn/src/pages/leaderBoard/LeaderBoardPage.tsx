@@ -1,7 +1,7 @@
 
 import React from "react";
 //@ts-ignore
-import LeaderBoard from "@/components/leaderBoard/leaderBoard";
+import LeaderBoard from "../../components/leaderBoard/LeaderBoard";
 import { Card, CardContent } from "@/components/ui/card";
 
 const LeaderBoardPage: React.FC = () => {
