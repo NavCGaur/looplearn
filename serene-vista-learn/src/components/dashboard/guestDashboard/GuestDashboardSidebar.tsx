@@ -1,5 +1,6 @@
-import { Book, AudioWaveform, Repeat, BarChartHorizontal } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Book, AudioWaveform, Repeat, BarChartHorizontal, Puzzle, Gamepad2, ClipboardCheck } from "lucide-react";
+import { Link, useLocation , Outlet} from "react-router-dom";
+
 import {
   Sidebar,
   useSidebar,
@@ -14,21 +15,71 @@ import {
 } from "@/components/ui/sidebar";
 
 import { useIsMobile } from "@/hooks/use-mobile";
-
-const menuItems = [
-  { icon: BarChartHorizontal, label: "Overview", path: "/guest/dashboard/stats" },
-  { icon: Book, label: "Vocab Quiz", path: "/guest/dashboard/vocab" },
-  { icon: Book, label: "Grammar Quiz", path: "/guest/dashboard/grammar" },
-  { icon: Repeat, label: "Spaced Repetition", path: "/guest/dashboard/spaced" },
-  { icon: AudioWaveform, label: "Speech Shadow", path: "/guest/dashboard/speech" },
-];
+import { useState } from "react";
 
 const GuestDashboardSidebar = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
-
   const { toggleSidebar } = useSidebar();
 
+  const [spacedOpen, setSpacedOpen] = useState(location.pathname.startsWith("/guest/dashboard/spaced"));
+
+  const handleNavClick = () => {
+    if (isMobile) toggleSidebar();
+  };
+
+  const isActive = (path) => location.pathname === path;
+
+  const menuItems = [
+    {
+      title: "Overview",
+      icon: <BarChartHorizontal className="h-5 w-5" />,
+      path: "/guest/dashboard/stats",
+    },
+    {
+      title: "Vocab Quiz",
+      icon: <Book className="h-5 w-5" />,
+      path: "/guest/dashboard/vocab",
+    },
+    {
+      title: "Grammar Quiz",
+      icon: <Book className="h-5 w-5" />,
+      path: "/guest/dashboard/grammar",
+    },
+    {
+      title: "Spaced Repetition",
+      icon: <Repeat className="h-5 w-5" />,
+      collapsible: true,
+      children: [
+        {
+          title: "Daily Practice",
+          icon: <ClipboardCheck className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/practice",
+        },
+        {
+          title: "Quiz",
+          icon: <Puzzle className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/word-quiz",
+        },
+        {
+          title: "My Word List",
+          icon: <ClipboardCheck className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/my-word-list",
+        },
+
+        {
+          title: "Hangman",
+          icon: <Gamepad2 className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/hangman-game",
+        },
+      ],
+    },
+    {
+      title: "Speech Shadow",
+      icon: <AudioWaveform className="h-5 w-5" />,
+      path: "/guest/dashboard/speech",
+    },
+  ];
 
   return (
     <Sidebar>
@@ -43,7 +94,6 @@ const GuestDashboardSidebar = () => {
         </div>
       </SidebarHeader>
 
-
       <SidebarContent className="relative z-10">
         <SidebarGroup>
           <SidebarGroupLabel className="text-md font-medium px-4 pb-1 text-gray-500">
@@ -51,26 +101,57 @@ const GuestDashboardSidebar = () => {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="py-1">
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton asChild>
-                    <Link 
-                      to={item.path}
-                      onClick={isMobile ? toggleSidebar : undefined}
-                      className={`flex items-center gap-3 px-3 py-6 cursor-pointer ${
-                        location.pathname === item.path 
-                          ? "bg-langlearn-blue/10 text-langlearn-blue font-medium" 
-                          : "hover:bg-gray-100/80"
-                      }`}
-                    >
-                      <item.icon className={`h-5 w-5 ${
-                        location.pathname === item.path 
-                          ? "text-langlearn-blue" 
-                          : "text-gray-500"
-                      }`} />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
+              {menuItems.map((item, index) => (
+                <SidebarMenuItem key={index}>
+                  {item.collapsible ? (
+                    <>
+                      <button
+                        onClick={() => setSpacedOpen(!spacedOpen)}
+                        className={`flex items-center gap-3 px-3 py-6 w-full text-left cursor-pointer ${
+                          location.pathname.startsWith("/guest/dashboard/spaced")
+                            ? "bg-langlearn-blue/10 text-langlearn-blue font-medium"
+                            : "hover:bg-gray-100/80"
+                        }`}
+                      >
+                        {item.icon}
+                        <span>{item.title}</span>
+                      </button>
+                      {spacedOpen &&
+                        item.children.map((child, cIndex) => (
+                          <SidebarMenuItem key={cIndex}>
+                            <SidebarMenuButton asChild>
+                              <Link
+                                to={child.path}
+                                onClick={handleNavClick}
+                                className={`ml-6 flex items-center gap-3 px-3 py-3 cursor-pointer text-sm ${
+                                  isActive(child.path)
+                                    ? "bg-langlearn-blue/10 text-langlearn-blue font-medium"
+                                    : "hover:bg-gray-100/80"
+                                }`}
+                              >
+                                {child.icon}
+                                <span>{child.title}</span>
+                              </Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        ))}
+                    </>
+                  ) : (
+                    <SidebarMenuButton asChild>
+                      <Link
+                        to={item.path}
+                        onClick={handleNavClick}
+                        className={`flex items-center gap-3 px-3 py-6 cursor-pointer ${
+                          isActive(item.path)
+                            ? "bg-langlearn-blue/10 text-langlearn-blue font-medium"
+                            : "hover:bg-gray-100/80"
+                        }`}
+                      >
+                        {item.icon}
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -86,6 +167,7 @@ const GuestDashboardSidebar = () => {
           </div>
         </div>
       </SidebarContent>
+      
     </Sidebar>
   );
 };

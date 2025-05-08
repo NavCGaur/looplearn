@@ -21,6 +21,7 @@ const HangmanGame: React.FC = () => {
   const [wrongGuesses, setWrongGuesses] = useState<number>(0);
   const [gameStatus, setGameStatus] = useState<"playing" | "won" | "lost">("playing");
   const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [showingAnimation, setShowingAnimation] = useState<boolean>(false);
   
   const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
   const maxWrongGuesses = 6;
@@ -35,10 +36,13 @@ const HangmanGame: React.FC = () => {
     // Check if player has lost with a delay to show the complete hangman
     if (wrongGuesses >= maxWrongGuesses && gameStatus === "playing") {
       setGameStatus("lost");
+      setShowingAnimation(true);
+      
       // Add delay before showing game over dialog
       setTimeout(() => {
         setShowDialog(true);
-      }, 1000); // 1 second delay
+        setShowingAnimation(false);
+      }, 5000); // 5 second delay for falling animation
     }
   }, [guessedLetters, wrongGuesses, word, gameStatus]);
   
@@ -58,6 +62,7 @@ const HangmanGame: React.FC = () => {
     setWrongGuesses(0);
     setGameStatus("playing");
     setShowDialog(false);
+    setShowingAnimation(false);
   };
   
   // Display word with correctly guessed letters and blanks for others
@@ -66,9 +71,49 @@ const HangmanGame: React.FC = () => {
     .map((letter) => (guessedLetters.includes(letter) ? letter : "_"))
     .join(" ");
     
+  // Create the facial expression based on wrong guesses
+  const getFacialExpression = () => {
+    if (wrongGuesses < 2) {
+      // Happy face
+      return (
+        <>
+          {/* Eyes - happy */}
+          <circle cx="45" cy="28" r="1.5" className="fill-langlearn-dark-blue" />
+          <circle cx="55" cy="28" r="1.5" className="fill-langlearn-dark-blue" />
+          {/* Smile */}
+          <path 
+            d="M43 33 Q50 38 57 33" 
+            fill="none" 
+            className="stroke-langlearn-dark-blue stroke-1.5" 
+            strokeLinecap="round" 
+          />
+        </>
+      );
+    } else {
+      // Sad face
+      return (
+        <>
+          {/* Eyes - sad */}
+          <circle cx="45" cy="28" r="1.5" className="fill-langlearn-dark-blue" />
+          <circle cx="55" cy="28" r="1.5" className="fill-langlearn-dark-blue" />
+          {/* Frown */}
+          <path 
+            d="M43 36 Q50 31 57 36" 
+            fill="none" 
+            className="stroke-langlearn-dark-blue stroke-1.5" 
+            strokeLinecap="round" 
+          />
+        </>
+      );
+    }
+  };
+  
   const hangmanFigureParts = [
-    // Head
-    <circle key="head" cx="50" cy="30" r="10" className="stroke-langlearn-orange fill-none stroke-2" />,
+    // Head with face
+    <g key="head">
+      <circle cx="50" cy="30" r="10" className="stroke-langlearn-orange fill-white stroke-2" />
+      {getFacialExpression()}
+    </g>,
     // Body
     <line key="body" x1="50" y1="40" x2="50" y2="70" className="stroke-langlearn-orange stroke-2" />,
     // Left arm
@@ -110,8 +155,27 @@ const HangmanGame: React.FC = () => {
                 <line x1="30" y1="10" x2="50" y2="10" className="stroke-langlearn-dark-blue stroke-2" />
                 <line x1="50" y1="10" x2="50" y2="20" className="stroke-langlearn-dark-blue stroke-2" />
                 
-                {/* Hangman figure - display parts based on wrong guesses */}
-                {hangmanFigureParts.slice(0, wrongGuesses)}
+                {/* Hangman figure - either normal or falling animation */}
+                {gameStatus === "lost" && showingAnimation ? (
+                  <motion.g
+                    initial={{ rotate: 0, y: 0 }}
+                    animate={{ 
+                      rotate: [0, 15, -15, 10, -10, 5, -5, 0],
+                      y: [0, 100],
+                    }}
+                    transition={{ 
+                      duration: 3,
+                      times: [0, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 1],
+                      ease: "easeIn" 
+                    }}
+                    //@ts-ignore
+                    transformOrigin="50 20"
+                  >
+                    {hangmanFigureParts}
+                  </motion.g>
+                ) : (
+                  <>{hangmanFigureParts.slice(0, wrongGuesses)}</>
+                )}
               </svg>
             </div>
             <div className="text-center mt-2">

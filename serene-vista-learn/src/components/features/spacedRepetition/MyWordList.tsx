@@ -53,7 +53,6 @@ const MyWordList = ({ userId }: MyWordListProps) => {
   // Get words from Redux store
   // @ts-ignore
   const vocabularyItems = useSelector((state) => state.auth?.user?.vocabulary || []) as VocabularyItem[];
-  console.log("Vocabulary Items: ", vocabularyItems);
 
 
 
@@ -100,7 +99,7 @@ const MyWordList = ({ userId }: MyWordListProps) => {
   return (
     <Card className="m-6 overflow-hidden shadow-lg bg-card border border-slate-200">
       <CardHeader className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-        <CardTitle className="text-center text-2xl font-bold">My Vocabulary</CardTitle>
+        <CardTitle className="text-center text-2xl font-bold">My Words</CardTitle>
       </CardHeader>
       <CardContent className="p-6">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">

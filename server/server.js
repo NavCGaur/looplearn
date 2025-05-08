@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import vocabRoutes from './routes/vocabRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+//import { generateAndPopulateQuizzes } from './utility/generateAndPopulateQuiz.js';
 
 dotenv.config();
 
@@ -56,5 +57,8 @@ mongoose.connect(process.env.MONGO_URL)
     console.error('MongoDB connection error:', err);
     process.exit(1);
   });
+
+
+//generateAndPopulateQuizzes();
 
 export default app;

@@ -6,9 +6,10 @@ import store from './state/store/index.ts';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";        
 import { SidebarProvider } from "@/components/ui/sidebar";
+import SpacedRepetitionLayout from './components/dashboard/guestDashboard/SpacedRepetitionLayout.jsx';
 
 import Dashboard from "./pages/Dashboard";
 import GuestDashboard from "./pages/guest/GuestDashboard.tsx";
@@ -23,48 +24,57 @@ import SpacedRepetition from './components/features/spacedRepetition/index';
 import Login from './components/auth/login';
 import MyWordList from './components/features/spacedRepetition/MyWordList.tsx';
 import HangmanGame from './components/features/spacedRepetition/HangmanGame.tsx';
-
+import LeaderBoardPage from './pages/leaderBoard/LeaderBoardPage.tsx';
+import WordQuizPage from './pages/wordQuiz/WordQuizPage.tsx';
 
 
 const App = () => (
   <Provider store={store}>
-
     <TooltipProvider>
-    <SidebarProvider>
-
+      <SidebarProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
+            
+            {/* Guest Dashboard Routes */}
             <Route path="/guest/dashboard" element={<GuestDashboard />}>
               <Route index element={<StatsOverview />} />
               <Route path="vocab" element={<VocabQuiz />} />
               <Route path="grammar" element={<GrammarQuiz />} />
-              <Route path="spaced" element={<SpacedRepetition />} />
               <Route path="stats" element={<StatsOverview />} />
-              <Route path="my-word-list" element={<MyWordList />} />
-              <Route path="hangman-game" element={<HangmanGame />} />
-            </Route>   
+              
+              {/* Spaced Repetition with nested routes */}
+              <Route path="spaced" element={<SpacedRepetitionLayout />}>
+                <Route index element={<Navigate to="practice" replace />} />
+                <Route path="practice" element={<SpacedRepetition />} />
+                <Route path="my-word-list" element={<MyWordList />} />
+                <Route path="hangman-game" element={<HangmanGame />} />
+                <Route path="leaderboard" element={<LeaderBoardPage />} />
+                <Route path="word-quiz" element={<WordQuizPage />} />
 
+              </Route>
+            </Route>
+            
+            {/* Admin Dashboard Routes */}
             <Route path="/admin/dashboard" element={<AdminDashboard />}>
               <Route index element={<StatsOverview />} />
               <Route path="vocab" element={<VocabQuiz />} />
               <Route path="grammar" element={<GrammarQuiz />} />
               <Route path="spaced" element={<SpacedRepetition />} />
-              <Route path="stats" element={<StatsOverview />} /> 
+              <Route path="stats" element={<StatsOverview />} />
               <Route path="students" element={<StudentVocabManager />} />
-
-            </Route>     
+            </Route>
+            
             <Route path="/login" element={<Login />} />
-         </Routes>
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </BrowserRouter>
-        </SidebarProvider>
-
+      </SidebarProvider>
     </TooltipProvider>
-  </Provider >
+  </Provider>
 );
 
 export default App;
