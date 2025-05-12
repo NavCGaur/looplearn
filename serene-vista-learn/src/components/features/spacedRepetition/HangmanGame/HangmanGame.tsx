@@ -119,7 +119,7 @@ const HangmanGame = () => {
   };
 
   return (
-    <Card className="mx-auto max-w-lg md:max-w-4xl overflow-hidden bg-white shadow-lg border-4 border-langlearn-light-blue relative">
+  <Card className="w-full max-w-md sm:max-w-lg overflow-hidden bg-white shadow-lg border-4 border-langlearn-light-blue relative">
       <GameHeader onReset={resetGame} />
       
       <CardContent className="p-3 sm:p-4 md:p-6 bg-[#F2FCE2]">
@@ -129,6 +129,7 @@ const HangmanGame = () => {
             gameStatus={gameStatus} 
             showingAnimation={showingAnimation} 
             maxWrongGuesses={maxWrongGuesses}
+            
           />
           
           <div className="w-full md:w-2/3 flex flex-col gap-4 md:gap-6">
