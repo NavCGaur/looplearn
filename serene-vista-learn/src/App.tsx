@@ -23,7 +23,7 @@ import GrammarQuiz from './components/features/grammerQuiz/index';
 import SpacedRepetition from './components/features/spacedRepetition/index';
 import Login from './components/auth/login';
 import MyWordList from './components/features/spacedRepetition/MyWordList.tsx';
-import HangmanGame from './components/features/spacedRepetition/HangmanGame.tsx';
+import HangmanGame from './components/features/spacedRepetition/HangmanGame/hangmanGame.tsx';
 import LeaderBoardPage from './pages/leaderBoard/LeaderBoardPage.tsx';
 import WordQuizPage from './pages/wordQuiz/WordQuizPage.tsx';
 

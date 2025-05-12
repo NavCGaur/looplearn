@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import WordQuiz from "../../components/features/wordQuiz/WordQuiz";
+import WordQuiz from "../../components/features/spacedRepetition/wordQuiz/WordQuiz.tsx";
 
 const WordQuizPage: React.FC = () => {
   return (
