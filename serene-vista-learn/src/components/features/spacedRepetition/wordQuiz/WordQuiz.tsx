@@ -113,8 +113,8 @@ const WordQuiz: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Card className="max-w-3xl mx-auto border-4 border-blue-500 border-opacity-10 rounded-xl shadow-lg animate-fade-in">
+    <div className="width-full py-4">
+      <Card className="max-w-3xl border-4 border-blue-500 border-opacity-10 rounded-xl shadow-lg animate-fade-in">
         <CardContent className="p-6">
           <QuizProgress 
             currentQuestion={currentQuestionIndex + 1} 

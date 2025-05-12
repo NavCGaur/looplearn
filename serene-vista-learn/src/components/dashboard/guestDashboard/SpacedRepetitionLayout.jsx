@@ -6,7 +6,7 @@ const SpacedRepetitionLayout = () => {
     <div className="w-full">
       
       {/* Common UI elements for all spaced repetition pages can go here */}
-      <div className="bg-white rounded-lg shadow p-2">
+      <div className="bg-white rounded-lg shadow">
         {/* The Outlet will render the child routes */}
         <Outlet />
       </div>

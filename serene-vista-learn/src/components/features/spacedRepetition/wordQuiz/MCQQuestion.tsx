@@ -31,7 +31,7 @@ const MCQQuestion: React.FC<MCQQuestionProps> = ({
         <h3 className="text-xl font-bold text-langlearn-dark-blue">{question.question}</h3>
       </div>
       
-      {question.imageUrl && (
+      {/*  {question.imageUrl && (
         <div className="flex justify-center my-4">
           <img 
             src={question.imageUrl} 
@@ -39,7 +39,8 @@ const MCQQuestion: React.FC<MCQQuestionProps> = ({
             className="h-32 object-contain rounded-lg" 
           />
         </div>
-      )}
+      )} */}
+    
       
       <RadioGroup 
         className="space-y-3 mt-4" 

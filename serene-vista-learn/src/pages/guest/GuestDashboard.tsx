@@ -31,7 +31,7 @@ const GuestDashboard = () => {
       <GuestDashboardNavbar />
       <div className="flex">
         <GuestDashboardSidebar />
-        <main className="flex-1 mt-16 flex items-center justify-center min-h-[calc(100vh-4rem)] p-6">
+        <main className="flex-1 mt-16 flex items-center justify-center min-h-[calc(100vh-4rem)] p-2">
           {isLoading ? (
             <Loader2 className={cn("h-10 w-10 animate-spin text-primary")} />
           ) : (
