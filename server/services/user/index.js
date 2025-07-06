@@ -220,129 +220,215 @@ export const getUserById = async (userId) => {
 
 export const assignWordToUser = async (userId, wordData) => {
   try {
-    const { word } = wordData;
-    
-    // Check if word already exists in database
-    const existingWord = await Word.findOne({ word: word.toLowerCase() });
-    
-    if (existingWord) {
-      // Check if user already has this word
-      const user = await User.findOne({ 
-        uid: userId,
-        'vocabulary.wordId': existingWord._id 
-      });
-      
-      if (user) {
-        throw new Error('This word is already in the user\'s vocabulary');
-      }
-      
-      // Assign existing word to user
-      await User.findOneAndUpdate(
-        { uid: userId },
-        { 
-          $push: { 
-            vocabulary: { 
-              wordId: existingWord._id,
-              addedAt: new Date()
-            } 
-          } 
-        }
-      );
-      
-      return existingWord;
-    }
-    
-    // Only use Free Dictionary API for pronunciation URL
-    let pronunciationUrl = '';
-    try {
-      const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`;
-      const response = await axios.get(apiUrl);
-      
-      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
-        const wordInfo = response.data[0];
-        
-        // Extract phonetics
-        if (wordInfo.phonetics && wordInfo.phonetics.length > 0) {
-          // Find the first phonetic with audio
-          const phoneticWithAudio = wordInfo.phonetics.find(p => p.audio && p.audio.trim() !== '');
-          if (phoneticWithAudio) {
-            // Ensure URL has proper protocol
-            pronunciationUrl = phoneticWithAudio.audio.startsWith('//') 
-              ? `https:${phoneticWithAudio.audio}` 
-              : phoneticWithAudio.audio;
+    const words = wordData.word.split(',').map(w => w.trim().toLowerCase()).filter(Boolean);
+    const results = [];
+
+    for (const word of words) {
+      try {
+        let wordDoc = await Word.findOne({ word });
+
+        // If word doesn't exist, fetch and create it
+        if (!wordDoc) {
+          let pronunciationUrl = '';
+          try {
+            const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`;
+            const response = await axios.get(apiUrl);
+            const phoneticWithAudio = response?.data?.[0]?.phonetics?.find(p => p.audio?.trim());
+            if (phoneticWithAudio) {
+              pronunciationUrl = phoneticWithAudio.audio.startsWith('//')
+                ? `https:${phoneticWithAudio.audio}`
+                : phoneticWithAudio.audio;
+            }
+          } catch (err) {
+            console.warn(`Failed to fetch pronunciation for ${word}`);
           }
+
+          const wordInfo = await getWordDefinition(word);
+          const exampleSentence = await generateExampleSentence(word, wordInfo.partOfSpeech, wordInfo.definition);
+          const translations = await getTranslations(word, wordInfo.definition, exampleSentence);
+
+          wordDoc = new Word({
+            word,
+            definition: wordInfo.definition,
+            wordHindi: translations.wordHindi,
+            definitionHindi: translations.definitionHindi,
+            exampleSentence,
+            exampleSentenceHindi: translations.exampleSentenceHindi,
+            partOfSpeech: wordInfo.partOfSpeech,
+            pronunciationUrl,
+            difficulty: 1
+          });
+          wordDoc = await wordDoc.save();
         }
+
+        // Check if already assigned
+        const userHasWord = await User.findOne({
+          uid: userId,
+          'vocabulary.wordId': wordDoc._id
+        });
+
+        if (!userHasWord) {
+          await User.findOneAndUpdate(
+            { uid: userId },
+            {
+              $push: {
+                vocabulary: {
+                  wordId: wordDoc._id,
+                  addedAt: new Date()
+                }
+              }
+            }
+          );
+          results.push({ word, success: true });
+        } else {
+          results.push({ word, success: false, error: 'Already assigned' });
+        }
+
+      } catch (err) {
+        results.push({ word, success: false, error: err.message });
       }
-    } catch (dictApiError) {
-      console.error('Error fetching pronunciation from Dictionary API:', dictApiError);
-      // Continue without pronunciation if API fails
     }
-    
-    // Get definition and part of speech using Gemini
-    const wordInfo = await getWordDefinition(word);
-    
-    // Generate example sentence using Gemini
-    const exampleSentence = await generateExampleSentence(
-      word, 
-      wordInfo.partOfSpeech, 
-      wordInfo.definition
-    );
-    
-    // Get Hindi translations for word, definition, and example
-    const translations = await getTranslations(word, wordInfo.definition, exampleSentence);
-    
-    console.log("Gemini translations:", translations);
-    
-    // Create new word with data
-    const newWord = new Word({
-      word: word.toLowerCase(),
-      definition: wordInfo.definition,
-      wordHindi: translations.wordHindi,
-      definitionHindi: translations.definitionHindi,
-      exampleSentence: exampleSentence,
-      exampleSentenceHindi: translations.exampleSentenceHindi,
-      partOfSpeech: wordInfo.partOfSpeech,
-      pronunciationUrl: pronunciationUrl,
-      difficulty: 1 // default difficulty level
-    });
-    
-    const savedWord = await newWord.save();
-    
-    console.log("Saved word:", savedWord);
-    
-    // Assign word to the user
-    await User.findOneAndUpdate(
-      { uid: userId },
-      { 
-        $push: { 
-          vocabulary: { 
-            wordId: savedWord._id,
-            addedAt: new Date()
-          } 
-        } 
-      }
-    );
-    
-    return {
-      id: savedWord._id,
-      word: savedWord.word,
-      definition: savedWord.definition,
-      wordHindi: savedWord.wordHindi,
-      definitionHindi: savedWord.definitionHindi,
-      exampleSentence: savedWord.exampleSentence,
-      exampleSentenceHindi: savedWord.exampleSentenceHindi,
-      partOfSpeech: savedWord.partOfSpeech,
-      pronunciationUrl: savedWord.pronunciationUrl
-    };
+
+    return results;
   } catch (error) {
-    // Improve error handling
-    if (error.response && error.response.status === 404) {
-      throw new Error(`Word "${wordData.word}" not found in dictionary`);
-    }
-    
-    throw new Error(`Error assigning word: ${error.message}`);
+    throw new Error(`Error assigning words: ${error.message}`);
   }
 };
+
+
+
+export const assignWordToBulkUsers = async (userIds, wordData) => {
+  const results = [];
+  let successCount = 0;
+  let failureCount = 0;
+
+  const words = wordData.word.split(',').map(w => w.trim().toLowerCase()).filter(Boolean);
+
+  const users = await User.find({ uid: { $in: userIds } });
+  const foundUserIds = users.map(user => user.uid);
+  const missingUserIds = userIds.filter(id => !foundUserIds.includes(id));
+
+  missingUserIds.forEach(userId => {
+    results.push({
+      userId,
+      userName: 'Unknown User',
+      success: false,
+      error: 'User not found'
+    });
+    failureCount++;
+  });
+
+  for (const word of words) {
+    let wordDocument = await Word.findOne({ word });
+
+    // Create word if not exists
+    if (!wordDocument) {
+      try {
+        let pronunciationUrl = '';
+        try {
+          const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`;
+          const response = await axios.get(apiUrl);
+          const phoneticWithAudio = response?.data?.[0]?.phonetics?.find(p => p.audio?.trim());
+          if (phoneticWithAudio) {
+            pronunciationUrl = phoneticWithAudio.audio.startsWith('//')
+              ? `https:${phoneticWithAudio.audio}`
+              : phoneticWithAudio.audio;
+          }
+        } catch (dictApiError) {
+          console.warn(`Failed to fetch pronunciation for ${word}`);
+        }
+
+        const wordInfo = await getWordDefinition(word);
+        const exampleSentence = await generateExampleSentence(word, wordInfo.partOfSpeech, wordInfo.definition);
+        const translations = await getTranslations(word, wordInfo.definition, exampleSentence);
+
+        wordDocument = new Word({
+          word,
+          definition: wordInfo.definition,
+          wordHindi: translations.wordHindi,
+          definitionHindi: translations.definitionHindi,
+          exampleSentence,
+          exampleSentenceHindi: translations.exampleSentenceHindi,
+          partOfSpeech: wordInfo.partOfSpeech,
+          pronunciationUrl,
+          difficulty: 1
+        });
+
+        wordDocument = await wordDocument.save();
+      } catch (error) {
+        users.forEach(user => {
+          results.push({
+            userId: user.uid,
+            userName: user.name,
+            success: false,
+            error: `Failed to create word "${word}": ${error.message}`
+          });
+          failureCount++;
+        });
+        continue; // Skip this word for all users
+      }
+    }
+
+    for (const user of users) {
+      try {
+        const alreadyAssigned = await User.findOne({
+          uid: user.uid,
+          'vocabulary.wordId': wordDocument._id
+        });
+
+        if (alreadyAssigned) {
+          results.push({
+            userId: user.uid,
+            userName: user.name,
+            success: false,
+            error: `Word "${word}" already assigned`
+          });
+          failureCount++;
+          continue;
+        }
+
+        await User.findOneAndUpdate(
+          { uid: user.uid },
+          {
+            $push: {
+              vocabulary: {
+                wordId: wordDocument._id,
+                addedAt: new Date()
+              }
+            }
+          }
+        );
+
+        results.push({
+          userId: user.uid,
+          userName: user.name,
+          success: true,
+          error: null
+        });
+        successCount++;
+
+      } catch (error) {
+        results.push({
+          userId: user.uid,
+          userName: user.name,
+          success: false,
+          error: `Failed to assign word "${word}": ${error.message}`
+        });
+        failureCount++;
+      }
+    }
+  }
+
+  return {
+    results,
+    successCount,
+    failureCount
+  };
+};
+
+
+
+
 
 export const removeWordFromUser = async (userId, wordId) => {
   try {

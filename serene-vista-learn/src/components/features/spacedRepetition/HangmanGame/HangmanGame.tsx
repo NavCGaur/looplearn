@@ -119,7 +119,7 @@ const HangmanGame = () => {
   };
 
   return (
-  <Card className="w-full max-w-md sm:max-w-lg overflow-hidden bg-white shadow-lg border-4 border-langlearn-light-blue relative">
+<Card className="w-full max-w-md sm:max-w-xl md:max-w-2xl  lg:max-w-4xl xl:max-w-6xl overflow-hidden bg-white shadow-lg border-4 border-langlearn-light-blue relative">
       <GameHeader onReset={resetGame} />
       
       <CardContent className="p-3 sm:p-4 md:p-6 bg-[#F2FCE2]">

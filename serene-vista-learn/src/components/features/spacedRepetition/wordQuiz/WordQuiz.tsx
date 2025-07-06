@@ -113,7 +113,7 @@ const WordQuiz: React.FC = () => {
   }
 
   return (
-    <div className="width-full py-4">
+    <div className="width-full py-4 sm:py-0 flex items-center justify-center">
       <Card className="max-w-3xl border-4 border-blue-500 border-opacity-10 rounded-xl shadow-lg animate-fade-in">
         <CardContent className="p-6">
           <QuizProgress 

@@ -20,7 +20,7 @@ import NotFound from "./pages/NotFound";
 import StatsOverview from './components/stats/StatsOverview';
 import VocabQuiz from './components/features/vocabQuiz/index';
 import GrammarQuiz from './components/features/grammerQuiz/index';
-import SpacedRepetition from './components/features/spacedRepetition/index';
+import SpacedRepetition from './components/features/spacedRepetition/spacedRepetition/SpacedRepetition.jsx';
 import Login from './components/auth/login';
 import MyWordList from './components/features/spacedRepetition/MyWordList.tsx';
 import HangmanGame from './components/features/spacedRepetition/HangmanGame/HangmanGame.tsx';
