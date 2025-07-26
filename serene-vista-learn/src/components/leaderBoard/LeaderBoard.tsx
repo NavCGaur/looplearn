@@ -1,13 +1,31 @@
 import React, { useState, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Input } from "@/components/ui/input";
-import { 
-  Table, 
-  TableHeader, 
-  TableBody, 
-  TableHead, 
-  TableRow, 
-  TableCell 
-} from "@/components/ui/table";
+import { ChevronDown } from "lucide-react"; 
+// Table components (assuming they're available in your project)
+const Table = ({ className = "", children, ...props }) => (
+  <table className={`w-full ${className}`} {...props}>
+    {children}
+  </table>
+);
+
+const TableHeader = ({ children }) => <thead>{children}</thead>;
+const TableBody = ({ children }) => <tbody>{children}</tbody>;
+const TableHead = ({ className = "", children, ...props }) => (
+  <th className={`px-4 py-2 text-left font-medium ${className}`} {...props}>
+    {children}
+  </th>
+);
+const TableRow = ({ className = "", children, ...props }) => (
+  <tr className={`border-b ${className}`} {...props}>
+    {children}
+  </tr>
+);
+const TableCell = ({ className = "", children, ...props }) => (
+  <td className={`px-4 py-2 ${className}`} {...props}>
+    {children}
+  </td>
+);
 import { Button } from "@/components/ui/button";
 import { 
   Award, 
@@ -16,10 +34,14 @@ import {
   ArrowDown, 
   Trophy, 
   Book, 
-  Star
+  Star,
+  User,
+  Target,
+  ArrowLeft
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import {
   Pagination,
   PaginationContent,
@@ -30,8 +52,13 @@ import {
 } from "@/components/ui/pagination";
 import { useIsMobile } from "@/hooks/use-mobile";
 
+import {
+       useGetUsersPointsQuery,
+} from "../../state/api/userApi";
+
 interface Student {
   id: string;
+  userId: string;
   name: string;
   wordsLearned: number;
   quizzesTaken: number;
@@ -39,19 +66,6 @@ interface Student {
   rank?: number;
   avatar?: string;
 }
-
-const dummyData: Student[] = [
-  { id: "1", name: "Emma Johnson", wordsLearned: 245, quizzesTaken: 32, points: 520 },
-  { id: "2", name: "Liam Smith", wordsLearned: 190, quizzesTaken: 28, points: 430 },
-  { id: "3", name: "Olivia Davis", wordsLearned: 310, quizzesTaken: 45, points: 650 },
-  { id: "4", name: "Noah Wilson", wordsLearned: 175, quizzesTaken: 22, points: 375 },
-  { id: "5", name: "Sophia Martinez", wordsLearned: 280, quizzesTaken: 38, points: 590 },
-  { id: "6", name: "Jackson Brown", wordsLearned: 220, quizzesTaken: 30, points: 470 },
-  { id: "7", name: "Ava Garcia", wordsLearned: 260, quizzesTaken: 35, points: 540 },
-  { id: "8", name: "Lucas Anderson", wordsLearned: 165, quizzesTaken: 20, points: 345 },
-  { id: "9", name: "Mia Thomas", wordsLearned: 290, quizzesTaken: 40, points: 610 },
-  { id: "10", name: "Ethan Rodriguez", wordsLearned: 210, quizzesTaken: 26, points: 450 },
-];
 
 // Define the colors for top ranks
 const getRankColor = (rank: number) => {
@@ -67,18 +81,45 @@ const getRankColor = (rank: number) => {
   }
 };
 
-const LeaderBoard: React.FC = () => {
+const LeaderBoard = () => {
+
+   const dispatch = useDispatch();
+  
+    // @ts-ignore
+  const userId = useSelector((state) => state.auth?.user?.uid);
+  //@ts-ignore
+  const { data: usersData = [], isLoading, isError, error } = useGetUsersPointsQuery(userId);
+ 
+
+  
+
+
+ 
+  const students = useMemo(() => {
+    if (isLoading || isError || !usersData?.users) return [];
+
+    return usersData.users.map((user, index) => ({
+      id: String(index + 1),
+      userId: user.userId || user.uid || "", // Handle different possible field names
+      name: user.name || "Unnamed",
+      wordsLearned: user.wordsLearned ?? 0,
+      quizzesTaken: user.quizzesTaken ?? 0,
+      points: user.points ?? 0,
+    }));
+  }, [usersData, isLoading, isError]);
+
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState<keyof Student>("points");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showUserContext, setShowUserContext] = useState(false);
   const isMobile = useIsMobile();
   const itemsPerPage = 5;
 
   // Sort and filter data
   const sortedAndFilteredData = useMemo(() => {
     // First add ranks based on points
-    const rankedData = [...dummyData].sort((a, b) => b.points - a.points)
+    const rankedData = [...students].sort((a, b) => b.points - a.points)
       .map((student, index) => ({
         ...student,
         rank: index + 1
@@ -95,13 +136,87 @@ const LeaderBoard: React.FC = () => {
       if (a[sortField] > b[sortField]) return sortDirection === "asc" ? 1 : -1;
       return 0;
     });
-  }, [dummyData, search, sortField, sortDirection]);
+  }, [students, search, sortField, sortDirection]);
+
+  // Find current user data
+  const currentUser = useMemo(() => {
+    if (!userId) return null;
+    const rankedData = [...students].sort((a, b) => b.points - a.points)
+      .map((student, index) => ({
+        ...student,
+        rank: index + 1
+      }));
+    return rankedData.find(student => student.userId === userId);
+  }, [students, userId]);
+
+  // Calculate next rank info
+  const nextRankInfo = useMemo(() => {
+    if (!currentUser) return null;
+    
+    const rankedData = [...students].sort((a, b) => b.points - a.points)
+      .map((student, index) => ({
+        ...student,
+        rank: index + 1
+      }));
+    
+    const nextRankUser = rankedData.find(student => student.rank === (currentUser.rank! - 1));
+    
+    if (!nextRankUser) {
+      return { isTop: true, pointsNeeded: 0, nextRank: 0 };
+    }
+    
+    const pointsNeeded = nextRankUser.points - currentUser.points + 1;
+    const progressPercentage = Math.min(100, (currentUser.points / nextRankUser.points) * 100);
+    
+    return {
+      isTop: false,
+      pointsNeeded,
+      nextRank: nextRankUser.rank,
+      progressPercentage
+    };
+  }, [currentUser, students]);
+
+  // Get user context data (±2 users around current user)
+  const userContextData = useMemo(() => {
+    if (!currentUser) return [];
+    
+    const rankedData = [...students].sort((a, b) => b.points - a.points)
+      .map((student, index) => ({
+        ...student,
+        rank: index + 1
+      }));
+    
+    const userIndex = rankedData.findIndex(student => student.userId === userId);
+    if (userIndex === -1) return [];
+    
+    // Handle edge cases
+    let startIndex: number;
+    let endIndex: number;
+    
+    if (userIndex <= 2) {
+      // Top users: show current user + 4 users below
+      startIndex = 0;
+      endIndex = Math.min(4, rankedData.length - 1);
+    } else if (userIndex >= rankedData.length - 3) {
+      // Bottom users: show 4 users above + current user
+      startIndex = Math.max(0, rankedData.length - 5);
+      endIndex = rankedData.length - 1;
+    } else {
+      // Middle users: show 2 above + current user + 2 below
+      startIndex = userIndex - 2;
+      endIndex = userIndex + 2;
+    }
+    
+    return rankedData.slice(startIndex, endIndex + 1);
+  }, [currentUser, students, userId]);
 
   // Pagination
+  const displayData = showUserContext ? userContextData : sortedAndFilteredData;
   const paginatedData = useMemo(() => {
+    if (showUserContext) return displayData;
     const startIndex = (currentPage - 1) * itemsPerPage;
-    return sortedAndFilteredData.slice(startIndex, startIndex + itemsPerPage);
-  }, [sortedAndFilteredData, currentPage]);
+    return displayData.slice(startIndex, startIndex + itemsPerPage);
+  }, [displayData, currentPage, showUserContext]);
 
   const totalPages = Math.ceil(sortedAndFilteredData.length / itemsPerPage);
 
@@ -114,10 +229,17 @@ const LeaderBoard: React.FC = () => {
     }
   };
 
-  const SortableHeader: React.FC<{
-    field: keyof Student;
-    children: React.ReactNode;
-  }> = ({ field, children }) => (
+  const handleFindMe = () => {
+    if (!currentUser) return;
+    setShowUserContext(true);
+    setSearch(""); // Clear search when showing user context
+  };
+
+  const handleBackToFullLeaderboard = () => {
+    setShowUserContext(false);
+  };
+
+  const SortableHeader = ({ field, children }) => (
     <TableHead className="cursor-pointer" onClick={() => handleSort(field)}>
       <div className="flex items-center gap-1">
         {children}
@@ -130,19 +252,122 @@ const LeaderBoard: React.FC = () => {
     </TableHead>
   );
 
+  // User Stats Panel Component
+// User Stats Panel Component - now collapsible
+const UserStatsPanel = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  console.log("Current User:", currentUser);
+  if (!currentUser) return null;
+
+  return (
+    <Card className="border-2 mb-3 ">
+      <CardHeader 
+        className="pb-3 pt-3 cursor-pointer" 
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <CardTitle className="flex items-center justify-between text-blue-600 text-xl">
+          <div className="flex items-center gap-1">
+            <User className="h-4 w-4" />
+            Your Current Performance
+          </div>
+          <ChevronDown className={`h-5 w-5 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+        </CardTitle>
+      </CardHeader>
+      
+      {isExpanded && (
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-xl font-bold text-blue-600">#{currentUser.rank}</div>
+              <div className="text-sm text-gray-600">Rank</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xl font-bold text-orange-600">{currentUser.points}</div>
+              <div className="text-sm text-gray-600">Points</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-semibold">{currentUser.wordsLearned}</div>
+              <div className="text-sm text-gray-600">Words</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-semibold">{currentUser.quizzesTaken}</div>
+              <div className="text-sm text-gray-600">Quizzes</div>
+            </div>
+          </div>
+          
+          {/* Next Rank Progress */}
+          <div className="space-y-2">
+            {nextRankInfo?.isTop ? (
+              <div className="flex items-center gap-2 text-yellow-600">
+                <Trophy className="h-4 w-4" />
+                <span className="font-medium">You're at the top! 🎉</span>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Target className="h-4 w-4 text-blue-600" />
+                    <span className="text-sm font-medium">Next rank: {nextRankInfo?.pointsNeeded} points away</span>
+                  </div>
+                </div>
+                <Progress value={nextRankInfo?.progressPercentage || 0} className="h-2" />
+              </>
+            )}
+          </div>
+
+          <div className="flex gap-2 justify-center">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleFindMe}
+              disabled={showUserContext}
+              className="border-blue-500 text-blue-600 hover:bg-blue-50"
+            >
+              <Target className="h-4 w-4 mr-1" />
+              Find Me in List
+            </Button>
+            {showUserContext && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleBackToFullLeaderboard}
+                className="border-gray-400 text-gray-700 hover:bg-gray-100"
+              >
+                <ArrowLeft className="h-4 w-4 mr-1" />
+                Back to Full List
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      )}
+    </Card>
+  );
+};
+
   const renderMobileView = () => (
     <div className="space-y-4">
       {paginatedData.map(student => (
-        <Card key={student.id} className={`border-2 ${getRankColor(student.rank || 0)} animate-fade-in`}>
+        <Card 
+          key={student.id} 
+          className={`border-2 ${getRankColor(student.rank || 0)} ${
+            student.userId === userId ? 'ring-2 ring-blue-500 ring-offset-2' : ''
+          }`}
+        >
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold ${student.rank && student.rank <= 3 ? "bg-langlearn-orange" : ""}`}>
+                <div className={`w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold ${student.rank && student.rank <= 3 ? "bg-orange-500" : ""}`}>
                   {student.rank}
                 </div>
-                <CardTitle className="text-lg">{student.name}</CardTitle>
+                <div>
+                  <CardTitle className="text-lg">{student.name}</CardTitle>
+                  {student.userId === userId && (
+                    <Badge variant="outline" className="text-xs mt-1">You</Badge>
+                  )}
+                </div>
               </div>
-              <Badge className="bg-langlearn-blue">
+              <Badge className="bg-blue-500 text-white">
                 {student.points} pts
               </Badge>
             </div>
@@ -150,11 +375,11 @@ const LeaderBoard: React.FC = () => {
           <CardContent className="pt-0">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-1">
-                <Book className="h-4 w-4 text-langlearn-blue" />
+                <Book className="h-4 w-4 text-blue-600" />
                 <span className="text-sm">{student.wordsLearned} words</span>
               </div>
               <div className="flex items-center gap-1">
-                <Star className="h-4 w-4 text-langlearn-orange" />
+                <Star className="h-4 w-4 text-orange-600" />
                 <span className="text-sm">{student.quizzesTaken} quizzes</span>
               </div>
             </div>
@@ -177,7 +402,14 @@ const LeaderBoard: React.FC = () => {
       </TableHeader>
       <TableBody>
         {paginatedData.map(student => (
-          <TableRow key={student.id} className={`animate-fade-in hover:bg-blue-50 transition-colors ${student.rank === 1 ? "bg-yellow-50" : ""}`}>
+          <TableRow 
+            key={student.id} 
+            className={`animate-fade-in hover:bg-blue-50 transition-colors ${
+              student.rank === 1 ? "bg-yellow-50" : ""
+            } ${
+              student.userId === userId ? "bg-blue-100 border-l-4 border-blue-500" : ""
+            }`}
+          >
             <TableCell>
               <div className="flex items-center justify-center">
                 {student.rank === 1 ? (
@@ -193,21 +425,28 @@ const LeaderBoard: React.FC = () => {
                 )}
               </div>
             </TableCell>
-            <TableCell className="font-medium">{student.name}</TableCell>
+            <TableCell className="font-medium">
+              <div className="flex items-center gap-2">
+                {student.name}
+                {student.userId === userId && (
+                  <Badge variant="outline" className="text-xs">You</Badge>
+                )}
+              </div>
+            </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
-                <Book className="h-4 w-4 text-langlearn-blue" />
+                <Book className="h-4 w-4 text-blue-600" />
                 {student.wordsLearned}
               </div>
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-langlearn-orange" />
+                <Star className="h-4 w-4 text-orange-600" />
                 {student.quizzesTaken}
               </div>
             </TableCell>
             <TableCell>
-              <Badge className={`${student.rank && student.rank <= 3 ? "bg-langlearn-orange" : "bg-langlearn-blue"}`}>
+              <Badge className={`${student.rank && student.rank <= 3 ? "bg-orange-500" : "bg-blue-500"} text-white`}>
                 {student.points} pts
               </Badge>
             </TableCell>
@@ -217,31 +456,45 @@ const LeaderBoard: React.FC = () => {
     </Table>
   );
 
+  if (isLoading) {
+    return <div className="text-center py-10 text-gray-500">Loading leaderboard...</div>;
+  }
+
+  if (isError) {
+    return <div className="text-center py-10 text-red-500">Failed to load leaderboard.</div>;
+  }
+
   return (
     <div className="space-y-6 w-full">
+     
+
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex gap-2 items-center">
-          <Trophy className="h-6 w-6 text-langlearn-orange" /> 
-          <h2 className="text-2xl font-bold">Language Champions</h2>
+          <Trophy className="h-6 w-6 text-orange-600" /> 
+          <h2 className="text-2xl font-bold">
+            {showUserContext ? "Your Position" : "Language Champions"}
+          </h2>
         </div>
         
-        <div className="relative w-full md:w-64">
-          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-          <Input
-            placeholder="Find a student..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-8"
-          />
-        </div>
+        {!showUserContext && (
+          <div className="relative w-full md:w-64">
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
+            <Input
+              placeholder="Find a student..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-8"
+            />
+          </div>
+        )}
       </div>
 
       {isMobile ? renderMobileView() : renderDesktopView()}
 
-      {totalPages > 1 && (
+      {totalPages > 1 && !showUserContext && (
         <Pagination>
           <PaginationContent>
-            <PaginationItem>
+            <PaginationItem className="cursor-pointer">
               <PaginationPrevious 
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
@@ -249,7 +502,7 @@ const LeaderBoard: React.FC = () => {
             </PaginationItem>
             
             {Array.from({length: totalPages}, (_, i) => i + 1).map(page => (
-              <PaginationItem key={page}>
+              <PaginationItem key={page} className="cursor-pointer">
                 <PaginationLink
                   isActive={currentPage === page}
                   onClick={() => setCurrentPage(page)}
@@ -259,7 +512,7 @@ const LeaderBoard: React.FC = () => {
               </PaginationItem>
             ))}
             
-            <PaginationItem>
+            <PaginationItem className="cursor-pointer">
               <PaginationNext 
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
@@ -268,6 +521,9 @@ const LeaderBoard: React.FC = () => {
           </PaginationContent>
         </Pagination>
       )}
+
+       {/* User Stats Panel */}
+      <UserStatsPanel />
     </div>
   );
 };

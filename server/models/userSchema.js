@@ -8,6 +8,12 @@ const userWordSchema = new mongoose.Schema({
   addedAt: { type: Date, default: Date.now }
 });
 
+const scienceWordSchema = new mongoose.Schema({
+  termId: { type: mongoose.Schema.Types.ObjectId, ref: "ScienceTerm" },
+  learned: { type: Boolean, default: false }, // Whether the term has been learned
+  progress: { type: Number, default: 0 } // Progress percentage (0–100)
+});
+
 
 export const UserSchema = new mongoose.Schema({
   uid: { type: String, required: true, unique: true },
@@ -15,10 +21,18 @@ export const UserSchema = new mongoose.Schema({
   
   // Vocabulary tracking
   vocabulary: [userWordSchema],
+
+  scienceWords: [scienceWordSchema],
   
   // User profile
   displayName: { type: String },
   photoURL: { type: String },
+
+  // User points
+  points: {
+    type: Number,
+    default: 0,
+  },
   
   // Subscription related fields
   role: { type: String, enum: ['Guest', 'Admin', 'Subscriber'], default: 'Guest' },

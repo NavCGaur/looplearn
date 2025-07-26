@@ -14,6 +14,7 @@ export const vocabApi = createApi({
       //@ts-ignore
       providesTags: ['Words']
     }),
+    
     submitRatings: build.mutation({
       query: ({ userId, ratings }) => ({
         url: '/vocab/submitratings', // Include /api here too
@@ -23,9 +24,20 @@ export const vocabApi = createApi({
       //@ts-ignore
       invalidatesTags: ['Words']
     }),
+
+    addPoints: build.mutation({
+  query: ({ userId, points, reason }) => ({
+    url: `/users/addPoints`,
+    method: 'POST',
+    body: { userId, points, reason },
   }),
+}),
+
+    }),
+    
 });
 export const {
   useGetPracticeWordsQuery,
   useSubmitRatingsMutation,
+  useAddPointsMutation,
 } = vocabApi;

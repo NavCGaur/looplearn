@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { useSubmitRatingsMutation } from '../../../../state/api/vocabApi.ts';
+import { useSubmitRatingsMutation, useAddPointsMutation  } from '../../../../state/api/vocabApi.ts';
 
 // Import all component parts
 import { WordCard } from './components/WordCard';
@@ -16,6 +16,7 @@ const SpacedRepetition = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
   const words = useSelector(state => state.vocab.words);
+  console.log("Words for Spaced Repetition:", words);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
   const [ratings, setRatings] = useState({});
@@ -23,6 +24,9 @@ const SpacedRepetition = () => {
   const userId = useSelector((state) => state.auth?.user?.uid);
 
   const [submitRatings, { isLoading, isSuccess, isError }] = useSubmitRatingsMutation();
+
+  const [addPoints] = useAddPointsMutation();
+
   
   // Preload current word's audio
   const currentWord = words?.[currentIndex];
@@ -56,15 +60,24 @@ const SpacedRepetition = () => {
     setCurrentIndex(prev => prev + 1);
   };
 
-  const handleSubmit = async () => {
-    const ratingsArray = Object.entries(ratings).map(([word, rating]) => ({ word, rating }));
-    try {
-      await submitRatings({ userId, ratings: ratingsArray }).unwrap();
-      setSubmitted(true);
-    } catch (error) {
-      console.error('Error submitting ratings:', error);
-    }
-  };
+ const handleSubmit = async () => {
+  const ratingsArray = Object.entries(ratings).map(([word, rating]) => ({ word, rating }));
+  try {
+    await submitRatings({ userId, ratings: ratingsArray }).unwrap();
+    
+    // Submit points after successful rating submission
+    await addPoints({
+      userId,
+      points: 10, // adjust as per logic
+      reason: 'spacedRepetitionComplete',
+    }).unwrap();
+
+    setSubmitted(true);
+  } catch (error) {
+    console.error('Error submitting ratings or points:', error);
+  }
+};
+
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={3} width="100%">
@@ -111,7 +124,7 @@ const SpacedRepetition = () => {
       {submitted && isSuccess && (
         <StatusMessage 
           success={true} 
-          message="Practice submitted successfully!" 
+          message="Practice submitted successfully! 🎯 +10 points for completing spaced repetition!" 
         />
       )}
       

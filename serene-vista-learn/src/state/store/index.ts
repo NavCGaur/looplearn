@@ -2,15 +2,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from '@reduxjs/toolkit/query';
 
-import authReducer from "../slices/authSlice.ts"; // Import your authSlice reducer
+import authReducer from "../slices/authSlice.ts"; 
 import vocabReducer from "../slices/vocabSlice.ts";
 import userReducer from '../slices/userSlice.ts';
+import scienceReducer from '../slices/scienceSlice.ts'; 
 
 
 
-import { authApi } from "../api/auth.ts";  // Import the authApi
+import { authApi } from "../api/auth.ts";  
 import { vocabApi } from "../api/vocabApi.ts";
-import { userApi } from "../api/userApi.ts"; // Import the userApi
+import { userApi } from "../api/userApi.ts"; 
+import { scienceApi } from "../api/scienceApi.ts"; 
 
 
 
@@ -18,22 +20,23 @@ import { userApi } from "../api/userApi.ts"; // Import the userApi
 const store = configureStore({
   reducer: {
     // Combine reducers
-    auth: authReducer, // For authentication state
+    auth: authReducer, 
     vocab: vocabReducer, 
     user: userReducer,
+    science: scienceReducer,
 
 
     [authApi.reducerPath]: authApi.reducer,
     [vocabApi.reducerPath]: vocabApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
-
+    [scienceApi.reducerPath]: scienceApi.reducer,
   
 
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(authApi.middleware ,
-    vocabApi.middleware,userApi.middleware
-  ), // Add middleware for RTK Query
+    vocabApi.middleware,userApi.middleware,scienceApi.middleware
+  ), 
 });
 
 

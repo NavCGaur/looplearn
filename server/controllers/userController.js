@@ -1,4 +1,5 @@
-import { getAllUsers, getUserById, assignWordToUser, assignWordToBulkUsers,removeWordFromUser } from '../services/user/index.js';
+import { getAllUsers, getUserById, assignWordToUser, assignWordToBulkUsers,removeWordFromUser, deleteUserById,
+  deleteUsersByIds, addPointsService, getUserPointsService, getQuizQuestionsService  } from '../services/user/index.js';
 
 export const getUsers = async (req, res) => {
   console.log('Fetching all users in controller...');
@@ -76,5 +77,85 @@ export const removeWord = async (req, res) => {
     res.status(200).json({ message: 'Word removed successfully' });
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+// DELETE a single user by ID
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedUser = await deleteUserById(id);
+    if (!deletedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      message: 'User deleted successfully',
+      deletedUserId: deletedUser._id,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting user', error: error.message });
+  }
+};
+
+// DELETE multiple users
+export const deleteBulkUsers = async (req, res) => {
+  try {
+    const { userIds } = req.body;
+
+    if (!Array.isArray(userIds) || userIds.length === 0) {
+      return res.status(400).json({ message: 'userIds must be a non-empty array' });
+    }
+
+    const result = await deleteUsersByIds(userIds);
+    res.status(200).json({
+      message: 'Bulk deletion completed',
+      deletedCount: result.deletedCount,
+      deletedIds: result.deletedIds,
+      notFoundIds: result.notFoundIds,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting users', error: error.message });
+  }
+};
+
+
+export const addPoints = async (req, res) => {
+  const { userId, points, reason } = req.body;
+
+  try {
+    const updatedUser = await addPointsService(userId, points, reason);
+    res.status(200).json({
+      message: `${points} points added for ${reason}`,
+      totalPoints: updatedUser.points,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getUserPoints = async (req, res) => {
+  const userId = req.params.userId;
+  console.log('Fetching points with user ID:', userId);
+
+  try {
+    const users = await getUserPointsService(userId);
+    console.log('Fetched users in controller:', users);
+    if (!users) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export const getQuizQuestions = async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const questions = await getQuizQuestionsService(uid);
+    res.status(200).json(questions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

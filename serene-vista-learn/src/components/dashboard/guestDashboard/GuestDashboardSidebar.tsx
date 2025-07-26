@@ -1,4 +1,4 @@
-import { Book, AudioWaveform, Repeat, BarChartHorizontal, Puzzle, Gamepad2, ClipboardCheck } from "lucide-react";
+import { Book, AudioWaveform, Repeat, BookOpenText  ,Atom, BarChartHorizontal, Puzzle, Gamepad2, ClipboardCheck } from "lucide-react";
 import { Link, useLocation , Outlet} from "react-router-dom";
 
 import {
@@ -16,6 +16,8 @@ import {
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
+import { title } from "process";
+import path from "path";
 
 const GuestDashboardSidebar = () => {
   const location = useLocation();
@@ -30,7 +32,78 @@ const GuestDashboardSidebar = () => {
 
   const isActive = (path) => location.pathname === path;
 
-  const menuItems = [
+
+   const menuItems = [
+   
+    
+    {
+      title: "LeaderBoard",
+      icon: <BarChartHorizontal className="h-4 w-4" />,
+      path: "/guest/dashboard/leaderboard",
+    },
+    
+    {
+      title: "English",
+      icon: <BookOpenText className="h-5 w-5" />,
+      collapsible: true,
+      children: [
+        {
+          title: "Daily Practice",
+          icon: <ClipboardCheck className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/practice",
+        },
+        {
+          title: "Quiz",
+          icon: <Puzzle className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/word-quiz",
+        },
+        {
+          title: "My Word List",
+          icon: <ClipboardCheck className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/my-word-list",
+        },
+
+        {
+          title: "Hangman",
+          icon: <Gamepad2 className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/hangman-game",
+        },
+      ],
+    },
+
+    {
+      title: "Science",
+      icon: <Atom className="h-5 w-5" />,
+      collapsible: true,
+      children: [
+        {
+          title: "Daily Practice",
+          icon: <ClipboardCheck className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/practice",
+        },
+        {
+          title: "Quiz",
+          icon: <Puzzle className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/word-quiz",
+        },
+        {
+          title: "My Word List",
+          icon: <ClipboardCheck className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/my-word-list",
+        },
+
+        {
+          title: "Hangman",
+          icon: <Gamepad2 className="h-4 w-4" />,
+          path: "/guest/dashboard/spaced/hangman-game",
+        },
+      ],
+    },
+   
+   
+  ];
+
+  /*const menuItems = [
     {
       title: "Overview",
       icon: <BarChartHorizontal className="h-5 w-5" />,
@@ -80,6 +153,7 @@ const GuestDashboardSidebar = () => {
       path: "/guest/dashboard/speech",
     },
   ];
+  */
 
   return (
     <Sidebar>

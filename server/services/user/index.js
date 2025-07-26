@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config(); 
 import { UserSchema } from '../../models/userSchema.js'; 
 import Word from '../../models/wordSchema.js';
+import Quiz from '../../models/quizSchema.js';
 import mongoose from 'mongoose';
  
 const User = mongoose.model('User', UserSchema);
@@ -445,5 +446,148 @@ export const removeWordFromUser = async (userId, wordId) => {
     return { success: true };
   } catch (error) {
     throw new Error(`Error removing word: ${error.message}`);
+  }
+};
+
+// DELETE single user
+// DELETE single user by Firebase UID
+export const deleteUserById = async (uid) => {
+  try {
+    const deletedUser = await User.findOneAndDelete({ uid });
+    return deletedUser;
+  } catch (error) {
+    console.error('Error deleting user by UID:', error);
+    throw new Error('Failed to delete user');
+  }
+};
+
+
+// DELETE multiple users
+// DELETE multiple users by Firebase UID
+export const deleteUsersByIds = async (userIds) => {
+  try {
+    // Find users that match the given Firebase UIDs
+    const users = await User.find({ uid: { $in: userIds } });
+    const foundUids = users.map((user) => user.uid);
+
+    const deleted = await User.deleteMany({ uid: { $in: foundUids } });
+
+    const notFoundIds = userIds.filter((id) => !foundUids.includes(id));
+    return {
+      deletedCount: deleted.deletedCount,
+      deletedIds: foundUids,
+      notFoundIds,
+    };
+  } catch (error) {
+    console.error('Error deleting users:', error);
+    throw new Error('Failed to delete users');
+  }
+};
+
+
+// Add points to a user
+export const addPointsService = async (userId, points, reason) => {
+  if (!userId || !points || points <= 0) {
+    throw new Error("Invalid point update request");
+  }
+
+ const user = await User.findOne({ uid: userId });
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  user.points += points;
+
+  // Optional: log reason (e.g., for analytics or debugging)
+  console.log(`[POINT LOG] ${user.email} earned ${points} for: ${reason}`);
+
+  await user.save();
+  return user;
+};
+
+export const getUserPointsService = async (userId) => {
+  if (!userId) {
+    throw new Error("User ID is required");
+  }
+
+  const userValid = await User.findOne({ uid: userId });
+  if (!userValid) {
+    throw new Error("Please login to view your points");
+  }
+  // If user is valid, fetch all users
+  console.log('Fetching all users for leaderboard...');
+  if(userValid) {
+   try {
+    const users = await User.find()
+      .select('uid displayName points')
+      .lean();
+      
+    // Transform users to include id, name, and points
+    if (!users || users.length === 0) {
+      throw new Error('No users found');
+    }
+
+    return users.map(user => ({
+      uid : user.uid,
+      name: user.displayName || 'Unnamed User',
+      points: user.points || 0
+    }));
+  } catch (error) {
+    throw new Error(`Error fetching users: ${error.message}`);
+  }
+  }
+
+
+};
+
+export const getQuizQuestionsService = async (uid) => {
+  try {
+    // Get user's vocabulary words
+    const user = await User.findOne({ uid }).populate('vocabulary.wordId');
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Get word IDs from user's vocabulary
+    const wordIds = user.vocabulary.map(item => item.wordId._id);
+
+    // Get quiz questions for these words
+    const quizQuestions = await Quiz.find({ wordId: { $in: wordIds } });
+
+    console.log('Quiz questions fetched:', quizQuestions, 'for user:', uid);
+
+    // Transform the questions to match the frontend format
+  const transformedQuestions = quizQuestions.flatMap(quiz => {
+  const questions = [];
+
+  if (quiz.mcq) {
+    questions.push({
+      id: quiz._id.toString() + '-mcq',
+      type: 'mcq',
+      question: quiz.mcq.question,
+      word: quiz.word,
+      options: quiz.mcq.options,
+      correctAnswer: quiz.mcq.correctAnswer,
+      difficulty: 'medium'
+    });
+  }
+
+  if (quiz.fillInTheBlank) {
+    questions.push({
+      id: quiz._id.toString() + '-fill',
+      type: 'fillBlank',
+      question: quiz.fillInTheBlank.question,
+      word: quiz.word,
+      correctAnswer: quiz.fillInTheBlank.answer,
+      difficulty: 'medium'
+    });
+  }
+
+  return questions;
+}).filter(Boolean); // Remove any undefined entries
+
+    return transformedQuestions;
+  } catch (error) {
+    throw error;
   }
 };

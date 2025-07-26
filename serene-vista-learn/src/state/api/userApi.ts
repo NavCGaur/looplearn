@@ -1,5 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+type QuizType = 'mcq' | 'fillBlank';
+
+interface QuizQuestion {
+  id: string;
+  type: QuizType;
+  question: string;
+  word: string;
+  definition: string;
+  options?: string[];
+  correctAnswer: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  imageUrl?: string;
+}
+
 export const userApi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
@@ -23,6 +37,19 @@ export const userApi = createApi({
       providesTags: (result, error, userId) => [{ type: 'User', id: userId }]
     }),
     
+
+    getUsersPoints: builder.query({
+      query: (userId) => `/users/points/${userId}`,
+      providesTags: (result) => 
+        result.users
+          ? [
+              ...result.users.map(({ id }) => ({ type: 'User', id })),
+              { type: 'User', id: 'LIST' }
+            ]
+          : [{ type: 'User', id: 'LIST' }]
+    }),
+
+
     assignWordToUser: builder.mutation({
       query: ({ userId, wordData }) => ({
         url: `/users/${userId}/words`,
@@ -98,14 +125,82 @@ export const userApi = createApi({
         { type: 'User', id: userId },
         { type: 'User', id: 'LIST' }
       ]
-    })
+    }),
+
+    
+    getQuizQuestions: builder.query<QuizQuestion[], string>({
+      query: (uid) => `/users/questions/${uid}`,
+    }),
+
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/users/delete/${id}`,
+        method: 'DELETE',
+      }),
+      //@ts-ignore
+      invalidatesTags: (result, error, id) => [
+        { type: 'User', id },
+        { type: 'User', id: 'LIST' },
+        { type: 'UserWords', id: 'LIST' },
+      ],
+      transformResponse: (response) => {
+        return {
+          success: true,
+          message: response.message || 'User deleted successfully',
+          deletedUserId: response.deletedUserId,
+        };
+      },
+      transformErrorResponse: (response) => {
+        return {
+          success: false,
+                //@ts-ignore
+          message: response.data?.message || 'Failed to delete user',
+                //@ts-ignore
+          error: response.data?.error || 'Unknown error',
+        };
+      },
+    }),
+    
+    /**
+     * Deletes multiple users
+     */
+    deleteBulkUsers: builder.mutation({
+      query: (userIds) => ({
+        url: '/users/bulk-delete',
+        method: 'DELETE',
+        body: { userIds },
+      }),
+      invalidatesTags: [
+        { type: 'User', id: 'LIST' },
+              //@ts-ignore
+        { type: 'UserWords', id: 'LIST' },
+      ],
+      transformResponse: (response) => {
+        // Transform response to match expected format
+        //@ts-ignore
+        return response.results || response;
+      },
+      transformErrorResponse: (response) => {
+        return {
+          success: false,
+                //@ts-ignore
+          message: response.data?.message || 'Failed to delete users',
+                //@ts-ignore
+          error: response.data?.error || 'Unknown error',
+        };
+      },
+    }),
   })
 });
 
 export const {
   useGetUsersQuery,
   useGetUserByIdQuery,
+  useGetUsersPointsQuery,
   useAssignWordToUserMutation,
   useAssignWordToBulkUsersMutation,
-  useRemoveWordFromUserMutation
+  useRemoveWordFromUserMutation,
+  useGetQuizQuestionsQuery,
+  useDeleteUserMutation,
+  useDeleteBulkUsersMutation,
 } = userApi;

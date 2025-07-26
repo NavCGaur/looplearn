@@ -26,6 +26,9 @@ import MyWordList from './components/features/spacedRepetition/MyWordList.tsx';
 import HangmanGame from './components/features/spacedRepetition/HangmanGame/HangmanGame.tsx';
 import LeaderBoardPage from './pages/leaderBoard/LeaderBoardPage.tsx';
 import WordQuizPage from './pages/wordQuiz/WordQuizPage.tsx';
+import LeaderBoard from './components/leaderBoard/LeaderBoard.tsx';
+
+import ScienceQuestionGenerator from './pages/scienceQuestion/ScienceQuestionGenerator.tsx';
 
 
 const App = () => (
@@ -44,6 +47,7 @@ const App = () => (
               <Route path="vocab" element={<VocabQuiz />} />
               <Route path="grammar" element={<GrammarQuiz />} />
               <Route path="stats" element={<StatsOverview />} />
+              <Route path="leaderboard" element={<LeaderBoard />} />
               
               {/* Spaced Repetition with nested routes */}
               <Route path="spaced" element={<SpacedRepetitionLayout />}>
@@ -53,8 +57,9 @@ const App = () => (
                 <Route path="hangman-game" element={<HangmanGame />} />
                 <Route path="leaderboard" element={<LeaderBoardPage />} />
                 <Route path="word-quiz" element={<WordQuizPage />} />
-
               </Route>
+
+
             </Route>
             
             {/* Admin Dashboard Routes */}
@@ -64,7 +69,9 @@ const App = () => (
               <Route path="grammar" element={<GrammarQuiz />} />
               <Route path="spaced" element={<SpacedRepetition />} />
               <Route path="stats" element={<StatsOverview />} />
-              <Route path="students" element={<StudentVocabManager />} />
+              <Route path="students" element={<StudentVocabManager />} />              
+              {/* Science guest dashboard routes here */}
+              <Route path="science-question-generator" element={<ScienceQuestionGenerator   />} />
             </Route>
             
             <Route path="/login" element={<Login />} />

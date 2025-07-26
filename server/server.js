@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import vocabRoutes from './routes/vocabRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import scienceRoutes from './routes/scienceRoutes.js';
 //import { generateAndPopulateQuizzes } from './utility/generateAndPopulateQuiz.js';
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.options('*', cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/vocab', vocabRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/science', scienceRoutes);
 
 // 🔥 Uptime Robot test route to keep server hot
 app.get('/uptime-ping', (req, res) => {

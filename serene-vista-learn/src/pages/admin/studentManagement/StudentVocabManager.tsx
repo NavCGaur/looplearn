@@ -1,39 +1,44 @@
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import { 
   openAssignModal, 
   closeAssignModal, 
   openAssignedWordsModal, 
   closeAssignedWordsModal,
-   openBulkAssignModal,
+  openBulkAssignModal,
   closeBulkAssignModal,
   toggleUserSelection,
   selectAllUsers,
-  clearAllSelections
+  clearAllSelections,                     
+  openDeleteModal,
+  closeDeleteModal,
+  openBulkDeleteModal,
+  closeBulkDeleteModal
 } from "../../../state/slices/userSlice";
 import { 
   useGetUsersQuery, 
   useAssignWordToUserMutation,
-  useAssignWordToBulkUsersMutation
+  useAssignWordToBulkUsersMutation,
+  useDeleteUserMutation,
+  useDeleteBulkUsersMutation
 } from "../../../state/api/userApi";
 
+// UI Components
 import { 
   Table, 
   TableHeader, 
   TableBody, 
   TableHead, 
   TableRow, 
-  TableCell,
-  
+  TableCell 
 } from "../../../components/ui/table";
-
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
@@ -54,93 +59,83 @@ import {
 import { Spinner } from "../../../components/ui/spinner";
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent } from '@/components/ui/card';
-
-
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../../../components/ui/accordion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-import { X, Users, Check, AlertCircle } from 'lucide-react';
+// Icons
+import { 
+  X, 
+  Users, 
+  Check, 
+  AlertCircle, 
+  MoreHorizontal,
+  UserX,
+  Trash2,
+  AlertTriangle
+} from 'lucide-react';
 
-import  useMediaQuery  from '../../../hooks/use-media-query.ts';
+// Hooks
+import useMediaQuery from '../../../hooks/use-media-query.ts';
 
+// Components
 import StudentAssignedWords from "./StudentAssignedWords";
 
-
+/**
+ * Formats user activity data for display
+ */
 const formatActivityData = (user) => {
-  // Define all possible features with display names
   const features = [
     { id: 'vocabSpacedRepetition', name: 'Spaced Repetition' },
     { id: 'vocabQuiz', name: 'Vocabulary Quiz' },
-    // Add more features as they're implemented
   ];
   
-  // Create array of feature activities with timestamps
   const activities = features.map(feature => ({
     featureId: feature.id,
     featureName: feature.name,
     timestamp: user.latestFeatureAccess?.[feature.id] || null
   }));
   
-  // Filter out null timestamps and sort by most recent
   const validActivities = activities
     .filter(activity => activity.timestamp !== null)
-    .sort(//@ts-ignore
-      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-    );
+    //@ts-ignore
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     
-  // Return the most recent activity or null if none
   return validActivities.length > 0 ? validActivities[0] : null;
 };
 
-// Step 2: Format relative time (from your existing code)
+/**
+ * Formats relative time display
+ */
 const formatRelativeTime = (dateString) => {
   if (!dateString) return "Never used";
   
   const date = new Date(dateString);
-  
-  // Check if date is valid
   if (isNaN(date.getTime())) return "Invalid date";
   
   const now = new Date();
   //@ts-ignore
   const diffInSeconds = Math.floor((now - date) / 1000);
   
-  // Less than a minute
-  if (diffInSeconds < 60) {
-    return 'Just now';
-  }
+  if (diffInSeconds < 60) return 'Just now';
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+  if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`;
   
-  // Less than an hour
-  if (diffInSeconds < 3600) {
-    const minutes = Math.floor(diffInSeconds / 60);
-    return `${minutes}m ago`;
-  }
-  
-  // Less than a day
-  if (diffInSeconds < 86400) {
-    const hours = Math.floor(diffInSeconds / 3600);
-    return `${hours}h ago`;
-  }
-  
-  // Less than a week
-  if (diffInSeconds < 604800) {
-    const days = Math.floor(diffInSeconds / 86400);
-    return `${days}d ago`;
-  }
-  
-  // Default: standard date format
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric'
-  });
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 };
 
-// Step 3: Format exact time for tooltip
+/**
+ * Formats exact time for tooltip
+ */
 const formatExactTime = (dateString) => {
   if (!dateString) return "";
   
   const date = new Date(dateString);
-  
-  // Check if date is valid
   if (isNaN(date.getTime())) return "";
   
   return date.toLocaleString('en-US', {
@@ -153,7 +148,9 @@ const formatExactTime = (dateString) => {
   });
 };
 
-
+/**
+ * Activity Cell Component
+ */
 const ActivityCell = ({ user }) => {
   const activity = formatActivityData(user);
   
@@ -166,9 +163,7 @@ const ActivityCell = ({ user }) => {
   return (
     <TooltipProvider>
       <Tooltip>
-        {/* Changed from asChild to direct control */}
         <TooltipTrigger className="inline-flex">
-          {/* Mobile-friendly click target */}
           <button 
             className="text-left appearance-none focus:outline-none"
             aria-label="View activity details"
@@ -182,24 +177,21 @@ const ActivityCell = ({ user }) => {
             </span>
           </button>
         </TooltipTrigger>
-        
-        <TooltipContent 
-          side="top" 
-          className="text-sm bg-white shadow-lg border p-3"
-        >
-          <div className="whitespace-pre-line">
-            {tooltipContent}
-          </div>
+        <TooltipContent side="top" className="text-sm bg-white shadow-lg border p-3">
+          <div className="whitespace-pre-line">{tooltipContent}</div>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
 };
 
-
+/**
+ * Bulk Assignment Result Modal
+ */
 const BulkAssignmentResultModal = ({ isOpen, onClose, results }) => {
-  const successCount = results?.filter(r => r.success).length || 0;
-  const failureCount = results?.filter(r => !r.success).length || 0;
+ const safeResults = Array.isArray(results) ? results : [];
+  const successCount = safeResults.filter(r => r.success).length;
+  const failureCount = safeResults.filter(r => !r.success).length;
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -231,25 +223,29 @@ const BulkAssignmentResultModal = ({ isOpen, onClose, results }) => {
           {failureCount > 0 && (
             <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
               <span>Failed assignments:</span>
-              <Badge variant="destructive">
-                {failureCount} users
-              </Badge>
+              <Badge variant="destructive">{failureCount} users</Badge>
             </div>
           )}
           
-          {results && results.length > 0 && (
+          {safeResults && safeResults.length > 0 && (
             <div className="max-h-40 overflow-y-auto space-y-2">
-              {results.map((result, index) => (
+              {safeResults.map((result, index) => (
                 <div 
                   key={index}
                   className={`flex items-center justify-between p-2 rounded text-sm ${
-                    result.success 
+                    // @ts-ignore
+                    safeResults.success 
                       ? 'bg-green-50 text-green-800' 
                       : 'bg-red-50 text-red-800'
                   }`}
                 >
-                  <span className="truncate">{result.userName}</span>
-                  {result.success ? (
+                  <span className="truncate">{safeResults.
+                  
+                        //@ts-ignore
+                        userName}</span>
+                  {safeResults.
+                        //@ts-ignore
+                        success ? (
                     <Check className="h-4 w-4 flex-shrink-0" />
                   ) : (
                     <AlertCircle className="h-4 w-4 flex-shrink-0" />
@@ -261,8 +257,77 @@ const BulkAssignmentResultModal = ({ isOpen, onClose, results }) => {
         </div>
         
         <DialogFooter>
-          <Button onClick={onClose} variant="outline">
-            Close
+          <Button onClick={onClose} variant="outline">Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+/**
+ * Delete Confirmation Modal
+ */
+const DeleteConfirmationModal = ({ 
+  isOpen, 
+  onClose, 
+  onConfirm, 
+  isLoading, 
+  user, 
+  isBulk = false, 
+  userCount = 0 
+}) => {
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-red-600">
+            <AlertTriangle className="h-5 w-5" />
+            {isBulk ? 'Delete Multiple Users' : 'Delete User'}
+          </DialogTitle>
+        </DialogHeader>
+        
+        <div className="space-y-4">
+          <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-800">
+              <strong>Warning:</strong> This action cannot be undone.
+            </p>
+          </div>
+          
+          {isBulk ? (
+            <div>
+              <p className="text-sm text-gray-600 mb-2">
+                You are about to delete <strong>{userCount}</strong> user{userCount !== 1 ? 's' : ''}.
+              </p>
+              <p className="text-sm text-gray-600">
+                All their assigned words and progress will be permanently removed.
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm text-gray-600 mb-2">
+                Are you sure you want to delete <strong>{user?.name}</strong>?
+              </p>
+              <p className="text-sm text-gray-600">
+                All their assigned words and progress will be permanently removed.
+              </p>
+            </div>
+          )}
+        </div>
+        
+        <DialogFooter className="gap-2">
+          <Button 
+            onClick={onClose} 
+            variant="outline"
+            disabled={isLoading}
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={onConfirm}
+            variant="destructive"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Deleting...' : `Delete ${isBulk ? 'Users' : 'User'}`}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -270,8 +335,15 @@ const BulkAssignmentResultModal = ({ isOpen, onClose, results }) => {
   );
 };
 
-// Bulk Selection Floating Action Bar
-const BulkSelectionBar = ({ selectedUsers, onBulkAssign, onClearSelection }) => {
+/**
+ * Enhanced Bulk Selection Floating Action Bar
+ */
+const BulkSelectionBar = ({ 
+  selectedUsers, 
+  onBulkAssign, 
+  onBulkDelete, 
+  onClearSelection 
+}) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   return (
@@ -295,6 +367,16 @@ const BulkSelectionBar = ({ selectedUsers, onBulkAssign, onClearSelection }) => 
               >
                 {isMobile ? <X className="h-4 w-4" /> : 'Clear'}
               </Button>
+              
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={onBulkDelete}
+                className="h-8"
+              >
+                {isMobile ? <Trash2 className="h-4 w-4" /> : 'Delete'}
+              </Button>
+              
               <Button
                 variant="default"
                 size="sm"
@@ -311,11 +393,42 @@ const BulkSelectionBar = ({ selectedUsers, onBulkAssign, onClearSelection }) => 
   );
 };
 
+/**
+ * User Actions Dropdown
+ */
+const UserActionsDropdown = ({ user, onAssign, onDelete, onViewWords }) => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={onAssign}>
+          Assign Word
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onViewWords}>
+          View Words
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          onClick={onDelete}
+          className="text-red-600 focus:text-red-600"
+        >
+          <UserX className="h-4 w-4 mr-2" />
+          Delete User
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
-
+/**
+ * Main Student Vocabulary Manager Component
+ */
 const StudentVocabManager = () => {
   const dispatch = useDispatch();
-  
+  const [deleteResults, setDeleteResults] = useState(null);
   //@ts-ignore
   const userState = useSelector((state) => state.user) || { 
     selectedUserId: null, 
@@ -323,6 +436,8 @@ const StudentVocabManager = () => {
     isAssignModalOpen: false, 
     isAssignedWordsModalOpen: false,
     isBulkAssignModalOpen: false,
+    isDeleteModalOpen: false,
+    isBulkDeleteModalOpen: false,
     bulkAssignResults: null
   };
   
@@ -332,64 +447,85 @@ const StudentVocabManager = () => {
     isAssignModalOpen, 
     isAssignedWordsModalOpen,
     isBulkAssignModalOpen,
+    isDeleteModalOpen,
+    isBulkDeleteModalOpen,
     bulkAssignResults
   } = userState;
 
   const isMobile = useMediaQuery("(max-width: 768px)");
   
+  // API Hooks
   //@ts-ignore
   const { data: users = [], isLoading, isError, error } = useGetUsersQuery();
-  
   const [assignWord, { isLoading: isAssigning, error: assignError }] = useAssignWordToUserMutation();
   const [assignWordToBulk, { isLoading: isBulkAssigning, error: bulkAssignError }] = useAssignWordToBulkUsersMutation();
+  const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+  const [deleteBulkUsers, { isLoading: isBulkDeleting }] = useDeleteBulkUsersMutation();
   
-  const singleAssignForm = useForm({
-    defaultValues: { word: '' }
-  });
+  // Forms
+  const singleAssignForm = useForm({ defaultValues: { word: '' } });
+  const bulkAssignForm = useForm({ defaultValues: { word: '' } });
   
-  const bulkAssignForm = useForm({
-    defaultValues: { word: '' }
-  });
-  
+  // Computed values
   const selectedUser = users?.find(user => user?.id === selectedUserId) || null;
   const selectedUsers = users?.filter(user => selectedUserIds.includes(user.id)) || [];
   const allUsersSelected = users.length > 0 && selectedUserIds.length === users.length;
   
-  // Single user assignment
+  // Event Handlers
   const handleSingleAssign = async (data) => {
-    if (selectedUserId) {
-      try {
-        await assignWord({
-          userId: selectedUserId,
-          wordData: { word: data.word }
-        }).unwrap();
-        
-        singleAssignForm.reset();
-        dispatch(closeAssignModal());
-      } catch (err) {
-        console.error('Failed to assign word:', err);
-      }
+    if (!selectedUserId) return;
+    
+    try {
+      await assignWord({
+        userId: selectedUserId,
+        wordData: { word: data.word }
+      }).unwrap();
+      
+      singleAssignForm.reset();
+      dispatch(closeAssignModal());
+    } catch (err) {
+      console.error('Failed to assign word:', err);
     }
   };
   
-  // Bulk user assignment
   const handleBulkAssign = async (data) => {
-    if (selectedUserIds.length > 0) {
-      try {
-        const result = await assignWordToBulk({
-          userIds: selectedUserIds,
-          wordData: { word: data.word }
-        }).unwrap();
-        
-        bulkAssignForm.reset();
-        dispatch(closeBulkAssignModal());
-        dispatch(clearAllSelections());
-        
-        // Show results modal
-        // The results will be handled by the reducer
-      } catch (err) {
-        console.error('Failed to bulk assign word:', err);
-      }
+    if (selectedUserIds.length === 0) return;
+    
+    try {
+      await assignWordToBulk({
+        userIds: selectedUserIds,
+        wordData: { word: data.word }
+      }).unwrap();
+      
+      bulkAssignForm.reset();
+      dispatch(closeBulkAssignModal());
+      dispatch(clearAllSelections());
+    } catch (err) {
+      console.error('Failed to bulk assign word:', err);
+    }
+  };
+  
+  const handleDeleteUser = async () => {
+    if (!selectedUserId) return;
+    
+    try {
+      await deleteUser(selectedUserId).unwrap();
+      dispatch(closeDeleteModal());
+    } catch (err) {
+      console.error('Failed to delete user:', err);
+    }
+  };
+  
+  const handleBulkDelete = async () => {
+    if (selectedUserIds.length === 0) return;
+    
+    try {
+      const result = await deleteBulkUsers(selectedUserIds).unwrap();
+      setDeleteResults(result);
+      dispatch(closeBulkDeleteModal());
+      dispatch(clearAllSelections());
+    } catch (err) {
+      console.error('Failed to bulk delete users:', err);
     }
   };
   
@@ -405,14 +541,7 @@ const StudentVocabManager = () => {
     dispatch(toggleUserSelection(userId));
   };
   
-  const handleBulkAssignClick = () => {
-    dispatch(openBulkAssignModal());
-  };
-  
-  const handleClearSelection = () => {
-    dispatch(clearAllSelections());
-  };
-  
+  // Loading and Error States
   if (isLoading) {
     return (
       <div className="flex justify-center p-10">
@@ -425,21 +554,23 @@ const StudentVocabManager = () => {
     return (
       <div className="p-6 text-red-500 border border-red-300 rounded-md bg-red-50">
         <h3 className="font-bold mb-2">Error loading data</h3>
-        {// @ts-ignore }
-  }        <p>{error?.data?.message || error?.error || 'Failed to load student data. Please try again later.'}</p>
+        {//@ts-ignore
+        <p>{error?.data?.message || error?.error || 'Failed to load student data. Please try again later.'}</p>
+  }
       </div>
     );
   }
   
   return (
     <div className="space-y-6 pb-24">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Student Vocabulary Management</h2>
         {selectedUserIds.length > 0 && (
           <Button
             variant="outline"
             size="sm"
-            onClick={handleClearSelection}
+            onClick={() => dispatch(clearAllSelections())}
             className="md:hidden"
           >
             Clear Selection
@@ -447,13 +578,14 @@ const StudentVocabManager = () => {
         )}
       </div>
       
+      {/* Content */}
       {users.length === 0 ? (
         <div className="text-center p-6 bg-gray-50 rounded-md">
           <p>No students found. Please add students to the system.</p>
         </div>
       ) : (
         <>
-          {/* Desktop view - Table */}
+          {/* Desktop Table View */}
           {!isMobile && (
             <Table>
               <TableHeader>
@@ -498,17 +630,13 @@ const StudentVocabManager = () => {
                         {user.assignedWords?.length || 0} words
                       </Badge>
                     </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="default"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          dispatch(openAssignModal(user.id));
-                        }}
-                      >
-                        Assign Word
-                      </Button>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <UserActionsDropdown
+                        user={user}
+                        onAssign={() => dispatch(openAssignModal(user.id))}
+                        onDelete={() => dispatch(openDeleteModal(user.id))}
+                        onViewWords={() => dispatch(openAssignedWordsModal(user.id))}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -516,7 +644,7 @@ const StudentVocabManager = () => {
             </Table>
           )}
 
-          {/* Mobile view - Accordion */}
+          {/* Mobile Accordion View */}
           {isMobile && (
             <div className="space-y-2">
               {users.map((user) => (
@@ -574,6 +702,16 @@ const StudentVocabManager = () => {
                             >
                               View Assigned Words
                             </Button>
+                            
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="w-full"
+                              onClick={() => dispatch(openDeleteModal(user.id))}
+                            >
+                              <UserX className="h-4 w-4 mr-2" />
+                              Delete User
+                            </Button>
                           </div>
                         </div>
                       </AccordionContent>
@@ -590,11 +728,14 @@ const StudentVocabManager = () => {
       {selectedUserIds.length > 0 && (
         <BulkSelectionBar
           selectedUsers={selectedUsers}
-          onBulkAssign={handleBulkAssignClick}
-          onClearSelection={handleClearSelection}
+          onBulkAssign={() => dispatch(openBulkAssignModal())}
+          onBulkDelete={() => dispatch(openBulkDeleteModal())}
+          onClearSelection={() => dispatch(clearAllSelections())}
         />
       )}
 
+      {/* Modals */}
+      
       {/* Single User Assignment Modal */}
       <Dialog 
         open={isAssignModalOpen} 
@@ -609,8 +750,10 @@ const StudentVocabManager = () => {
           
           {assignError && (
             <div className="p-3 mb-3 text-sm bg-red-50 border border-red-200 text-red-600 rounded">
-              {// @ts-ignore }
-}              {assignError?.data?.message || 'Failed to assign word. Please try again.'}
+              
+              {assignError?.
+              //@ts-ignore
+              data?.message || 'Failed to assign word. Please try again.'}
             </div>
           )}
           
@@ -678,8 +821,9 @@ const StudentVocabManager = () => {
           
           {bulkAssignError && (
             <div className="p-3 mb-3 text-sm bg-red-50 border border-red-200 text-red-600 rounded">
-              {// @ts-ignore }
-}                  {bulkAssignError?.data?.message || 'Failed to assign word. Please try again.'}
+              {bulkAssignError?.
+              //@ts-ignore
+              data?.message || 'Failed to assign word. Please try again.'}
             </div>
           )}
           
@@ -719,11 +863,38 @@ const StudentVocabManager = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Delete Single User Modal */}
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => dispatch(closeDeleteModal())}
+        onConfirm={handleDeleteUser}
+        isLoading={isDeleting}
+        user={selectedUser}
+      />
+
+      {/* Delete Multiple Users Modal */}
+      {//@ts-ignore
+      <DeleteConfirmationModal
+        isOpen={isBulkDeleteModalOpen}
+        onClose={() => dispatch(closeBulkDeleteModal())}
+        onConfirm={handleBulkDelete}
+        isLoading={isBulkDeleting}
+        isBulk={true}
+        userCount={selectedUsers.length}
+      />}
+
       {/* Bulk Assignment Results Modal */}
       <BulkAssignmentResultModal
         isOpen={!!bulkAssignResults}
         onClose={() => dispatch({ type: 'user/clearBulkAssignResults' })}
         results={bulkAssignResults}
+      />
+
+      {/* Delete Results Modal */}
+      <BulkAssignmentResultModal
+        isOpen={!!deleteResults}
+        onClose={() => setDeleteResults(null)}
+        results={deleteResults}
       />
 
       {/* View Assigned Words Modal */}
