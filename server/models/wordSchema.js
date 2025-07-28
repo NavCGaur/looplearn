@@ -11,6 +11,7 @@ const wordSchema = new mongoose.Schema({
   difficulty: { type: Number, default: 1 }, // For future leveling
   partOfSpeech: { type: String }, // e.g., noun, verb
   pronunciationUrl:{ type: String }, // URL to audio pronunciation
+  quiz: { type: Boolean, default: false },
 });
 
 export default mongoose.model("Word", wordSchema);

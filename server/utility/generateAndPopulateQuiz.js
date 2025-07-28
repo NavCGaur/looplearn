@@ -4,12 +4,18 @@ import { getGeminiQuiz } from "./geminiQuizApi.js"; // You’ll implement this n
 
 export const generateAndPopulateQuizzes = async () => {
   try {
-    const words = await Word.find({
-        $or: [{ quiz: false }, { quiz: { $exists: false } }],
-      });
-      
+    // Step 1: Add quiz: false to words missing the quiz field
+    const patchResult = await Word.updateMany(
+      { quiz: { $exists: false } },
+      { $set: { quiz: false } }
+    );
+    console.log(`Patched ${patchResult.modifiedCount} words missing 'quiz' field.`);
+
+    // Step 2: Get all words with quiz: false and generate quizzes
+    const words = await Word.find({ quiz: false });
+
     for (const word of words) {
-        console.log(`Generating quiz for word: ${word.word}`);
+      console.log(`Generating quiz for word: ${word.word}`);
       const geminiResponse = await getGeminiQuiz(word);
 
       if (!geminiResponse) continue;
@@ -24,7 +30,7 @@ export const generateAndPopulateQuizzes = async () => {
       await quizDoc.save();
       word.quiz = true;
       await word.save();
-        console.log(`Quiz saved for word: ${word.word}`);
+      console.log(`Quiz saved for word: ${word.word}`);
     }
 
     console.log("Quiz generation completed.");
@@ -32,3 +38,4 @@ export const generateAndPopulateQuizzes = async () => {
     console.error("Error generating quizzes:", error.message);
   }
 };
+

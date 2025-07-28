@@ -222,6 +222,8 @@ export const getUserById = async (userId) => {
 export const assignWordToUser = async (userId, wordData) => {
   try {
     const words = wordData.word.split(',').map(w => w.trim().toLowerCase()).filter(Boolean);
+    const subject = wordData.subject || 'English';
+    console.log('Assigning words to user in service:', userId, 'Words:', words, 'Subject:', subject);
     const results = [];
 
     for (const word of words) {
@@ -304,6 +306,8 @@ export const assignWordToBulkUsers = async (userIds, wordData) => {
   let failureCount = 0;
 
   const words = wordData.word.split(',').map(w => w.trim().toLowerCase()).filter(Boolean);
+  const subject = wordData.subject || 'English';
+  console.log('Assigning words to bulk users:', userIds, 'Words:', words, 'Subject:', subject);
 
   const users = await User.find({ uid: { $in: userIds } });
   const foundUserIds = users.map(user => user.uid);

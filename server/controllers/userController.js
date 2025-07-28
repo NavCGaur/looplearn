@@ -24,8 +24,9 @@ export const getUser = async (req, res) => {
 
 export const assignWord = async (req, res) => {
   try {
-    const { word } = req.body;
-    const result = await assignWordToUser(req.params.userId, { word });
+    const { word} = req.body;
+    console.log('Assigning word in controller:', word);
+    const result = await assignWordToUser(req.params.userId, { word, subject });
     res.status(201).json(result);
   } catch (error) {
     res.status(400).json({ message: error.message });

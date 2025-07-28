@@ -21,13 +21,15 @@ const GuestDashboard = () => {
     refetch,
   } = useGetPracticeWordsQuery(userId);
 
+
+  /*
   const { 
     data: scienceWords,
     isLoading: isLoadingScience,
     error: errorScience,
     refetch: refetchScience,
   } = useGetScienceWordsQuery(userId);
-
+  
   useEffect(() => {
     if (words) {
       dispatch(setWords(words));
@@ -37,6 +39,7 @@ const GuestDashboard = () => {
       dispatch(setWords(scienceWords));
     }
   }, [words, , scienceWords, dispatch]);
+  */
 
   return (
     <div className="min-h-screen bg-gray-50 border w-full">

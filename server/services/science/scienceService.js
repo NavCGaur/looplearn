@@ -151,10 +151,27 @@ function calculateNextReviewDate(rating, fromDate) {
 export const generateQuestionsService = async (params) => {
   try {
     const { classStandard, subject, chapter, topic, questionType, numberOfQuestions } = params;
-
-    // Create the system prompt for question generation
-    const systemPrompt = `You are an expert educator specializing in creating educational content for Indian schools. 
-Generate exactly ${numberOfQuestions} fill-in-the-blank questions for students studying ${subject} at ${classStandard} level.
+    
+    console.log('Starting question generation with params:', params);
+    
+    // Step 1: Search for existing questions in MongoDB
+    const existingQuestions = await searchExistingQuestions(params);
+    const foundCount = existingQuestions.length;
+    
+    // Step 2: Determine if we need to generate additional questions
+    const remainingCount = numberOfQuestions - foundCount;
+    
+    console.log(`Found ${foundCount} existing questions, need ${remainingCount} more`);
+    
+    let generatedQuestions = [];
+    
+    // Step 3: Generate remaining questions with Gemini if needed
+    if (remainingCount > 0) {
+      console.log(`Generating ${remainingCount} additional questions with Gemini`);
+      
+      // Create the system prompt for question generation
+      const systemPrompt = `You are an expert educator specializing in creating educational content for Indian schools. 
+Generate exactly ${remainingCount} ${questionType} questions for students studying ${subject} at ${classStandard} level.
 
 Topic Details:
 - Subject: ${subject}
@@ -162,20 +179,22 @@ Topic Details:
 - Topic: ${topic}
 - Question Type: ${questionType}
 - Class Standard: ${classStandard}
+- Number of questions to generate: ${remainingCount}
 
 Requirements:
-1. Create exactly ${numberOfQuestions} fill-in-the-blank questions
+1. Create exactly ${remainingCount} ${questionType} questions
 2. Questions should be age-appropriate for ${classStandard} students
 3. Include mathematical/scientific notation using LaTeX format when needed:
    - Mathematical formulas: $\\pi r^2$, $E=mc^2$, $\\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
    - Chemical formulas: Always wrap in dollar signs: $\\text{H}_2\\text{SO}_4$, $\\text{CO}_2$, $\\text{NaCl}$, $\\text{C}_6\\text{H}_{12}\\text{O}_6$
    - IMPORTANT: Chemical formulas MUST be wrapped in $ signs to render properly
    - Never use raw underscore notation like H_2SO_4, always use $\\text{H}_2\\text{SO}_4$
-4. Each question should have a clear blank represented by "____"
+4. Each question should have a clear blank represented by "____" (for fill-in-blank questions)
 5. Provide accurate, concise answers
 6. Ensure questions test understanding of ${topic} within ${chapter}
 7. Questions should be suitable for Indian curriculum and context
 8. Include units where applicable (e.g., meters, seconds, grams)
+9. Make sure questions are unique and don't duplicate common knowledge
 
 Respond with JSON in this exact format:
 {
@@ -193,56 +212,105 @@ Respond with JSON in this exact format:
 
 IMPORTANT: Return only the JSON response, no additional text or explanations.`;
 
-    console.log('Generating questions with prompt length:', systemPrompt.length);
-    
-    const geminiResponse = await callGeminiAPI(systemPrompt, 0.3, 2000);
-    
-    console.log('Raw Gemini response:', geminiResponse);
+      console.log('Generating questions with prompt length:', systemPrompt.length);
+      
+      const geminiResponse = await callGeminiAPI(systemPrompt, 0.3, 2000);
+      
+      console.log('Raw Gemini response:', geminiResponse);
 
-    // Parse the JSON response
-    let parsedResponse;
-    try {
-      // Extract JSON from the response - handles case where model might add text before/after JSON
-      const jsonMatch = geminiResponse.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        parsedResponse = JSON.parse(jsonMatch[0]);
-      } else {
-        throw new Error('No JSON found in Gemini response');
+      // Parse the JSON response
+      let parsedResponse;
+      try {
+        // Extract JSON from the response - handles case where model might add text before/after JSON
+        const jsonMatch = geminiResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          parsedResponse = JSON.parse(jsonMatch[0]);
+        } else {
+          throw new Error('No JSON found in Gemini response');
+        }
+      } catch (parseError) {
+        console.error('Error parsing Gemini JSON response:', parseError);
+        console.error('Response was:', geminiResponse);
+        throw new Error('Failed to parse AI response. Please try again.');
       }
-    } catch (parseError) {
-      console.error('Error parsing Gemini JSON response:', parseError);
-      console.error('Response was:', geminiResponse);
-      throw new Error('Failed to parse AI response. Please try again.');
+
+      // Validate the response structure
+      if (!parsedResponse.questions || !Array.isArray(parsedResponse.questions)) {
+        throw new Error('Invalid response format from AI. Expected questions array.');
+      }
+
+      // Enhance generated questions with metadata
+      generatedQuestions = parsedResponse.questions.map((question, index) => ({
+        ...question,
+        classStandard,
+        subject,
+        chapter,
+        topic,
+        questionType,
+        difficulty: getDifficultyByClass(classStandard),
+        metadata: {
+          generationMethod: 'ai-generated',
+          aiModel: 'gemini',
+          generationTimestamp: new Date(),
+          questionIndex: foundCount + index + 1
+        }
+      }));
+
+      console.log(`Successfully generated ${generatedQuestions.length} new questions`);
+      
+      // Step 4: Save newly generated questions to MongoDB for future use
+      if (generatedQuestions.length > 0) {
+        try {
+          const savedQuestions = await ScienceQuestion.insertMany(generatedQuestions);
+          console.log(`Saved ${savedQuestions.length} new questions to MongoDB`);
+        } catch (saveError) {
+          console.error('Error saving generated questions to MongoDB:', saveError);
+          // Continue execution even if saving fails
+        }
+      }
     }
 
-    // Validate the response structure
-    if (!parsedResponse.questions || !Array.isArray(parsedResponse.questions)) {
-      throw new Error('Invalid response format from AI. Expected questions array.');
-    }
+    // Step 5: Combine existing and generated questions
+    const allQuestions = [
+      ...existingQuestions.map(q => ({
+        questionText: q.questionText,
+        answer: q.answer,
+        classStandard: q.classStandard,
+        subject: q.subject,
+        chapter: q.chapter,
+        topic: q.topic,
+        questionType: q.questionType,
+        difficulty: q.difficulty,
+        metadata: {
+          ...q.metadata,
+          source: 'mongodb-existing'
+        }
+      })),
+      ...generatedQuestions
+    ];
 
-    // Enhance questions with metadata
-    const enhancedQuestions = parsedResponse.questions.map((question, index) => ({
-      ...question,
-      classStandard,
-      subject,
-      chapter,
-      topic,
-      questionType,
-      difficulty: getDifficultyByClass(classStandard),
-      metadata: {
-        generationMethod: 'ai-generated',
-        aiModel: 'gemini',
-        generationTimestamp: new Date(),
-        questionIndex: index + 1
-      }
-    }));
+    // Step 6: Shuffle questions to mix existing and new ones
+    const shuffledQuestions = allQuestions.sort(() => Math.random() - 0.5);
 
-    console.log(`Successfully generated ${enhancedQuestions.length} questions`);
+    console.log(`Total questions returned: ${shuffledQuestions.length} (${foundCount} existing + ${generatedQuestions.length} generated)`);
 
     return {
-      questions: enhancedQuestions,
-      totalGenerated: enhancedQuestions.length,
-      parameters: params
+      questions: shuffledQuestions,
+      totalGenerated: shuffledQuestions.length,
+      existingCount: foundCount,
+      newlyGenerated: generatedQuestions.length,
+      parameters: params,
+      searchStrategy: {
+        mongodbQuery: {
+          classStandard: classStandard,
+          subject: getSubjectSearchArray(subject),
+          chapter: 'flexible_regex_match',
+          topic: 'flexible_regex_match',
+          questionType: questionType
+        },
+        chapterPattern: chapter,
+        topicPattern: topic
+      }
     };
 
   } catch (error) {
@@ -250,6 +318,7 @@ IMPORTANT: Return only the JSON response, no additional text or explanations.`;
     throw error;
   }
 };
+
 
 // Save questions to database
 export const saveQuestionsService = async (questions) => {
@@ -476,4 +545,70 @@ const getDifficultyByClass = (classStandard) => {
   if (classNumber <= 7) return 'easy';
   if (classNumber <= 9) return 'medium';
   return 'hard';
+};
+
+// Helper function to create flexible search patterns for chapter and topic
+const createFlexibleSearchPattern = (text) => {
+  if (!text) return '';
+  
+  // Remove common separators and normalize text
+  const normalized = text
+    .toLowerCase()
+    .replace(/[&\-_\s]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  
+  // Create regex pattern that allows for flexible matching
+  const words = normalized.split(' ');
+  const pattern = words.map(word => `(?=.*${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`).join('');
+  
+  return new RegExp(pattern, 'i');
+};
+
+// Helper function to create subject search array including related subjects
+const getSubjectSearchArray = (subject) => {
+  const subjectMap = {
+    'physics': ['physics', 'science'],
+    'chemistry': ['chemistry', 'science'],
+    'biology': ['biology', 'science'],
+    'mathematics': ['mathematics'],
+    'science': ['science', 'physics', 'chemistry', 'biology']
+  };
+  
+  return subjectMap[subject] || [subject];
+};
+
+const searchExistingQuestions = async (params) => {
+  try {
+    const { classStandard, subject, chapter, topic, questionType, numberOfQuestions } = params;
+    
+    // Create flexible search patterns
+    const chapterPattern = createFlexibleSearchPattern(chapter);
+    const topicPattern = createFlexibleSearchPattern(topic);
+    const subjectArray = getSubjectSearchArray(subject);
+    
+    // Build MongoDB query
+    const query = {
+      classStandard: classStandard, // Strict match
+      subject: { $in: subjectArray }, // Flexible subject matching
+      chapter: { $regex: chapterPattern }, // Loose chapter matching
+      topic: { $regex: topicPattern }, // Loose topic matching
+      questionType: questionType, // Strict match
+      isActive: true
+    };
+    
+    console.log('MongoDB search query:', JSON.stringify(query, null, 2));
+    
+    // Search for existing questions
+    const existingQuestions = await ScienceQuestion.find(query)
+      .limit(numberOfQuestions)
+      .lean();
+    
+    console.log(`Found ${existingQuestions.length} existing questions in MongoDB`);
+    
+    return existingQuestions;
+  } catch (error) {
+    console.error('Error searching existing questions:', error);
+    return []; // Return empty array if search fails, fallback to AI generation
+  }
 };

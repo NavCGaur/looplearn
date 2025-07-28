@@ -24,7 +24,13 @@ const GuestDashboardSidebar = () => {
   const isMobile = useIsMobile();
   const { toggleSidebar } = useSidebar();
 
-  const [spacedOpen, setSpacedOpen] = useState(location.pathname.startsWith("/guest/dashboard/spaced"));
+  // Independent menu states for English and Science
+  const [englishOpen, setEnglishOpen] = useState(
+    location.pathname.startsWith("/guest/dashboard/spaced")
+  );
+  const [scienceOpen, setScienceOpen] = useState(
+    location.pathname.startsWith("/guest/dashboard/spaced-science")
+  );
 
   const handleNavClick = () => {
     if (isMobile) toggleSidebar();
@@ -32,23 +38,19 @@ const GuestDashboardSidebar = () => {
 
   const isActive = (path) => location.pathname === path;
 
-
-   const menuItems = [
-   
-    
+  const menuItems = [
     {
       title: "LeaderBoard",
       icon: <BarChartHorizontal className="h-4 w-4" />,
       path: "/guest/dashboard/leaderboard",
     },
-    
     {
       title: "English",
       icon: <BookOpenText className="h-5 w-5" />,
       collapsible: true,
       children: [
         {
-          title: "Daily Practice",
+          title: "Word Practice",
           icon: <ClipboardCheck className="h-4 w-4" />,
           path: "/guest/dashboard/spaced/practice",
         },
@@ -62,7 +64,6 @@ const GuestDashboardSidebar = () => {
           icon: <ClipboardCheck className="h-4 w-4" />,
           path: "/guest/dashboard/spaced/my-word-list",
         },
-
         {
           title: "Hangman",
           icon: <Gamepad2 className="h-4 w-4" />,
@@ -70,90 +71,34 @@ const GuestDashboardSidebar = () => {
         },
       ],
     },
-
     {
       title: "Science",
       icon: <Atom className="h-5 w-5" />,
       collapsible: true,
       children: [
         {
-          title: "Daily Practice",
+          title: "Word Practice",
           icon: <ClipboardCheck className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced/practice",
+          path: "/guest/dashboard/spaced-science/practice",
         },
         {
           title: "Quiz",
           icon: <Puzzle className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced/word-quiz",
+          path: "/guest/dashboard/spaced-science/word-quiz",
         },
         {
           title: "My Word List",
           icon: <ClipboardCheck className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced/my-word-list",
+          path: "/guest/dashboard/spaced-science/my-word-list",
         },
-
         {
           title: "Hangman",
           icon: <Gamepad2 className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced/hangman-game",
+          path: "/guest/dashboard/spaced-science/hangman-game",
         },
       ],
     },
-   
-   
   ];
-
-  /*const menuItems = [
-    {
-      title: "Overview",
-      icon: <BarChartHorizontal className="h-5 w-5" />,
-      path: "/guest/dashboard/stats",
-    },
-    {
-      title: "Vocab Quiz",
-      icon: <Book className="h-5 w-5" />,
-      path: "/guest/dashboard/vocab",
-    },
-    {
-      title: "Grammar Quiz",
-      icon: <Book className="h-5 w-5" />,
-      path: "/guest/dashboard/grammar",
-    },
-    {
-      title: "Spaced Repetition",
-      icon: <Repeat className="h-5 w-5" />,
-      collapsible: true,
-      children: [
-        {
-          title: "Daily Practice",
-          icon: <ClipboardCheck className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced/practice",
-        },
-        {
-          title: "Quiz",
-          icon: <Puzzle className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced/word-quiz",
-        },
-        {
-          title: "My Word List",
-          icon: <ClipboardCheck className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced/my-word-list",
-        },
-
-        {
-          title: "Hangman",
-          icon: <Gamepad2 className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced/hangman-game",
-        },
-      ],
-    },
-    {
-      title: "Speech Shadow",
-      icon: <AudioWaveform className="h-5 w-5" />,
-      path: "/guest/dashboard/speech",
-    },
-  ];
-  */
 
   return (
     <Sidebar>
@@ -163,7 +108,9 @@ const GuestDashboardSidebar = () => {
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-langlearn-blue to-langlearn-light-blue flex items-center justify-center">
               <span className="text-white font-bold text-lg">L</span>
             </div>
-            <span className="font-bold text-lg text-langlearn-dark-blue">LinguaLearn</span>
+            <span className="font-bold text-lg text-langlearn-dark-blue">
+              LinguaLearn
+            </span>
           </div>
         </div>
       </SidebarHeader>
@@ -177,10 +124,10 @@ const GuestDashboardSidebar = () => {
             <SidebarMenu className="py-1">
               {menuItems.map((item, index) => (
                 <SidebarMenuItem key={index}>
-                  {item.collapsible ? (
+                  {item.title === "English" && (
                     <>
                       <button
-                        onClick={() => setSpacedOpen(!spacedOpen)}
+                        onClick={() => setEnglishOpen(!englishOpen)}
                         className={`flex items-center gap-3 px-3 py-6 w-full text-left cursor-pointer ${
                           location.pathname.startsWith("/guest/dashboard/spaced")
                             ? "bg-langlearn-blue/10 text-langlearn-blue font-medium"
@@ -190,7 +137,7 @@ const GuestDashboardSidebar = () => {
                         {item.icon}
                         <span>{item.title}</span>
                       </button>
-                      {spacedOpen &&
+                      {englishOpen &&
                         item.children.map((child, cIndex) => (
                           <SidebarMenuItem key={cIndex}>
                             <SidebarMenuButton asChild>
@@ -210,7 +157,42 @@ const GuestDashboardSidebar = () => {
                           </SidebarMenuItem>
                         ))}
                     </>
-                  ) : (
+                  )}
+                  {item.title === "Science" && (
+                    <>
+                      <button
+                        onClick={() => setScienceOpen(!scienceOpen)}
+                        className={`flex items-center gap-3 px-3 py-6 w-full text-left cursor-pointer ${
+                          location.pathname.startsWith("/guest/dashboard/spaced-science")
+                            ? "bg-langlearn-blue/10 text-langlearn-blue font-medium"
+                            : "hover:bg-gray-100/80"
+                        }`}
+                      >
+                        {item.icon}
+                        <span>{item.title}</span>
+                      </button>
+                      {scienceOpen &&
+                        item.children.map((child, cIndex) => (
+                          <SidebarMenuItem key={cIndex}>
+                            <SidebarMenuButton asChild>
+                              <Link
+                                to={child.path}
+                                onClick={handleNavClick}
+                                className={`ml-6 flex items-center gap-3 px-3 py-3 cursor-pointer text-sm ${
+                                  isActive(child.path)
+                                    ? "bg-langlearn-blue/10 text-langlearn-blue font-medium"
+                                    : "hover:bg-gray-100/80"
+                                }`}
+                              >
+                                {child.icon}
+                                <span>{child.title}</span>
+                              </Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        ))}
+                    </>
+                  )}
+                  {!item.collapsible && (
                     <SidebarMenuButton asChild>
                       <Link
                         to={item.path}
@@ -241,7 +223,6 @@ const GuestDashboardSidebar = () => {
           </div>
         </div>
       </SidebarContent>
-      
     </Sidebar>
   );
 };

@@ -84,6 +84,7 @@ import useMediaQuery from '../../../hooks/use-media-query.ts';
 
 // Components
 import StudentAssignedWords from "./StudentAssignedWords";
+import { sub } from "date-fns";
 
 /**
  * Formats user activity data for display
@@ -464,7 +465,7 @@ const StudentVocabManager = () => {
   
   // Forms
   const singleAssignForm = useForm({ defaultValues: { word: '' } });
-  const bulkAssignForm = useForm({ defaultValues: { word: '' } });
+  const bulkAssignForm = useForm({ defaultValues: { word: '', subject: 'English' } });
   
   // Computed values
   const selectedUser = users?.find(user => user?.id === selectedUserId) || null;
@@ -494,7 +495,7 @@ const StudentVocabManager = () => {
     try {
       await assignWordToBulk({
         userIds: selectedUserIds,
-        wordData: { word: data.word }
+        wordData: { word: data.word, subject: data.subject }
       }).unwrap();
       
       bulkAssignForm.reset();
@@ -832,6 +833,26 @@ const StudentVocabManager = () => {
               onSubmit={bulkAssignForm.handleSubmit(handleBulkAssign)}
               className="space-y-4"
             >
+                <FormField
+                  control={bulkAssignForm.control}
+                  name="subject"
+                  rules={{ required: "Subject is required" }}
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>Subject</FormLabel>
+                      <FormControl>
+                        <select {...field} className="border rounded px-3 py-2 w-full">
+                          <option value="English">English</option>
+                          <option value="Science">Science</option>
+                        </select>
+                      </FormControl>
+                      {fieldState.error && (
+                        <p className="text-sm text-red-500">{fieldState.error.message}</p>
+                      )}
+                    </FormItem>
+                  )}
+                />
+
               <FormField
                 control={bulkAssignForm.control}
                 name="word"

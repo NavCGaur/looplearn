@@ -9,7 +9,7 @@ import authRoutes from './routes/authRoutes.js';
 import vocabRoutes from './routes/vocabRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import scienceRoutes from './routes/scienceRoutes.js';
-//import { generateAndPopulateQuizzes } from './utility/generateAndPopulateQuiz.js';
+import { generateAndPopulateQuizzes } from './utility/generateAndPopulateQuiz.js';
 
 dotenv.config();
 
@@ -61,6 +61,6 @@ mongoose.connect(process.env.MONGO_URL)
   });
 
 
-//generateAndPopulateQuizzes();
+generateAndPopulateQuizzes();
 
 export default app;
