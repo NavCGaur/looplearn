@@ -89,6 +89,8 @@ const LeaderBoard = () => {
   const userId = useSelector((state) => state.auth?.user?.uid);
   //@ts-ignore
   const { data: usersData = [], isLoading, isError, error } = useGetUsersPointsQuery(userId);
+
+  console.log("Users Data:", usersData);
  
 
   

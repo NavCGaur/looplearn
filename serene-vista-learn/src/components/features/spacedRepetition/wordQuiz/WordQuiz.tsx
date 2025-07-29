@@ -12,6 +12,26 @@ import { useToast } from "@/hooks/use-toast";
 import { Star, Trophy } from "lucide-react";
 import confetti from 'canvas-confetti';
 import { AlertCircle } from "lucide-react";
+import Fuse from 'fuse.js';
+
+// Shared flexible answer matching function
+const isAnswerCorrect = (userAnswer: string, correctAnswer: string) => {
+  // First try exact match (case insensitive)
+  if (userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()) {
+    return true;
+  }
+  
+  // Then try fuzzy matching with Fuse.js
+  const fuse = new Fuse([correctAnswer], {
+    threshold: 0.2, // Allow up to 20% difference
+    includeScore: true,
+    ignoreLocation: true,
+    findAllMatches: true
+  });
+  
+  const result = fuse.search(userAnswer.trim());
+  return result.length > 0 && result[0].score <= 0.2;
+};
 
 const WordQuiz: React.FC = () => {
   //@ts-ignore
@@ -47,11 +67,12 @@ const WordQuiz: React.FC = () => {
     setSelectedAnswer(answer);
     setAnswered(true);
     
-    if (answer.toLowerCase() === currentQuestion?.correctAnswer.toLowerCase()) {
+    // Use the same flexible matching logic as FillBlankQuestion
+    if (isAnswerCorrect(answer, currentQuestion?.correctAnswer || '')) {
       setScore(prevScore => prevScore + 1);
       toast({
         title: "Correct! 🎉",
-        description: `Great job! "${currentQuestion.word}" means "${currentQuestion.definition}"`,
+        description: `Great job! "${currentQuestion.word}" -- you got it right!"`,
         variant: "default",
       });
       

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Fuse from 'fuse.js';
 import { QuizQuestion } from "./mockQuizData";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,25 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState("");
   
+  // Flexible answer matching function
+  const isAnswerCorrect = (userAnswer: string, correctAnswer: string) => {
+    // First try exact match (case insensitive)
+    if (userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()) {
+      return true;
+    }
+    
+    // Then try fuzzy matching with Fuse.js
+    const fuse = new Fuse([correctAnswer], {
+      threshold: 0.2, // Allow up to 20% difference
+      includeScore: true,
+      ignoreLocation: true,
+      findAllMatches: true
+    });
+    
+    const result = fuse.search(userAnswer.trim());
+    return result.length > 0 && result[0].score <= 0.2;
+  };
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim() && !isAnswered) {
@@ -27,7 +47,10 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
     }
   };
   
-  const parts = question.question.split('________');
+  const parts = question.question.split('________').map(part => part.replace(/_/g, ''));
+  
+  // Calculate this once and reuse
+  const isCorrect = userAnswer ? isAnswerCorrect(userAnswer, question.correctAnswer) : false;
 
   return (
     <div className="space-y-4">
@@ -38,14 +61,14 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="p-4 bg-white rounded-lg shadow-sm mt-4">
-          <div className="mb-4 text-lg">
+          <div className="mb-4 text-lg leading-relaxed">
             <span>{parts[0]}</span>
-            <span className="inline-block mx-1 min-w-[100px] relative">
+            <span className="inline-block mx-1 min-w-[120px] relative">
               {isAnswered ? (
                 <span 
                   className={cn(
-                    "px-2 py-1 rounded font-bold",
-                    userAnswer?.toLowerCase() === question.correctAnswer.toLowerCase() 
+                    "px-3 py-1 rounded font-bold",
+                    isCorrect 
                       ? "bg-green-100 text-green-800" 
                       : "bg-red-100 text-red-800"
                   )}
@@ -53,10 +76,18 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
                   {userAnswer}
                 </span>
               ) : (
-                <span className="border-b-2 border-dashed border-langlearn-blue inline-block min-w-[80px]">&nbsp;</span>
+                <span 
+                  className="inline-block min-w-[120px]" 
+                  style={{
+                    borderBottom: '2px dashed #60a5fa', 
+                    paddingBottom: '2px'
+                  }}
+                >
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
               )}
             </span>
-            <span>{parts[1]}</span>
+            {parts[1] && <span>{parts[1]}</span>}
           </div>
           
           {!isAnswered ? (
@@ -79,7 +110,7 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
             </div>
           ) : (
             <div className="flex items-center mt-4">
-              {userAnswer?.toLowerCase() === question.correctAnswer.toLowerCase() ? (
+              {isCorrect ? (
                 <div className="flex items-center text-green-600 bg-green-50 p-2 rounded-lg">
                   <Check className="mr-2 h-5 w-5" />
                   <span className="font-medium">Correct!</span>
@@ -100,12 +131,12 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
           )}
         </div>
       </form>
-      
-      {isAnswered && (
+          
+      {/*isAnswered && (
         <div className="mt-4 p-3 bg-blue-100 rounded-lg">
-          <p className="font-medium">{question.word}: <span className="text-gray-700">{question.definition}</span></p>
+          <p className="font-medium">{question.word}<span className="text-gray-700">{question.definition}</span></p>
         </div>
-      )}
+      )*/}
     </div>
   );
 };
