@@ -356,7 +356,7 @@ const UserStatsPanel = () => {
             student.userId === userId ? 'ring-2 ring-blue-500 ring-offset-2' : ''
           }`}
         >
-          <CardHeader className="pb-2">
+          <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className={`w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold ${student.rank && student.rank <= 3 ? "bg-orange-500" : ""}`}>
@@ -374,7 +374,7 @@ const UserStatsPanel = () => {
               </Badge>
             </div>
           </CardHeader>
-          <CardContent className="pt-0">
+          {/* <CardContent className="pt-0">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-1">
                 <Book className="h-4 w-4 text-blue-600" />
@@ -386,6 +386,8 @@ const UserStatsPanel = () => {
               </div>
             </div>
           </CardContent>
+           */}
+         
         </Card>
       ))}
     </div>
