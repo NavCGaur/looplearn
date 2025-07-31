@@ -116,7 +116,7 @@ const LeaderBoard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showUserContext, setShowUserContext] = useState(false);
   const isMobile = useIsMobile();
-  const itemsPerPage = 5;
+  const itemsPerPage = 15;
 
   // Sort and filter data
   const sortedAndFilteredData = useMemo(() => {
@@ -395,10 +395,10 @@ const UserStatsPanel = () => {
     <Table className="border-2 rounded-lg overflow-hidden">
       <TableHeader>
         <TableRow className="bg-blue-50">
-          <TableHead>Rank</TableHead>
+          <TableHead style={{ textAlign: 'center' }}>Rank</TableHead>
           <TableHead>Student</TableHead>
-          <SortableHeader field="wordsLearned">Words Learned</SortableHeader>
-          <SortableHeader field="quizzesTaken">Quizzes Taken</SortableHeader>
+          {/*<SortableHeader field="wordsLearned">Words Learned</SortableHeader>*/}
+          {/*<SortableHeader field="quizzesTaken">Quizzes Taken</SortableHeader>*/}
           <SortableHeader field="points">Points</SortableHeader>
         </TableRow>
       </TableHeader>
@@ -435,7 +435,7 @@ const UserStatsPanel = () => {
                 )}
               </div>
             </TableCell>
-            <TableCell>
+           {/* <TableCell>
               <div className="flex items-center gap-2">
                 <Book className="h-4 w-4 text-blue-600" />
                 {student.wordsLearned}
@@ -446,7 +446,7 @@ const UserStatsPanel = () => {
                 <Star className="h-4 w-4 text-orange-600" />
                 {student.quizzesTaken}
               </div>
-            </TableCell>
+            </TableCell>*/}
             <TableCell>
               <Badge className={`${student.rank && student.rank <= 3 ? "bg-orange-500" : "bg-blue-500"} text-white`}>
                 {student.points} pts

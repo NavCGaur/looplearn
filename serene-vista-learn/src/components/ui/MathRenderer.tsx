@@ -17,9 +17,23 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
   const containerRef = useRef<HTMLSpanElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [katexLoaded, setKatexLoaded] = useState(false);
+
+  // Check if content contains LaTeX
+  const hasLatex = children.includes('$') || children.includes('\\') || children.includes('^') || children.includes('_');
 
   const renderMath = useCallback(async () => {
-    if (!containerRef.current || !children.trim()) return;
+    if (!containerRef.current || !children.trim()) {
+      setIsLoading(false);
+      return;
+    }
+
+    // If no LaTeX content, just show plain text
+    if (!hasLatex) {
+      containerRef.current.textContent = children;
+      setIsLoading(false);
+      return;
+    }
 
     try {
       setIsLoading(true);
@@ -30,6 +44,8 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
       if (!katex || !katex.render) {
         throw new Error('KaTeX not properly loaded');
       }
+
+      setKatexLoaded(true);
       
       // Clear previous content
       containerRef.current.innerHTML = '';
@@ -52,7 +68,7 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
         throwOnError: false,
         errorColor: '#cc0000',
         trust: true,
-        strict: 'ignore', // Ignore unknown commands instead of erroring
+        strict: "ignore" as const, // Ignore unknown commands instead of erroring
         macros: {
           '\\ce': '\\mathrm{#1}', // Chemistry notation
           '\\degree': '^{\\circ}', // Degree symbol
@@ -74,11 +90,21 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
       
       onError?.(error as Error);
     }
-  }, [children, displayMode, onError]);
+  }, [children, displayMode, onError, hasLatex]);
 
   useEffect(() => {
     renderMath();
   }, [renderMath]);
+
+  // Force re-render when component mounts and KaTeX becomes available
+  useEffect(() => {
+    if (katexLoaded && hasLatex) {
+      const timer = setTimeout(() => {
+        renderMath();
+      }, 10);
+      return () => clearTimeout(timer);
+    }
+  }, [katexLoaded, hasLatex, renderMath]);
 
   if (hasError) {
     return (
@@ -90,9 +116,12 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
 
   return (
     <span 
-      ref={containerRef} 
+      ref={containerRef}
       className={`math-renderer ${className} ${isLoading ? 'loading' : ''}`}
-      style={{ minHeight: isLoading ? '1em' : 'auto' }}
+      style={{ 
+        minHeight: isLoading ? '1em' : 'auto',
+        display: 'inline-block'
+      }}
     >
       {isLoading && children}
     </span>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { UseDispatch, useSelector } from "react-redux";
-import { useGetQuizQuestionsQuery } from "@/state/api/userApi";
+import { useDispatch, useSelector } from "react-redux";
+import { useGetQuizQuestionsQuery  } from "@/state/api/userApi";
+import { useGetAssignedScienceQuestionsQuery } from "@/state/api/scienceApi";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { mockQuizQuestions, QuizQuestion } from "./mockQuizData";
@@ -12,13 +13,26 @@ import { useToast } from "@/hooks/use-toast";
 import { Star, Trophy } from "lucide-react";
 import confetti from 'canvas-confetti';
 import { AlertCircle } from "lucide-react";
+import { loadKaTeX } from '../../../utils/katexLoader';
+
 
 const WordQuiz: React.FC = () => {
+
+
   //@ts-ignore
   const userId = useSelector((state) => state.auth?.user?.uid);
+  //@ts-ignore
+  const user = useSelector((state) => state.auth?.user);
   
 
-  const { data: quizQuestions = [], isLoading, isError } = useGetQuizQuestionsQuery(userId || '');
+  const classStandard = user?.classStandard;
+
+  
+
+  //const { data: quizQuestions = [], isLoading, isError } = useGetQuizQuestionsQuery(userId || '');
+
+  const { data: quizQuestions = [], isLoading , isError } = useGetAssignedScienceQuestionsQuery(classStandard || 'class-9');
+
 
   console.log("Quiz Questions:", quizQuestions);
 
@@ -32,14 +46,16 @@ const WordQuiz: React.FC = () => {
   const [endTime, setEndTime] = useState<Date | null>(null);
   const { toast } = useToast();
 
-  useEffect(() => {
-    if (quizQuestions.length > 0) {
-      // Shuffle questions and take 5
-      const shuffled = [...quizQuestions].sort(() => 0.5 - Math.random());
-      setQuestions(shuffled.slice(0, 5));
-      setStartTime(new Date());
-    }
-  }, [quizQuestions]);
+
+
+
+useEffect(() => {
+  if (quizQuestions.length > 0 ) {
+    const shuffled = [...quizQuestions].sort(() => 0.5 - Math.random());
+    setQuestions(shuffled.slice(0, 5));
+    setStartTime(new Date());
+  }
+}, [quizQuestions]);
 
   const currentQuestion = questions[currentQuestionIndex];
   
@@ -51,8 +67,9 @@ const WordQuiz: React.FC = () => {
       setScore(prevScore => prevScore + 1);
       toast({
         title: "Correct! 🎉",
-        description: `Great job! "${currentQuestion.word}" means "${currentQuestion.definition}"`,
+        description: `Great job!"`,
         variant: "default",
+       
       });
       
       // Small confetti for correct answer
@@ -107,7 +124,7 @@ const WordQuiz: React.FC = () => {
         <CardContent>
           <div className="flex flex-col items-center justify-center py-10">
             <Star className="w-12 h-12 text-yellow-400 animate-pulse" />
-            <p className="text-lg mt-4">Loading your awesome word quiz...</p>
+            <p className="text-lg mt-4">Loading your awesome Science quiz...</p>
           </div>
         </CardContent>
       </Card>
@@ -120,7 +137,7 @@ const WordQuiz: React.FC = () => {
         <CardContent>
           <div className="flex flex-col items-center justify-center py-10">
             <Star className="w-12 h-12 text-yellow-400 animate-pulse" />
-            <p className="text-lg mt-4">Loading your awesome word quiz...</p>
+            <p className="text-lg mt-4">Loading your awesome Science quiz...</p>
           </div>
         </CardContent>
       </Card>
@@ -133,7 +150,7 @@ const WordQuiz: React.FC = () => {
         <CardContent>
           <div className="flex flex-col items-center justify-center py-10">
             <AlertCircle className="w-12 h-12 text-red-400" />
-            <p className="text-lg mt-4">Failed to load quiz questions. Please try again.</p>
+            <p className="text-lg mt-4">Failed to load Science quiz questions. Please try again.</p>
           </div>
         </CardContent>
       </Card>

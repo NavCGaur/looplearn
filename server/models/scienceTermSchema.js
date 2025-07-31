@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const ScienceTermSchema = new mongoose.Schema({
+export const ScienceTermSchema = new mongoose.Schema({
   term: {
     type: String,
     required: true,

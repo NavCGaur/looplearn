@@ -100,6 +100,7 @@ export default function QuestionGenerator() {
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
   const { isKatexReady, katexError } = useMathRenderer();
+  const [standard, setStandard] = useState("");
 
   const form = useForm<QuestionGenerationRequest>({
     resolver: zodResolver(questionGenerationRequestSchema),
@@ -119,7 +120,12 @@ export default function QuestionGenerator() {
   const handleGenerateQuestions = async (data: QuestionGenerationRequest) => {
     setIsGenerating(true);
     try {
+
       console.log("Generating questions with data:", data);
+      setStandard(data.classStandard);
+      console.log("Selected standard:", standard);
+      
+
       const response = await generateQuestions(data).unwrap();
       setGeneratedQuestions(response.questions);
       console.log("Generated questions:", response);
@@ -151,36 +157,52 @@ export default function QuestionGenerator() {
   };
 
   const handleSaveSelectedQuestions = async () => {
-    const questionsToSave = generatedQuestions.filter((_, index) => selectedQuestions.has(index));
-    
-    if (questionsToSave.length === 0) {
-      toast({
-        title: "No Selection",
-        description: "Please select at least one question to save.",
-        variant: "destructive",
-      });
-      return;
-    }
+  const questionsToSave = generatedQuestions.filter((_, index) =>
+    selectedQuestions.has(index)
+  );
 
-    setIsSaving(true);
-    try {
-      console.log("Saving selected questions:", questionsToSave);
-      const response = await saveSelectedQuestions(questionsToSave).unwrap();
-      toast({
-        title: "Success",
-        description: response.message,
-      });
-      setSelectedQuestions(new Set());
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to save questions. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSaving(false);
-    }
-  };
+  if (questionsToSave.length === 0) {
+    toast({
+      title: "No Selection",
+      description: "Please select at least one question to save.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  console.log("Saving selected questions :", questionsToSave);
+
+  //@ts-ignore
+  const questionIds = questionsToSave.map((q) => q._id); // using id from backend
+
+  console.log("Selected question IDs:", questionIds);
+
+  setIsSaving(true);
+  try {
+    const response = await saveSelectedQuestions({
+      classStandard: standard, // already set from handleGenerateQuestions
+      questionIds,
+    }).unwrap();
+
+    toast({
+      title: "Success",
+      description: response.message,
+    });
+    setSelectedQuestions(new Set());
+  } catch (error) {
+    toast({
+      title: "Error",
+      description:
+        error instanceof Error
+          ? error.message
+          : "Failed to assign questions. Please try again.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsSaving(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -490,7 +512,7 @@ export default function QuestionGenerator() {
                       <Button 
                         onClick={handleSaveSelectedQuestions}
                         disabled={selectedQuestions.size === 0 || isSaving}
-                        className="bg-secondary hover:bg-secondary/90"
+                        className="bg-gray-500 hover:bg-gray-800"
                       >
                         {isSaving ? (
                           <>

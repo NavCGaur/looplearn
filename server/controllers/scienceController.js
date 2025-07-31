@@ -4,9 +4,11 @@ import { fetchUserWordsDue,
   getQuestionStatsService, 
   deleteQuestionService, 
   updateQuestionService,
-  getAllQuestionsService,
-  getQuestionsByFiltersService,
+  getScienceQuizQuestionsService,
+ getQuestionsByFiltersService,
   saveQuestionsService,
+  assignQuestionsToClassService,
+  fetchAssignedScienceQuestions
  } from '../services/science/scienceService.js';
 
 
@@ -141,39 +143,39 @@ const scienceController= {
     }
   },
 
+
+  getAssignedScienceQuestions: async (req, res) => {
+   try {
+    const { classStandard } = req.params;
+    const questions = await fetchAssignedScienceQuestions(classStandard);
+    res.status(200).json(questions);
+  } catch (err) {
+    res.status(500).json({ error: err.message || 'Failed to fetch assigned questions.' });
+  }
+  } ,
+
   getAllQuestions: async (req, res) => {
     try {
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || 'createdAt';
-      const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
 
-      const result = await getAllQuestionsService({
-        page,
-        limit,
-        sortBy,
-        sortOrder
-      });
+        console.log("Query object:", req.query);
 
-      res.status(200).json({
-        success: true,
-        questions: result.questions,
-        pagination: {
-          currentPage: page,
-          totalPages: result.totalPages,
-          totalQuestions: result.totalQuestions,
-          hasNext: result.hasNext,
-          hasPrev: result.hasPrev
-        }
-      });
-
-    } catch (error) {
-      console.error('Error in getAllQuestions controller:', error);
-      res.status(500).json({
-        success: false,
-        message: error.message || 'Failed to retrieve questions'
-      });
-    }
+      console.log('Get all questions request');
+  const uid = req.query.uid;
+      console.log('Fetching questions for user ID:', uid);
+    const questions = await getScienceQuizQuestionsService(uid);
+    
+    res.status(200).json({
+      success: true,
+      data: questions,
+      message: 'Science quiz questions fetched successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null
+    });
+  }
   },
 
   getQuestionsByFilters: async (req, res) => {
@@ -306,7 +308,25 @@ const scienceController= {
         message: error.message || 'Failed to retrieve question statistics'
       });
     }
+  },
+
+
+  assignQuestionsToClass: async (req, res) => {
+    try {
+    const { classStandard, questionIds } = req.body;
+
+    if (!classStandard || !Array.isArray(questionIds) || questionIds.length === 0) {
+      return res.status(400).json({ message: 'Class and questions are required.' });
+    }
+
+    await assignQuestionsToClassService(classStandard, questionIds);
+
+    res.status(200).json({ message: `Questions assigned to ${classStandard} successfully.` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to assign questions.' });
   }
+  }       
 }
 
 

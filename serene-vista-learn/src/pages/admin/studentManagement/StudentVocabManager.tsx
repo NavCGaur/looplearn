@@ -189,10 +189,39 @@ const ActivityCell = ({ user }) => {
 /**
  * Bulk Assignment Result Modal
  */
+/**
+ * Bulk Assignment Result Modal
+ */
+/**
+ * Bulk Assignment Result Modal
+ */
 const BulkAssignmentResultModal = ({ isOpen, onClose, results }) => {
- const safeResults = Array.isArray(results) ? results : [];
-  const successCount = safeResults.filter(r => r.success).length;
-  const failureCount = safeResults.filter(r => !r.success).length;
+  // First normalize the results array
+  const safeResults = Array.isArray(results) ? results : [];
+  
+  // Create a map to track unique users and their overall status
+  const userResults = new Map();
+  
+  safeResults.forEach(result => {
+    if (!userResults.has(result.userId)) {
+      userResults.set(result.userId, {
+        userId: result.userId,
+        userName: result.userName || `User ${userResults.size + 1}`,
+        success: result.success,
+        wordCount: 1
+      });
+    } else {
+      const existing = userResults.get(result.userId);
+      // User only counts as successful if all assignments were successful
+      existing.success = existing.success && result.success;
+      existing.wordCount += 1;
+    }
+  });
+
+  const userResultsArray = Array.from(userResults.values());
+  const successCount = userResultsArray.filter(r => r.success).length;
+  const failureCount = userResultsArray.filter(r => !r.success).length;
+  const hasMixedResults = successCount > 0 && failureCount > 0;
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -204,49 +233,57 @@ const BulkAssignmentResultModal = ({ isOpen, onClose, results }) => {
                 <Check className="h-5 w-5 text-green-500" />
                 Assignment Successful
               </>
-            ) : (
+            ) : hasMixedResults ? (
               <>
                 <AlertCircle className="h-5 w-5 text-yellow-500" />
                 Assignment Results
+              </>
+            ) : (
+              <>
+                <AlertCircle className="h-5 w-5 text-red-500" />
+                Assignment Failed
               </>
             )}
           </DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4">
-          <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-            <span>Successfully assigned:</span>
-            <Badge variant="default" className="bg-green-100 text-green-800">
-              {successCount} users
-            </Badge>
-          </div>
+          {successCount > 0 && (
+            <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+              <span>Successfully assigned:</span>
+              <Badge variant="default" className="bg-green-100 text-green-800">
+                {successCount} user{successCount !== 1 ? 's' : ''}
+              </Badge>
+            </div>
+          )}
           
           {failureCount > 0 && (
             <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
               <span>Failed assignments:</span>
-              <Badge variant="destructive">{failureCount} users</Badge>
+              <Badge variant="destructive">
+                {failureCount} user{failureCount !== 1 ? 's' : ''}
+              </Badge>
             </div>
           )}
           
-          {safeResults && safeResults.length > 0 && (
+          {userResultsArray.length > 0 && (
             <div className="max-h-40 overflow-y-auto space-y-2">
-              {safeResults.map((result, index) => (
+              {userResultsArray.map((result, index) => (
                 <div 
                   key={index}
                   className={`flex items-center justify-between p-2 rounded text-sm ${
-                    // @ts-ignore
-                    safeResults.success 
+                    result.success 
                       ? 'bg-green-50 text-green-800' 
                       : 'bg-red-50 text-red-800'
                   }`}
                 >
-                  <span className="truncate">{safeResults.
-                  
-                        //@ts-ignore
-                        userName}</span>
-                  {safeResults.
-                        //@ts-ignore
-                        success ? (
+                  <div className="flex flex-col">
+                    <span className="truncate">{result.userName}</span>
+                    <span className="text-xs text-gray-500">
+                      {result.wordCount} word{result.wordCount !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+                  {result.success ? (
                     <Check className="h-4 w-4 flex-shrink-0" />
                   ) : (
                     <AlertCircle className="h-4 w-4 flex-shrink-0" />
@@ -264,7 +301,6 @@ const BulkAssignmentResultModal = ({ isOpen, onClose, results }) => {
     </Dialog>
   );
 };
-
 /**
  * Delete Confirmation Modal
  */

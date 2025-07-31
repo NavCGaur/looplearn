@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import ScienceQuestion from '../../models/scienceQuestionSchema.js';
+import AssignedScienceQuestion from '../../models/assignedScienceQuestions.js';
+
 import axios from 'axios';
 
 import { UserSchema } from '../../models/userSchema.js'; 
@@ -263,6 +265,16 @@ IMPORTANT: Return only the JSON response, no additional text or explanations.`;
         try {
           const savedQuestions = await ScienceQuestion.insertMany(generatedQuestions);
           console.log(`Saved ${savedQuestions.length} new questions to MongoDB`);
+
+            // Update generatedQuestions with the saved versions that include _ids
+          generatedQuestions = savedQuestions.map(question => ({
+            ...question.toObject(), // Convert mongoose document to plain object
+            metadata: {
+              ...question.metadata,
+              source: 'mongodb-new'
+            }
+          }));
+
         } catch (saveError) {
           console.error('Error saving generated questions to MongoDB:', saveError);
           // Continue execution even if saving fails
@@ -271,8 +283,9 @@ IMPORTANT: Return only the JSON response, no additional text or explanations.`;
     }
 
     // Step 5: Combine existing and generated questions
-    const allQuestions = [
+   const allQuestions = [
       ...existingQuestions.map(q => ({
+        _id: q._id, // Include existing _id
         questionText: q.questionText,
         answer: q.answer,
         classStandard: q.classStandard,
@@ -286,7 +299,10 @@ IMPORTANT: Return only the JSON response, no additional text or explanations.`;
           source: 'mongodb-existing'
         }
       })),
-      ...generatedQuestions
+      ...generatedQuestions.map(q => ({
+        _id: q._id, // Include new _id
+        ...q
+      }))
     ];
 
     // Step 6: Shuffle questions to mix existing and new ones
@@ -377,6 +393,34 @@ export const saveQuestionsService = async (questions) => {
     throw error;
   }
 };
+
+export const fetchAssignedScienceQuestions = async (classStandard) => {
+  const assignment = await AssignedScienceQuestion.findOne({ classStandard });
+
+  if (!assignment || !assignment.questionIds.length) {
+    return []; // Return empty if nothing is assigned
+  }
+
+  const questions = await ScienceQuestion.find({
+    _id: { $in: assignment.questionIds },
+    isActive: true
+  }).lean();
+
+  console.log(`Fetched ${questions.length} assigned questions for class ${classStandard}, questions are -${questions} `);
+console.log(JSON.stringify(questions, null, 2));
+  // Optional: format questions if frontend expects specific fields
+  return questions.map(q => ({
+    id: q._id,
+    word: q.questionText.replace('____', '________'), // consistent blank format
+    correctAnswer: q.answer,
+    type: q.questionType === 'multiple-choice' ? 'mcq' : 'fill-in-blank',
+    options: q.options || [],
+    definition: q.topic || '', // example fallback
+  }));
+};
+
+
+
 
 // Get all questions with pagination
 export const getAllQuestionsService = async (options) => {
@@ -611,4 +655,75 @@ const searchExistingQuestions = async (params) => {
     console.error('Error searching existing questions:', error);
     return []; // Return empty array if search fails, fallback to AI generation
   }
+};
+
+
+export const getScienceQuizQuestionsService = async (uid) => {
+  try {
+    // Get user's class standard
+    const user = await User.findOne({ uid }).select('classStandard');
+   
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Get science questions matching the user's class standard
+    const questions = await ScienceQuestion.aggregate([
+      { 
+        $match: { 
+          classStandard: user.classStandard,
+          isActive: true 
+        } 
+      },
+      { $sample: { size: 5 } }, // Get 10 random questions
+      {
+        $project: {
+          _id: 1,
+          questionText: 1,
+          answer: 1,
+          questionType: 1,
+          difficulty: 1,
+          subject: 1,
+          chapter: 1,
+          topic: 1
+        }
+      }
+    ]);
+
+    if (questions.length === 0) {
+      throw new Error('No questions found for this class standard');
+    }
+
+    // Transform questions for frontend
+    const transformedQuestions = questions.map((question, index) => {
+      const baseQuestion = {
+        id: question._id.toString(),
+        type: question.questionType,
+        question: question.questionText,
+        correctAnswer: question.answer,
+        difficulty: question.difficulty,
+        subject: question.subject,
+        chapter: question.chapter,
+        topic: question.topic
+      };
+
+      return baseQuestion;
+    });
+
+    return transformedQuestions;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const assignQuestionsToClassService = async (classStandard, questionIds) => {
+
+  console.log('Assigning questions to class:', classStandard, 'Questions:', questionIds);
+  await AssignedScienceQuestion.findOneAndUpdate(
+    { classStandard },
+    { questionIds, assignedAt: new Date() },
+    { upsert: true, new: true }
+  );
 };

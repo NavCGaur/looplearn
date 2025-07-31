@@ -29,6 +29,10 @@ import WordQuizPage from './pages/wordQuiz/WordQuizPage.tsx';
 import LeaderBoard from './components/leaderBoard/LeaderBoard.tsx';
 
 import ScienceQuestionGenerator from './pages/scienceQuestion/ScienceQuestionGenerator.tsx';
+import ScienceQuizPage from './pages/scienceQuiz/ScienceQuizPage.tsx';
+
+import 'katex/dist/katex.min.css';
+
 
 
 const App = () => (
@@ -57,6 +61,7 @@ const App = () => (
                 <Route path="hangman-game" element={<HangmanGame />} />
                 <Route path="leaderboard" element={<LeaderBoardPage />} />
                 <Route path="word-quiz" element={<WordQuizPage />} />
+                <Route path="science-quiz" element={<ScienceQuizPage />} />
               </Route>
 
 

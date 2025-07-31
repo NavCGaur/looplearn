@@ -14,12 +14,13 @@ const QuizProgress: React.FC<QuizProgressProps> = ({
   totalQuestions, 
   score 
 }) => {
-  const progressPercentage = (currentQuestion / totalQuestions) * 100;
+
+  const progressPercentage = Math.round((currentQuestion / totalQuestions) * 100);
   
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-langlearn-blue">Word Quiz</h2>
+        <h2 className="text-2xl font-bold text-langlearn-blue">Science Quiz</h2>
         <div className="flex items-center">
           <Star className="h-5 w-5 text-yellow-500 mr-1" />
           <span className="font-bold">{score}</span>

@@ -558,7 +558,6 @@ export const getQuizQuestionsService = async (uid) => {
     // Get quiz questions for these words
     const quizQuestions = await Quiz.find({ wordId: { $in: wordIds } });
 
-    console.log('Quiz questions fetched:', quizQuestions, 'for user:', uid);
 
     // Transform the questions to match the frontend format
   const transformedQuestions = quizQuestions.flatMap(quiz => {

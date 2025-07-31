@@ -26,14 +26,18 @@ export const scienceApi = createApi({
       invalidatesTags: ['Words']
     }), 
     saveSelectedQuestions: build.mutation({
-      query: (questions) => ({
-        url: '/science/save-selected',
+      query: (data) => ({
+        url: '/science/assign-science-questions',
         method: 'POST',
-        body: questions,
+        body: data,
       }),
-      //@ts-ignore
-      invalidatesTags: ['Words']
+      
     }), 
+
+    getAssignedScienceQuestions: build.query({
+      query: (classStandard) => `/science/get-science-questions/${classStandard}`,
+    }),
+
      getQuestions: build.query({
       query: (userId) => `/science/get-science-questions?userId=${  userId}`,
     }), 
@@ -124,6 +128,9 @@ export const scienceApi = createApi({
       },
     }),
 
+   
+  
+
     
     submitRatings: build.mutation({
       query: ({ userId, ratings }) => ({
@@ -151,5 +158,6 @@ export const {
   useSubmitRatingsMutation,
   useAddPointsMutation,
   useGenerateQuestionsMutation,
-  useSaveSelectedQuestionsMutation
+  useSaveSelectedQuestionsMutation,
+  useGetAssignedScienceQuestionsQuery 
 } = scienceApi;

@@ -49,7 +49,7 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
   
   const parts = question.question.split('________').map(part => part.replace(/_/g, ''));
   
-  // Calculate this once and reuse
+  // Calculate this once and reuse 
   const isCorrect = userAnswer ? isAnswerCorrect(userAnswer, question.correctAnswer) : false;
 
   return (

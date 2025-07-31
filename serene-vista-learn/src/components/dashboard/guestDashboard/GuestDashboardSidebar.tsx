@@ -44,20 +44,20 @@ const GuestDashboardSidebar = () => {
       icon: <BarChartHorizontal className="h-4 w-4" />,
       path: "/guest/dashboard/leaderboard",
     },
-    {
-      title: "English",
-      icon: <BookOpenText className="h-5 w-5" />,
-      collapsible: true,
-      children: [
-        {
+     {
           title: "Word Practice",
           icon: <ClipboardCheck className="h-4 w-4" />,
           path: "/guest/dashboard/spaced/practice",
         },
         {
-          title: "Quiz",
+          title: "English Quiz",
           icon: <Puzzle className="h-4 w-4" />,
           path: "/guest/dashboard/spaced/word-quiz",
+        },
+         {
+          title: "Science Quiz",
+          icon: <Atom className="h-5 w-5" />,
+          path: "/guest/dashboard/spaced/science-quiz",
         },
         {
           title: "My Word List",
@@ -69,35 +69,8 @@ const GuestDashboardSidebar = () => {
           icon: <Gamepad2 className="h-4 w-4" />,
           path: "/guest/dashboard/spaced/hangman-game",
         },
-      ],
-    },
-    {
-      title: "Science",
-      icon: <Atom className="h-5 w-5" />,
-      collapsible: true,
-      children: [
-        {
-          title: "Word Practice",
-          icon: <ClipboardCheck className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced-science/practice",
-        },
-        {
-          title: "Quiz",
-          icon: <Puzzle className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced-science/word-quiz",
-        },
-        {
-          title: "My Word List",
-          icon: <ClipboardCheck className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced-science/my-word-list",
-        },
-        {
-          title: "Hangman",
-          icon: <Gamepad2 className="h-4 w-4" />,
-          path: "/guest/dashboard/spaced-science/hangman-game",
-        },
-      ],
-    },
+      
+    
   ];
 
   return (
@@ -138,6 +111,7 @@ const GuestDashboardSidebar = () => {
                         <span>{item.title}</span>
                       </button>
                       {englishOpen &&
+                      //@ts-ignore
                         item.children.map((child, cIndex) => (
                           <SidebarMenuItem key={cIndex}>
                             <SidebarMenuButton asChild>
@@ -172,6 +146,7 @@ const GuestDashboardSidebar = () => {
                         <span>{item.title}</span>
                       </button>
                       {scienceOpen &&
+                      //@ts-ignore
                         item.children.map((child, cIndex) => (
                           <SidebarMenuItem key={cIndex}>
                             <SidebarMenuButton asChild>
@@ -192,7 +167,8 @@ const GuestDashboardSidebar = () => {
                         ))}
                     </>
                   )}
-                  {!item.collapsible && (
+                  { //@ts-ignore
+                  !item.collapsible && (
                     <SidebarMenuButton asChild>
                       <Link
                         to={item.path}

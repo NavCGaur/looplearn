@@ -23,6 +23,7 @@ export const UserSchema = new mongoose.Schema({
   vocabulary: [userWordSchema],
 
   scienceWords: [scienceWordSchema],
+
   
   // User profile
   displayName: { type: String },
@@ -47,9 +48,12 @@ export const UserSchema = new mongoose.Schema({
     vocabSpacedRepetition: Date,
     vocabQuiz: Date
   },
+  classStandard: { type: String, default: "" }, // Class standard for quizzes
   
   createdAt: { type: Date, default: Date.now }
 });
+
+export const User = mongoose.model('User', UserSchema, 'NeurolingvaUsers');
 
 
   
