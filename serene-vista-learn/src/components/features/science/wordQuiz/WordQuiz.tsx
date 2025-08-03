@@ -34,7 +34,7 @@ const WordQuiz: React.FC = () => {
   const { data: quizQuestions = [], isLoading , isError } = useGetAssignedScienceQuestionsQuery(classStandard || 'class-9');
 
 
-  console.log("Quiz Questions:", quizQuestions);
+  console.log("ScienceQuiz Questions:", quizQuestions);
 
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);

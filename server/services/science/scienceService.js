@@ -402,8 +402,7 @@ export const fetchAssignedScienceQuestions = async (classStandard) => {
   }
 
   const questions = await ScienceQuestion.find({
-    _id: { $in: assignment.questionIds },
-    isActive: true
+    _id: { $in: assignment.questionIds }
   }).lean();
 
   console.log(`Fetched ${questions.length} assigned questions for class ${classStandard}, questions are -${questions} `);
