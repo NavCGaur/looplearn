@@ -269,23 +269,34 @@ export const assignWordToUser = async (userId, wordData) => {
           uid: userId,
           'vocabulary.wordId': wordDoc._id
         });
-
-        if (!userHasWord) {
-          await User.findOneAndUpdate(
-            { uid: userId },
-            {
-              $push: {
-                vocabulary: {
-                  wordId: wordDoc._id,
-                  addedAt: new Date()
+          if (!userHasWord) {
+            await User.findOneAndUpdate(
+              { uid: userId },
+              {
+                $push: {
+                  vocabulary: {
+                    wordId: wordDoc._id,
+                    addedAt: new Date()
+                  }
                 }
               }
-            }
-          );
-          results.push({ word, success: true });
-        } else {
-          results.push({ word, success: false, error: 'Already assigned' });
-        }
+            );
+
+            results.push({
+              word,
+              userId,
+              success: true,
+              message: 'Word assigned successfully'
+            });
+          } else {
+            results.push({
+              word,
+              userId,
+              success: true, // ✅ Treat as success
+              message: 'Word already assigned'
+            });
+          }
+
 
       } catch (err) {
         results.push({ word, success: false, error: err.message });
@@ -301,16 +312,24 @@ export const assignWordToUser = async (userId, wordData) => {
 
 
 export const assignWordToBulkUsers = async (userIds, wordData) => {
+
+  console.log('Assigning words to bulk users in service:', userIds, 'Word Data:', wordData, 'Subject:', wordData.subject);
+
   const results = [];
   let successCount = 0;
   let failureCount = 0;
 
   const words = wordData.word.split(',').map(w => w.trim().toLowerCase()).filter(Boolean);
   const subject = wordData.subject || 'English';
-  console.log('Assigning words to bulk users:', userIds, 'Words:', words, 'Subject:', subject);
 
   const users = await User.find({ uid: { $in: userIds } });
+
+  console.log('Found users:', users); 
+
   const foundUserIds = users.map(user => user.uid);
+
+  console.log('Found user IDs:', foundUserIds);
+  
   const missingUserIds = userIds.filter(id => !foundUserIds.includes(id));
 
   missingUserIds.forEach(userId => {
@@ -323,8 +342,12 @@ export const assignWordToBulkUsers = async (userIds, wordData) => {
     failureCount++;
   });
 
+  console.log('Missing user IDs:', missingUserIds);
+
   for (const word of words) {
     let wordDocument = await Word.findOne({ word });
+
+    console.log('Processing word:', word, 'Found document:', wordDocument ? 'Yes' : 'No');
 
     // Create word if not exists
     if (!wordDocument) {
@@ -359,6 +382,8 @@ export const assignWordToBulkUsers = async (userIds, wordData) => {
           difficulty: 1
         });
 
+        console.log('Creating new word document in service:', wordDocument);
+
         wordDocument = await wordDocument.save();
       } catch (error) {
         users.forEach(user => {
@@ -375,6 +400,7 @@ export const assignWordToBulkUsers = async (userIds, wordData) => {
     }
 
     for (const user of users) {
+      console.log('Assigning word to user:', user.uid, 'Word:', word);
       try {
         const alreadyAssigned = await User.findOne({
           uid: user.uid,
@@ -385,12 +411,13 @@ export const assignWordToBulkUsers = async (userIds, wordData) => {
           results.push({
             userId: user.uid,
             userName: user.name,
-            success: false,
-            error: `Word "${word}" already assigned`
+            success: true,
+            message: `Word "${word}" was already assigned`
           });
-          failureCount++;
+          successCount++; // ✅ Treat as success
           continue;
         }
+
 
         await User.findOneAndUpdate(
           { uid: user.uid },

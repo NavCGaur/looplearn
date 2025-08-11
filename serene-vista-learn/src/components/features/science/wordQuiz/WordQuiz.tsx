@@ -52,7 +52,7 @@ const WordQuiz: React.FC = () => {
 useEffect(() => {
   if (quizQuestions.length > 0 ) {
     const shuffled = [...quizQuestions].sort(() => 0.5 - Math.random());
-    setQuestions(shuffled.slice(0, 5));
+    setQuestions(shuffled.slice(0, 10));
     setStartTime(new Date());
   }
 }, [quizQuestions]);

@@ -5,7 +5,7 @@ export const questionGenerationRequestSchema = z.object({
   classStandard: z.string().min(1, "Class/Standard is required"),
   subject: z.string().min(1, "Subject is required"),
   chapter: z.string().min(1, "Chapter is required"),
-  topic: z.string().min(1, "Topic is required"),
+  topic: z.string().optional().default("All"),
   questionType: z.enum(["fill-in-blank", "multiple-choice", "true-false", "short-answer", "long-answer"])
     .default("fill-in-blank"),
   numberOfQuestions: z.number().min(1).max(15),

@@ -108,7 +108,7 @@ export default function QuestionGenerator() {
       classStandard: "",
       subject: "",
       chapter: "",
-      topic: "",
+      topic: "All",
       questionType: "fill-in-blank",
       numberOfQuestions: 5,
     },
@@ -363,10 +363,10 @@ export default function QuestionGenerator() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>
-                            Topic <span className="text-red-500">*</span>
+                            Topic
                           </FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g., Dalton's Atomic Theory" {...field} />
+                            <Input placeholder="e.g., Dalton's Atomic Theory" defaultValue="All"  {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

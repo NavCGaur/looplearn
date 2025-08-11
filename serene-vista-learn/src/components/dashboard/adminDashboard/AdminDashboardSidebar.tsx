@@ -1,4 +1,4 @@
-import { Book, AudioWaveform, Repeat, BarChartHorizontal , Users} from "lucide-react";
+import { Book, AudioWaveform, Repeat, BarChartHorizontal , Users, Telescope} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -19,6 +19,7 @@ const menuItems = [
   { icon: Repeat, label: "Spaced Repetition", path: "/admin/dashboard/spaced" },
   { icon: AudioWaveform, label: "Speech Shadow", path: "/admin/dashboard/speech" },
   { icon: Users, label: "Student Management", path: "/admin/dashboard/students" },
+  { icon: Telescope, label: "Science Question Management", path: "/admin/dashboard/science-question-generator" },
 ];
 
 const AdminDashboardSidebar = () => {

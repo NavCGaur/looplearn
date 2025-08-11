@@ -403,10 +403,9 @@ export const fetchAssignedScienceQuestions = async (classStandard) => {
 
   const questions = await ScienceQuestion.find({
     _id: { $in: assignment.questionIds }
-  }).lean();
+  });
 
   console.log(`Fetched ${questions.length} assigned questions for class ${classStandard}, questions are -${questions} `);
-console.log(JSON.stringify(questions, null, 2));
   // Optional: format questions if frontend expects specific fields
   return questions.map(q => ({
     id: q._id,
@@ -623,11 +622,10 @@ const getSubjectSearchArray = (subject) => {
 
 const searchExistingQuestions = async (params) => {
   try {
-    const { classStandard, subject, chapter, topic, questionType, numberOfQuestions } = params;
+    const { classStandard, subject, chapter, questionType, numberOfQuestions } = params;
     
     // Create flexible search patterns
     const chapterPattern = createFlexibleSearchPattern(chapter);
-    const topicPattern = createFlexibleSearchPattern(topic);
     const subjectArray = getSubjectSearchArray(subject);
     
     // Build MongoDB query
@@ -635,7 +633,6 @@ const searchExistingQuestions = async (params) => {
       classStandard: classStandard, // Strict match
       subject: { $in: subjectArray }, // Flexible subject matching
       chapter: { $regex: chapterPattern }, // Loose chapter matching
-      topic: { $regex: topicPattern }, // Loose topic matching
       questionType: questionType, // Strict match
       isActive: true
     };
@@ -675,7 +672,7 @@ export const getScienceQuizQuestionsService = async (uid) => {
           isActive: true 
         } 
       },
-      { $sample: { size: 5 } }, // Get 10 random questions
+      { $sample: { size: 10 } }, // Get 10 random questions
       {
         $project: {
           _id: 1,
@@ -717,12 +714,38 @@ export const getScienceQuizQuestionsService = async (uid) => {
 };
 
 
-export const assignQuestionsToClassService = async (classStandard, questionIds) => {
+export const assignQuestionsToClassService = async (classStandard, newQuestionIds) => {
+  console.log('Assigning questions to class:', classStandard, 'New Questions:', newQuestionIds);
 
-  console.log('Assigning questions to class:', classStandard, 'Questions:', questionIds);
-  await AssignedScienceQuestion.findOneAndUpdate(
+  // Fetch existing assignment
+  const existingAssignment = await AssignedScienceQuestion.findOne({ classStandard });
+
+  let updatedQuestionIds;
+
+  if (existingAssignment) {
+    const existingIds = new Set(existingAssignment.questionIds.map(id => id.toString()));
+    const uniqueNewIds = newQuestionIds.filter(id => !existingIds.has(id.toString()));
+
+    updatedQuestionIds = [...existingAssignment.questionIds, ...uniqueNewIds];
+  } else {
+    updatedQuestionIds = newQuestionIds;
+  }
+
+  // Update or create the assignment
+  const updatedAssignment = await AssignedScienceQuestion.findOneAndUpdate(
     { classStandard },
-    { questionIds, assignedAt: new Date() },
+    {
+      questionIds: updatedQuestionIds,
+      assignedAt: new Date()
+    },
     { upsert: true, new: true }
   );
+
+  console.log('Updated assignment:', updatedAssignment);
+
+  return {
+    classStandard,
+    addedCount: updatedQuestionIds.length - (existingAssignment?.questionIds.length || 0),
+    totalCount: updatedQuestionIds.length
+  };
 };

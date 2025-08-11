@@ -500,7 +500,7 @@ const StudentVocabManager = () => {
   const [deleteBulkUsers, { isLoading: isBulkDeleting }] = useDeleteBulkUsersMutation();
   
   // Forms
-  const singleAssignForm = useForm({ defaultValues: { word: '' } });
+  const singleAssignForm = useForm({ defaultValues: { word: '', subject: 'English' } });
   const bulkAssignForm = useForm({ defaultValues: { word: '', subject: 'English' } });
   
   // Computed values
@@ -511,11 +511,12 @@ const StudentVocabManager = () => {
   // Event Handlers
   const handleSingleAssign = async (data) => {
     if (!selectedUserId) return;
+
     
     try {
       await assignWord({
         userId: selectedUserId,
-        wordData: { word: data.word }
+        wordData: { word: data.word, subject: "English" }
       }).unwrap();
       
       singleAssignForm.reset();
@@ -529,11 +530,13 @@ const StudentVocabManager = () => {
     if (selectedUserIds.length === 0) return;
     
     try {
-      await assignWordToBulk({
+      const response = await assignWordToBulk({
         userIds: selectedUserIds,
         wordData: { word: data.word, subject: data.subject }
       }).unwrap();
       
+      console.log('Response of assigning word to bulk users:', response);
+
       bulkAssignForm.reset();
       dispatch(closeBulkAssignModal());
       dispatch(clearAllSelections());

@@ -26,7 +26,7 @@ export const assignWord = async (req, res) => {
   try {
     const { word} = req.body;
     console.log('Assigning word in controller:', word);
-    const result = await assignWordToUser(req.params.userId, { word, subject });
+    const result = await assignWordToUser(req.params.userId, { word, subject: 'English' });
     res.status(201).json(result);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -54,7 +54,7 @@ export const bulkAssignWord = async (req, res) => {
     // Call the bulk assignment service
     const result = await assignWordToBulkUsers(userIds, wordData);
     
-    res.status(201).json({
+    res.status(200).json({
       message: 'Bulk assignment completed',
       results: result.results,
       successCount: result.successCount,

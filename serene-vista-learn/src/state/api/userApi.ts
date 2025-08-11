@@ -50,17 +50,17 @@ export const userApi = createApi({
     }),
 
 
-    assignWordToUser: builder.mutation({
-      query: ({ userId, wordData }) => ({
-        url: `/users/${userId}/words`,
-        method: 'POST',
-        body: wordData
-      }),
-      invalidatesTags: (result, error, { userId }) => [
-        { type: 'User', id: userId },
-        { type: 'User', id: 'LIST' }
-      ]
-    }),
+ assignWordToUser: builder.mutation({
+  query: ({ userId, wordData }) => ({
+    url: `/users/${userId}/words`,
+    method: 'POST',
+    body: { ...wordData, subject: wordData.subject || 'English' }
+  }),
+  invalidatesTags: (result, error, { userId }) => [
+    { type: 'User', id: userId },
+    { type: 'User', id: 'LIST' }
+  ]
+}),
 
     assignWordToBulkUsers: builder.mutation({
   query: ({ userIds, wordData }) => ({
