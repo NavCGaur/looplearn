@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
+import Fuse from 'fuse.js'; 
 import ScienceQuestion from '../../models/scienceQuestionSchema.js';
 import AssignedScienceQuestion from '../../models/assignedScienceQuestions.js';
 
@@ -592,20 +593,19 @@ const getDifficultyByClass = (classStandard) => {
 // Helper function to create flexible search patterns for chapter and topic
 const createFlexibleSearchPattern = (text) => {
   if (!text) return '';
-  
-  // Remove common separators and normalize text
+
   const normalized = text
     .toLowerCase()
-    .replace(/[&\-_\s]+/g, ' ')
+    .replace(/[^a-z0-9\s]/g, ' ') // Remove all non-alphanumeric characters
     .replace(/\s+/g, ' ')
     .trim();
-  
-  // Create regex pattern that allows for flexible matching
+
   const words = normalized.split(' ');
   const pattern = words.map(word => `(?=.*${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`).join('');
   
   return new RegExp(pattern, 'i');
 };
+
 
 // Helper function to create subject search array including related subjects
 const getSubjectSearchArray = (subject) => {
@@ -620,36 +620,50 @@ const getSubjectSearchArray = (subject) => {
   return subjectMap[subject] || [subject];
 };
 
+const normalizeText = (text) => {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ') // Remove punctuation
+    .replace(/\s+/g, ' ')         // Collapse whitespace
+    .trim();
+};
+
 const searchExistingQuestions = async (params) => {
   try {
     const { classStandard, subject, chapter, questionType, numberOfQuestions } = params;
-    
-    // Create flexible search patterns
-    const chapterPattern = createFlexibleSearchPattern(chapter);
+
     const subjectArray = getSubjectSearchArray(subject);
-    
-    // Build MongoDB query
-    const query = {
-      classStandard: classStandard, // Strict match
-      subject: { $in: subjectArray }, // Flexible subject matching
-      chapter: { $regex: chapterPattern }, // Loose chapter matching
-      questionType: questionType, // Strict match
-      isActive: true
-    };
-    
-    console.log('MongoDB search query:', JSON.stringify(query, null, 2));
-    
-    // Search for existing questions
-    const existingQuestions = await ScienceQuestion.find(query)
-      .limit(numberOfQuestions)
-      .lean();
-    
-    console.log(`Found ${existingQuestions.length} existing questions in MongoDB`);
-    
-    return existingQuestions;
+
+    // Broad MongoDB query — no chapter filtering
+    const candidates = await ScienceQuestion.find({
+      classStandard,
+      subject: { $in: subjectArray },
+      questionType 
+     }).lean();
+
+    console.log(`Fetched ${candidates.length} candidates from MongoDB`);
+
+    if (!chapter || candidates.length === 0) {
+      return candidates.slice(0, numberOfQuestions); // Fallback: return top N
+    }
+
+    // Fuse.js fuzzy matching on chapter
+    const fuse = new Fuse(candidates, {
+      keys: ['chapter'],
+      threshold: 0.4, // Lower = stricter match
+      ignoreLocation: true,
+      minMatchCharLength: 2
+    });
+
+    const fuzzyResults = fuse.search(chapter);
+    const filtered = fuzzyResults.map(r => r.item);
+
+    console.log(`Fuse.js matched ${filtered.length} questions for chapter "${chapter}"`);
+
+    return filtered.slice(0, numberOfQuestions);
   } catch (error) {
     console.error('Error searching existing questions:', error);
-    return []; // Return empty array if search fails, fallback to AI generation
+    return [];
   }
 };
 

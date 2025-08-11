@@ -27,11 +27,10 @@ const WordQuiz: React.FC = () => {
 
   const classStandard = user?.classStandard;
 
-  
+  console.log("User from Redux:", user);
 
-  //const { data: quizQuestions = [], isLoading, isError } = useGetQuizQuestionsQuery(userId || '');
-
-  const { data: quizQuestions = [], isLoading , isError } = useGetAssignedScienceQuestionsQuery(classStandard || 'class-9');
+  console.log(classStandard, "Class Standard from user:", user?.classStandard);
+  const { data: quizQuestions = [], isLoading , isError } = useGetAssignedScienceQuestionsQuery(classStandard);
 
 
   console.log("ScienceQuiz Questions:", quizQuestions);

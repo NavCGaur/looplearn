@@ -95,6 +95,7 @@ const authService = {
         }));
   
       console.log('Successfully populated user vocabulary');
+      console.log('populatedUser:', populatedUser);
       
       return {
         uid: decodedToken.uid,
@@ -104,10 +105,12 @@ const authService = {
         photoURL: decodedToken.picture || populatedUser.photoURL,
         vocabulary: transformedVocabulary,
         role: populatedUser.role,
+        classStandard: populatedUser.classStandard,
         createdAt: populatedUser.createdAt,
         planId: populatedUser.planId,
         subscriptionStatus: populatedUser.subscriptionStatus,
         currentPeriodEnd: populatedUser.currentPeriodEnd
+
       };
     } catch (error) {
       console.error('Firebase token verification error:', error);

@@ -147,6 +147,7 @@ const scienceController= {
   getAssignedScienceQuestions: async (req, res) => {
    try {
     const { classStandard } = req.params;
+    console.log('Fetching assigned questions for class:', classStandard);
     const questions = await fetchAssignedScienceQuestions(classStandard);
     res.status(200).json(questions);
   } catch (err) {
