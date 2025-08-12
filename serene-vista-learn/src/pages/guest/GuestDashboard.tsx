@@ -22,7 +22,8 @@ const GuestDashboard = () => {
   } = useGetPracticeWordsQuery(userId);
 
 
-
+  console.log("User Id in GuestDashboard:",  userId);
+  console.log("Words fetched in GuestDashboard:", words);
   
   useEffect(() => {
     if (words) {
