@@ -42,25 +42,24 @@ import {
 
 /**
  * Login Component - Handles user authentication including:
- * - Email/password login
  * - Google OAuth
- * - Facebook OAuth
  * - Token verification
  * - Navigation based on user role
  */
 const Login = () => {
   // State management for form inputs and UI
-  const [email, setEmail] = useState(""); // Stores email input
-  const [password, setPassword] = useState(""); // Stores password input
-  const [showPassword, setShowPassword] = useState(false); // Toggles password visibility
+  // Commented out email/password states since we're not using them
+  // const [email, setEmail] = useState(""); // Stores email input
+  // const [password, setPassword] = useState(""); // Stores password input
+  // const [showPassword, setShowPassword] = useState(false); // Toggles password visibility
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Controls snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState(""); // Snackbar message content
   const [snackbarSeverity, setSnackbarSeverity] = useState("info"); // Snackbar severity level
-  const [isAuthLoading, setIsAuthLoading] = useState(false); // Loading state for email/password auth
+  // Commented out unused loading states
+  // const [isAuthLoading, setIsAuthLoading] = useState(false); // Loading state for email/password auth
   const [isGoogleLoading, setIsGoogleLoading] = useState(false); // Loading state for Google auth
-  const [isFacebookLoading, setIsFacebookLoading] = useState(false); // Loading state for Facebook auth
+  // const [isFacebookLoading, setIsFacebookLoading] = useState(false); // Loading state for Facebook auth
   const [rememberMe, setRememberMe] = useState(false);
-
 
   // Hooks for navigation, state management, and theming
   const navigate = useNavigate();
@@ -70,8 +69,7 @@ const Login = () => {
   // Firebase authentication setup
   const auth = getAuth();
   const googleProvider = new GoogleAuthProvider(); // Google auth provider
-  const facebookProvider = new FacebookAuthProvider(); // Facebook auth provider
-
+  // const facebookProvider = new FacebookAuthProvider(); // Facebook auth provider (commented out)
 
   /**
    * Effect hook to check if user is already authenticated
@@ -133,7 +131,7 @@ const Login = () => {
         case "Guest":
           rolePath = "/guest/dashboard/spaced";
           break;
-    }
+      }
 
       console.log(`Navigating to ${rolePath}...`);
       navigate(rolePath);
@@ -148,10 +146,9 @@ const Login = () => {
     }
   };
 
-  /**
-   * Handles email/password login submission
-   * @param {Event} e - Form submission event
-   */
+  /*
+   * Commented out email/password login handler since we're not using it
+   * 
   const handleEmailPasswordLogin = async (e) => {
     e.preventDefault();
     console.log("Attempting email/password login...");
@@ -231,6 +228,7 @@ const Login = () => {
       setIsAuthLoading(false);
     }
   };
+  */
 
   /**
    * Handles Google OAuth sign-in
@@ -250,7 +248,7 @@ const Login = () => {
 
       const user = result.user;
 
-     console.log("User credential:", user);
+      console.log("User credential:", user);
       if (!user.emailVerified) {
         console.log("User email not verified. Logging out...");
 
@@ -290,9 +288,9 @@ const Login = () => {
     }
   };
 
-  /**
-   * Handles Facebook OAuth sign-in
-   */
+  /*
+   * Commented out Facebook login handler since we're not using it
+   * 
   const handleFacebookSignIn = async () => {
     console.log("Attempting Facebook sign-in...");
     setIsFacebookLoading(true);
@@ -346,8 +344,7 @@ const Login = () => {
       setIsFacebookLoading(false);
     }
   };
-
-
+  */
 
   /**
    * Navigates to sign-up page
@@ -356,13 +353,13 @@ const Login = () => {
     navigate("/signup");
   };
 
-  /**
-   * Navigates to forgot password page
-   */
+  /*
+   * Commented out forgot password navigation since we're not using email/password login
+   * 
   const navigateToForgotPassword = () => {
     navigate("/forgot-password");
   };
-
+  */
 
   return (
     <Box
@@ -440,27 +437,9 @@ const Login = () => {
         >
           LoopLearn
         </Typography>
-
-       {/* <Typography 
-          variant="h4" 
-          component="h1"
-          textAlign="center"
-          fontWeight="bold"
-          mb={3}
-          sx={{
-            background: "linear-gradient(90deg, #60efff, #00ff87)",
-            backgroundClip: "text",
-            textFillColor: "transparent",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          Login to your account
-        </Typography>
-        */}
   
         {/* Social login buttons */}
-        <Box display="flex" justifyContent="space-around" mb="2rem">
+        <Box display="flex" justifyContent="space-around" mb="2rem" mt="4rem">
           {/* Google login button */}
           <Button
             variant="contained"
@@ -468,9 +447,9 @@ const Login = () => {
             disabled={isGoogleLoading}
             onClick={handleGoogleSignIn}
             sx={{
-              py: 1,
+              py: 2,
               fontSize: '0.75rem',
-              width: '45%',
+              width: '70%',
               textWrap: 'nowrap',
               background: "rgba(255, 255, 255, 0.05)",
               backdropFilter: "blur(4px)",
@@ -488,45 +467,13 @@ const Login = () => {
             {isGoogleLoading ? (
               <CircularProgress size={24} color="inherit" />
             ) : (
-              "Google"
+              "Login with Google"
             )}
           </Button>
-  
-          {/* Facebook login button */}
-          <Button
-            variant="contained"
-            startIcon={<Facebook />}
-            disabled={isFacebookLoading}
-            onClick={handleFacebookSignIn}
-            sx={{
-              py: 1,
-              fontSize: '0.75rem',
-              width: '45%',
-              textWrap: 'nowrap',
-              background: "rgba(255, 255, 255, 0.05)",
-              backdropFilter: "blur(4px)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              color: "#fff",
-              boxShadow: "none",
-              '&:hover': {
-                background: "rgba(255, 255, 255, 0.15)",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                transform: "translateY(-2px)",
-              },
-              transition: "all 0.3s ease"
-            }}
-          >
-            {isFacebookLoading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              "Facebook"
-            )}
-          </Button>
-
-        
         </Box>
   
-        {/* Divider for social login options */}
+        {/* Divider for social login options 
+        
         <Box sx={{ my: 2 }}>
           <Divider sx={{ 
             "&::before, &::after": {
@@ -539,7 +486,13 @@ const Login = () => {
           </Divider>
         </Box>
   
-        {/* Login form */}
+        
+        
+        */}
+        
+        {/* 
+         * Commented out the email/password form since we're not using it
+         * 
         <Box
           component="form"
           onSubmit={handleEmailPasswordLogin}
@@ -548,7 +501,6 @@ const Login = () => {
             '& .MuiButton-root': { mt: 2 },
           }}
         >
-          {/* Email input field */}
           <FormControl fullWidth required>
             <InputLabel htmlFor="email" sx={{
               fontSize: '0.85rem',
@@ -583,7 +535,6 @@ const Login = () => {
             />
           </FormControl>
   
-          {/* Password input field with visibility toggle */}
           <FormControl fullWidth required>
             <InputLabel htmlFor="password" sx={{
               fontSize: '0.85rem',
@@ -626,7 +577,6 @@ const Login = () => {
           </FormControl>
   
           <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" sx={{ mt: 1, mb: 1 }}>
-            {/* Remember Me Checkbox */}
             <FormControlLabel
               control={
                 <Checkbox
@@ -646,7 +596,6 @@ const Login = () => {
               label={<Typography variant="body2" sx={{ color: "rgba(255, 255, 255, 0.7)" }}>Remember Me</Typography>}
             />
   
-            {/* Forgot Password link */}
             <Typography
               variant="body2"
               sx={{
@@ -667,7 +616,6 @@ const Login = () => {
             </Typography>
           </Box>
   
-          {/* Login button */}
           <Button
             type="submit"
             variant="contained"
@@ -699,7 +647,6 @@ const Login = () => {
             )}
           </Button>
   
-          {/* Sign-up link */}
           <Box sx={{ mt: 3, textAlign: 'center' }}>
             <Typography variant="body2" sx={{ color: "rgba(255, 255, 255, 0.7)", letterSpacing: '0.5px' }}>
               Don't have an account?{' '}
@@ -724,6 +671,7 @@ const Login = () => {
             </Typography>
           </Box>
         </Box>
+        */}
       </Paper>
   
       {/* Snackbar for showing notifications/alerts */}
@@ -752,6 +700,5 @@ const Login = () => {
     </Box>
   );
 };
-
 
 export default Login;
