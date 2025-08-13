@@ -407,12 +407,12 @@ export default function QuestionGenerator() {
                             <Input 
                               type="number" 
                               min={1} 
-                              max={15} 
+                              max={100} 
                               {...field}
                               onChange={(e) => field.onChange(parseInt(e.target.value))}
                             />
                           </FormControl>
-                          <p className="text-xs text-gray-500">Maximum 15 questions per generation</p>
+                          <p className="text-xs text-gray-500">Maximum 100 questions per generation</p>
                           <FormMessage />
                         </FormItem>
                       )}
