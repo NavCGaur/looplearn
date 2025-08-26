@@ -156,7 +156,7 @@ const getTranslations = async (word, definition, exampleSentence) => {
 export const getAllUsers = async () => {
   try {
     const users = await User.find()
-      .select('uid email displayName vocabulary latestFeatureAccess')
+      .select('uid email displayName vocabulary latestFeatureAccess classStandard')
       .lean();
       
     // Transform users to include count of assigned words and feature access
@@ -164,7 +164,9 @@ export const getAllUsers = async () => {
       id: user.uid,
       name: user.displayName || 'Unnamed User',
       email: user.email,
-      assignedWords: user.vocabulary || [],
+      vocabulary: user.vocabulary || [],
+      classStandard: user.classStandard,
+      vocabularyCount: user.vocabulary?.length || 0,
       latestFeatureAccess: user.latestFeatureAccess || {}
     }));
   } catch (error) {
@@ -619,5 +621,77 @@ export const getQuizQuestionsService = async (uid) => {
     return transformedQuestions;
   } catch (error) {
     throw error;
+  }
+};
+
+// Get users by class standard
+export const getUsersByClassService = async (classStandard) => {
+  try {
+    const users = await User.find({ classStandard })
+      .select('uid email displayName vocabulary classStandard')
+      .lean();
+      
+    // Transform users to include count of assigned words
+    return users.map(user => ({
+      id: user.uid,
+      name: user.displayName || 'Unnamed User',
+      email: user.email,
+      classStandard: user.classStandard,
+      assignedWords: user.vocabulary || [],
+      vocabularyCount: user.vocabulary ? user.vocabulary.length : 0
+    }));
+  } catch (error) {
+    throw new Error(`Error fetching users by class: ${error.message}`);
+  }
+};
+
+// Assign word to all users in a class
+export const assignWordToClassService = async (classStandard, wordData) => {
+  try {
+    // Get all users in the class
+    const users = await User.find({ classStandard });
+    
+    if (users.length === 0) {
+      throw new Error(`No users found in class ${classStandard}`);
+    }
+
+    const userIds = users.map(user => user.uid);
+    
+    // Use existing bulk assign function
+    const result = await assignWordToBulkUsers(userIds, wordData);
+    
+    return {
+      ...result,
+      classStandard,
+      totalUsersInClass: users.length,
+      message: `Words assigned to all users in class ${classStandard}`
+    };
+  } catch (error) {
+    throw new Error(`Error assigning words to class: ${error.message}`);
+  }
+};
+
+// Update user's class standard
+export const updateUserClassService = async (userId, classStandard) => {
+  try {
+    const updated = await User.findOneAndUpdate(
+      { uid: userId },
+      { classStandard },
+      { new: true }
+    ).select('uid displayName email classStandard');
+    
+    if (!updated) {
+      throw new Error('User not found');
+    }
+    
+    return {
+      id: updated.uid,
+      name: updated.displayName,
+      email: updated.email,
+      classStandard: updated.classStandard,
+      message: `User class updated to ${classStandard}`
+    };
+  } catch (error) {
+    throw new Error(`Error updating user class: ${error.message}`);
   }
 };

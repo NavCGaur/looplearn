@@ -8,7 +8,12 @@ import { fetchUserWordsDue,
  getQuestionsByFiltersService,
   saveQuestionsService,
   assignQuestionsToClassService,
-  fetchAssignedScienceQuestions
+  fetchAssignedScienceQuestions,
+  bulkUploadQuestionsService,
+  getAssignedQuestionsService,
+  unassignQuestionsService,
+  getAvailableQuestionsForAssignmentService,
+  assignNewQuestionsService
  } from '../services/science/scienceService.js';
 
 
@@ -328,9 +333,190 @@ const scienceController= {
     res.status(500).json({ message: 'Failed to assign questions.' });
   }
   }       
+,
+  bulkUploadQuestions: async (req, res) => {
+  try {
+    const { questions } = req.body;
+
+    if (!questions || !Array.isArray(questions) || questions.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Questions array is required and cannot be empty'
+      });
+    }
+
+    const result = await bulkUploadQuestionsService(questions);
+    
+    res.status(200).json({
+      success: true,
+      count: result.count,
+      questions: result.questions,
+      assignments: result.assignments,
+      message: `Successfully uploaded ${result.count} questions and assigned them to ${result.assignmentCount} class(es)`
+    });
+  } catch (error) {
+    console.error('Bulk upload error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to upload questions'
+    });
+  }
+  },
+
+  getAssignedQuestions: async (req, res) => {
+    try {
+      const { classStandard } = req.params;
+      
+      const filters = {
+        subject: req.query.subject,
+        chapter: req.query.chapter,
+        topic: req.query.topic,
+        questionType: req.query.questionType,
+        difficulty: req.query.difficulty,
+        search: req.query.search
+      };
+
+      // Remove undefined filters
+      Object.keys(filters).forEach(key => {
+        if (filters[key] === undefined || filters[key] === '') {
+          delete filters[key];
+        }
+      });
+
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+
+      const result = await getAssignedQuestionsService(classStandard, filters, { page, limit });
+
+      res.status(200).json({
+        success: true,
+        data: result,
+        appliedFilters: filters
+      });
+
+    } catch (error) {
+      console.error('Error in getAssignedQuestions controller:', error);
+      res.status(500).json({
+        success: false,
+        message: error.message || 'Failed to retrieve assigned questions'
+      });
+    }
+  },
+
+  unassignQuestions: async (req, res) => {
+    try {
+      const { classStandard } = req.params;
+      const { questionIds } = req.body;
+
+      if (!classStandard) {
+        return res.status(400).json({
+          success: false,
+          message: 'Class standard is required'
+        });
+      }
+
+      if (!questionIds || !Array.isArray(questionIds) || questionIds.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'Question IDs array is required and cannot be empty'
+        });
+      }
+
+      const result = await unassignQuestionsService(classStandard, questionIds);
+
+      res.status(200).json({
+        success: true,
+        message: `Successfully unassigned ${result.removedCount} questions from ${classStandard}`,
+        data: result
+      });
+
+    } catch (error) {
+      console.error('Error in unassignQuestions controller:', error);
+      res.status(500).json({
+        success: false,
+        message: error.message || 'Failed to unassign questions'
+      });
+    }
+  },
+
+  getAvailableQuestionsForAssignment: async (req, res) => {
+    try {
+      const { classStandard } = req.params;
+      
+      const filters = {
+        subject: req.query.subject,
+        chapter: req.query.chapter,
+        topic: req.query.topic,
+        questionType: req.query.questionType,
+        difficulty: req.query.difficulty,
+        search: req.query.search
+      };
+
+      // Remove undefined filters
+      Object.keys(filters).forEach(key => {
+        if (filters[key] === undefined || filters[key] === '') {
+          delete filters[key];
+        }
+      });
+
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+
+      const result = await getAvailableQuestionsForAssignmentService(classStandard, filters, { page, limit });
+
+      res.status(200).json({
+        success: true,
+        data: result,
+        appliedFilters: filters
+      });
+
+    } catch (error) {
+      console.error('Error in getAvailableQuestionsForAssignment controller:', error);
+      res.status(500).json({
+        success: false,
+        message: error.message || 'Failed to retrieve available questions'
+      });
+    }
+  },
+
+  assignNewQuestions: async (req, res) => {
+    try {
+      const { classStandard } = req.params;
+      const { questionIds } = req.body;
+
+      if (!classStandard) {
+        return res.status(400).json({
+          success: false,
+          message: 'Class standard is required'
+        });
+      }
+
+      if (!questionIds || !Array.isArray(questionIds) || questionIds.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'Question IDs array is required and cannot be empty'
+        });
+      }
+
+      const result = await assignNewQuestionsService(classStandard, questionIds);
+
+      res.status(200).json({
+        success: true,
+        message: `Successfully assigned ${result.addedCount} questions to ${classStandard}${result.skippedDuplicates > 0 ? ` (${result.skippedDuplicates} duplicates skipped)` : ''}`,
+        data: result
+      });
+
+    } catch (error) {
+      console.error('Error in assignNewQuestions controller:', error);
+      res.status(500).json({
+        success: false,
+        message: error.message || 'Failed to assign questions'
+      });
+    }
+  },
+
+
+
 }
-
-
-
 
 export default scienceController

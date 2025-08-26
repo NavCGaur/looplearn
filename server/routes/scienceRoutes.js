@@ -22,4 +22,15 @@ router.delete('/delete-question/:id', scienceController.deleteQuestion);
 // Question assignment routes
 router.post('/assign-science-questions', scienceController.assignQuestionsToClass);
 
+// Question management routes for assigned questions
+router.get('/assigned-questions/:classStandard', scienceController.getAssignedQuestions);
+router.delete('/unassign-questions/:classStandard', scienceController.unassignQuestions);
+
+// Question assignment routes
+router.get('/available-questions/:classStandard', scienceController.getAvailableQuestionsForAssignment);
+router.post('/assign-questions/:classStandard', scienceController.assignNewQuestions);
+
+router.post('/bulk-upload', scienceController.bulkUploadQuestions);
+
+
 export default router;

@@ -128,6 +128,78 @@ export const scienceApi = createApi({
       },
     }),
 
+    bulkUploadScienceQuestions: build.mutation<
+      {
+        success: boolean;
+        count: number;
+        questions: any[];
+        message: string;
+      },
+      { questions: any[] }
+    >({
+      query: (data) => ({
+        url: '/science/bulk-upload',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['ScienceQuestion'],
+    }),
+
+    // Get assigned questions for a class with filters
+    getAssignedQuestions: build.query({
+      query: ({ classStandard, ...filters }) => ({
+        url: `/science/assigned-questions/${classStandard}`,
+        params: filters,
+      }),
+      providesTags: ['ScienceQuestion'],
+      transformResponse: (response) => {
+        console.log('Get assigned questions API response:', response);
+        return response;
+      },
+    }),
+
+    // Unassign questions from a class
+    unassignQuestions: build.mutation({
+      query: ({ classStandard, questionIds }) => ({
+        url: `/science/unassign-questions/${classStandard}`,
+        method: 'DELETE',
+        body: { questionIds },
+      }),
+      invalidatesTags: ['ScienceQuestion'],
+      transformResponse: (response) => {
+        console.log('Unassign questions API response:', response);
+        return response;
+      },
+    }),
+
+    // Get available questions for assignment to a class
+    getAvailableQuestionsForAssignment: build.query({
+      query: ({ classStandard, ...filters }) => ({
+        url: `/science/available-questions/${classStandard}`,
+        params: filters,
+      }),
+      providesTags: ['ScienceQuestion'],
+      transformResponse: (response) => {
+        console.log('Get available questions API response:', response);
+        return response;
+      },
+    }),
+
+    // Assign new questions to a class
+    assignNewQuestions: build.mutation({
+      query: ({ classStandard, questionIds }) => ({
+        url: `/science/assign-questions/${classStandard}`,
+        method: 'POST',
+        body: { questionIds },
+      }),
+      invalidatesTags: ['ScienceQuestion'],
+      transformResponse: (response) => {
+        console.log('Assign new questions API response:', response);
+        return response;
+      },
+    }),
+    
+
    
   
 
@@ -159,5 +231,10 @@ export const {
   useAddPointsMutation,
   useGenerateQuestionsMutation,
   useSaveSelectedQuestionsMutation,
-  useGetAssignedScienceQuestionsQuery 
+  useGetAssignedScienceQuestionsQuery,
+  useBulkUploadScienceQuestionsMutation,
+  useGetAssignedQuestionsQuery,
+  useUnassignQuestionsMutation,
+  useGetAvailableQuestionsForAssignmentQuery,
+  useAssignNewQuestionsMutation
 } = scienceApi;

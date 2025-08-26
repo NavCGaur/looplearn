@@ -14,7 +14,7 @@ import SpacedRepetitionLayout from './components/dashboard/guestDashboard/Spaced
 import Dashboard from "./pages/Dashboard";
 import GuestDashboard from "./pages/guest/GuestDashboard.tsx";
 import AdminDashboard from './pages/admin/AdminDashboard.tsx';
-import StudentVocabManager from './pages/admin/studentManagement/StudentVocabManager.tsx';
+import StudentVocabManager from './pages/admin/studentManagement/StudentVocabManager.enhanced.tsx';
 import NotFound from "./pages/NotFound";
 
 import StatsOverview from './components/stats/StatsOverview';
@@ -30,8 +30,13 @@ import LeaderBoard from './components/leaderBoard/LeaderBoard.tsx';
 
 import ScienceQuestionGenerator from './pages/scienceQuestion/ScienceQuestionGenerator.tsx';
 import ScienceQuizPage from './pages/scienceQuiz/ScienceQuizPage.tsx';
+import QuestionManager from './pages/scienceQuestion/QuestionManager.tsx';
+import QuestionAssigner from './pages/scienceQuestion/QuestionAssigner.tsx';
+import Main from './pages/scienceQuestion/Main.tsx';
+import BulkUpload from './pages/scienceQuestion/BulkUpload.tsx';
 
 import 'katex/dist/katex.min.css';
+
 
 
 
@@ -74,9 +79,15 @@ const App = () => (
               <Route path="grammar" element={<GrammarQuiz />} />
               <Route path="spaced" element={<SpacedRepetition />} />
               <Route path="stats" element={<StatsOverview />} />
-              <Route path="students" element={<StudentVocabManager />} />              
+              <Route path="students" element={<StudentVocabManager />} />  
+              <Route path="students-enhanced" element={<StudentVocabManager />} />
               {/* Science guest dashboard routes here */}
+              <Route path="science-questions" element={<Main />} />
               <Route path="science-question-generator" element={<ScienceQuestionGenerator   />} />
+              <Route path="bulk-upload" element={<BulkUpload />} />
+              <Route path="question-manager" element={<QuestionManager />} />
+              <Route path="question-assigner" element={<QuestionAssigner />} />
+
             </Route>
             
             <Route path="/login" element={<Login />} />

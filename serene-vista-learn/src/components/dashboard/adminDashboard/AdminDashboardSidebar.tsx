@@ -1,5 +1,6 @@
-import { Book, AudioWaveform, Repeat, BarChartHorizontal , Users, Telescope} from "lucide-react";
+import { Book, AudioWaveform, Repeat, BarChartHorizontal, Users, Telescope, ChevronDown, Settings, Upload, Database, Plus } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,7 +11,15 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const menuItems = [
   { icon: BarChartHorizontal, label: "Overview", path: "/admin/dashboard/stats" },
@@ -19,11 +28,24 @@ const menuItems = [
   { icon: Repeat, label: "Spaced Repetition", path: "/admin/dashboard/spaced" },
   { icon: AudioWaveform, label: "Speech Shadow", path: "/admin/dashboard/speech" },
   { icon: Users, label: "Student Management", path: "/admin/dashboard/students" },
-  { icon: Telescope, label: "Science Question Management", path: "/admin/dashboard/science-question-generator" },
+];
+
+const scienceMenuItems = [
+  { icon: Telescope, label: "Question Generator", path: "/admin/dashboard/science-question-generator" },
+  { icon: Settings, label: "Question Manager", path: "/admin/dashboard/question-manager" },
+  { icon: Plus, label: "Question Assigner", path: "/admin/dashboard/question-assigner" },
+  { icon: Upload, label: "Bulk Upload", path: "/admin/dashboard/bulk-upload" },
+  { icon: Database, label: "Main Dashboard", path: "/admin/dashboard/science-questions" },
 ];
 
 const AdminDashboardSidebar = () => {
   const location = useLocation();
+  const [isScienceOpen, setIsScienceOpen] = useState(
+    location.pathname.includes('/admin/dashboard/science-') || 
+    location.pathname.includes('/admin/dashboard/question-manager') ||
+    location.pathname.includes('/admin/dashboard/question-assigner') ||
+    location.pathname.includes('/admin/dashboard/bulk-upload')
+  );
 
   return (
     <Sidebar>
@@ -55,6 +77,36 @@ const AdminDashboardSidebar = () => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              
+              {/* Science Question Management Collapsible */}
+              <Collapsible open={isScienceOpen} onOpenChange={setIsScienceOpen}>
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton>
+                      <Telescope />
+                      <span>Science Questions</span>
+                      <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${isScienceOpen ? 'rotate-180' : ''}`} />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {scienceMenuItems.map((item) => (
+                        <SidebarMenuSubItem key={item.label}>
+                          <SidebarMenuSubButton asChild>
+                            <Link 
+                              to={item.path}
+                              className={location.pathname === item.path ? "bg-sidebar-accent" : ""}
+                            >
+                              <item.icon />
+                              <span>{item.label}</span>
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

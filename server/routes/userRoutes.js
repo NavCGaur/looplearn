@@ -1,5 +1,19 @@
 import express from 'express';
-import { getUsers, getUser, assignWord,bulkAssignWord, removeWord, deleteUser, deleteBulkUsers, addPoints, getUserPoints, getQuizQuestions   } from '../controllers/userController.js';
+import { 
+  getUsers, 
+  getUser, 
+  assignWord,
+  bulkAssignWord, 
+  removeWord, 
+  deleteUser, 
+  deleteBulkUsers, 
+  addPoints, 
+  getUserPoints, 
+  getQuizQuestions,
+  getUsersByClass,
+  assignWordToClass,
+  updateUserClass
+} from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -44,10 +58,28 @@ router.post("/addPoints", addPoints);
 router.get("/points/:userId", getUserPoints);
 
 /**
- * Get /api/questions/:uid
+ * GET /api/users/questions/:uid
  * Get questions for a user
  */
 router.get('/questions/:uid', getQuizQuestions);
+
+/**
+ * GET /api/users/class/:classStandard
+ * Get users by class standard
+ */
+router.get('/class/:classStandard', getUsersByClass);
+
+/**
+ * POST /api/users/class/:classStandard/assign-word
+ * Assign word to all users in a class
+ */
+router.post('/class/:classStandard/assign-word', assignWordToClass);
+
+/**
+ * PUT /api/users/:userId/class
+ * Update user's class standard
+ */
+router.put('/:userId/class', updateUserClass);
 
 
 export default router;

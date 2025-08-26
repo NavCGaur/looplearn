@@ -11,7 +11,7 @@ export const scienceQuestionSchema = new mongoose.Schema({
   subject: {
     type: String,
     required: true,
-    enum: ['mathematics', 'physics', 'chemistry', 'biology', 'science']
+    enum: ['mathematics', 'physics', 'chemistry', 'biology', 'science', 'social-science']
   },
   chapter: { type: String, required: true, trim: true },
   topic: { type: String, required: true, trim: true },

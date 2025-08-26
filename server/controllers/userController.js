@@ -1,5 +1,18 @@
-import { getAllUsers, getUserById, assignWordToUser, assignWordToBulkUsers,removeWordFromUser, deleteUserById,
-  deleteUsersByIds, addPointsService, getUserPointsService, getQuizQuestionsService  } from '../services/user/index.js';
+import { 
+  getAllUsers, 
+  getUserById, 
+  assignWordToUser, 
+  assignWordToBulkUsers,
+  removeWordFromUser, 
+  deleteUserById,
+  deleteUsersByIds, 
+  addPointsService, 
+  getUserPointsService, 
+  getQuizQuestionsService,
+  getUsersByClassService,
+  assignWordToClassService,
+  updateUserClassService
+} from '../services/user/index.js';
 
 export const getUsers = async (req, res) => {
   console.log('Fetching all users in controller...');
@@ -156,6 +169,41 @@ export const getQuizQuestions = async (req, res) => {
     const { uid } = req.params;
     const questions = await getQuizQuestionsService(uid);
     res.status(200).json(questions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get users by class standard
+export const getUsersByClass = async (req, res) => {
+  try {
+    const { classStandard } = req.params;
+    const users = await getUsersByClassService(classStandard);
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Assign word to all users in a class
+export const assignWordToClass = async (req, res) => {
+  try {
+    const { classStandard } = req.params;
+    const wordData = req.body;
+    const result = await assignWordToClassService(classStandard, wordData);
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update user's class standard
+export const updateUserClass = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { classStandard } = req.body;
+    const result = await updateUserClassService(userId, classStandard);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

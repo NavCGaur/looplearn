@@ -763,3 +763,332 @@ export const assignQuestionsToClassService = async (classStandard, newQuestionId
     totalCount: updatedQuestionIds.length
   };
 };
+
+
+export const bulkUploadQuestionsService = async (questions) => {
+  try {
+    // Validate questions format
+    const validatedQuestions = questions.map(q => ({
+      questionText: q.questionText,
+      answer: q.answer,
+      classStandard: q.classStandard,
+      subject: q.subject,
+      chapter: q.chapter,
+      topic: q.topic,
+      questionType: q.questionType || 'fill-in-blank',
+      difficulty: q.difficulty || 'medium'
+    }));
+
+    // Save questions to ScienceQuestion collection
+    const savedQuestions = await ScienceQuestion.insertMany(validatedQuestions);
+    
+    // Group questions by class standard for assignment
+    const questionsByClass = savedQuestions.reduce((acc, question) => {
+      const classStandard = question.classStandard;
+      if (!acc[classStandard]) {
+        acc[classStandard] = [];
+      }
+      acc[classStandard].push(question._id);
+      return acc;
+    }, {});
+
+    // Create or update assignments for each class standard
+    const assignmentPromises = Object.entries(questionsByClass).map(async ([classStandard, questionIds]) => {
+      try {
+        // Check if assignment already exists for this class
+        let assignment = await AssignedScienceQuestion.findOne({ classStandard });
+        
+        if (assignment) {
+          // Add new questions to existing assignment (avoid duplicates)
+          const newQuestionIds = questionIds.filter(id => 
+            !assignment.questionIds.some(existingId => existingId.equals(id))
+          );
+          
+          if (newQuestionIds.length > 0) {
+            assignment.questionIds.push(...newQuestionIds);
+            assignment.updatedAt = new Date();
+            await assignment.save();
+          }
+          
+          return assignment;
+        } else {
+          // Create new assignment
+          const newAssignment = new AssignedScienceQuestion({
+            classStandard,
+            questionIds,
+            assignedAt: new Date()
+          });
+          
+          await newAssignment.save();
+          return newAssignment;
+        }
+      } catch (error) {
+        // Handle unique constraint error gracefully
+        if (error.code === 11000) {
+          // If duplicate key error, try to update existing record
+          const assignment = await AssignedScienceQuestion.findOne({ classStandard });
+          if (assignment) {
+            const newQuestionIds = questionIds.filter(id => 
+              !assignment.questionIds.some(existingId => existingId.equals(id))
+            );
+            
+            if (newQuestionIds.length > 0) {
+              assignment.questionIds.push(...newQuestionIds);
+              assignment.updatedAt = new Date();
+              await assignment.save();
+            }
+            return assignment;
+          }
+        }
+        throw error;
+      }
+    });
+
+    const assignments = await Promise.all(assignmentPromises);
+
+    return {
+      count: savedQuestions.length,
+      questions: savedQuestions,
+      assignments,
+      assignmentCount: assignments.length
+    };
+  } catch (error) {
+    console.error('Service bulk upload error:', error);
+    throw new Error(`Failed to bulk upload questions: ${error.message}`);
+  }
+};
+
+// Get assigned questions for a class with filtering and pagination
+export const getAssignedQuestionsService = async (classStandard, filters = {}, options = {}) => {
+  try {
+    const { page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
+    // Get assignment for the class
+    const assignment = await AssignedScienceQuestion.findOne({ classStandard });
+    if (!assignment || !assignment.questionIds.length) {
+      return {
+        questions: [],
+        totalQuestions: 0,
+        totalPages: 0,
+        hasNext: false,
+        hasPrev: false
+      };
+    }
+
+    // Build query for filtering questions
+    const query = {
+      _id: { $in: assignment.questionIds },
+      isActive: { $ne: false } // Include questions that are not marked as inactive
+    };
+
+    // Apply filters
+    if (filters.subject) query.subject = filters.subject;
+    if (filters.chapter) query.chapter = new RegExp(filters.chapter, 'i');
+    if (filters.topic) query.topic = new RegExp(filters.topic, 'i');
+    if (filters.questionType) query.questionType = filters.questionType;
+    if (filters.difficulty) query.difficulty = filters.difficulty;
+    if (filters.search) {
+      query.$or = [
+        { questionText: new RegExp(filters.search, 'i') },
+        { answer: new RegExp(filters.search, 'i') },
+        { chapter: new RegExp(filters.search, 'i') },
+        { topic: new RegExp(filters.search, 'i') }
+      ];
+    }
+
+    // Get total count for pagination
+    const totalQuestions = await ScienceQuestion.countDocuments(query);
+    const totalPages = Math.ceil(totalQuestions / limit);
+
+    // Get filtered questions with pagination
+    const questions = await ScienceQuestion.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    return {
+      questions,
+      totalQuestions,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+      assignment: {
+        classStandard: assignment.classStandard,
+        assignedAt: assignment.assignedAt,
+        totalAssigned: assignment.questionIds.length
+      }
+    };
+
+  } catch (error) {
+    console.error('Error in getAssignedQuestionsService:', error);
+    throw error;
+  }
+};
+
+// Unassign questions from a class
+export const unassignQuestionsService = async (classStandard, questionIds) => {
+  try {
+    console.log(`Unassigning ${questionIds.length} questions from ${classStandard}`);
+
+    // Find the assignment for this class
+    const assignment = await AssignedScienceQuestion.findOne({ classStandard });
+    if (!assignment) {
+      throw new Error(`No assignment found for class ${classStandard}`);
+    }
+
+    // Convert question IDs to ObjectId for comparison
+    const questionObjectIds = questionIds.map(id => 
+      typeof id === 'string' ? new mongoose.Types.ObjectId(id) : id
+    );
+
+    // Remove the specified questions from the assignment
+    assignment.questionIds = assignment.questionIds.filter(assignedId => 
+      !questionObjectIds.some(removeId => removeId.equals(assignedId))
+    );
+
+    // Update the assignment
+    assignment.updatedAt = new Date();
+    await assignment.save();
+
+    console.log(`Successfully unassigned questions. Remaining: ${assignment.questionIds.length}`);
+
+    return {
+      classStandard,
+      removedCount: questionIds.length,
+      remainingCount: assignment.questionIds.length
+    };
+
+  } catch (error) {
+    console.error('Error in unassignQuestionsService:', error);
+    throw error;
+  }
+};
+
+// Get available questions for assignment (excluding already assigned ones)
+export const getAvailableQuestionsForAssignmentService = async (classStandard, filters = {}, options = {}) => {
+  try {
+    const { page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
+    // Get currently assigned question IDs for this class
+    const assignment = await AssignedScienceQuestion.findOne({ classStandard });
+    const assignedQuestionIds = assignment ? assignment.questionIds : [];
+
+    // Build query for available questions
+    const query = {
+      classStandard: classStandard, // Only show questions for the selected class
+      isActive: { $ne: false }, // Include questions that are not marked as inactive
+      _id: { $nin: assignedQuestionIds } // Exclude already assigned questions
+    };
+
+    // Apply filters
+    if (filters.subject) query.subject = filters.subject;
+    if (filters.chapter) query.chapter = new RegExp(filters.chapter, 'i');
+    if (filters.topic) query.topic = new RegExp(filters.topic, 'i');
+    if (filters.questionType) query.questionType = filters.questionType;
+    if (filters.difficulty) query.difficulty = filters.difficulty;
+    if (filters.search) {
+      query.$or = [
+        { questionText: new RegExp(filters.search, 'i') },
+        { answer: new RegExp(filters.search, 'i') },
+        { chapter: new RegExp(filters.search, 'i') },
+        { topic: new RegExp(filters.search, 'i') }
+      ];
+    }
+
+    // Get total count for pagination
+    const totalQuestions = await ScienceQuestion.countDocuments(query);
+    const totalPages = Math.ceil(totalQuestions / limit);
+
+    // Get available questions with pagination
+    const questions = await ScienceQuestion.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    return {
+      questions,
+      totalQuestions,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+      assignmentInfo: {
+        classStandard,
+        totalAssigned: assignedQuestionIds.length,
+        availableForAssignment: totalQuestions
+      }
+    };
+
+  } catch (error) {
+    console.error('Error in getAvailableQuestionsForAssignmentService:', error);
+    throw error;
+  }
+};
+
+// Assign new questions to a class
+export const assignNewQuestionsService = async (classStandard, questionIds) => {
+  try {
+    console.log(`Assigning ${questionIds.length} new questions to ${classStandard}`);
+
+    // Convert question IDs to ObjectId
+    const questionObjectIds = questionIds.map(id => 
+      typeof id === 'string' ? new mongoose.Types.ObjectId(id) : id
+    );
+
+    // Verify that all questions exist and belong to the correct class
+    const questions = await ScienceQuestion.find({
+      _id: { $in: questionObjectIds },
+      classStandard: classStandard
+    });
+
+    if (questions.length !== questionIds.length) {
+      throw new Error('Some questions are invalid or do not belong to the specified class');
+    }
+
+    // Find or create assignment for this class
+    let assignment = await AssignedScienceQuestion.findOne({ classStandard });
+    
+    if (assignment) {
+      // Add new questions to existing assignment (avoid duplicates)
+      const newQuestionIds = questionObjectIds.filter(id => 
+        !assignment.questionIds.some(existingId => existingId.equals(id))
+      );
+      
+      if (newQuestionIds.length > 0) {
+        assignment.questionIds.push(...newQuestionIds);
+        assignment.updatedAt = new Date();
+        await assignment.save();
+      }
+      
+      return {
+        classStandard,
+        addedCount: newQuestionIds.length,
+        totalAssigned: assignment.questionIds.length,
+        skippedDuplicates: questionIds.length - newQuestionIds.length
+      };
+    } else {
+      // Create new assignment
+      const newAssignment = new AssignedScienceQuestion({
+        classStandard,
+        questionIds: questionObjectIds,
+        assignedAt: new Date()
+      });
+      
+      await newAssignment.save();
+      
+      return {
+        classStandard,
+        addedCount: questionObjectIds.length,
+        totalAssigned: questionObjectIds.length,
+        skippedDuplicates: 0
+      };
+    }
+
+  } catch (error) {
+    console.error('Error in assignNewQuestionsService:', error);
+    throw error;
+  }
+};
