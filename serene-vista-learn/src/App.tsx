@@ -22,6 +22,7 @@ import VocabQuiz from './components/features/vocabQuiz/index';
 import GrammarQuiz from './components/features/grammerQuiz/index';
 import SpacedRepetition from './components/features/spacedRepetition/spacedRepetition/SpacedRepetition.jsx';
 import Login from './components/auth/login';
+import Onboarding from './components/auth/onboarding';
 import MyWordList from './components/features/spacedRepetition/MyWordList.tsx';
 import HangmanGame from './components/features/spacedRepetition/HangmanGame/HangmanGame.tsx';
 import LeaderBoardPage from './pages/leaderBoard/LeaderBoardPage.tsx';
@@ -30,6 +31,7 @@ import LeaderBoard from './components/leaderBoard/LeaderBoard.tsx';
 
 import ScienceQuestionGenerator from './pages/scienceQuestion/ScienceQuestionGenerator.tsx';
 import ScienceQuizPage from './pages/scienceQuiz/ScienceQuizPage.tsx';
+import MathQuizPage from './pages/mathQuiz/MathQuizPage.tsx';
 import QuestionManager from './pages/scienceQuestion/QuestionManager.tsx';
 import QuestionAssigner from './pages/scienceQuestion/QuestionAssigner.tsx';
 import Main from './pages/scienceQuestion/Main.tsx';
@@ -67,6 +69,7 @@ const App = () => (
                 <Route path="leaderboard" element={<LeaderBoardPage />} />
                 <Route path="word-quiz" element={<WordQuizPage />} />
                 <Route path="science-quiz" element={<ScienceQuizPage />} />
+                <Route path="math-quiz" element={<MathQuizPage />} />
               </Route>
 
 
@@ -91,6 +94,7 @@ const App = () => (
             </Route>
             
             <Route path="/login" element={<Login />} />
+            <Route path="/onboarding" element={<Onboarding />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

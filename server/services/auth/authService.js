@@ -109,7 +109,8 @@ const authService = {
         createdAt: populatedUser.createdAt,
         planId: populatedUser.planId,
         subscriptionStatus: populatedUser.subscriptionStatus,
-        currentPeriodEnd: populatedUser.currentPeriodEnd
+        currentPeriodEnd: populatedUser.currentPeriodEnd,
+        needsOnboarding: !populatedUser.displayName || !populatedUser.classStandard
 
       };
     } catch (error) {

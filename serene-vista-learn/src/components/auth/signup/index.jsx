@@ -259,7 +259,7 @@ const SignUp = () => {
       justifyContent="center"
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg,#1E91FF, #EDF9FF)",       
+        background: "linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%)",       
         padding: 2
       }}
     >
@@ -273,9 +273,8 @@ const SignUp = () => {
           maxWidth: "450px",
           minHeight: "650px",
           borderRadius: 3,
-          backdropFilter: "blur(16px)",
-          backgroundColor: "#176DC2",
-          border: "1px solid rgba(255, 255, 255, 0.125)",
+          backgroundColor: "#FFFFFF",
+          border: "1px solid #E2E8F0",
           boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
           transition: 'all 0.3s ease-in-out',
           '&:hover': {
@@ -298,7 +297,7 @@ const SignUp = () => {
                         left: "10px",
                         width: "30px",
                         height: "30px",
-                        color: "white",
+                        color: "#64748B",
                         cursor: "pointer"
                       }}
                     />
@@ -312,7 +311,7 @@ const SignUp = () => {
           fontWeight="bold"
           mb={3}
           sx={{
-            background: "linear-gradient(90deg, #60efff, #00ff87)",
+            background: "linear-gradient(90deg, #3B82F6, #1E40AF)",
             backgroundClip: "text",
             textFillColor: "transparent",
             WebkitBackgroundClip: "text",
@@ -327,7 +326,7 @@ const SignUp = () => {
           component="h2"
           textAlign="center"
           mb={4}
-          sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+          sx={{ color: "#64748B" }}
         >
           Create a new account
         </Typography>
@@ -343,7 +342,7 @@ const SignUp = () => {
           <FormControl fullWidth required>
             <InputLabel htmlFor="fullName" sx={{
               fontSize: '0.85rem',
-              color: "rgba(255, 255, 255, 0.7)",
+              color: "#64748B",
             }}>
               Full Name
             </InputLabel>
@@ -355,20 +354,21 @@ const SignUp = () => {
               placeholder="Enter your full name"
               disableUnderline
               sx={{
-                backgroundColor: "rgba(255, 255, 255, 0.07)",
-                color: "#ffffff !important",
+                backgroundColor: "#F8FAFC",
+                color: "#1E293B",
                 padding: "12px 16px",
                 borderRadius: "10px",
                 fontSize: '0.95rem',
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                border: "2px solid #E2E8F0",
                 transition: "all 0.3s ease",
                 '&:hover': {
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  backgroundColor: "#F1F5F9",
+                  border: "2px solid #CBD5E1",
                 },
                 '&:focus': {
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  boxShadow: "0 0 0 2px rgba(96, 239, 255, 0.2)"
+                  backgroundColor: "#FFFFFF",
+                  border: "2px solid #3B82F6",
+                  boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.1)"
                 }
               }}
             />

@@ -45,12 +45,12 @@ interface Question {
 
 interface FilterParams {
   classStandard: string;
-  subject?: string;
-  chapter?: string;
-  topic?: string;
-  questionType?: string;
-  difficulty?: string;
-  search?: string;
+  subject?: string | undefined;
+  chapter?: string | undefined;
+  topic?: string | undefined;
+  questionType?: string | undefined;
+  difficulty?: string | undefined;
+  search?: string | undefined;
   page?: number;
   limit?: number;
 }

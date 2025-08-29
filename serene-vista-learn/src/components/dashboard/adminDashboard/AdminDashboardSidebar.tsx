@@ -26,6 +26,7 @@ const menuItems = [
   { icon: Book, label: "Vocab Quiz", path: "/admin/dashboard/vocab" },
   { icon: Book, label: "Grammar Quiz", path: "/admin/dashboard/grammar" },
   { icon: Repeat, label: "Spaced Repetition", path: "/admin/dashboard/spaced" },
+  { icon: BarChartHorizontal, label: "Math Quiz", path: "/admin/dashboard/spaced/math-quiz" },
   { icon: AudioWaveform, label: "Speech Shadow", path: "/admin/dashboard/speech" },
   { icon: Users, label: "Student Management", path: "/admin/dashboard/students" },
 ];

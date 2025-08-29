@@ -12,8 +12,10 @@ import {
   getQuizQuestions,
   getUsersByClass,
   assignWordToClass,
-  updateUserClass
+  updateUserClass,
+  updateUserProfile
 } from '../controllers/userController.js';
+import { authenticateUser as authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -80,6 +82,12 @@ router.post('/class/:classStandard/assign-word', assignWordToClass);
  * Update user's class standard
  */
 router.put('/:userId/class', updateUserClass);
+
+/**
+ * PUT /api/users/update-profile
+ * Update user profile (for onboarding)
+ */
+router.put('/update-profile', authenticate, updateUserProfile);
 
 
 export default router;

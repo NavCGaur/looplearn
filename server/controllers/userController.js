@@ -208,3 +208,59 @@ export const updateUserClass = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Update user profile (for onboarding)
+export const updateUserProfile = async (req, res) => {
+  try {
+    const { uid } = req.user; // From auth middleware
+    const { displayName, classStandard } = req.body;
+
+    if (!displayName || !classStandard) {
+      return res.status(400).json({
+        success: false,
+        message: 'Display name and class standard are required'
+      });
+    }
+
+    // Import User model
+    const { User } = await import('../models/userSchema.js');
+    
+    const updatedUser = await User.findOneAndUpdate(
+      { uid },
+      { 
+        displayName: displayName.trim(),
+        classStandard 
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    console.log("Profile updated successfully for user:", uid);
+
+    res.status(200).json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: {
+        user: {
+          uid: updatedUser.uid,
+          email: updatedUser.email,
+          displayName: updatedUser.displayName,
+          classStandard: updatedUser.classStandard,
+          role: updatedUser.role
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update profile'
+    });
+  }
+};

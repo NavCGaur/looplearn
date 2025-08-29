@@ -121,6 +121,14 @@ const Login = () => {
 
       // Navigate based on user role
       let rolePath = "/";
+      
+      // Check if user needs onboarding
+      if (user.needsOnboarding) {
+        console.log("User needs onboarding, redirecting...");
+        navigate("/onboarding");
+        return true;
+      }
+      
       switch (user.role) {
         case "Admin":
           rolePath = "/admin/dashboard";
@@ -363,47 +371,63 @@ const Login = () => {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
       sx={{
-        minHeight: "100vh",
-        width: "100%",
-        padding: 2
+        display: 'grid',
+        placeItems: 'center',
+        minHeight: '100vh',
+        width: '100%',
+        background: 'linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%)',
+        padding: { xs: 2, sm: 4 },
+        boxSizing: 'border-box',
+        position: 'relative',
+        overflow: 'hidden'
       }}
-      className="bg-gradient-to-br from-blue-50 to-blue-100"
     >
+      <Box
+        aria-hidden
+        sx={{
+          position: 'absolute',
+          left: -80,
+          bottom: -80,
+          width: { xs: 180, sm: 340 },
+          height: { xs: 180, sm: 340 },
+          borderRadius: '50%',
+          background: 'radial-gradient(circle at 20% 20%, rgba(34,197,94,0.10), transparent 30%), radial-gradient(circle at 80% 80%, rgba(59,130,246,0.06), transparent 40%)',
+          filter: 'blur(24px)',
+          transform: 'rotate(-12deg)',
+          pointerEvents: 'none'
+        }}
+      />
+
       {/* Main login card */}
       <Paper
-        elevation={12}
+        elevation={6}
         sx={{
           p: { xs: 3, sm: 4, md: 5 },
-          mt: 3,
-          mb: 3,
-          width: "100%",
-          maxWidth: "450px",
-          minHeight: "450px",
-          height: "auto",
-          borderRadius: 3,
-          backdropFilter: "blur(16px)",
-          backgroundColor: "#176DC2",
-          border: "1px solid rgba(255, 255, 255, 0.125)",
-          boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-          transition: 'all 0.3s ease-in-out',
-          '&:hover': {
-            transform: 'translateY(-5px)',
-            boxShadow: "0 12px 40px 0 rgba(31, 38, 135, 0.47)",
-          },
-          position: "relative",
+          mx: 'auto',
+          width: '100%',
+          maxWidth: '520px',
+          minHeight: '420px',
+          height: 'auto',
+          borderRadius: 4,
+          backgroundColor: 'rgba(255,255,255,0.88)',
+          backdropFilter: 'blur(6px)',
+          border: '1px solid rgba(226,232,240,0.6)',
+          boxShadow: '0 12px 40px rgba(16,24,40,0.08)',
+          transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'stretch'
         }}
       >
         
         {/* Login form title */}
 
-        <Box display="flex" alignItems="center" justifyContent="center" mb={3}> 
-           <img src={Logo} alt="logo" style={{ width: "50px", height: "50px" }} /> 
-        </Box>
+      <Box display="flex" alignItems="center" justifyContent="center" mb={2}> 
+        <img src={Logo} alt="logo" style={{ width: 56, height: 56, borderRadius: 8, boxShadow: '0 6px 18px rgba(16,24,40,0.06)' }} /> 
+      </Box>
 
         <Box>
           <Link href="/" style={{ textDecoration: "none" }}>
@@ -414,7 +438,7 @@ const Login = () => {
                 left: "10px",
                 width: "30px",
                 height: "30px",
-                color: "white",
+                color: "#64748B",
                 cursor: "pointer"
               }}
             />
@@ -425,41 +449,49 @@ const Login = () => {
           variant="h4" 
           component="h1"
           textAlign="center"
-          fontWeight="bold"
-          mb={3}
+          fontWeight="700"
+          mb={2}
           sx={{
-            background: "linear-gradient(90deg, #60efff, #00ff87)",
+            background: "linear-gradient(90deg, #3B82F6, #1E40AF)",
             backgroundClip: "text",
             textFillColor: "transparent",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
+            letterSpacing: '-0.02em'
           }}
         >
           LoopLearn
         </Typography>
   
         {/* Social login buttons */}
-        <Box display="flex" justifyContent="space-around" mb="2rem" mt="4rem">
+  <Box display="flex" justifyContent="center" mb={4} mt={3}>
           {/* Google login button */}
           <Button
             variant="contained"
             startIcon={<Google />}
             disabled={isGoogleLoading}
             onClick={handleGoogleSignIn}
-            sx={{
+              sx={{
               py: 2,
-              fontSize: '0.75rem',
-              width: '70%',
+              fontSize: '0.95rem',
+              fontWeight: "600",
+              width: { xs: '100%', sm: '70%' },
               textWrap: 'nowrap',
-              background: "rgba(255, 255, 255, 0.05)",
-              backdropFilter: "blur(4px)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              color: "#fff",
+              background: "linear-gradient(90deg, #3B82F6, #1E40AF)",
+              color: "#FFFFFF",
+              borderRadius: "10px",
+              textTransform: 'none',
               boxShadow: "none",
               '&:hover': {
-                background: "rgba(255, 255, 255, 0.15)",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                background: "linear-gradient(90deg, #2563EB, #1D4ED8)",
                 transform: "translateY(-2px)",
+                boxShadow: "0 10px 20px rgba(59, 130, 246, 0.3)",
+              },
+              '&:disabled': {
+                background: "#CBD5E1",
+                color: "#64748B",
+                transform: 'none',
+                boxShadow: 'none'
               },
               transition: "all 0.3s ease"
             }}
@@ -648,7 +680,7 @@ const Login = () => {
           </Button>
   
           <Box sx={{ mt: 3, textAlign: 'center' }}>
-            <Typography variant="body2" sx={{ color: "rgba(255, 255, 255, 0.7)", letterSpacing: '0.5px' }}>
+            <Typography variant="body2" sx={{ color: "#64748B", letterSpacing: '0.5px' }}>
               Don't have an account?{' '}
               <Typography
                 component="span"
@@ -657,11 +689,11 @@ const Login = () => {
                   cursor: 'pointer', 
                   fontSize: '0.95rem',
                   fontWeight: "medium",
-                  color: "#60efff",
+                  color: "#3B82F6",
                   transition: "color 0.2s ease",
                   '&:hover': { 
                     textDecoration: 'underline',
-                    color: "#00ff87"
+                    color: "#1E40AF"
                   }
                 }}
                 onClick={navigateToSignUp}

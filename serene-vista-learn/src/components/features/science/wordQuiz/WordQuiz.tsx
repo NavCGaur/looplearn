@@ -15,22 +15,48 @@ import { Star, Trophy, Award } from "lucide-react";
 import confetti from 'canvas-confetti';
 import { AlertCircle } from "lucide-react";
 import { loadKaTeX } from '../../../utils/katexLoader';
-import Fuse from 'fuse.js'; // Add Fuse.js import
+import writtenNumber from 'written-number';
+import pluralize from 'pluralize';
 
-// Add the isAnswerCorrect function from the first component
+// Deterministic answer checker: numeric words <-> digits and singular/plural equivalence
 const isAnswerCorrect = (userAnswer: string, correctAnswer: string) => {
-  if (userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()) {
-    return true;
-  }
-  
-  const fuse = new Fuse([correctAnswer], {
-    threshold: 0.2,
-    includeScore: true,
-    ignoreLocation: true
-  });
-  
-  const result = fuse.search(userAnswer.trim());
-  return result.length > 0 && result[0].score <= 0.2;
+  const normalize = (s: string) =>
+    s
+      .toLowerCase()
+      .trim()
+      .replace(/[\u2018\u2019\u201C\u201D]/g, "'")
+      .replace(/[^a-z0-9\s-]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  const tryConvertToDigits = (s: string): string | null => {
+    const raw = s.trim();
+    if (/^[\d,]+$/.test(raw)) return raw.replace(/,/g, '').replace(/^0+(?!$)/, '');
+    if (/[a-z]/i.test(raw)) {
+      try {
+        const maybe = writtenNumber(raw);
+        const digits = String(maybe).replace(/[^0-9]/g, '');
+        if (digits.length > 0) return digits.replace(/^0+(?!$)/, '');
+      } catch (e) {
+        // ignore
+      }
+    }
+    return null;
+  };
+
+  const a = normalize(userAnswer);
+  const b = normalize(correctAnswer);
+
+  const aDigits = tryConvertToDigits(a);
+  const bDigits = tryConvertToDigits(b);
+  if (aDigits !== null && bDigits !== null) return aDigits === bDigits;
+
+  if (a === b) return true;
+
+  const singularizeTokens = (s: string) => s.split(' ').map(tok => pluralize.singular(tok)).join(' ');
+  if (singularizeTokens(a) === singularizeTokens(b)) return true;
+
+  return false;
 };
 
 const WordQuiz: React.FC = () => {
@@ -90,6 +116,7 @@ const WordQuiz: React.FC = () => {
   const handleAnswer = (answer: string) => {
     setSelectedAnswer(answer);
     setAnswered(true);
+  console.debug('handleAnswer called for index', currentQuestionIndex, 'answer', answer);
     
     // Use the fuzzy matching function
     const isCorrect = isAnswerCorrect(answer, currentQuestion?.correctAnswer || '');
@@ -138,6 +165,18 @@ const WordQuiz: React.FC = () => {
         description: `The correct answer was "${currentQuestion.correctAnswer}". Keep trying!`,
         variant: "destructive",
       });
+    }
+    // If this was the last question, finish quiz immediately
+    if (currentQuestionIndex >= questions.length - 1) {
+      const completionBonus = 20;
+      setTotalPoints(prev => prev + completionBonus);
+      setEndTime(new Date());
+      if (userId && !pointsAwarded.has('completion')) {
+        addPoints({ userId, points: completionBonus, reason: 'quizCompleted' }).catch(() => {});
+        setPointsAwarded(prev => new Set(prev).add('completion'));
+      }
+      setQuizFinished(true);
+      confetti({ particleCount: 200, spread: 160, origin: { y: 0.6 } });
     }
   };
 

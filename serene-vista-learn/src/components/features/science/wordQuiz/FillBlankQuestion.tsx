@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import Fuse from 'fuse.js';
+import writtenNumber from 'written-number';
+import pluralize from 'pluralize';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Check, X } from 'lucide-react';
@@ -178,21 +179,63 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
 
   // Memoize the answer checking function
   const isAnswerCorrect = useCallback((userAnswer: string, correctAnswer: string) => {
-    // First try exact match (case insensitive)
-    if (userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()) {
-      return true;
+    // Normalizer: lowercase, remove smart quotes, replace non-alphanum (except hyphen) with space, collapse spaces
+    const normalize = (s: string) =>
+      s
+        .toLowerCase()
+        .trim()
+        .replace(/[\u2018\u2019\u201C\u201D]/g, "'")
+        .replace(/[^a-z0-9\s-]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    // Try to convert English number-words to a digit string using words-to-numbers
+   const tryConvertToDigits = (s: string): string | null => {
+  const raw = s.trim();
+
+  // If it's already numeric (allow commas), normalize and return
+  if (/^[\d,]+$/.test(raw)) {
+    return raw.replace(/,/g, '').replace(/^0+(?!$)/, '');
+  }
+
+  // Try converting number-words using written-number (browser-friendly)
+  if (/[a-z]/i.test(raw)) {
+    try {
+      // writtenNumber returns a string representation like '123' for 'one hundred twenty three'
+      // Some locales return words; ensure digits-only
+      const maybe = writtenNumber(raw);
+      const digits = String(maybe).replace(/[^0-9]/g, '');
+      if (digits.length > 0) {
+        return digits.replace(/^0+(?!$)/, '');
+      }
+    } catch (e) {
+      // conversion failed; fall through to null
     }
-    
-    // Then try fuzzy matching with Fuse.js
-    const fuse = new Fuse([correctAnswer], {
-      threshold: 0.2,
-      includeScore: true,
-      ignoreLocation: true,
-      findAllMatches: true
-    });
-    
-    const result = fuse.search(userAnswer.trim());
-    return result.length > 0 && result[0].score <= 0.2;
+  }
+
+  return null;
+};
+
+    const a = normalize(userAnswer);
+    const b = normalize(correctAnswer);
+
+    // Numeric path: if both sides convert to digits, require exact equality of normalized digits
+    const aDigits = tryConvertToDigits(a);
+    const bDigits = tryConvertToDigits(b);
+    if (aDigits !== null && bDigits !== null) {
+      return aDigits === bDigits;
+    }
+
+    // For non-numeric answers: allow exact match or singular/plural token-wise equivalence.
+    if (a === b) return true;
+
+    const singularizeTokens = (s: string) =>
+      s.split(' ').map(tok => pluralize.singular(tok)).join(' ');
+
+    if (singularizeTokens(a) === singularizeTokens(b)) return true;
+
+    // No fuzzy spelling tolerance for non-numeric answers as per requirement
+    return false;
   }, []);
 
   // Memoize expensive computations

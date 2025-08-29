@@ -60,6 +60,11 @@ const GuestDashboardSidebar = () => {
           path: "/guest/dashboard/spaced/science-quiz",
         },
         {
+          title: "Math Quiz",
+          icon: <BarChartHorizontal className="h-5 w-5" />,
+          path: "/guest/dashboard/spaced/math-quiz",
+        },
+        {
           title: "My Word List",
           icon: <ClipboardCheck className="h-4 w-4" />,
           path: "/guest/dashboard/spaced/my-word-list",

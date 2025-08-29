@@ -24,6 +24,7 @@ const authenticateUser = async (req, res, next) => {
 
     // Add user data to request object
     req.user = {
+      uid: decodedToken.uid,
       userId: decodedToken.uid,
       email: decodedToken.email
     };
@@ -35,4 +36,4 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-export { authenticateUser };
+export { authenticateUser, authenticateUser as authenticate };

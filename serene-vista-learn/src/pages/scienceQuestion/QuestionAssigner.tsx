@@ -19,7 +19,7 @@ const CLASS_OPTIONS = [
 ];
 
 const SUBJECT_OPTIONS = [
-  'mathematics', 'physics', 'chemistry', 'biology', 'science'
+  'mathematics', 'physics', 'chemistry', 'biology', 'science', 'social-science'
 ];
 
 const QUESTION_TYPE_OPTIONS = [
