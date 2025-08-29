@@ -3,6 +3,7 @@ import MathQuiz from '@/components/features/mathQuiz/MathQuiz';
 import { Card, CardContent } from '@/components/ui/card';
 import { useSelector } from 'react-redux';
 import { useGetAssignedMathQuestionsQuery } from '@/state/api/mathApi';
+import { pageview, event as gaEvent } from '@/lib/ga';
 
 const MathQuizPage: React.FC = () => {
   //@ts-ignore
@@ -52,11 +53,17 @@ const MathQuizPage: React.FC = () => {
   console.debug('Assigned math questions from backend:', assigned);
   console.debug('Mapped math questions used by MathQuiz:', finalMapped);
 
+  React.useEffect(() => {
+    try {
+      pageview('/spaced/math-quiz');
+      gaEvent('quiz_landing', { quizType: 'math', assignedCount: Array.isArray(assigned) ? assigned.length : 0 });
+    } catch (e) {}
+  }, [assigned]);
+
   return (
     <div className="mx-auto max-w-3xl mt-8">
       <Card>
         <CardContent>
-          <h2 className="text-xl font-bold mb-4">Math Quiz</h2>
           {isLoading ? (
             <div>Loading math questions...</div>
           ) : isError ? (

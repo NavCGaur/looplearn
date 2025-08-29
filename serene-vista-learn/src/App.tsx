@@ -1,4 +1,5 @@
 import './config/firebase';
+import React from 'react';
 
 import { Provider } from 'react-redux';
 
@@ -6,7 +7,7 @@ import store from './state/store/index.ts';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Index from "./pages/Index";        
 import { SidebarProvider } from "@/components/ui/sidebar";
 import SpacedRepetitionLayout from './components/dashboard/guestDashboard/SpacedRepetitionLayout.jsx';
@@ -46,6 +47,18 @@ import 'katex/dist/katex.min.css';
 
 
 
+const RouterWithAnalytics: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+  // We import pageview lazily to avoid SSR issues
+  const location = useLocation();
+  React.useEffect(() => {
+    import("./lib/ga").then((m) => {
+      if (m && m.pageview) m.pageview(location.pathname + location.search);
+    }).catch(() => {});
+  }, [location.pathname, location.search]);
+
+  return <>{children}</>;
+};
+
 const App = () => (
   <Provider store={store}>
     <TooltipProvider>
@@ -53,6 +66,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <RouterWithAnalytics>
           <Routes>
             <Route path="/" element={<Index />} />
             
@@ -106,6 +120,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </RouterWithAnalytics>
         </BrowserRouter>
       </SidebarProvider>
     </TooltipProvider>

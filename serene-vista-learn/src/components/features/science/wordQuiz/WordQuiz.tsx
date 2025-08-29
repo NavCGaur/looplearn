@@ -93,7 +93,7 @@ const WordQuiz: React.FC = () => {
   useEffect(() => {
     if (quizQuestions.length > 0 ) {
       const shuffled = [...quizQuestions].sort(() => 0.5 - Math.random());
-      setQuestions(shuffled.slice(0, 10));
+  setQuestions(shuffled.slice(0, 20));
       setStartTime(new Date());
     }
   }, [quizQuestions]);
@@ -229,8 +229,8 @@ const WordQuiz: React.FC = () => {
     setPointsAwarded(new Set());
     setAnswered(false);
     setSelectedAnswer(null);
-    const shuffled = [...quizQuestions].sort(() => 0.5 - Math.random());
-    setQuestions(shuffled.slice(0, 5));
+  const shuffled = [...quizQuestions].sort(() => 0.5 - Math.random());
+  setQuestions(shuffled.slice(0, 5));
     setStartTime(new Date());
     setEndTime(null);
   };

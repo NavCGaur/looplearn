@@ -223,7 +223,7 @@ export const getMathQuizQuestionsService = async (uid) => {
   if (!user) throw new Error('User not found');
   const questions = await MathQuestion.aggregate([
     { $match: { classStandard: user.classStandard, isActive: { $ne: false } } },
-    { $sample: { size: 10 } },
+  { $sample: { size: 20 } },
     { $project: { _id: 1, questionText: 1, options: 1, correctOptionIndex: 1, questionType: 1, difficulty: 1, subject: 1, chapter: 1, topic: 1 } }
   ]);
   if (!questions.length) throw new Error('No math questions found for this class standard');

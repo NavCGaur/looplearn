@@ -8,6 +8,7 @@ import {
   deleteUsersByIds, 
   addPointsService, 
   getUserPointsService, 
+  getLeaderboardService,
   getQuizQuestionsService,
   getUsersByClassService,
   assignWordToClassService,
@@ -163,6 +164,18 @@ export const getUserPoints = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 }
+
+// Return leaderboard (all users sorted by points)
+export const getUsersPointsAll = async (req, res) => {
+  try {
+    const leaderboard = await getLeaderboardService();
+    // Return array of users: [{ uid, name, points }, ...]
+    res.status(200).json(leaderboard);
+  } catch (error) {
+    console.error('Error fetching leaderboard:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 export const getQuizQuestions = async (req, res) => {
   try {

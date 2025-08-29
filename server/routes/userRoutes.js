@@ -9,6 +9,7 @@ import {
   deleteBulkUsers, 
   addPoints, 
   getUserPoints, 
+  getUsersPointsAll,
   getQuizQuestions,
   getUsersByClass,
   assignWordToClass,
@@ -22,8 +23,6 @@ const router = express.Router();
 // Get all users
 router.get('/', getUsers);
 
-// Get a specific user
-router.get('/:userId', getUser);
 
 // Assign a word to a user
 router.post('/:userId/words', assignWord);
@@ -57,7 +56,11 @@ router.post("/addPoints", addPoints);
  * GET /api/users/points    
  * Get points for a user
  */
-router.get("/points/:userId", getUserPoints);
+// Get points for a specific user
+router.get('/points/:userId', getUserPoints);
+
+// Get leaderboard - all users' points
+router.get('/points', getUsersPointsAll);
 
 /**
  * GET /api/users/questions/:uid
@@ -82,6 +85,9 @@ router.post('/class/:classStandard/assign-word', assignWordToClass);
  * Update user's class standard
  */
 router.put('/:userId/class', updateUserClass);
+
+// Get a specific user (placed after static routes to avoid shadowing)
+router.get('/:userId', getUser);
 
 /**
  * PUT /api/users/update-profile

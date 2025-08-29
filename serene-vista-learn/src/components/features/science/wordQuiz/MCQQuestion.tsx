@@ -88,9 +88,12 @@ const MCQQuestion: React.FC<MCQQuestionProps> = ({
         ))}
       </RadioGroup>
       
-      {isAnswered && (
+        {isAnswered && (question.word || question.definition) && (
         <div className="mt-4 p-3 bg-blue-100 rounded-lg">
-          <p className="font-medium">{question.word}: <span className="text-gray-700">{question.definition}</span></p>
+          <p className="font-medium">
+            {question.word && <>{question.word}: </>}
+            <span className="text-gray-700">{question.definition}</span>
+          </p>
         </div>
       )}
     </div>

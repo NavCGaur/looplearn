@@ -63,11 +63,28 @@ export const userApi = createApi({
     
 
     getUsersPoints: builder.query({
+      // Fetch points for a single user by ID
       query: (userId) => `/users/points/${userId}`,
-      providesTags: (result) => 
-        result.users
+      providesTags: (result) => {
+        // Support both shapes: API may return { users: {...} } or an object
+        if (!result) return [{ type: 'User', id: 'LIST' }];
+        const users = Array.isArray(result) ? result : result.users ? result.users : [];
+        return users && users.length
           ? [
-              ...result.users.map(({ id }) => ({ type: 'User', id })),
+              ...users.map(({ id }) => ({ type: 'User', id })),
+              { type: 'User', id: 'LIST' }
+            ]
+          : [{ type: 'User', id: 'LIST' }];
+      }
+    }),
+
+    // Leaderboard: fetch all users' points (array)
+    getLeaderboard: builder.query({
+      query: () => '/users/points',
+      providesTags: (result) =>
+        result && Array.isArray(result) && result.length
+          ? [
+              ...result.map((u: any) => ({ type: 'User', id: u.uid || u.id })),
               { type: 'User', id: 'LIST' }
             ]
           : [{ type: 'User', id: 'LIST' }]
@@ -301,6 +318,7 @@ export const {
   useGetUserByIdQuery,
   useGetUsersByClassQuery,
   useGetUsersPointsQuery,
+  useGetLeaderboardQuery,
   useAssignWordToUserMutation,
   useAssignWordMutation,
   useAssignWordToBulkUsersMutation,

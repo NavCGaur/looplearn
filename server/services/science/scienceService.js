@@ -676,7 +676,7 @@ export const getScienceQuizQuestionsService = async (uid) => {
           isActive: true 
         } 
       },
-      { $sample: { size: 10 } }, // Get 10 random questions
+  { $sample: { size: 20 } }, // Get 20 random questions
       {
         $project: {
           _id: 1,

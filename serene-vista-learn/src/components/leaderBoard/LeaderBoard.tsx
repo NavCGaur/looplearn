@@ -53,8 +53,10 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 
 import {
-       useGetUsersPointsQuery,
+  useGetUsersPointsQuery,
+  useGetLeaderboardQuery,
 } from "../../state/api/userApi";
+import { event as gaEvent } from "@/lib/ga";
 
 interface Student {
   id: string;
@@ -86,11 +88,27 @@ const LeaderBoard = () => {
    const dispatch = useDispatch();
   
     // @ts-ignore
-  const userId = useSelector((state) => state.auth?.user?.uid);
-  //@ts-ignore
-  const { data: usersData = [], isLoading, isError, error } = useGetUsersPointsQuery(userId);
+    const userId = useSelector((state) => state.auth?.user?.uid);
 
-  console.log("Users Data:", usersData);
+    // Fetch full leaderboard (all users with points)
+    const { data: leaderboard = [], isLoading, isError, error } = useGetLeaderboardQuery();
+
+    // Normalize to { users: [] } so existing logic can continue to reference usersData.users
+    const usersData = useMemo(() => ({ users: Array.isArray(leaderboard) ? leaderboard : [] }), [leaderboard]);
+
+    console.log("Users Data:", usersData.users);
+
+  // Fire GA event when leaderboard data is available
+  React.useEffect(() => {
+    if (!isLoading && !isError && usersData?.users && usersData.users.length > 0) {
+      try {
+        gaEvent("view_leaderboard", {
+          userCount: usersData.users.length,
+          sampleUser: usersData.users[0]?.userId || usersData.users[0]?.uid || null,
+        });
+      } catch (e) {}
+    }
+  }, [isLoading, isError, usersData]);
  
 
   
