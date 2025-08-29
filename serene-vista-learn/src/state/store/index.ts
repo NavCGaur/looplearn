@@ -13,6 +13,7 @@ import { authApi } from "../api/auth.ts";
 import { vocabApi } from "../api/vocabApi.ts";
 import { userApi } from "../api/userApi.ts"; 
 import { scienceApi } from "../api/scienceApi.ts"; 
+import { mathApi } from "../api/mathApi.ts";
 
 
 
@@ -30,12 +31,14 @@ const store = configureStore({
     [vocabApi.reducerPath]: vocabApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [scienceApi.reducerPath]: scienceApi.reducer,
+  [mathApi.reducerPath]: mathApi.reducer,
   
 
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(authApi.middleware ,
     vocabApi.middleware,userApi.middleware,scienceApi.middleware
+  ,mathApi.middleware
   ), 
 });
 

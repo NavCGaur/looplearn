@@ -5,6 +5,7 @@ import ScienceQuestion from '../../models/scienceQuestionSchema.js';
 import AssignedScienceQuestion from '../../models/assignedScienceQuestions.js';
 
 import axios from 'axios';
+import { requestWithRetries } from '../../utility/geminiQuizApi.js';
 
 import { UserSchema } from '../../models/userSchema.js'; 
 import mongoose from 'mongoose';
@@ -22,20 +23,9 @@ const callGeminiAPI = async (prompt, temperature = 0.2, maxTokens = 1500) => {
       throw new Error('Gemini API key not configured');
     }
 
-    const response = await axios.post(
-      `${geminiApiUrl}?key=${geminiApiKey}`,
-      { 
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: temperature,
-          maxOutputTokens: maxTokens,
-          topP: 0.8,
-          topK: 40
-        }
-      }
-    );
+    const response = await requestWithRetries({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature, maxOutputTokens: maxTokens, topP: 0.8, topK: 40 } });
 
-    if (response.data && response.data.candidates && response.data.candidates[0]) {
+    if (response?.data?.candidates?.[0]) {
       return response.data.candidates[0].content.parts[0].text;
     }
 

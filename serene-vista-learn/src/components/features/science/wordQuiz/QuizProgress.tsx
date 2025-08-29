@@ -7,12 +7,14 @@ interface QuizProgressProps {
   currentQuestion: number;
   totalQuestions: number;
   score: number;
+  title?: string;
 }
 
 const QuizProgress: React.FC<QuizProgressProps> = ({ 
   currentQuestion, 
   totalQuestions, 
   score 
+  , title = 'Quiz'
 }) => {
 
   const progressPercentage = Math.round((currentQuestion / totalQuestions) * 100);
@@ -20,7 +22,7 @@ const QuizProgress: React.FC<QuizProgressProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-langlearn-blue">Science Quiz</h2>
+        <h2 className="text-2xl font-bold text-langlearn-blue">{title}</h2>
         <div className="flex items-center">
           <Star className="h-5 w-5 text-yellow-500 mr-1" />
           <span className="font-bold">{score}</span>

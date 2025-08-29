@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "simulate-bulk-upload": "node scripts/simulateAiAndUpload.js",
+  "test-bulk-upload": "node scripts/runBulkUploadServiceTest.js"
   },
   "keywords": [],
   "author": "",

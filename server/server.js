@@ -9,6 +9,7 @@ import authRoutes from './routes/authRoutes.js';
 import vocabRoutes from './routes/vocabRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import scienceRoutes from './routes/scienceRoutes.js';
+import mathRoutes from './routes/mathRoutes.js';
 //import analyticsRoutes from './routes/analyticsRoutes.js';  
 import { generateAndPopulateQuizzes } from './utility/generateAndPopulateQuiz.js';
 
@@ -34,6 +35,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/vocab', vocabRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/science', scienceRoutes);
+app.use('/api/math', mathRoutes);
 
 // 🔥 Uptime Robot test route to keep server hot
 app.get('/uptime-ping', (req, res) => {

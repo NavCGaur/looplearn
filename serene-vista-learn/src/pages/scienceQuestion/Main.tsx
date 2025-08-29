@@ -28,6 +28,19 @@ function Navigation() {
               Bulk Upload
             </Button>
           </Link>
+          {/* Math links */}
+          <Link to="/admin/dashboard/math-question-generator">
+            <Button variant={location.pathname === "/math-question-generator" ? "default" : "ghost"} size="sm">
+              <Home className="mr-2 h-4 w-4" />
+              Math Generator
+            </Button>
+          </Link>
+          <Link to="/admin/dashboard/math-bulk-upload">
+            <Button variant={location.pathname === "/math-bulk-upload" ? "default" : "ghost"} size="sm">
+              <Database className="mr-2 h-4 w-4" />
+              Math Bulk Upload
+            </Button>
+          </Link>
           <Link to="/admin/dashboard/question-manager">
             <Button variant={location.pathname === "/question-manager" ? "default" : "ghost"} size="sm">
               <Settings className="mr-2 h-4 w-4" />

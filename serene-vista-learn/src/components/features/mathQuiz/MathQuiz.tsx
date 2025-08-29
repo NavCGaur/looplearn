@@ -139,7 +139,7 @@ const MathQuiz: React.FC<{ questions: QuizQuestionSimple[] }> = ({ questions: in
     <Card>
       <CardContent>
         <div className="flex justify-between items-center mb-4">
-          <QuizProgress currentQuestion={currentIndex + 1} totalQuestions={questions.length} score={score} />
+          <QuizProgress title="Math Quiz" currentQuestion={currentIndex + 1} totalQuestions={questions.length} score={score} />
           <div className="font-bold">{totalPoints} pts</div>
         </div>
 

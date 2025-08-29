@@ -39,6 +39,13 @@ const scienceMenuItems = [
   { icon: Database, label: "Main Dashboard", path: "/admin/dashboard/science-questions" },
 ];
 
+const mathMenuItems = [
+  { icon: Telescope, label: "Question Generator", path: "/admin/dashboard/math-question-generator" },
+  { icon: Settings, label: "Question Manager", path: "/admin/dashboard/math-question-manager" },
+  { icon: Upload, label: "Bulk Upload", path: "/admin/dashboard/math-bulk-upload" },
+  { icon: Database, label: "Main Dashboard", path: "/admin/dashboard/math-questions" },
+];
+
 const AdminDashboardSidebar = () => {
   const location = useLocation();
   const [isScienceOpen, setIsScienceOpen] = useState(
@@ -46,6 +53,12 @@ const AdminDashboardSidebar = () => {
     location.pathname.includes('/admin/dashboard/question-manager') ||
     location.pathname.includes('/admin/dashboard/question-assigner') ||
     location.pathname.includes('/admin/dashboard/bulk-upload')
+  );
+  const [isMathOpen, setIsMathOpen] = useState(
+    location.pathname.includes('/admin/dashboard/math-') ||
+    location.pathname.includes('/admin/dashboard/math-question-manager') ||
+    location.pathname.includes('/admin/dashboard/math-bulk-upload') ||
+    location.pathname.includes('/admin/dashboard/math-questions')
   );
 
   return (
@@ -108,6 +121,36 @@ const AdminDashboardSidebar = () => {
                   </CollapsibleContent>
                 </SidebarMenuItem>
               </Collapsible>
+
+                {/* Math Question Management Collapsible */}
+                <Collapsible open={isMathOpen} onOpenChange={setIsMathOpen}>
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton>
+                        <Telescope />
+                        <span>Math Questions</span>
+                        <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${isMathOpen ? 'rotate-180' : ''}`} />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {mathMenuItems.map((item) => (
+                          <SidebarMenuSubItem key={item.label}>
+                            <SidebarMenuSubButton asChild>
+                              <Link 
+                                to={item.path}
+                                className={location.pathname === item.path ? "bg-sidebar-accent" : ""}
+                              >
+                                <item.icon />
+                                <span>{item.label}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

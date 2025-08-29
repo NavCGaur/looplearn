@@ -7,28 +7,24 @@ import mongoose from 'mongoose';
  
 const User = mongoose.model('User', UserSchema);
 import axios from 'axios';
+import { getGeminiWordData, getGeminiWordsData, getGeminiStats } from '../../utility/geminiQuizApi.js';
 
-// Gemini client for all word processing tasks
+// Gemini client for all word processing tasks (uses centralized rate-limited requester)
+import { requestWithRetries } from '../../utility/geminiQuizApi.js';
+
 const callGeminiAPI = async (prompt, temperature = 0.2, maxTokens = 150) => {
   try {
-
     console.log("gemini api url", process.env.GEMINI_API_URL);
-    const geminiApiUrl = process.env.GEMINI_API_URL;
     const geminiApiKey = process.env.GEMINI_API_KEY;
-    
     if (!geminiApiKey) {
       throw new Error('Gemini API key not configured');
     }
-    
-    const response = await axios.post(
-      `${process.env.GEMINI_API_URL}?key=${geminiApiKey}`,
-      { contents: [{ parts: [{ text: prompt }] }] }
-    );
-    
-    if (response.data && response.data.candidates && response.data.candidates[0]) {
+
+    const response = await requestWithRetries({ contents: [{ parts: [{ text: prompt }] }] });
+    if (response?.data?.candidates?.[0]) {
       return response.data.candidates[0].content.parts[0].text;
     }
-    
+
     throw new Error('Invalid response from Gemini API');
   } catch (error) {
     console.error('Error calling Gemini API:', error);
@@ -248,22 +244,58 @@ export const assignWordToUser = async (userId, wordData) => {
             console.warn(`Failed to fetch pronunciation for ${word}`);
           }
 
-          const wordInfo = await getWordDefinition(word);
-          const exampleSentence = await generateExampleSentence(word, wordInfo.partOfSpeech, wordInfo.definition);
-          const translations = await getTranslations(word, wordInfo.definition, exampleSentence);
+          // Try the combined Gemini call first to reduce number of outbound requests
+          const combined = await getGeminiWordData(word);
+          if (combined) {
+            const translations = combined.translations || { wordHindi: '', definitionHindi: '', exampleSentenceHindi: '' };
+            const exampleSentence = combined.exampleSentence || '';
 
-          wordDoc = new Word({
-            word,
-            definition: wordInfo.definition,
-            wordHindi: translations.wordHindi,
-            definitionHindi: translations.definitionHindi,
-            exampleSentence,
-            exampleSentenceHindi: translations.exampleSentenceHindi,
-            partOfSpeech: wordInfo.partOfSpeech,
-            pronunciationUrl,
-            difficulty: 1
-          });
-          wordDoc = await wordDoc.save();
+            wordDoc = new Word({
+              word,
+              definition: combined.definition || '',
+              wordHindi: translations.wordHindi,
+              definitionHindi: translations.definitionHindi,
+              exampleSentence,
+              exampleSentenceHindi: translations.exampleSentenceHindi,
+              partOfSpeech: combined.partOfSpeech || '',
+              pronunciationUrl,
+              difficulty: 1
+            });
+            wordDoc = await wordDoc.save();
+
+            // Persist quiz if returned
+            if (combined.quiz) {
+              try {
+                const quizDoc = new Quiz({
+                  wordId: wordDoc._id,
+                  word,
+                  mcq: combined.quiz.mcq || null,
+                  fillInTheBlank: combined.quiz.fillInTheBlank || null
+                });
+                await quizDoc.save();
+              } catch (quizSaveErr) {
+                console.warn('Failed to save quiz for word', word, quizSaveErr.message || quizSaveErr);
+              }
+            }
+          } else {
+            // Fallback to old multi-call flow
+            const wordInfo = await getWordDefinition(word);
+            const exampleSentence = await generateExampleSentence(word, wordInfo.partOfSpeech, wordInfo.definition);
+            const translations = await getTranslations(word, wordInfo.definition, exampleSentence);
+
+            wordDoc = new Word({
+              word,
+              definition: wordInfo.definition,
+              wordHindi: translations.wordHindi,
+              definitionHindi: translations.definitionHindi,
+              exampleSentence,
+              exampleSentenceHindi: translations.exampleSentenceHindi,
+              partOfSpeech: wordInfo.partOfSpeech,
+              pronunciationUrl,
+              difficulty: 1
+            });
+            wordDoc = await wordDoc.save();
+          }
         }
 
         // Check if already assigned
@@ -271,35 +303,34 @@ export const assignWordToUser = async (userId, wordData) => {
           uid: userId,
           'vocabulary.wordId': wordDoc._id
         });
-          if (!userHasWord) {
-            await User.findOneAndUpdate(
-              { uid: userId },
-              {
-                $push: {
-                  vocabulary: {
-                    wordId: wordDoc._id,
-                    addedAt: new Date()
-                  }
+
+        if (!userHasWord) {
+          await User.findOneAndUpdate(
+            { uid: userId },
+            {
+              $push: {
+                vocabulary: {
+                  wordId: wordDoc._id,
+                  addedAt: new Date()
                 }
               }
-            );
+            }
+          );
 
-            results.push({
-              word,
-              userId,
-              success: true,
-              message: 'Word assigned successfully'
-            });
-          } else {
-            results.push({
-              word,
-              userId,
-              success: true, // ✅ Treat as success
-              message: 'Word already assigned'
-            });
-          }
-
-
+          results.push({
+            word,
+            userId,
+            success: true,
+            message: 'Word assigned successfully'
+          });
+        } else {
+          results.push({
+            word,
+            userId,
+            success: true, // ✅ Treat as success
+            message: 'Word already assigned'
+          });
+        }
       } catch (err) {
         results.push({ word, success: false, error: err.message });
       }
@@ -311,10 +342,7 @@ export const assignWordToUser = async (userId, wordData) => {
   }
 };
 
-
-
 export const assignWordToBulkUsers = async (userIds, wordData) => {
-
   console.log('Assigning words to bulk users in service:', userIds, 'Word Data:', wordData, 'Subject:', wordData.subject);
 
   const results = [];
@@ -346,12 +374,67 @@ export const assignWordToBulkUsers = async (userIds, wordData) => {
 
   console.log('Missing user IDs:', missingUserIds);
 
-  for (const word of words) {
-    let wordDocument = await Word.findOne({ word });
+  // Collect words to create in batch
+  const wordsToCreate = [];
+  const existingDocsMap = {};
 
+  for (const w of words) {
+    const doc = await Word.findOne({ word: w });
+    if (!doc) wordsToCreate.push(w);
+    else existingDocsMap[w] = doc;
+  }
+
+  // Fetch batched data for missing words
+  let batchResults = [];
+  if (wordsToCreate.length > 0) {
+    console.log('Fetching batched Gemini data for words:', wordsToCreate);
+    batchResults = await getGeminiWordsData(wordsToCreate);
+    console.log('Gemini batch fetched:', batchResults.map(b => b.word));
+  }
+
+  // Create documents for batch results
+  for (const item of batchResults) {
+    try {
+      const translations = item.translations || { wordHindi: '', definitionHindi: '', exampleSentenceHindi: '' };
+      const wordDoc = new Word({
+        word: item.word,
+        definition: item.definition || '',
+        wordHindi: translations.wordHindi,
+        definitionHindi: translations.definitionHindi,
+        exampleSentence: item.exampleSentence || '',
+        exampleSentenceHindi: translations.exampleSentenceHindi,
+        partOfSpeech: item.partOfSpeech || '',
+        pronunciationUrl: '',
+        difficulty: 1
+      });
+      const saved = await wordDoc.save();
+      existingDocsMap[item.word] = saved;
+
+      // Save quiz
+      if (item.quiz) {
+        try {
+          const quizDoc = new Quiz({
+            wordId: saved._id,
+            word: item.word,
+            mcq: item.quiz.mcq || null,
+            fillInTheBlank: item.quiz.fillInTheBlank || null
+          });
+          await quizDoc.save();
+        } catch (qe) {
+          console.warn('Failed to save quiz for', item.word, qe.message || qe);
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to create word from batch for', item.word, err.message || err);
+    }
+  }
+
+  // Now proceed over original words list using existingDocsMap
+  for (const word of words) {
+    let wordDocument = existingDocsMap[word];
     console.log('Processing word:', word, 'Found document:', wordDocument ? 'Yes' : 'No');
 
-    // Create word if not exists
+    // If still not present, fallback to single-create logic
     if (!wordDocument) {
       try {
         let pronunciationUrl = '';
@@ -367,26 +450,63 @@ export const assignWordToBulkUsers = async (userIds, wordData) => {
         } catch (dictApiError) {
           console.warn(`Failed to fetch pronunciation for ${word}`);
         }
+        
+        // Try combined Gemini helper first to minimize API calls for single word
+        const combined = await getGeminiWordData(word);
+        if (combined) {
+          const translations = combined.translations || { wordHindi: '', definitionHindi: '', exampleSentenceHindi: '' };
+          const exampleSentence = combined.exampleSentence || '';
 
-        const wordInfo = await getWordDefinition(word);
-        const exampleSentence = await generateExampleSentence(word, wordInfo.partOfSpeech, wordInfo.definition);
-        const translations = await getTranslations(word, wordInfo.definition, exampleSentence);
+          wordDocument = new Word({
+            word,
+            definition: combined.definition || '',
+            wordHindi: translations.wordHindi,
+            definitionHindi: translations.definitionHindi,
+            exampleSentence,
+            exampleSentenceHindi: translations.exampleSentenceHindi,
+            partOfSpeech: combined.partOfSpeech || '',
+            pronunciationUrl,
+            difficulty: 1
+          });
 
-        wordDocument = new Word({
-          word,
-          definition: wordInfo.definition,
-          wordHindi: translations.wordHindi,
-          definitionHindi: translations.definitionHindi,
-          exampleSentence,
-          exampleSentenceHindi: translations.exampleSentenceHindi,
-          partOfSpeech: wordInfo.partOfSpeech,
-          pronunciationUrl,
-          difficulty: 1
-        });
+          console.log('Creating new word document (combined) in service:', wordDocument);
+          wordDocument = await wordDocument.save();
 
-        console.log('Creating new word document in service:', wordDocument);
+          // Save quiz if provided
+          if (combined.quiz) {
+            try {
+              const quizDoc = new Quiz({
+                wordId: wordDocument._id,
+                word,
+                mcq: combined.quiz.mcq || null,
+                fillInTheBlank: combined.quiz.fillInTheBlank || null
+              });
+              await quizDoc.save();
+            } catch (quizSaveErr) {
+              console.warn('Failed to save quiz for word', word, quizSaveErr.message || quizSaveErr);
+            }
+          }
+        } else {
+          // Fallback to legacy flow
+          const wordInfo = await getWordDefinition(word);
+          const exampleSentence = await generateExampleSentence(word, wordInfo.partOfSpeech, wordInfo.definition);
+          const translations = await getTranslations(word, wordInfo.definition, exampleSentence);
 
-        wordDocument = await wordDocument.save();
+          wordDocument = new Word({
+            word,
+            definition: wordInfo.definition,
+            wordHindi: translations.wordHindi,
+            definitionHindi: translations.definitionHindi,
+            exampleSentence,
+            exampleSentenceHindi: translations.exampleSentenceHindi,
+            partOfSpeech: wordInfo.partOfSpeech,
+            pronunciationUrl,
+            difficulty: 1
+          });
+
+          console.log('Creating new word document in service (fallback):', wordDocument);
+          wordDocument = await wordDocument.save();
+        }
       } catch (error) {
         users.forEach(user => {
           results.push({
@@ -420,7 +540,6 @@ export const assignWordToBulkUsers = async (userIds, wordData) => {
           continue;
         }
 
-
         await User.findOneAndUpdate(
           { uid: user.uid },
           {
@@ -440,7 +559,6 @@ export const assignWordToBulkUsers = async (userIds, wordData) => {
           error: null
         });
         successCount++;
-
       } catch (error) {
         results.push({
           userId: user.uid,
@@ -460,10 +578,6 @@ export const assignWordToBulkUsers = async (userIds, wordData) => {
   };
 };
 
-
-
-
-
 export const removeWordFromUser = async (userId, wordId) => {
   try {
     const updated = await User.findOneAndUpdate(
@@ -482,7 +596,6 @@ export const removeWordFromUser = async (userId, wordId) => {
   }
 };
 
-// DELETE single user
 // DELETE single user by Firebase UID
 export const deleteUserById = async (uid) => {
   try {
@@ -494,8 +607,6 @@ export const deleteUserById = async (uid) => {
   }
 };
 
-
-// DELETE multiple users
 // DELETE multiple users by Firebase UID
 export const deleteUsersByIds = async (userIds) => {
   try {
@@ -517,14 +628,13 @@ export const deleteUsersByIds = async (userIds) => {
   }
 };
 
-
 // Add points to a user
 export const addPointsService = async (userId, points, reason) => {
   if (!userId || !points || points <= 0) {
     throw new Error("Invalid point update request");
   }
 
- const user = await User.findOne({ uid: userId });
+  const user = await User.findOne({ uid: userId });
   if (!user) {
     throw new Error("User not found");
   }
@@ -543,34 +653,37 @@ export const getUserPointsService = async (userId) => {
     throw new Error("User ID is required");
   }
 
-  const userValid = await User.findOne({ uid: userId });
-  if (!userValid) {
-    throw new Error("Please login to view your points");
+  const user = await User.findOne({ uid: userId });
+  if (!user) {
+    throw new Error("User not found");
   }
-  // If user is valid, fetch all users
-  console.log('Fetching all users for leaderboard...');
-  if(userValid) {
-   try {
+
+  return {
+    uid: user.uid,
+    name: user.displayName || 'Unnamed User',
+    points: user.points || 0
+  };
+};
+
+export const getLeaderboardService = async () => {
+  try {
     const users = await User.find()
       .select('uid displayName points')
+      .sort({ points: -1 })
       .lean();
       
-    // Transform users to include id, name, and points
     if (!users || users.length === 0) {
       throw new Error('No users found');
     }
 
     return users.map(user => ({
-      uid : user.uid,
+      uid: user.uid,
       name: user.displayName || 'Unnamed User',
       points: user.points || 0
     }));
   } catch (error) {
-    throw new Error(`Error fetching users: ${error.message}`);
+    throw new Error(`Error fetching leaderboard: ${error.message}`);
   }
-  }
-
-
 };
 
 export const getQuizQuestionsService = async (uid) => {
@@ -587,36 +700,35 @@ export const getQuizQuestionsService = async (uid) => {
     // Get quiz questions for these words
     const quizQuestions = await Quiz.find({ wordId: { $in: wordIds } });
 
-
     // Transform the questions to match the frontend format
-  const transformedQuestions = quizQuestions.flatMap(quiz => {
-  const questions = [];
+    const transformedQuestions = quizQuestions.flatMap(quiz => {
+      const questions = [];
 
-  if (quiz.mcq) {
-    questions.push({
-      id: quiz._id.toString() + '-mcq',
-      type: 'mcq',
-      question: quiz.mcq.question,
-      word: quiz.word,
-      options: quiz.mcq.options,
-      correctAnswer: quiz.mcq.correctAnswer,
-      difficulty: 'medium'
-    });
-  }
+      if (quiz.mcq) {
+        questions.push({
+          id: quiz._id.toString() + '-mcq',
+          type: 'mcq',
+          question: quiz.mcq.question,
+          word: quiz.word,
+          options: quiz.mcq.options,
+          correctAnswer: quiz.mcq.correctAnswer,
+          difficulty: 'medium'
+        });
+      }
 
-  if (quiz.fillInTheBlank) {
-    questions.push({
-      id: quiz._id.toString() + '-fill',
-      type: 'fillBlank',
-      question: quiz.fillInTheBlank.question,
-      word: quiz.word,
-      correctAnswer: quiz.fillInTheBlank.answer,
-      difficulty: 'medium'
-    });
-  }
+      if (quiz.fillInTheBlank) {
+        questions.push({
+          id: quiz._id.toString() + '-fill',
+          type: 'fillBlank',
+          question: quiz.fillInTheBlank.question,
+          word: quiz.word,
+          correctAnswer: quiz.fillInTheBlank.answer,
+          difficulty: 'medium'
+        });
+      }
 
-  return questions;
-}).filter(Boolean); // Remove any undefined entries
+      return questions;
+    }).filter(Boolean); // Remove any undefined entries
 
     return transformedQuestions;
   } catch (error) {

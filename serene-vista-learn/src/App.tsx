@@ -32,8 +32,12 @@ import LeaderBoard from './components/leaderBoard/LeaderBoard.tsx';
 import ScienceQuestionGenerator from './pages/scienceQuestion/ScienceQuestionGenerator.tsx';
 import ScienceQuizPage from './pages/scienceQuiz/ScienceQuizPage.tsx';
 import MathQuizPage from './pages/mathQuiz/MathQuizPage.tsx';
+import MathQuestionGenerator from './pages/mathQuestion/MathQuestionGenerator.tsx';
+import MathBulkUpload from './pages/mathQuestion/MathBulkUpload.tsx';
 import QuestionManager from './pages/scienceQuestion/QuestionManager.tsx';
 import QuestionAssigner from './pages/scienceQuestion/QuestionAssigner.tsx';
+import MathQuestionManager from './pages/mathQuestion/QuestionManager.tsx';
+import MathQuestionAssigner from './pages/mathQuestion/QuestionAssigner.tsx';
 import Main from './pages/scienceQuestion/Main.tsx';
 import BulkUpload from './pages/scienceQuestion/BulkUpload.tsx';
 
@@ -88,6 +92,10 @@ const App = () => (
               <Route path="science-questions" element={<Main />} />
               <Route path="science-question-generator" element={<ScienceQuestionGenerator   />} />
               <Route path="bulk-upload" element={<BulkUpload />} />
+              <Route path="math-question-generator" element={<MathQuestionGenerator />} />
+              <Route path="math-bulk-upload" element={<MathBulkUpload />} />
+              <Route path="math-question-manager" element={<MathQuestionManager />} />
+              <Route path="math-question-assigner" element={<MathQuestionAssigner />} />
               <Route path="question-manager" element={<QuestionManager />} />
               <Route path="question-assigner" element={<QuestionAssigner />} />
 

@@ -293,6 +293,7 @@ const WordQuiz: React.FC = () => {
         <CardContent className="p-6">
           <div className="flex justify-between items-center mb-6">
             <QuizProgress 
+              title="Science Quiz"
               currentQuestion={currentQuestionIndex + 1} 
               totalQuestions={questions.length} 
               score={score} 
