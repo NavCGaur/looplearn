@@ -1,14 +1,18 @@
-import katex from 'katex';
+// Dynamic, cached loader for KaTeX. Returns the same promise for subsequent calls.
+let katexPromise: Promise<typeof import('katex')> | null = null;
 
-let isKatexLoaded = false;
-
-export const loadKaTeX = async (): Promise<typeof katex> => {
-  if (!isKatexLoaded) {
-    isKatexLoaded = true; // Mark as loaded
+export const loadKaTeX = async (): Promise<typeof import('katex')> => {
+  if (!katexPromise) {
+    // dynamic import so KaTeX is code-split and not forced into every bundle
+    katexPromise = import('katex').then(mod => mod).catch(err => {
+      // reset on failure so caller can retry later
+      katexPromise = null;
+      throw err;
+    });
   }
-  return katex;
+  return katexPromise;
 };
 
 export const resetKatexLoader = () => {
-  isKatexLoaded = false;
+  katexPromise = null;
 };

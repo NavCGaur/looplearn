@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1",
-  "simulate-bulk-upload": "node scripts/simulateAiAndUpload.js",
-  "test-bulk-upload": "node scripts/runBulkUploadServiceTest.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "simulate-bulk-upload": "node scripts/simulateAiAndUpload.js",
+    "test-bulk-upload": "node scripts/runBulkUploadServiceTest.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,8 @@
   "type": "module",
   "dependencies": {
     "@google-cloud/translate": "^9.0.1",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "axios": "^1.8.4",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",

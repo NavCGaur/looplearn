@@ -41,6 +41,8 @@ import MathQuestionManager from './pages/mathQuestion/QuestionManager.tsx';
 import MathQuestionAssigner from './pages/mathQuestion/QuestionAssigner.tsx';
 import Main from './pages/scienceQuestion/Main.tsx';
 import BulkUpload from './pages/scienceQuestion/BulkUpload.tsx';
+import UnifiedQuestionManagerPage from './pages/admin/QuestionManagerPage.tsx';
+import UnifiedQuestionGenerator from './pages/unifiedQuestion/UnifiedQuestionGenerator';
 
 import 'katex/dist/katex.min.css';
 
@@ -106,12 +108,14 @@ const App = () => (
               <Route path="science-questions" element={<Main />} />
               <Route path="science-question-generator" element={<ScienceQuestionGenerator   />} />
               <Route path="bulk-upload" element={<BulkUpload />} />
+              <Route path="unified-question-generator" element={<UnifiedQuestionGenerator />} />
               <Route path="math-question-generator" element={<MathQuestionGenerator />} />
               <Route path="math-bulk-upload" element={<MathBulkUpload />} />
               <Route path="math-question-manager" element={<MathQuestionManager />} />
               <Route path="math-question-assigner" element={<MathQuestionAssigner />} />
               <Route path="question-manager" element={<QuestionManager />} />
               <Route path="question-assigner" element={<QuestionAssigner />} />
+              <Route path="questions" element={<UnifiedQuestionManagerPage />} />
 
             </Route>
             

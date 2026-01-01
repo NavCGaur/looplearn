@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 
 export const scienceQuestionSchema = new mongoose.Schema({
   questionText: { type: String, required: true, trim: true },
+  // For MCQ questions we may store options and index of the correct option
+  options: [{ type: String, trim: true }],
+  correctOptionIndex: { type: Number },
+  // Backwards compatible field for single-answer or fill-in types
   answer: { type: String, required: true, trim: true },
   classStandard: {
     type: String,

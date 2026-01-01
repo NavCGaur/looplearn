@@ -10,6 +10,7 @@ import vocabRoutes from './routes/vocabRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import scienceRoutes from './routes/scienceRoutes.js';
 import mathRoutes from './routes/mathRoutes.js';
+import questionManagerRoutes from './routes/questionManagerRoutes.js';
 //import analyticsRoutes from './routes/analyticsRoutes.js';  
 import { generateAndPopulateQuizzes } from './utility/generateAndPopulateQuiz.js';
 
@@ -36,6 +37,8 @@ app.use('/api/vocab', vocabRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/science', scienceRoutes);
 app.use('/api/math', mathRoutes);
+app.use('/api/question-manager', questionManagerRoutes);
+console.log('Mounted /api/question-manager routes');
 
 // 🔥 Uptime Robot test route to keep server hot
 app.get('/uptime-ping', (req, res) => {
@@ -63,7 +66,6 @@ mongoose.connect(process.env.MONGO_URL)
     process.exit(1);
   });
 
-
-generateAndPopulateQuizzes();
+// generateAndPopulateQuizzes(); // Commented out to prevent server exit
 
 export default app;

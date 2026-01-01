@@ -3,6 +3,7 @@ dotenv.config();
 import Fuse from 'fuse.js'; 
 import ScienceQuestion from '../../models/scienceQuestionSchema.js';
 import AssignedScienceQuestion from '../../models/assignedScienceQuestions.js';
+import AssignedQuestion from '../../models/assignedQuestion.js';
 
 import axios from 'axios';
 import { requestWithRetries } from '../../utility/geminiQuizApi.js';
@@ -232,9 +233,11 @@ IMPORTANT: Return only the JSON response, no additional text or explanations.`;
         throw new Error('Invalid response format from AI. Expected questions array.');
       }
 
-      // Enhance generated questions with metadata
+      // Enhance generated questions with metadata; preserve options/correctOptionIndex when present
       generatedQuestions = parsedResponse.questions.map((question, index) => ({
         ...question,
+        options: question.options || [],
+        correctOptionIndex: typeof question.correctOptionIndex === 'number' ? question.correctOptionIndex : undefined,
         classStandard,
         subject,
         chapter,
@@ -279,6 +282,8 @@ IMPORTANT: Return only the JSON response, no additional text or explanations.`;
         _id: q._id, // Include existing _id
         questionText: q.questionText,
         answer: q.answer,
+        options: q.options || [],
+        correctOptionIndex: typeof q.correctOptionIndex === 'number' ? q.correctOptionIndex : undefined,
         classStandard: q.classStandard,
         subject: q.subject,
         chapter: q.chapter,
@@ -386,26 +391,39 @@ export const saveQuestionsService = async (questions) => {
 };
 
 export const fetchAssignedScienceQuestions = async (classStandard) => {
-  const assignment = await AssignedScienceQuestion.findOne({ classStandard });
+  try {
+    // Get assigned question IDs from the new unified schema
+    const assignedQuestionIds = await AssignedQuestion.getAssignedQuestionIds(
+      classStandard, 
+      'science' // Use consistent subject name
+    );
+    
+    if (!assignedQuestionIds || assignedQuestionIds.length === 0) {
+      return []; // Return empty if nothing is assigned
+    }
 
-  if (!assignment || !assignment.questionIds.length) {
-    return []; // Return empty if nothing is assigned
+    // Fetch the actual questions
+    const questions = await ScienceQuestion.find({
+      _id: { $in: assignedQuestionIds }
+    });
+
+    console.log(`Fetched ${questions.length} assigned questions for class ${classStandard}`);
+    
+    // Optional: format questions if frontend expects specific fields
+    return questions.map(q => ({
+      id: q._id,
+      word: q.questionText.replace('____', '________'), // consistent blank format
+      answer: q.answer,
+      options: q.options || [],
+      correctOptionIndex: typeof q.correctOptionIndex === 'number' ? q.correctOptionIndex : undefined,
+      subject: q.subject,
+      chapter: q.chapter,
+      topic: q.topic
+    }));
+  } catch (error) {
+    console.error('Error fetching assigned science questions:', error);
+    return [];
   }
-
-  const questions = await ScienceQuestion.find({
-    _id: { $in: assignment.questionIds }
-  });
-
-  console.log(`Fetched ${questions.length} assigned questions for class ${classStandard}, questions are -${questions} `);
-  // Optional: format questions if frontend expects specific fields
-  return questions.map(q => ({
-    id: q._id,
-    word: q.questionText.replace('____', '________'), // consistent blank format
-    correctAnswer: q.answer,
-    type: q.questionType === 'multiple-choice' ? 'mcq' : 'fill-in-blank',
-    options: q.options || [],
-    definition: q.topic || '', // example fallback
-  }));
 };
 
 
@@ -465,13 +483,23 @@ export const getQuestionsByFiltersService = async (filters, options) => {
       ];
     }
 
-    const questions = await ScienceQuestion.find(query)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean();
+    // Get all questions first
+    const allQuestions = await ScienceQuestion.find(query).sort({ createdAt: -1 }).lean();
+    
+    // Get assigned question IDs for this class and subject using the new efficient method
+    const assignedQuestionIds = await AssignedQuestion.getAssignedQuestionIds(
+      filters.classStandard,
+      filters.subject || 'science'
+    );
 
-    const totalQuestions = await ScienceQuestion.countDocuments(query);
+    // Filter out assigned questions
+    const availableQuestions = allQuestions.filter(q => 
+      !assignedQuestionIds.includes(q._id.toString())
+    );
+
+    // Apply pagination to available questions
+    const questions = availableQuestions.slice(skip, skip + limit);
+    const totalQuestions = availableQuestions.length;
     const totalPages = Math.ceil(totalQuestions / limit);
 
     return {
@@ -682,6 +710,8 @@ export const getScienceQuizQuestionsService = async (uid) => {
           _id: 1,
           questionText: 1,
           answer: 1,
+          options: 1,
+          correctOptionIndex: 1,
           questionType: 1,
           difficulty: 1,
           subject: 1,
@@ -702,6 +732,8 @@ export const getScienceQuizQuestionsService = async (uid) => {
         type: question.questionType,
         question: question.questionText,
         correctAnswer: question.answer,
+        options: question.options || [],
+        correctOptionIndex: typeof question.correctOptionIndex === 'number' ? question.correctOptionIndex : undefined,
         difficulty: question.difficulty,
         subject: question.subject,
         chapter: question.chapter,
@@ -760,7 +792,9 @@ export const bulkUploadQuestionsService = async (questions) => {
     // Validate questions format
     const validatedQuestions = questions.map(q => ({
       questionText: q.questionText,
-      answer: q.answer,
+      options: q.options || [],
+      correctOptionIndex: typeof q.correctOptionIndex === 'number' ? q.correctOptionIndex : undefined,
+      answer: q.answer || (q.options && typeof q.correctOptionIndex === 'number' ? (q.options[q.correctOptionIndex] || '') : q.answer || ''),
       classStandard: q.classStandard,
       subject: q.subject,
       chapter: q.chapter,

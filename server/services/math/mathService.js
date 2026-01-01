@@ -3,6 +3,7 @@ dotenv.config();
 import Fuse from 'fuse.js';
 import MathQuestion from '../../models/mathQuestionSchema.js';
 import AssignedMathQuestion from '../../models/assignedMathQuestions.js';
+import AssignedQuestion from '../../models/assignedQuestion.js'; // Add unified schema
 
 import { requestWithRetries } from '../../utility/geminiQuizApi.js';
 import { UserSchema } from '../../models/userSchema.js';
@@ -133,9 +134,26 @@ export const getQuestionsByFiltersService = async (filters, options) => {
     if (filters.search) {
       query.$or = [ { questionText: new RegExp(filters.search, 'i') }, { answer: new RegExp(filters.search, 'i') }, { chapter: new RegExp(filters.search, 'i') }, { topic: new RegExp(filters.search, 'i') } ];
     }
-    const questions = await MathQuestion.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).lean();
-    const totalQuestions = await MathQuestion.countDocuments(query);
+
+    // Get all questions first
+    const allQuestions = await MathQuestion.find(query).sort({ createdAt: -1 }).lean();
+    
+    // Get assigned question IDs for this class and subject using the new efficient method
+    const assignedQuestionIds = await AssignedQuestion.getAssignedQuestionIds(
+      filters.classStandard,
+      'mathematics' // Use consistent subject name
+    );
+
+    // Filter out assigned questions
+    const availableQuestions = allQuestions.filter(q => 
+      !assignedQuestionIds.includes(q._id.toString())
+    );
+
+    // Apply pagination to available questions
+    const questions = availableQuestions.slice(skip, skip + limit);
+    const totalQuestions = availableQuestions.length;
     const totalPages = Math.ceil(totalQuestions / limit);
+    
     return { questions, totalQuestions, totalPages, hasNext: page < totalPages, hasPrev: page > 1 };
   } catch (error) {
     console.error('Error in getQuestionsByFiltersService (math)', error);
@@ -212,10 +230,33 @@ export const bulkUploadQuestionsService = async (questions) => {
 };
 
 export const fetchAssignedMathQuestions = async (classStandard) => {
-  const assignment = await AssignedMathQuestion.findOne({ classStandard });
-  if (!assignment || !assignment.questionIds.length) return [];
-  const questions = await MathQuestion.find({ _id: { $in: assignment.questionIds } });
-  return questions.map(q => ({ id: q._id, question: q.questionText, type: q.questionType, options: q.options || [], correctAnswer: q.answer }));
+  try {
+    // Get assigned question IDs from the new unified schema
+    const assignedQuestionIds = await AssignedQuestion.getAssignedQuestionIds(
+      classStandard, 
+      'mathematics' // Use consistent subject name
+    );
+    
+    if (!assignedQuestionIds || assignedQuestionIds.length === 0) {
+      return [];
+    }
+
+    // Fetch the actual questions
+    const questions = await MathQuestion.find({ 
+      _id: { $in: assignedQuestionIds } 
+    });
+    
+    return questions.map(q => ({ 
+      id: q._id, 
+      question: q.questionText, 
+      type: q.questionType, 
+      options: q.options || [], 
+      correctAnswer: q.answer 
+    }));
+  } catch (error) {
+    console.error('Error fetching assigned math questions:', error);
+    return [];
+  }
 };
 
 export const getMathQuizQuestionsService = async (uid) => {

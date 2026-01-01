@@ -12,7 +12,8 @@ interface FillBlankQuestionProps {
   question: {
     id: string;
     word: string;
-    correctAnswer: string;
+    correctAnswer?: string;
+    answer?: string; // Allow both field names for backward compatibility
     type: string;
     definition?: string;
   };
@@ -99,7 +100,7 @@ const QuestionDisplay = React.memo(({
   return (
     <div className="mb-4 text-lg flex flex-wrap items-center gap-1">
       {parts.map((part, index) => (
-        <React.Fragment key={`fragment-${index}-${renderKey}`}>
+        <div key={`fragment-${index}-${renderKey}`} className="contents">
           {/* Render the text part */}
           {part && <TextWithMath key={`part-${index}-${renderKey}`}>{part}</TextWithMath>}
           
@@ -125,7 +126,7 @@ const QuestionDisplay = React.memo(({
               )}
             </>
           )}
-        </React.Fragment>
+        </div>
       ))}
     </div>
   );
@@ -176,12 +177,19 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
   const [renderKey, setRenderKey] = useState(0);
 
   console.log('FillBlankQuestion rendering'); // This should NOT log on every keystroke now
+  console.log('Full question object received:', JSON.stringify(question, null, 2));
+
+  // Helper to get the correct answer field (support both answer and correctAnswer)
+  const getCorrectAnswer = useCallback(() => {
+    return question.correctAnswer || question.answer || '';
+  }, [question.correctAnswer, question.answer]);
 
   // Memoize the answer checking function
   const isAnswerCorrect = useCallback((userAnswer: string, correctAnswer: string) => {
     // Normalizer: lowercase, remove smart quotes, replace non-alphanum (except hyphen) with space, collapse spaces
-    const normalize = (s: string) =>
-      s
+    // Make normalizer resilient to undefined/null inputs (coerce to empty string)
+    const normalize = (s?: string) =>
+      (s || '')
         .toLowerCase()
         .trim()
         .replace(/[\u2018\u2019\u201C\u201D]/g, "'")
@@ -190,8 +198,8 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
         .trim();
 
     // Try to convert English number-words to a digit string using words-to-numbers
-   const tryConvertToDigits = (s: string): string | null => {
-  const raw = s.trim();
+  const tryConvertToDigits = (s?: string): string | null => {
+  const raw = (s || '').trim();
 
   // If it's already numeric (allow commas), normalize and return
   if (/^[\d,]+$/.test(raw)) {
@@ -241,6 +249,7 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
   // Memoize expensive computations
   const parts = useMemo(() => {
     console.log('Computing parts'); // Should only log when question changes
+    console.log('Raw question.word received:', JSON.stringify(question.word));
     
     // First, normalize all sequences of 4 or more underscores to a single placeholder
     // This handles cases where we have ________ (8) or ____________ (12) underscores
@@ -257,12 +266,13 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
   const correctAnswers = useMemo(() => {
     // For now, assume single answer, but this could be extended for multiple answers
     // If you have multiple correct answers separated by some delimiter, split them here
-    return [question.correctAnswer];
-  }, [question.correctAnswer]);
+    return [getCorrectAnswer()];
+  }, [getCorrectAnswer]);
   
   const isCorrect = useMemo(() => {
-    return userAnswer ? isAnswerCorrect(userAnswer, question.correctAnswer) : false;
-  }, [userAnswer, question.correctAnswer, isAnswerCorrect]);
+    const correctAnswer = getCorrectAnswer();
+    return userAnswer ? isAnswerCorrect(userAnswer, correctAnswer) : false;
+  }, [userAnswer, getCorrectAnswer, isAnswerCorrect]);
 
   // Memoized submit handler
   const handleAnswer = useCallback((answer: string) => {
@@ -273,11 +283,12 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
     async function initKaTeX() {
       try {
         await loadKaTeX();
-        setIsKatexReady(true);
-        setRenderKey(prev => prev + 1);
+  setIsKatexReady(true);
+  setRenderKey(prev => prev + 1);
       } catch (error) {
         console.error("Failed to load KaTeX:", error);
-        setIsKatexReady(true);
+  // Do NOT mark KaTeX as ready on failure. Keep false and fallback to plain text rendering.
+  setIsKatexReady(false);
       }
     }
 
@@ -325,7 +336,7 @@ const FillBlankQuestion: React.FC<FillBlankQuestionProps> = ({
         ) : (
           <AnswerFeedback
             isCorrect={isCorrect}
-            correctAnswer={question.correctAnswer}
+            correctAnswer={getCorrectAnswer()}
             renderKey={renderKey}
           />
         )}

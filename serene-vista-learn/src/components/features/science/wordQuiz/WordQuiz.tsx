@@ -118,8 +118,11 @@ const WordQuiz: React.FC = () => {
     setAnswered(true);
   console.debug('handleAnswer called for index', currentQuestionIndex, 'answer', answer);
     
+    // Get the correct answer field (support both answer and correctAnswer)
+    const correctAnswer = currentQuestion?.correctAnswer || currentQuestion?.answer || '';
+    
     // Use the fuzzy matching function
-    const isCorrect = isAnswerCorrect(answer, currentQuestion?.correctAnswer || '');
+    const isCorrect = isAnswerCorrect(answer, correctAnswer);
     const pointsEarned = calculateQuestionPoints(isCorrect, currentQuestion);
     
     if (isCorrect) {
@@ -148,7 +151,7 @@ const WordQuiz: React.FC = () => {
 
       toast({
         title: "Correct! 🎉",
-        description: `+${pointsEarned} points! "${currentQuestion.word}" - ${currentQuestion.correctAnswer}`,
+        description: `+${pointsEarned} points! Answer is - ${correctAnswer}`,
         variant: "default",
       });
       
@@ -162,7 +165,7 @@ const WordQuiz: React.FC = () => {
       setCurrentQuestionPoints(0);
       toast({
         title: "Not quite right",
-        description: `The correct answer was "${currentQuestion.correctAnswer}". Keep trying!`,
+        description: `The correct answer was "${correctAnswer}". Keep trying!`,
         variant: "destructive",
       });
     }

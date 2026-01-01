@@ -29,6 +29,8 @@ const menuItems = [
   { icon: BarChartHorizontal, label: "Math Quiz", path: "/admin/dashboard/spaced/math-quiz" },
   { icon: AudioWaveform, label: "Speech Shadow", path: "/admin/dashboard/speech" },
   { icon: Users, label: "Student Management", path: "/admin/dashboard/students" },
+  { icon: Database, label: "Questions (Unified)", path: "/admin/dashboard/questions" },
+  { icon: Telescope, label: "Unified Generator", path: "/admin/dashboard/unified-question-generator" },
 ];
 
 const scienceMenuItems = [

@@ -38,8 +38,9 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
     try {
       setIsLoading(true);
       setHasError(false);
-      
+      console.debug('MathRenderer: attempting to load KaTeX');
       const katex = await loadKaTeX();
+      console.debug('MathRenderer: loadKaTeX resolved, katex:', !!katex);
       
       if (!katex || !katex.render) {
         throw new Error('KaTeX not properly loaded');
@@ -54,13 +55,14 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
       let cleanExpression = children
         .trim()
         // Fix common issues
-        .replace(/\\text\{([^}]*)\}/g, '\\mathrm{$1}') // Use mathrm instead of text for better compatibility
+        // Accept either "\\text{...}" or corrupted "text{...}" (missing backslash)
+        .replace(/\\?text\{([^}]*)\}/g, '\\mathrm{$1}') // Use mathrm instead of text for better compatibility
         .replace(/\s*\*\s*/g, '\\cdot ') // Replace * with proper multiplication symbol
         .replace(/imes/g, '\\times') // Fix times symbol
         .replace(/\^(\d+)/g, '^{$1}') // Wrap single digit exponents in braces
         .replace(/_(\d+)/g, '_{$1}'); // Wrap single digit subscripts in braces
       
-      console.log('Rendering LaTeX:', cleanExpression);
+  console.debug('MathRenderer: rendering LaTeX:', cleanExpression);
       
       // Enhanced rendering options
       const options = {
@@ -76,10 +78,10 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
       };
 
       katex.render(cleanExpression, containerRef.current, options);
-      console.log('KaTeX rendered successfully');
+  console.debug('MathRenderer: KaTeX rendered successfully');
       setIsLoading(false);
     } catch (error) {
-      console.error('KaTeX rendering error:', error);
+  console.error('MathRenderer: KaTeX rendering error:', error);
       setHasError(true);
       setIsLoading(false);
       
@@ -88,7 +90,7 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
         containerRef.current.textContent = children;
       }
       
-      onError?.(error as Error);
+  onError?.(error as Error);
     }
   }, [children, displayMode, onError, hasLatex]);
 

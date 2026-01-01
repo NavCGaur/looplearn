@@ -14,6 +14,8 @@ import { vocabApi } from "../api/vocabApi.ts";
 import { userApi } from "../api/userApi.ts"; 
 import { scienceApi } from "../api/scienceApi.ts"; 
 import { mathApi } from "../api/mathApi.ts";
+import { questionsApi } from "../api/questionsApi.ts";
+import { questionManagerApi } from "../api/questionManagerApi";
 
 
 
@@ -32,6 +34,8 @@ const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [scienceApi.reducerPath]: scienceApi.reducer,
   [mathApi.reducerPath]: mathApi.reducer,
+  [questionsApi.reducerPath]: questionsApi.reducer,
+  [questionManagerApi.reducerPath]: questionManagerApi.reducer,
   
 
   },
@@ -39,6 +43,8 @@ const store = configureStore({
     getDefaultMiddleware().concat(authApi.middleware ,
     vocabApi.middleware,userApi.middleware,scienceApi.middleware
   ,mathApi.middleware
+  ,questionsApi.middleware
+  ,questionManagerApi.middleware
   ), 
 });
 

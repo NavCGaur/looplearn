@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useGetQuizQuestionsQuery } from "@/state/api/userApi";
 import { useAddPointsMutation } from "@/state/api/vocabApi";
@@ -30,11 +30,20 @@ const isAnswerCorrect = (userAnswer: string, correctAnswer: string) => {
   return result.length > 0 && result[0].score <= 0.2;
 };
 
-const WordQuiz: React.FC = () => {
+type WordQuizProps = {
+  className?: string;
+  fullWidth?: boolean; // when true the card will expand to the parent's width
+};
+
+const WordQuiz: React.FC<WordQuizProps> = ({ className = '', fullWidth = false }) => {
   const userId = useSelector((state: any) => state.auth?.user?.uid);
   const { data: quizQuestions = [], isLoading, isError } = useGetQuizQuestionsQuery(userId || '');
   const [addPoints] = useAddPointsMutation();
   const { toast } = useToast();
+
+  // ref to the root wrapper so we can observe parent size
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const [parentSize, setParentSize] = useState<{ width: number; height: number } | null>(null);
 
   // Game state
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -58,6 +67,35 @@ const WordQuiz: React.FC = () => {
       setStartTime(new Date());
     }
   }, [quizQuestions]);
+
+  // Observe parent element size so this component can occupy full parent area
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    const parent = wrapper.parentElement;
+    if (!parent) return;
+
+    const measure = () => {
+      setParentSize({ width: parent.clientWidth, height: parent.clientHeight });
+    };
+
+    // initial measure
+    measure();
+
+    // use ResizeObserver to track parent size changes
+    const ro = new ResizeObserver(() => {
+      measure();
+    });
+    ro.observe(parent);
+
+    // also listen for window resize as a fallback
+    window.addEventListener('resize', measure);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -180,11 +218,11 @@ const WordQuiz: React.FC = () => {
 
   if (isLoading || questions.length === 0) {
     return (
-      <Card className="max-w-3xl mx-auto mt-8 p-4 text-center">
+      <Card className={`w-full ${fullWidth ? '' : 'max-w-md mx-auto'} mt-4 p-4 text-center ${className}`}>
         <CardContent>
-          <div className="flex flex-col items-center justify-center py-10">
-            <Star className="w-12 h-12 text-yellow-400 animate-pulse" />
-            <p className="text-lg mt-4">Loading your word quiz...</p>
+          <div className="flex flex-col items-center justify-center py-8">
+            <Star className="w-10 h-10 text-yellow-400 animate-pulse" />
+            <p className="text-base mt-3">Loading your word quiz...</p>
           </div>
         </CardContent>
       </Card>
@@ -193,11 +231,11 @@ const WordQuiz: React.FC = () => {
 
   if (isError) {
     return (
-      <Card className="max-w-3xl mx-auto mt-8 p-4 text-center">
+      <Card className={`w-full ${fullWidth ? '' : 'max-w-md mx-auto'} mt-4 p-4 text-center ${className}`}>
         <CardContent>
-          <div className="flex flex-col items-center justify-center py-10">
-            <AlertCircle className="w-12 h-12 text-red-400" />
-            <p className="text-lg mt-4">Failed to load quiz questions. Please try again.</p>
+          <div className="flex flex-col items-center justify-center py-8">
+            <AlertCircle className="w-10 h-10 text-red-400" />
+            <p className="text-base mt-3">Failed to load quiz questions. Please try again.</p>
           </div>
         </CardContent>
       </Card>
@@ -216,23 +254,27 @@ const WordQuiz: React.FC = () => {
     );
   }
 
+  const containerStyle: React.CSSProperties = parentSize ? { width: parentSize.width, height: parentSize.height } : {};
+
   return (
-    <div className="w-full py-4 sm:py-0 flex items-center justify-center">
-      <Card className="max-w-3xl border-4 border-blue-500 border-opacity-10 rounded-xl shadow-lg w-full">
-        <CardContent className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <QuizProgress 
-              currentQuestion={currentQuestionIndex + 1} 
-              totalQuestions={questions.length} 
-              score={score}
-            />
-            <div className="flex items-center gap-2 bg-yellow-50 px-3 py-1 rounded-full">
+    <div ref={wrapperRef} className={`w-full px-4 py-4 flex justify-center ${className}`} style={containerStyle}>
+      <Card className={`w-full h-full ${fullWidth ? '' : 'max-w-xl mx-auto'} border border-blue-200 rounded-lg shadow-sm`}>
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
+            <div className="flex-1">
+              <QuizProgress 
+                currentQuestion={currentQuestionIndex + 1} 
+                totalQuestions={questions.length} 
+                score={score}
+              />
+            </div>
+            <div className="flex items-center gap-2 bg-yellow-50 px-3 py-1 rounded-full self-start sm:self-auto">
               <Award className="h-5 w-5 text-yellow-600" />
-              <span className="font-bold text-yellow-700">{totalPoints} pts</span>
+              <span className="font-semibold text-yellow-700 text-sm">{totalPoints} pts</span>
             </div>
           </div>
           
-          <div className="my-6 p-4 bg-blue-50 rounded-lg">
+          <div className="my-2 p-3 bg-blue-50 rounded-md">
             {currentQuestion.type === 'mcq' ? (
               <MCQQuestion 
                 question={currentQuestion} 
@@ -251,7 +293,7 @@ const WordQuiz: React.FC = () => {
           </div>
           
           {answered && (
-            <div className="mt-4 flex justify-between items-center">
+            <div className="mt-3 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
               <div className="text-sm text-gray-600">
                 {currentQuestionPoints > 0 ? (
                   <span className="text-green-600 font-medium">
@@ -263,9 +305,11 @@ const WordQuiz: React.FC = () => {
               </div>
               <Button 
                 onClick={nextQuestion}
-                className="px-8 py-2 bg-langlearn-orange hover:bg-langlearn-orange/90 text-white font-bold rounded-full"
+                className="w-full sm:w-auto px-4 py-2 bg-langlearn-orange hover:bg-langlearn-orange/90 text-white font-bold rounded-full flex items-center justify-center"
               >
-                {currentQuestionIndex < questions.length - 1 ? "Next Question" : "Finish Quiz"}
+                <span>
+                  {currentQuestionIndex < questions.length - 1 ? "Next" : "Finish"}
+                </span>
                 <Trophy className="ml-2 h-5 w-5" />
               </Button>
             </div>

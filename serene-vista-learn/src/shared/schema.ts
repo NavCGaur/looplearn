@@ -19,6 +19,8 @@ export const scienceQuestionSchema = z.object({
   topic: z.string().min(1),
   questionType: z.string().default("fill-in-blank"),
   questionText: z.string().min(1),
+  options: z.array(z.string()).optional(),
+  correctOptionIndex: z.number().int().optional(),
   answer: z.string().min(1),
   createdAt: z.string().datetime().optional(),
   createdBy: z.string().optional(),

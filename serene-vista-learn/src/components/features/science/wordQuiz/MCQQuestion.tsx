@@ -4,6 +4,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Trophy, HelpCircle } from "lucide-react";
+import { TextWithMath } from '@/components/ui/TextWithMath';
 
 interface MCQQuestionProps {
   question: QuizQuestion;
@@ -18,6 +19,10 @@ const MCQQuestion: React.FC<MCQQuestionProps> = ({
   isAnswered,
   selectedAnswer 
 }) => {
+  // Debug logs for LaTeX rendering issues
+  console.debug('MCQQuestion: raw question:', question.question);
+  console.debug('MCQQuestion: options:', question.options);
+  question.options?.forEach((opt, i) => console.debug(`option[${i}] contains $:`, opt.includes('$'), 'contains \\: ', opt.includes('\\')));
   const handleOptionClick = (option: string) => {
     if (!isAnswered) {
       onAnswer(option);
@@ -28,7 +33,9 @@ const MCQQuestion: React.FC<MCQQuestionProps> = ({
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <HelpCircle className="h-6 w-6 text-langlearn-blue flex-shrink-0" />
-        <h3 className="text-xl font-bold text-langlearn-dark-blue">{question.question}</h3>
+        <h3 className="text-xl font-bold text-langlearn-dark-blue">
+          <TextWithMath>{question.question}</TextWithMath>
+        </h3>
       </div>
       
       {/*  {question.imageUrl && (
@@ -78,7 +85,7 @@ const MCQQuestion: React.FC<MCQQuestionProps> = ({
                 isAnswered && option === selectedAnswer && option !== question.correctAnswer ? "text-red-700" : ""
               )}
             >
-              {option}
+              <TextWithMath>{option}</TextWithMath>
             </Label>
             
             {isAnswered && option === question.correctAnswer && (
