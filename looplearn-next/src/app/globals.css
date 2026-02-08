@@ -1,0 +1,235 @@
+@import "tailwindcss";
+@config "../../tailwind.config.js";
+
+/* LoopLearn Design System - Gamified, Playful, Modern */
+
+@layer base {
+  :root {
+    /* Base colors */
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+
+    /* Card surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary Blue - #2563EB */
+    --primary: 217 91% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Light blue tint */
+    --secondary: 217 91% 95%;
+    --secondary-foreground: 217 91% 30%;
+
+    /* Muted */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    /* Accent - Sunshine Yellow #FACC15 */
+    --accent: 48 96% 53%;
+    --accent-foreground: 48 96% 20%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 53%;
+
+    --radius: 1rem;
+
+    /* LoopLearn Custom Colors */
+    --loop-blue: 217 91% 53%;
+    --loop-green: 142 71% 58%;
+    --loop-yellow: 48 96% 53%;
+    --loop-purple: 270 91% 65%;
+    --loop-pink: 330 81% 60%;
+
+    /* Glassmorphism */
+    --glass-bg: 0 0% 100% / 0.15;
+    --glass-border: 0 0% 100% / 0.3;
+    --glass-shadow: 217 91% 53% / 0.1;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(210 40% 98%) 0%, hsl(217 91% 97%) 50%, hsl(142 71% 97%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 53%) 0%, hsl(217 91% 45%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 71% 58%) 0%, hsl(142 71% 45%) 100%);
+
+    /* Sidebar (keeping defaults) */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217 91% 60%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217 32% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 48 96% 53%;
+    --accent-foreground: 48 96% 10%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 217 91% 60%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224 76% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: "Fredoka", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+
+  /* Glassmorphism card */
+  .glass-card {
+    @apply bg-white/20 backdrop-blur-xl border border-white/30 shadow-xl;
+  }
+
+  /* Floating icon container */
+  .float-icon {
+    @apply rounded-2xl p-3 shadow-lg bg-white/20 backdrop-blur-xl border border-white/30;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%);
+  }
+
+  /* Curly underline effect */
+  .curly-underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  .curly-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 12px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12'%3E%3Cpath d='M0 8 Q 12.5 0, 25 8 T 50 8 T 75 8 T 100 8' stroke='%234ADE80' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+
+  /* Badge pill */
+  .badge-pill {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium;
+    background: linear-gradient(135deg, hsl(var(--loop-yellow) / 0.2) 0%, hsl(var(--loop-green) / 0.2) 100%);
+    border: 1px solid hsl(var(--loop-yellow) / 0.3);
+  }
+
+  /* Avatar stack */
+  .avatar-stack {
+    @apply flex -space-x-3;
+  }
+
+  .avatar-stack>* {
+    @apply ring-2 ring-white rounded-full;
+  }
+}
+
+@layer utilities {
+
+  /* Bounce animation for mascot */
+  .animate-bounce-slow {
+    animation: bounce-slow 3s ease-in-out infinite;
+  }
+
+  @keyframes bounce-slow {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  /* Float animation for icons */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 1.5s;
+  }
+
+  .animate-float-delayed-2 {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 3s;
+  }
+
+  .animate-float-delayed-3 {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 4.5s;
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+      transform: translateY(-10px) rotate(2deg);
+    }
+
+    50% {
+      transform: translateY(-5px) rotate(0deg);
+    }
+
+    75% {
+      transform: translateY(-15px) rotate(-2deg);
+    }
+  }
+}
