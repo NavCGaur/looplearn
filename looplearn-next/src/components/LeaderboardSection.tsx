@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Flame, Trophy, Medal, Crown, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import Link from 'next/link';
 
 const leaderboardData = [
     { rank: 1, name: "Ayush S.", xp: 12450, streak: 45, avatar: "ES" },
@@ -176,20 +177,22 @@ const LeaderboardSection = () => {
                             </p>
                             <span className="text-2xl">🚀</span>
                         </div>
-                        <Button
-                            variant="default"
-                            size="lg"
-                            className="group bg-green-500 hover:bg-green-600 text-white rounded-full text-xl px-8 py-6 h-auto"
-                        >
-                            <span>Sign Up to Compete</span>
-                            <motion.span
-                                className="text-xl ml-2"
-                                animate={{ scale: [1, 1.2, 1] }}
-                                transition={{ duration: 1.5, repeat: Infinity }}
+                        <Link href="/auth/signup">
+                            <Button
+                                variant="default"
+                                size="lg"
+                                className="group bg-green-500 hover:bg-green-600 text-white rounded-full text-xl px-8 py-6 h-auto cursor-pointer"
                             >
-                                🏆
-                            </motion.span>
-                        </Button>
+                                <span>Sign Up to Compete</span>
+                                <motion.span
+                                    className="text-xl ml-2"
+                                    animate={{ scale: [1, 1.2, 1] }}
+                                    transition={{ duration: 1.5, repeat: Infinity }}
+                                >
+                                    🏆
+                                </motion.span>
+                            </Button>
+                        </Link>
                         <p className="text-sm text-muted-foreground">
                             Join <span className="font-bold text-primary">2,847</span> learners already on the leaderboard!
                         </p>

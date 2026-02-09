@@ -42,8 +42,8 @@ export default async function Home() {
     <main>
       <HeroSection />
       <FeaturesSection />
-      <LeaderboardSection />
       <GuestAccessSection />
+      <LeaderboardSection />
     </main>
   )
 }

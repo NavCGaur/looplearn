@@ -5,6 +5,7 @@ import { Brain, Layers, Target, Gamepad2, Zap, Rocket } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LucideIcon } from "lucide-react";
+import Link from 'next/link';
 
 const FeatureCard = ({
     icon: Icon,
@@ -95,7 +96,7 @@ const FeaturesSection = () => {
     ];
 
     return (
-        <section className="py-20 lg:py-28 relative overflow-hidden bg-gradient-to-b from-background via-loop-purple/5 to-background">
+        <section id="features" className="py-20 lg:py-28 relative overflow-hidden bg-gradient-to-b from-background via-loop-purple/5 to-background">
             {/* Background decorations */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-loop-blue/10 blur-3xl" />
@@ -191,10 +192,12 @@ const FeaturesSection = () => {
                 >
                     <p className="text-muted-foreground text-xl sm:text-3xl pt-10 mb-2">Ready to break the forgetting cycle?</p>
                     <div className="flex justify-center mt-8 px-4 sm:px-0">
-                        <Button size="lg" className="group rounded-full text-lg sm:text-2xl px-6 py-4 sm:px-8 sm:py-6 h-auto bg-[#4ADE80] hover:bg-[#22c55e] text-white shadow-lg shadow-green-200/50 font-bold w-full sm:w-auto">
-                            <Rocket className="w-4 h-4 sm:w-5 sm:h-5 mr-2 fill-current transition-transform group-hover:scale-110" />
-                            Start Your Learning Loop!
-                        </Button>
+                        <Link href="#guest-access">
+                            <Button size="lg" className="group rounded-full text-lg sm:text-2xl px-6 py-4 sm:px-8 sm:py-6 h-auto bg-[#4ADE80] hover:bg-[#22c55e] text-white shadow-lg shadow-green-200/50 font-bold w-full sm:w-auto cursor-pointer">
+                                <Rocket className="w-4 h-4 sm:w-5 sm:h-5 mr-2 fill-current transition-transform group-hover:scale-110" />
+                                Start Your Learning Loop!
+                            </Button>
+                        </Link>
                     </div>
                 </motion.div>
             </div>

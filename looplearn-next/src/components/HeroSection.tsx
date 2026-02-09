@@ -4,6 +4,7 @@ import React from 'react';
 import { motion } from "framer-motion";
 import { Play, LayoutDashboard, Calculator, FlaskConical, Atom, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from 'next/link';
 
 const FloatingIcon = ({
     icon: Icon,
@@ -134,10 +135,12 @@ const HeroSection = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5, duration: 0.6 }}
                         >
-                            <Button size="lg" className="group rounded-full text-base px-8 py-6 h-auto bg-[#4ADE80] hover:bg-[#22c55e] text-white shadow-lg shadow-green-200/50 font-bold cursor-pointer">
-                                <Play className="w-5 h-5 mr-2 fill-current transition-transform group-hover:scale-110" />
-                                Start Quiz Now
-                            </Button>
+                            <Link href="#guest-access">
+                                <Button size="lg" className="group rounded-full text-base px-8 py-6 h-auto bg-[#4ADE80] hover:bg-[#22c55e] text-white shadow-lg shadow-green-200/50 font-bold cursor-pointer">
+                                    <Play className="w-5 h-5 mr-2 fill-current transition-transform group-hover:scale-110" />
+                                    Start Quiz Now
+                                </Button>
+                            </Link>
                             <Button variant="outline" size="lg" className="rounded-full text-base px-8 py-6 h-auto border-2 border-gray-200 bg-white hover:bg-gray-50 text-gray-900 font-semibold cursor-pointer">
                                 <LayoutDashboard className="w-5 h-5 mr-2 text-gray-700" />
                                 View Dashboard

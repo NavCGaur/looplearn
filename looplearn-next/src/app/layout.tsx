@@ -5,6 +5,8 @@ import { Navbar } from "@/components/ui/navbar";
 import Footer from "@/components/Footer";
 import { getUser } from "@/lib/supabase/server";
 
+import { GoogleAnalytics } from "@next/third-parties/google";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -41,6 +43,7 @@ export default async function RootLayout({
         <Navbar user={user?.user || null} profile={user?.profile || null} />
         {children}
         <Footer />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!} />
       </body>
     </html>
   );

@@ -176,7 +176,7 @@ const GuestAccessSection = () => {
     }
 
     return (
-        <section className="py-20 lg:py-28 relative overflow-hidden bg-gradient-to-b from-white via-blue-50/30 to-white">
+        <section id="guest-access" className="py-20 lg:py-28 relative bg-gradient-to-b from-white via-blue-50/30 to-white">
             {/* Background decorations */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-0 left-1/4 w-72 h-72 rounded-full bg-purple-100/40 blur-3xl opacity-60" />
@@ -219,7 +219,7 @@ const GuestAccessSection = () => {
                             viewport={{ once: true }}
                             className="h-full"
                         >
-                            <Card className="overflow-hidden border-2 border-white shadow-xl bg-white/80 backdrop-blur-sm ring-1 ring-black/5 h-full flex flex-col">
+                            <Card className="border-2 border-white shadow-xl bg-white/80 backdrop-blur-sm ring-1 ring-black/5 h-full flex flex-col">
                                 <CardContent className="p-6 lg:p-8 space-y-6 flex-1 flex flex-col">
                                     {/* Loopie Avatar */}
                                     <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
@@ -299,7 +299,7 @@ const GuestAccessSection = () => {
                                     {/* Start Quiz Button */}
                                     <Button
                                         size="xl"
-                                        className="w-full group mt-2 rounded-xl text-lg font-bold shadow-lg shadow-green-200 bg-[#4ADE80] hover:bg-[#22c55e] text-white"
+                                        className="w-full group mt-2 rounded-xl text-lg font-bold shadow-lg shadow-green-200 bg-[#4ADE80] hover:bg-[#22c55e] text-white cursor-pointer"
                                         onClick={handleStartQuiz}
                                         disabled={!selectedClass || !selectedSubject}
                                     >
@@ -360,7 +360,7 @@ const GuestAccessSection = () => {
                                 >
                                     <Button
                                         size="xl"
-                                        className="w-full bg-gradient-to-r from-[#6366f1] to-[#a855f7] hover:from-[#4f46e5] hover:to-[#9333ea] shadow-lg rounded-xl text-lg h-14 text-white font-bold"
+                                        className="w-full bg-gradient-to-r from-[#6366f1] to-[#a855f7] hover:from-[#4f46e5] hover:to-[#9333ea] shadow-lg rounded-xl text-lg h-14 text-white font-bold cursor-pointer"
                                         onClick={() => router.push('/auth/signup')}
                                     >
                                         Create a Free Account

@@ -8,7 +8,7 @@ const Footer = () => {
             <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
 
                 {/* Left Side: Made with love text */}
-                <div className="flex items-center gap-2 text-sm md:text-base font-fredoka">
+                <div className="flex items-center gap-2 text-sm md:text-xl font-fredoka">
                     <span>Made with</span>
                     <Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" />
                     <span>for my students</span>
@@ -16,7 +16,7 @@ const Footer = () => {
 
                 {/* Right Side: Naveen Gaur & Social Link */}
                 <div className="flex items-center gap-6">
-                    <span className="font-semibold text-gray-400 text-sm">Naveen Gaur</span>
+                    <span className="font-semibold text-gray-400 text-xl">Naveen Gaur</span>
 
                     <Link
                         href="https://x.com/NAVEENCGaur"

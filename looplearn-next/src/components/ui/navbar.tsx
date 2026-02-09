@@ -20,6 +20,7 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { LoopLearnXIcon } from "@/components/ui/brand-icons";
 import { signOut } from "@/app/actions/auth";
 
 interface NavbarProps {
@@ -88,8 +89,10 @@ export function Navbar({ user, profile }: NavbarProps) {
             <div className="container mx-auto px-6 h-16 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 group mr-8">
-                    <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-500 via-green-500 to-blue-600 bg-clip-text text-transparent font-fredoka">
-                        LoopLearn
+                    <span className="text-2xl md:text-3xl font-bold font-fredoka flex items-center">
+                        <span className="bg-gradient-to-r from-blue-500 via-green-500 to-blue-600 bg-clip-text text-transparent">LoopLearn</span>
+
+                        <LoopLearnXIcon className="w-8 h-8" />
                     </span>
                     <motion.span
                         className="text-2xl"
@@ -110,13 +113,13 @@ export function Navbar({ user, profile }: NavbarProps) {
                 {/* Desktop Navigation - Centered */}
                 <div className="hidden md:flex flex-1 justify-center">
                     <nav className="flex items-center gap-8">
-                        <Link href="/" className="text-base font-fredoka text-gray-700 hover:text-gray-900 transition-all hover:-translate-y-0.5">
+                        {/* <Link href="/" className="text-base font-fredoka text-gray-700 hover:text-gray-900 transition-all hover:-translate-y-0.5">
                             Explore
-                        </Link>
-                        <Link href="/features" className="text-base font-fredoka text-gray-700 hover:text-gray-900 transition-all hover:-translate-y-0.5">
+                        </Link> */}
+                        <Link href="#features" className="text-base font-fredoka text-gray-700 hover:text-gray-900 transition-all hover:-translate-y-0.5">
                             Features
                         </Link>
-                        <Link href="/leaderboard" className="text-base font-fredoka text-gray-700 hover:text-gray-900 transition-all hover:-translate-y-0.5">
+                        <Link href="#leaderboard" className="text-base font-fredoka text-gray-700 hover:text-gray-900 transition-all hover:-translate-y-0.5">
                             Leaderboard
                         </Link>
                         <Link href="/about" className="text-base font-fredoka text-gray-700 hover:text-gray-900 transition-all hover:-translate-y-0.5">
