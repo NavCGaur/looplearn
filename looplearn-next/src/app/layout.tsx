@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Fredoka } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/ui/navbar";
+import Footer from "@/components/Footer";
 import { getUser } from "@/lib/supabase/server";
 
 const geistSans = Geist({
@@ -39,6 +40,7 @@ export default async function RootLayout({
       >
         <Navbar user={user?.user || null} profile={user?.profile || null} />
         {children}
+        <Footer />
       </body>
     </html>
   );
