@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import confetti from 'canvas-confetti'
-import type { QuizQuestion } from '@/types/database'
+import type { QuizQuestion } from '@/types/db'
 import { updateProgress, awardPoints } from '@/app/actions/quiz'
 import { logError } from '@/lib/utils/client-error-logger'
 import { MCQQuestion } from '@/components/quiz/mcq-question'

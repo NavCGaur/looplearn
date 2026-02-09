@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { QuizQuestion } from '@/types/database'
+import type { QuizQuestion } from '@/types/db'
 import { logSupabaseError } from '@/lib/utils/error-logger'
 
 /**

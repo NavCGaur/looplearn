@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { QuizQuestion } from '@/types/database'
+import type { QuizQuestion } from '@/types/db'
 import { FormulaText } from '@/components/ui/formula-text'
 import { fuzzyMatchAnswer } from '@/lib/utils/fuzzy-match'
 
