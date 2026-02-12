@@ -43,7 +43,7 @@ export default async function RootLayout({
         <Navbar user={user?.user || null} profile={user?.profile || null} />
         {children}
         <Footer />
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!} />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || ''} />
       </body>
     </html>
   );
