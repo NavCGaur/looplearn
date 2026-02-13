@@ -3,6 +3,9 @@
 import Link from 'next/link'
 import { signOut } from '@/app/actions/auth'
 import { TeacherStats } from '@/app/actions/teacher-dashboard'
+import { LoopLearnXIcon } from '@/components/ui/brand-icons'
+import { TeacherNavbar } from '@/components/dashboard/teacher-navbar'
+import { Home } from 'lucide-react'
 import {
     Users,
     BookOpen,
@@ -34,41 +37,19 @@ export function TeacherDashboardClient({ data }: TeacherDashboardProps) {
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
-            <header className="bg-white shadow-sm border-b border-gray-200">
-                <div className="container mx-auto px-4 py-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="flex items-center gap-2">
-                                <h1 className="text-2xl font-bold text-gray-800">
-                                    Teacher Dashboard
-                                </h1>
-                                <span className="px-2 py-0.5 text-xs font-semibold bg-indigo-100 text-indigo-700 rounded-full">
-                                    BETA
-                                </span>
-                            </div>
-                            <p className="text-sm text-gray-600">
-                                Welcome back, {user.name}
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <Link
-                                href="/dashboard?view=student"
-                                className="text-sm text-gray-600 hover:text-indigo-600 transition-colors"
-                            >
-                                Switch to Student View
-                            </Link>
-                            <button
-                                onClick={handleSignOut}
-                                className="px-4 py-2 text-sm text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
-                            >
-                                Sign Out
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <TeacherNavbar user={user} />
 
             <main className="container mx-auto px-4 py-8">
+                {/* Welcome Section */}
+                <div className="mb-8">
+                    <h2 className="text-2xl font-bold text-gray-800">
+                        Welcome back, {user.name} 👋
+                    </h2>
+                    <p className="text-gray-600">
+                        Here's what's happening with your students today.
+                    </p>
+                </div>
+
                 {/* Stats Overview */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
@@ -181,17 +162,20 @@ export function TeacherDashboardClient({ data }: TeacherDashboardProps) {
                                     </p>
                                 </Link>
 
-                                <button className="group p-4 bg-white border border-gray-200 rounded-xl opacity-60 cursor-not-allowed">
+                                <Link
+                                    href="/dashboard/teacher/students"
+                                    className="group p-4 bg-white border border-gray-200 rounded-xl hover:border-blue-300 hover:shadow-md transition-all"
+                                >
                                     <div className="flex items-center gap-3 mb-3">
-                                        <div className="p-2 bg-gray-100 rounded-lg">
-                                            <PlusCircle className="w-6 h-6 text-gray-500" />
+                                        <div className="p-2 bg-blue-50 rounded-lg">
+                                            <Users className="w-6 h-6 text-blue-600" />
                                         </div>
-                                        <h3 className="font-bold text-gray-800">Create Class</h3>
+                                        <h3 className="font-bold text-gray-800">Students</h3>
                                     </div>
                                     <p className="text-gray-500 text-sm">
-                                        Set up new classes and invite students (Coming Soon).
+                                        View student list and individual performance analytics.
                                     </p>
-                                </button>
+                                </Link>
                             </div>
                         </section>
 

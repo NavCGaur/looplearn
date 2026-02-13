@@ -1,7 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { signOut } from '@/app/actions/auth'
+import { LoopLearnXIcon } from '@/components/ui/brand-icons'
+import { Home, LogOut, BarChart3 } from 'lucide-react'
+import { QuizSelectorModal } from '@/components/quiz/quiz-selector-modal'
 
 interface DashboardData {
     user: {
@@ -26,71 +30,107 @@ interface DashboardData {
 
 export function DashboardClient({ data }: { data: DashboardData }) {
     const { user, stats, upcomingReviews } = data
+    const [showQuizSelector, setShowQuizSelector] = useState(false)
 
     const handleSignOut = async () => {
         await signOut()
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-cloud-gray via-white to-primary-blue/10">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
             {/* Header */}
-            <header className="bg-white shadow-sm border-b border-gray-200">
-                <div className="container mx-auto px-4 py-4">
+            <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 border-b border-blue-100/50 shadow-sm">
+                <div className="container mx-auto px-4 py-3">
                     <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-3xl font-fredoka font-bold text-foreground">
-                                Welcome back, {user.name}! 👋
-                            </h1>
-                            <p className="text-sm font-fredoka text-foreground/70">
-                                {user.role === 'student' ? `Class ${user.class}` : 'Teacher'} • {user.points} points
-                            </p>
-                        </div>
                         <div className="flex items-center gap-4">
+                            <Link href="/" className="flex items-center gap-2 group hover:opacity-90 transition-opacity">
+                                <span className="text-2xl font-bold font-fredoka flex items-center">
+                                    <span className="bg-gradient-to-r from-blue-500 via-green-500 to-blue-600 bg-clip-text text-transparent">LoopLearn</span>
+                                    <LoopLearnXIcon className="w-8 h-8" />
+                                </span>
+                            </Link>
+                            <div className="hidden md:block h-6 w-px bg-gray-200" />
+                            <div className="hidden md:block">
+                                <h1 className="text-xl font-fredoka font-bold text-gray-800">
+                                    Student Dashboard
+                                </h1>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Link href="/" className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-fredoka font-bold text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all">
+                                <Home className="w-4 h-4" />
+                                Home
+                            </Link>
+
+                            <Link href="/dashboard/analytics" className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-fredoka font-bold text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all">
+                                <BarChart3 className="w-4 h-4" />
+                                Analytics
+                            </Link>
+
                             {(user.role === 'teacher' || user.role === 'admin') && (
                                 <Link
                                     href="/dashboard"
-                                    className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
+                                    className="hidden sm:block text-sm font-fredoka font-bold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-4 py-2 rounded-full transition-colors"
                                 >
-                                    Switch to Teacher Dashboard
+                                    Teacher View
                                 </Link>
                             )}
-                            <button
-                                onClick={handleSignOut}
-                                className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 font-medium cursor-pointer"
-                            >
-                                Sign Out
-                            </button>
+
+                            <div className="flex items-center gap-2 pl-2 border-l border-gray-100">
+                                <div className="text-right hidden sm:block">
+                                    <p className="text-sm font-fredoka font-bold text-gray-900 leading-none">{user.name}</p>
+                                    <p className="text-xs font-fredoka text-gray-500">Class {user.class || 'N/A'}</p>
+                                </div>
+                                <button
+                                    onClick={handleSignOut}
+                                    className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-all"
+                                    title="Sign Out"
+                                >
+                                    <LogOut className="w-5 h-5" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </header>
 
             <div className="container mx-auto px-4 py-8">
+                {/* Welcome Section */}
+                <div className="mb-8">
+                    <h1 className="text-3xl md:text-4xl font-fredoka font-bold text-gray-800 mb-2">
+                        Welcome back, {user.name}! 👋
+                    </h1>
+                    <p className="text-lg text-gray-600 font-medium font-fredoka">
+                        Ready to learn something new today?
+                    </p>
+                </div>
+
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                     {/* Due Today */}
-                    <div className="bg-gradient-to-br from-soft-red to-soft-red/80 rounded-2xl p-5 text-white shadow-xl">
+                    <div className="bg-gradient-to-br from-destructive to-destructive/80 rounded-2xl p-5 text-white shadow-xl">
                         <div className="text-3xl mb-2">🔥</div>
                         <div className="text-4xl font-fredoka font-bold mb-1">{stats.dueToday}</div>
                         <div className="text-base font-fredoka font-medium opacity-90">Due Today</div>
                     </div>
 
                     {/* Streak */}
-                    <div className="bg-gradient-to-br from-sunshine-yellow to-sunshine-yellow/80 rounded-2xl p-5 text-white shadow-xl">
+                    <div className="bg-gradient-to-br from-loop-yellow to-loop-yellow/80 rounded-2xl p-5 text-white shadow-xl">
                         <div className="text-3xl mb-2">⚡</div>
                         <div className="text-4xl font-fredoka font-bold mb-1">{stats.streak}</div>
                         <div className="text-base font-fredoka font-medium opacity-90">Day Streak</div>
                     </div>
 
                     {/* Mastered */}
-                    <div className="bg-gradient-to-br from-grassy-green to-grassy-green/80 rounded-2xl p-5 text-white shadow-xl">
+                    <div className="bg-gradient-to-br from-loop-green to-loop-green/80 rounded-2xl p-5 text-white shadow-xl">
                         <div className="text-3xl mb-2">✅</div>
                         <div className="text-4xl font-fredoka font-bold mb-1">{stats.mastered}</div>
                         <div className="text-base font-fredoka font-medium opacity-90">Mastered</div>
                     </div>
 
                     {/* Total Points */}
-                    <div className="bg-gradient-to-br from-primary-blue to-primary-blue/80 rounded-2xl p-5 text-white shadow-xl">
+                    <div className="bg-gradient-to-br from-loop-blue to-loop-blue/80 rounded-2xl p-5 text-white shadow-xl">
                         <div className="text-3xl mb-2">⭐</div>
                         <div className="text-4xl font-fredoka font-bold mb-1">{user.points}</div>
                         <div className="text-base font-fredoka font-medium opacity-90">Total Points</div>
@@ -104,16 +144,16 @@ export function DashboardClient({ data }: { data: DashboardData }) {
                         <div className="bg-white rounded-xl shadow-md p-5">
                             <h2 className="text-xl font-fredoka font-bold mb-4">Quick Actions</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <Link
-                                    href="/quiz?subject=science"
+                                <button
+                                    onClick={() => setShowQuizSelector(true)}
                                     className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg hover:shadow-md transition-shadow cursor-pointer border border-blue-200"
                                 >
                                     <span className="text-2xl">📚</span>
                                     <div>
                                         <h3 className="font-semibold text-gray-800 text-sm">Start Quiz</h3>
-                                        <p className="text-xs text-gray-600">Practice new questions</p>
+                                        <p className="text-xs text-gray-600">Choose subject & chapter</p>
                                     </div>
-                                </Link>
+                                </button>
 
                                 <Link
                                     href="/quiz?review=true"
@@ -138,7 +178,18 @@ export function DashboardClient({ data }: { data: DashboardData }) {
                                 </Link>
 
                                 <Link
-                                    href="/profile"
+                                    href="/dashboard/analytics"
+                                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg hover:shadow-md transition-shadow cursor-pointer border border-emerald-200"
+                                >
+                                    <span className="text-2xl">📊</span>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-800 text-sm">Analytics</h3>
+                                        <p className="text-xs text-gray-600">Track your progress</p>
+                                    </div>
+                                </Link>
+
+                                <Link
+                                    href="/dashboard/profile"
                                     className="flex items-center gap-3 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg hover:shadow-md transition-shadow cursor-pointer border border-purple-200"
                                 >
                                     <span className="text-2xl">👤</span>
@@ -264,6 +315,13 @@ export function DashboardClient({ data }: { data: DashboardData }) {
                     </div>
                 </div>
             </div>
+
+            {/* Quiz Selector Modal */}
+            <QuizSelectorModal
+                isOpen={showQuizSelector}
+                onClose={() => setShowQuizSelector(false)}
+                userClass={user.class || 9}
+            />
         </div>
     )
 }
