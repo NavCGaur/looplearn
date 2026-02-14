@@ -71,7 +71,7 @@ export function MCQQuestion({ question, onAnswer, answered, selectedAnswer }: MC
             <div className="mb-8">
                 <div className="flex items-center gap-2 mb-3">
                     <span className="px-3 py-1 bg-primary-blue/20 text-primary-blue text-sm font-fredoka font-semibold rounded-full">
-                        Multiple Choice
+                        {question.question_type === 'truefalse' ? 'True / False' : 'Multiple Choice'}
                     </span>
                     {question.difficulty && (
                         <span

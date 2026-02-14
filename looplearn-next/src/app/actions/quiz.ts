@@ -555,7 +555,7 @@ export async function logAnswer(params: {
         if (question) {
             let correctAnswer = ''
 
-            if (question.question_type === 'mcq' && question.question_options) {
+            if (['mcq', 'truefalse'].includes(question.question_type) && question.question_options) {
                 const correctOpt = question.question_options.find((o: any) => o.is_correct)
                 if (correctOpt) correctAnswer = correctOpt.option_text
             } else if (question.question_type === 'fillblank' && question.fillblank_answers) {

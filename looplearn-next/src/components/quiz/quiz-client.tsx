@@ -196,7 +196,7 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
 
                 {/* Question Card */}
                 <div className="bg-white rounded-3xl shadow-xl p-8 mt-6">
-                    {currentQuestion.question_type === 'mcq' ? (
+                    {['mcq', 'truefalse'].includes(currentQuestion.question_type) ? (
                         <MCQQuestion
                             key={currentQuestion.id}
                             question={currentQuestion}
@@ -274,7 +274,7 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
 }
 
 function getCorrectAnswer(question: QuizQuestion): string {
-    if (question.question_type === 'mcq') {
+    if (['mcq', 'truefalse'].includes(question.question_type)) {
         const correct = question.question_options?.find(o => o.is_correct)
         return correct?.option_text || 'N/A'
     } else {
