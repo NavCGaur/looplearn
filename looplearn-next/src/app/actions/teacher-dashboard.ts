@@ -106,3 +106,37 @@ export async function getTeacherDashboardData() {
         stats
     }
 }
+
+/**
+ * Get list of all students (for teacher view)
+ * In a real app, this should be filtered by class/school
+ */
+export async function getStudentsList() {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) return []
+
+    // Check permissions
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+    if (profile?.role !== 'teacher' && profile?.role !== 'admin') {
+        return []
+    }
+
+    // Fetch students
+    // Use admin client to ensure we can list all profiles
+    // (Profiles RLS allows viewing all, but just to be safe and consistent)
+    const { data: students } = await supabase
+        .from('profiles')
+        .select('id, display_name, class_standard, points, created_at')
+        .eq('role', 'student')
+        .order('points', { ascending: false })
+        .limit(100) // Safety limit
+
+    return students || []
+}

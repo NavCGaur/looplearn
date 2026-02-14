@@ -1,7 +1,7 @@
 'use client'
 
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { Navbar } from '@/components/ui/navbar'
 
 interface LeaderboardEntry {
     id: string
@@ -22,12 +22,16 @@ interface LeaderboardData {
 interface LeaderboardClientProps {
     data: LeaderboardData
     availableClasses: number[]
-    selectedClass?: number
+    user: any
+    profile: any
 }
 
-export function LeaderboardClient({ data, availableClasses, selectedClass }: LeaderboardClientProps) {
+export function LeaderboardClient({ data, availableClasses, user, profile }: LeaderboardClientProps) {
     const router = useRouter()
     const { leaderboard, currentUser, userRank } = data
+
+    // Get selected class from current user if available
+    const selectedClass = profile?.class_standard
 
     const handleClassFilter = (classNum: number | null) => {
         if (classNum === null) {
@@ -60,29 +64,11 @@ export function LeaderboardClient({ data, availableClasses, selectedClass }: Lea
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-            {/* Header */}
-            <header className="bg-white shadow-sm border-b border-gray-200">
-                <div className="container mx-auto px-4 py-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                                🏆 Leaderboard
-                            </h1>
-                            <p className="text-sm text-gray-600">
-                                {selectedClass ? `Class ${selectedClass} Rankings` : 'Global Rankings'}
-                            </p>
-                        </div>
-                        <Link
-                            href="/dashboard"
-                            className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 font-medium cursor-pointer"
-                        >
-                            ← Back to Dashboard
-                        </Link>
-                    </div>
-                </div>
-            </header>
+            {/* Navbar */}
+            <Navbar user={user} profile={profile} />
 
-            <div className="container mx-auto px-4 py-8">
+            {/* Main Content */}
+            <div className="container mx-auto px-4 py-8 mt-20">
                 {/* Filters */}
                 <div className="bg-white rounded-xl shadow-md p-4 mb-6">
                     <h2 className="text-sm font-bold mb-3">Filter by Class</h2>
@@ -90,8 +76,8 @@ export function LeaderboardClient({ data, availableClasses, selectedClass }: Lea
                         <button
                             onClick={() => handleClassFilter(null)}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${!selectedClass
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                         >
                             All Classes
@@ -101,8 +87,8 @@ export function LeaderboardClient({ data, availableClasses, selectedClass }: Lea
                                 key={classNum}
                                 onClick={() => handleClassFilter(classNum)}
                                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${selectedClass === classNum
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                     }`}
                             >
                                 Class {classNum}
@@ -175,8 +161,8 @@ export function LeaderboardClient({ data, availableClasses, selectedClass }: Lea
                                             <div
                                                 key={entry.id}
                                                 className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${isCurrentUser
-                                                        ? 'bg-blue-50 border-blue-300 ring-2 ring-blue-200'
-                                                        : getRankBg(rank)
+                                                    ? 'bg-blue-50 border-blue-300 ring-2 ring-blue-200'
+                                                    : getRankBg(rank)
                                                     }`}
                                             >
                                                 {/* Rank */}

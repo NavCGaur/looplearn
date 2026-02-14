@@ -12,13 +12,11 @@ export async function getLeaderboardData(classStandard?: number) {
     // Get current user
     const { data: { user } } = await supabase.auth.getUser()
 
-    // Refresh the materialized view to get latest rankings
-    // Note: This requires elevated permissions, so we'll skip it for now
-    // In production, you'd run this on a schedule (e.g., every 5 minutes)
-
+    // Query profiles directly for real-time data (better than materialized view)
     let query = supabase
-        .from('leaderboard_cache')
-        .select('*')
+        .from('profiles')
+        .select('id, display_name, points, class_standard, role')
+        .eq('role', 'student') // Only show students on leaderboard
         .order('points', { ascending: false })
 
     // If classStandard is provided, filter by class
@@ -26,7 +24,7 @@ export async function getLeaderboardData(classStandard?: number) {
         query = query.eq('class_standard', classStandard)
     }
 
-    const { data: leaderboard, error } = await query.limit(100)
+    const { data: profiles, error } = await query.limit(100)
 
     if (error) {
         logSupabaseError('Leaderboard error', error)
@@ -37,12 +35,26 @@ export async function getLeaderboardData(classStandard?: number) {
         }
     }
 
+    // Add ranks to the leaderboard
+    const leaderboard = (profiles || []).map((profile, index) => ({
+        ...profile,
+        rank: index + 1,
+        class_rank: null as number | null, // Will be calculated if filtering by class
+    }))
+
+    // If filtering by class, recalculate class ranks
+    if (classStandard) {
+        leaderboard.forEach((entry, index) => {
+            entry.class_rank = index + 1
+        })
+    }
+
     // Find current user in leaderboard
-    const currentUserEntry = user ? leaderboard?.find(entry => entry.id === user.id) : null
+    const currentUserEntry = user ? leaderboard.find(entry => entry.id === user.id) || null : null
     const userRank = currentUserEntry ? (classStandard ? currentUserEntry.class_rank : currentUserEntry.rank) : null
 
     return {
-        leaderboard: leaderboard || [],
+        leaderboard,
         currentUser: currentUserEntry,
         userRank,
     }

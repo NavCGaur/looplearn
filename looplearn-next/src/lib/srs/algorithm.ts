@@ -49,14 +49,19 @@ export function calculateNextReview(
     return { easeFactor, intervalDays, repetitions }
 }
 
+import { getStartOfISTDay } from '../date-utils'
+
 /**
  * Calculate next review date
+ * Uses IST (Indian Standard Time) day boundary (12:00 AM IST)
  */
 export function getNextReviewDate(intervalDays: number): Date {
     const next = new Date()
+    // Add interval days to current time
     next.setDate(next.getDate() + intervalDays)
-    next.setHours(0, 0, 0, 0) // Normalize to start of day
-    return next
+
+    // Normalize to start of IST day
+    return getStartOfISTDay(next)
 }
 
 /**

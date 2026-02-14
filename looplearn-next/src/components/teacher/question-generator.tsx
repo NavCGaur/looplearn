@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { generateQuestions, saveQuestionsToDatabase, type GeneratedQuestion, type Difficulty, type QuestionType } from '@/app/actions/ai'
 import { FormulaText } from '@/components/ui/formula-text'
 import { useRouter } from 'next/navigation'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
 
 const SUBJECTS = [
     'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Science', 'History', 'Geography'
@@ -207,7 +208,8 @@ export function QuestionGenerator() {
                 >
                     {loading ? (
                         <>
-                            <span className="animate-spin text-xl">✨</span> Generating Questions...
+                            <LoadingSpinner size="sm" />
+                            <span>Generating Questions...</span>
                         </>
                     ) : (
                         <>

@@ -1,13 +1,23 @@
+import { Suspense } from 'react'
 import { loadQuizQuestions } from '@/app/actions/quiz'
 import { getUser } from '@/app/actions/auth'
 import { QuizClient } from '@/components/quiz/quiz-client'
 import { redirect } from 'next/navigation'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
 
 interface QuizPageProps {
     searchParams: Promise<{ subject?: string; class?: string; excludeIds?: string; chapter?: string }>
 }
 
-export default async function QuizPage({ searchParams }: QuizPageProps) {
+function QuizLoading() {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+            <LoadingSpinner size="xl" message="Preparing your quiz..." />
+        </div>
+    )
+}
+
+async function QuizContent({ searchParams }: QuizPageProps) {
     const params = await searchParams
     const subject = params.subject || 'science'
     const classStandard = params.class ? parseInt(params.class) : undefined
@@ -32,4 +42,12 @@ export default async function QuizPage({ searchParams }: QuizPageProps) {
         classStandard={classStandard || user?.profile?.class_standard || 8}
         chapter={chapter}
     />
+}
+
+export default async function QuizPage({ searchParams }: QuizPageProps) {
+    return (
+        <Suspense fallback={<QuizLoading />}>
+            <QuizContent searchParams={searchParams} />
+        </Suspense>
+    )
 }

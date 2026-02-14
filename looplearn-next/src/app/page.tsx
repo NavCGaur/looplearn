@@ -6,7 +6,15 @@ import GuestAccessSection from '@/components/GuestAccessSection'
 import FeaturesSection from '@/components/FeaturesSection'
 import LeaderboardSection from '@/components/LeaderboardSection'
 
-export default async function Home() {
+import { redirect } from 'next/navigation'
+
+export default async function Home({ searchParams }: { searchParams: { code?: string } }) {
+  // Fallback: If user lands here with an auth code, redirect them to the callback
+  if (searchParams?.code) {
+    const next = '/dashboard'
+    redirect(`/auth/callback?code=${searchParams.code}&next=${next}`)
+  }
+
   const user = await getUser()
 
   if (user) {

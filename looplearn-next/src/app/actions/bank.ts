@@ -58,7 +58,7 @@ export async function getQuestions(filters: QuestionFilter = {}) {
     }
 
     if (chapter) {
-        query = query.eq('chapter', chapter)
+        query = query.ilike('chapter', `%${chapter}%`)
     }
 
     if (questionType) {
@@ -85,6 +85,11 @@ export async function getQuestions(filters: QuestionFilter = {}) {
 
 /**
  * Bulk delete questions
+ * Note: Database has CASCADE DELETE configured for:
+ * - question_options
+ * - fillblank_answers  
+ * - user_progress
+ * These will be automatically deleted when the question is deleted.
  */
 export async function deleteQuestions(questionIds: string[]) {
     const supabase = await createClient()
@@ -92,16 +97,44 @@ export async function deleteQuestions(questionIds: string[]) {
 
     if (!user) throw new Error('Unauthorized')
 
-    const { error } = await supabase
+    // Verify user is a teacher/admin
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+    if (!profile || (profile.role !== 'teacher' && profile.role !== 'admin')) {
+        throw new Error('Only teachers and admins can delete questions')
+    }
+
+    // Delete questions (CASCADE will handle related data)
+    // Admins can delete any questions, teachers can only delete their own
+    let deleteQuery = supabase
         .from('questions')
-        .delete()
+        .delete({ count: 'exact' })
         .in('id', questionIds)
-        .eq('created_by', user.id) // Security check
+
+    // Only filter by created_by if not an admin
+    if (profile.role !== 'admin') {
+        deleteQuery = deleteQuery.eq('created_by', user.id)
+    }
+
+    const { error, count } = await deleteQuery
 
     if (error) {
         logSupabaseError('Error deleting questions', error)
-        return { success: false, error: error.message }
+        console.error('Delete failed:', {
+            questionIds,
+            userRole: profile.role,
+            userId: user.id,
+            error: error.message,
+            hint: error.hint,
+            details: error.details
+        })
+        throw new Error(`Failed to delete questions: ${error.message}`)
     }
 
-    return { success: true }
+    console.log(`Successfully deleted ${count} questions and their related data`)
+    return { success: true, deletedCount: count }
 }

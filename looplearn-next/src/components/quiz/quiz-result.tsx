@@ -80,18 +80,7 @@ export function QuizResult({ score, totalQuestions, points, timeTaken, isGuest, 
                 <div className="space-y-3">
                     {isGuest ? (
                         <>
-                            <button
-                                onClick={onLoadMore}
-                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-105 shadow-lg cursor-pointer flex items-center justify-center gap-2"
-                            >
-                                <span>🔄</span> Load More Questions
-                            </button>
-                            <button
-                                onClick={onExit}
-                                className="w-full bg-white border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-700 font-bold py-4 rounded-xl transition-all cursor-pointer"
-                            >
-                                Choose Another Topic
-                            </button>
+                            <span>🔄</span> Try Quiz Again
                         </>
                     ) : (
                         <>

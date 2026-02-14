@@ -26,7 +26,6 @@ export async function signInWithGoogle() {
         return { error: error.message }
     }
 
-    if (data.url) {
-        redirect(data.url) // Redirect to Google OAuth consent screen
-    }
+    // Return the URL for client-side redirect instead of server-side redirect
+    return { url: data.url }
 }

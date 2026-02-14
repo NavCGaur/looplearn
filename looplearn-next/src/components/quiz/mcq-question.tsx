@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import type { QuizQuestion } from '@/types/db'
 import { FormulaText } from '@/components/ui/formula-text'
 
@@ -14,7 +14,18 @@ interface MCQQuestionProps {
 export function MCQQuestion({ question, onAnswer, answered, selectedAnswer }: MCQQuestionProps) {
     const [hoveredOption, setHoveredOption] = useState<string | null>(null)
 
-    const options = question.question_options?.sort((a, b) => a.display_order - b.display_order) || []
+    // Shuffle options once per question using Fisher-Yates algorithm
+    // This prevents answer patterns (e.g., correct answer always being option A)
+    const options = useMemo(() => {
+        const opts = question.question_options || []
+        const shuffled = [...opts]
+        // Fisher-Yates shuffle for truly random distribution
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+        }
+        return shuffled
+    }, [question.id]) // Re-shuffle only when question changes
 
     console.log('MCQ Question:', {
         questionId: question.id,
@@ -82,7 +93,7 @@ export function MCQQuestion({ question, onAnswer, answered, selectedAnswer }: MC
 
             {/* Options */}
             <div className="space-y-3">
-                {options.map((option) => (
+                {options.map((option, index) => (
                     <button
                         key={option.id}
                         onClick={() => handleOptionClick(option.id, option.is_correct)}
@@ -105,7 +116,7 @@ export function MCQQuestion({ question, onAnswer, answered, selectedAnswer }: MC
                                     : 'bg-cloud-gray text-foreground'
                                     }`}
                             >
-                                {String.fromCharCode(65 + option.display_order - 1)}
+                                {String.fromCharCode(65 + index)}
                             </div>
 
                             {/* Option Text */}

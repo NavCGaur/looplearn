@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Play, LayoutDashboard, Calculator, FlaskConical, Atom, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
+import Image from 'next/image';
 
 const FloatingIcon = ({
     icon: Icon,
@@ -119,14 +120,9 @@ const HeroSection = () => {
                         </motion.h1>
 
                         {/* Subheadline */}
-                        <motion.p
-                            className="text-lg sm:text-xl text-foreground/70 max-w-xl leading-relaxed font-medium"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4, duration: 0.6 }}
-                        >
+                        <p className="text-lg sm:text-xl text-foreground/70 max-w-xl leading-relaxed font-medium">
                             Reinforces concepts through cards, quizzes, and games until they stick. Repetition, because it works.
-                        </motion.p>
+                        </p>
 
                         {/* CTAs */}
                         <motion.div
@@ -207,10 +203,13 @@ const HeroSection = () => {
 
                             {/* Mascot placeholder - Glass Card */}
                             <div className="relative w-full h-full rounded-3xl bg-gradient-to-br from-white/40 to-white/10 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center shadow-2xl p-8">
-                                <img
+                                <Image
                                     src="/loopie-main.png"
                                     alt="Loopie Mascot"
-                                    className="w-full h-full object-contain"
+                                    className="object-contain"
+                                    fill
+                                    priority
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 500px"
                                 />
                             </div>
                         </motion.div>

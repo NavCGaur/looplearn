@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 
 export interface AnalyticsFilters {
@@ -64,7 +65,9 @@ export async function getAnalyticsDashboard(filters: AnalyticsFilters = {}): Pro
     const timeFilter = getTimeFilter(filters.timeRange)
 
     // Get all user progress for teacher's questions
-    let query = supabase
+    // Use admin client to bypass link-table RLS policies involved in the join
+    const adminSupabase = createAdminClient()
+    let query = adminSupabase
         .from('user_progress')
         .select(`
             user_id,
@@ -234,7 +237,8 @@ export async function getQuestionPerformance(filters: AnalyticsFilters = {}): Pr
 
     const timeFilter = getTimeFilter(filters.timeRange)
 
-    let query = supabase
+    const adminSupabase = createAdminClient()
+    let query = adminSupabase
         .from('user_progress')
         .select(`
             question_id,
@@ -307,6 +311,7 @@ export async function getQuestionPerformance(filters: AnalyticsFilters = {}): Pr
     return performances.sort((a, b) => a.avg_quality - b.avg_quality)
 }
 
+
 /**
  * Helper to calculate time filter
  */
@@ -317,4 +322,88 @@ function getTimeFilter(timeRange?: string): string | null {
     const days = parseInt(timeRange)
     const date = new Date(now.getTime() - days * 24 * 60 * 60 * 1000)
     return date.toISOString()
+}
+
+/**
+ * Get activity logs for a specific student
+ */
+export async function getStudentActivityLogs(studentId: string) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) return []
+
+    // Verify teacher/admin role
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+    if (!profile || (profile.role !== 'teacher' && profile.role !== 'admin')) {
+        return []
+    }
+
+    // Fetch logs with question details
+    const { data: logs, error } = await supabase
+        .from('quiz_logs')
+        .select(`
+            id,
+            given_answer,
+            is_correct,
+            question_type,
+            time_taken_seconds,
+            error_type,
+            created_at,
+            questions:questions!quiz_logs_question_id_fkey (
+                question_text,
+                subject,
+                difficulty,
+                question_options (
+                    option_text,
+                    is_correct
+                ),
+                fillblank_answers (
+                    accepted_answer,
+                    is_primary
+                )
+            )
+        `)
+        .eq('user_id', studentId)
+        .order('created_at', { ascending: false })
+        .limit(50)
+
+    if (error) {
+        console.error('Error fetching logs:', error)
+        return []
+    }
+
+    return logs.map(log => {
+        // Determine correct answer text
+        let correctAnswer = 'N/A'
+        const q = log.questions as any
+
+        if (q) {
+            if (log.question_type === 'mcq' && q.question_options) {
+                const correctOpt = q.question_options.find((o: any) => o.is_correct)
+                correctAnswer = correctOpt ? correctOpt.option_text : 'N/A'
+            } else if (log.question_type === 'fillblank' && q.fillblank_answers) {
+                const correctAns = q.fillblank_answers.find((a: any) => a.is_primary)
+                correctAnswer = correctAns ? correctAns.accepted_answer : (q.fillblank_answers[0]?.accepted_answer || 'N/A')
+            }
+        }
+
+        return {
+            id: log.id,
+            questionText: q?.question_text || 'Unknown Question',
+            subject: q?.subject || 'N/A',
+            difficulty: q?.difficulty || 'N/A',
+            givenAnswer: log.given_answer,
+            correctAnswer,
+            isCorrect: log.is_correct,
+            timeTaken: log.time_taken_seconds,
+            timestamp: log.created_at,
+            errorType: log.error_type
+        }
+    })
 }

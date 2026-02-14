@@ -18,6 +18,8 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
+
 interface QuizMetadata {
     classes: number[]
     subjects: Record<number, string[]>
@@ -92,10 +94,7 @@ export function GuestQuizSetup() {
     if (loading) {
         return (
             <div className="w-full max-w-[95%] xl:max-w-[1400px] mx-auto p-8 flex items-center justify-center min-h-[500px]">
-                <div className="animate-pulse flex flex-col items-center">
-                    <div className="h-12 w-12 bg-gray-200 rounded-full mb-4"></div>
-                    <div className="h-4 w-48 bg-gray-200 rounded"></div>
-                </div>
+                <LoadingSpinner size="lg" message="Loading quiz options..." />
             </div>
         )
     }

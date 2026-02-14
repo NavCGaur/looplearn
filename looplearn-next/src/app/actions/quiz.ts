@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import type { QuizQuestion } from '@/types/db'
 import { logSupabaseError } from '@/lib/utils/error-logger'
+import { getStartOfISTDay } from '@/lib/date-utils'
 
 /**
  * Load quiz questions for a user based on their class and subject
@@ -23,7 +24,7 @@ export async function loadQuizQuestions(params: {
 
     if (user) {
         // Registered user: Load questions based on SRS
-        return loadQuestionsForUser(user.id, subject, limit)
+        return loadQuestionsForUser(user.id, subject, limit, chapter)
     } else {
         // Guest: Load random questions, excluding previously seen ones
         return loadQuestionsForGuest(subject, classStandard || 8, limit, excludeQuestionIds, chapter)
@@ -115,7 +116,8 @@ export async function getQuizMetadata() {
 async function loadQuestionsForUser(
     userId: string,
     subject: string,
-    limit: number
+    limit: number,
+    chapter?: string
 ): Promise<QuizQuestion[]> {
     const supabase = await createClient()
 
@@ -128,59 +130,204 @@ async function loadQuestionsForUser(
 
     if (!profile) return []
 
-    // Get questions due for review
-    const { data: dueProgress } = await supabase
-        .from('user_progress')
+    const today = getStartOfISTDay(new Date())
+    const todayISO = today.toISOString()
+
+    // PRIORITY 1: Get never-attempted questions (NOT in user_progress)
+    let neverAttemptedQuery = supabase
+        .from('questions')
         .select(`
-      question_id,
-      questions (
-        id,
-        question_text,
-        question_type,
-        class_standard,
-        subject,
-        difficulty,
-        points,
-        question_options (
-          id,
-          option_text,
-          display_order,
-          is_correct
-        ),
-        fillblank_answers (
-          id,
-          accepted_answer,
-          is_case_sensitive,
-          is_primary
-        )
-      )
-    `)
-        .eq('user_id', userId)
-        .lte('next_review_date', new Date().toISOString())
-        .limit(limit)
+            *,
+            question_options (*),
+            fillblank_answers (*)
+        `)
+        .eq('subject', subject)
+        .eq('class_standard', profile.class_standard)
+        .eq('is_active', true)
 
-    const dueQuestions = dueProgress?.map(p => p.questions).filter(Boolean) || []
-
-    // If we need more questions, add new ones
-    if (dueQuestions.length < limit) {
-        const needed = limit - dueQuestions.length
-        const { data: newQuestions } = await supabase
-            .from('questions')
-            .select(`
-        *,
-        question_options (*),
-        fillblank_answers (*)
-      `)
-            .eq('subject', subject)
-            .lte('class_standard', profile.class_standard)
-            .eq('is_active', true)
-            .not('id', 'in', `(${dueQuestions.map((q: any) => q.id).join(',')})`)
-            .limit(needed)
-
-        return [...dueQuestions, ...(newQuestions || [])] as unknown as QuizQuestion[]
+    // Filter by chapter if provided
+    if (chapter) {
+        neverAttemptedQuery = neverAttemptedQuery.ilike('chapter', `%${chapter}%`)
     }
 
-    return dueQuestions as unknown as QuizQuestion[]
+    // Exclude questions that exist in user_progress
+    const { data: attemptedQuestionIds } = await supabase
+        .from('user_progress')
+        .select('question_id')
+        .eq('user_id', userId)
+
+    if (attemptedQuestionIds && attemptedQuestionIds.length > 0) {
+        const attemptedIds = attemptedQuestionIds.map(p => p.question_id).join(',')
+        neverAttemptedQuery = neverAttemptedQuery.not('id', 'in', `(${attemptedIds})`)
+    }
+
+    const { data: neverAttempted } = await neverAttemptedQuery.limit(limit)
+    const neverAttemptedQuestions = (neverAttempted || []) as unknown as QuizQuestion[]
+
+    // If we have enough never-attempted questions, return them
+    if (neverAttemptedQuestions.length >= limit) {
+        return neverAttemptedQuestions.slice(0, limit)
+    }
+
+    const collected: QuizQuestion[] = [...neverAttemptedQuestions]
+    const collectedIds = new Set(collected.map(q => q.id))
+    let needed = limit - collected.length
+
+    // PRIORITY 2: Get due review questions (SRS scheduled)
+    if (needed > 0) {
+        let dueQuery = supabase
+            .from('user_progress')
+            .select(`
+                question_id,
+                questions (
+                    id,
+                    question_text,
+                    question_type,
+                    class_standard,
+                    subject,
+                    chapter,
+                    difficulty,
+                    points,
+                    question_options (
+                        id,
+                        option_text,
+                        display_order,
+                        is_correct
+                    ),
+                    fillblank_answers (
+                        id,
+                        accepted_answer,
+                        is_case_sensitive,
+                        is_primary
+                    )
+                )
+            `)
+            .eq('user_id', userId)
+            .lte('next_review_date', new Date().toISOString())
+            .limit(needed)
+
+        const { data: dueProgress } = await dueQuery
+        const dueQuestions = (dueProgress?.map(p => p.questions).filter(Boolean) || []) as unknown as QuizQuestion[]
+
+        // Filter by chapter if provided
+        const filteredDue = chapter
+            ? dueQuestions.filter(q => q.chapter?.toLowerCase().includes(chapter.toLowerCase()))
+            : dueQuestions
+
+        for (const q of filteredDue) {
+            if (!collectedIds.has(q.id) && collected.length < limit) {
+                collected.push(q)
+                collectedIds.add(q.id)
+            }
+        }
+
+        needed = limit - collected.length
+    }
+
+    // PRIORITY 3: Get not-attempted-today questions
+    if (needed > 0) {
+        let notTodayQuery = supabase
+            .from('user_progress')
+            .select(`
+                question_id,
+                last_reviewed,
+                questions (
+                    id,
+                    question_text,
+                    question_type,
+                    class_standard,
+                    subject,
+                    chapter,
+                    difficulty,
+                    points,
+                    question_options (
+                        id,
+                        option_text,
+                        display_order,
+                        is_correct
+                    ),
+                    fillblank_answers (
+                        id,
+                        accepted_answer,
+                        is_case_sensitive,
+                        is_primary
+                    )
+                )
+            `)
+            .eq('user_id', userId)
+            .lt('last_reviewed', todayISO)
+            .order('last_reviewed', { ascending: true })
+            .limit(needed * 2) // Get more to filter by chapter
+
+        const { data: notTodayProgress } = await notTodayQuery
+        const notTodayQuestions = (notTodayProgress?.map(p => p.questions).filter(Boolean) || []) as unknown as QuizQuestion[]
+
+        // Filter by chapter if provided
+        const filteredNotToday = chapter
+            ? notTodayQuestions.filter(q => q.chapter?.toLowerCase().includes(chapter.toLowerCase()))
+            : notTodayQuestions
+
+        for (const q of filteredNotToday) {
+            if (!collectedIds.has(q.id) && collected.length < limit) {
+                collected.push(q)
+                collectedIds.add(q.id)
+            }
+        }
+
+        needed = limit - collected.length
+    }
+
+    // PRIORITY 4: Get oldest attempts (fallback)
+    if (needed > 0) {
+        let oldestQuery = supabase
+            .from('user_progress')
+            .select(`
+                question_id,
+                last_reviewed,
+                questions (
+                    id,
+                    question_text,
+                    question_type,
+                    class_standard,
+                    subject,
+                    chapter,
+                    difficulty,
+                    points,
+                    question_options (
+                        id,
+                        option_text,
+                        display_order,
+                        is_correct
+                    ),
+                    fillblank_answers (
+                        id,
+                        accepted_answer,
+                        is_case_sensitive,
+                        is_primary
+                    )
+                )
+            `)
+            .eq('user_id', userId)
+            .order('last_reviewed', { ascending: true })
+            .limit(needed * 2) // Get more to filter by chapter
+
+        const { data: oldestProgress } = await oldestQuery
+        const oldestQuestions = (oldestProgress?.map(p => p.questions).filter(Boolean) || []) as unknown as QuizQuestion[]
+
+        // Filter by chapter if provided
+        const filteredOldest = chapter
+            ? oldestQuestions.filter(q => q.chapter?.toLowerCase().includes(chapter.toLowerCase()))
+            : oldestQuestions
+
+        for (const q of filteredOldest) {
+            if (!collectedIds.has(q.id) && collected.length < limit) {
+                collected.push(q)
+                collectedIds.add(q.id)
+            }
+        }
+    }
+
+    return collected.slice(0, limit)
 }
 
 async function loadQuestionsForGuest(
@@ -372,4 +519,75 @@ export async function awardPoints(points: number) {
         .eq('id', user.id)
 
     return { success: true, totalPoints: profile.points + points }
+}
+
+/**
+ * Log details of a user's answer
+ */
+export async function logAnswer(params: {
+    questionId: string
+    givenAnswer: string
+    isCorrect: boolean
+    questionType: string
+    timeTaken: number
+}) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) return { error: 'Not authenticated' }
+
+    let errorType: string | null = null
+
+    // If answer is incorrect, check for spelling error
+    if (!params.isCorrect && params.givenAnswer) {
+        // Fetch the correct answer for comparison
+        // We need to fetch based on question type
+        const { data: question } = await supabase
+            .from('questions')
+            .select(`
+                question_type,
+                question_options (option_text, is_correct),
+                fillblank_answers (accepted_answer, is_primary)
+            `)
+            .eq('id', params.questionId)
+            .single()
+
+        if (question) {
+            let correctAnswer = ''
+
+            if (question.question_type === 'mcq' && question.question_options) {
+                const correctOpt = question.question_options.find((o: any) => o.is_correct)
+                if (correctOpt) correctAnswer = correctOpt.option_text
+            } else if (question.question_type === 'fillblank' && question.fillblank_answers) {
+                const correctAns = question.fillblank_answers.find((a: any) => a.is_primary)
+                // Fallback to any answer if primary not found
+                if (correctAns) correctAnswer = correctAns.accepted_answer
+                else if (question.fillblank_answers.length > 0) correctAnswer = question.fillblank_answers[0].accepted_answer
+            }
+
+            if (correctAnswer) {
+                const { isSpellingError } = await import('@/lib/utils/string-similarity')
+                if (isSpellingError(params.givenAnswer, correctAnswer)) {
+                    errorType = 'spelling'
+                }
+            }
+        }
+    }
+
+    const { error } = await supabase.from('quiz_logs').insert({
+        user_id: user.id,
+        question_id: params.questionId,
+        given_answer: params.givenAnswer,
+        is_correct: params.isCorrect,
+        question_type: params.questionType,
+        time_taken_seconds: params.timeTaken,
+        error_type: errorType
+    })
+
+    if (error) {
+        logSupabaseError('Error logging answer', error)
+        return { error: error.message }
+    }
+
+    return { success: true }
 }

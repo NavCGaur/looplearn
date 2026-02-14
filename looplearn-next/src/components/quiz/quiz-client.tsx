@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import confetti from 'canvas-confetti'
 import type { QuizQuestion } from '@/types/db'
-import { updateProgress, awardPoints } from '@/app/actions/quiz'
+import { updateProgress, awardPoints, logAnswer } from '@/app/actions/quiz'
 import { logError } from '@/lib/utils/client-error-logger'
 import { MCQQuestion } from '@/components/quiz/mcq-question'
 import { FillBlankQuestion } from '@/components/quiz/fillblank-question'
@@ -31,6 +31,11 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
     const [isCorrect, setIsCorrect] = useState(false)
     const [quizFinished, setQuizFinished] = useState(false)
     const [startTime] = useState(new Date())
+    const [questionStartTime, setQuestionStartTime] = useState(Date.now())
+
+    useEffect(() => {
+        setQuestionStartTime(Date.now())
+    }, [currentIndex])
 
     const currentQuestion = questions[currentIndex]
     const progress = ((currentIndex + 1) / questions.length) * 100
@@ -54,6 +59,16 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
 
             // Update progress for registered users
             if (!isGuest) {
+                // Log the attempt
+                const timeTaken = Math.round((Date.now() - questionStartTime) / 1000)
+                await logAnswer({
+                    questionId: currentQuestion.id,
+                    givenAnswer: answer,
+                    isCorrect: correct,
+                    questionType: currentQuestion.question_type,
+                    timeTaken
+                })
+
                 const quality = 3 // "Easy" - can be made dynamic based on time taken
                 await updateProgress({
                     questionId: currentQuestion.id,
@@ -64,6 +79,16 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
         } else {
             // Wrong answer - reset SRS for registered users
             if (!isGuest) {
+                // Log the attempt
+                const timeTaken = Math.round((Date.now() - questionStartTime) / 1000)
+                await logAnswer({
+                    questionId: currentQuestion.id,
+                    givenAnswer: answer,
+                    isCorrect: correct,
+                    questionType: currentQuestion.question_type,
+                    timeTaken
+                })
+
                 await updateProgress({
                     questionId: currentQuestion.id,
                     quality: 0
@@ -110,32 +135,18 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
     }
 
     const handleLoadMore = () => {
-        // Load more questions from same chapter, excluding seen ones
-        try {
-            const seenQuestions = JSON.parse(sessionStorage.getItem(SEEN_QUESTIONS_KEY) || '[]')
-            const params = new URLSearchParams({
-                subject,
-                class: classStandard.toString(),
-                excludeIds: seenQuestions.join(','),
-            })
-            if (chapter) {
-                params.set('chapter', chapter)
-            }
-            router.push(`/quiz?${params.toString()}`)
-        } catch (error) {
-            logError('Error loading more questions', error)
-            router.refresh()
-        }
+        // Simple return to topic selection
+        router.push('/#guest-access')
     }
 
     const handleExit = () => {
         // Go back to setup (Home page where GuestQuizSetup is)
-        router.push('/')
+        router.push('/#guest-access')
     }
 
     const handleRestart = () => {
-        // Registered user restart - simple refresh for now, or redirect to dashboard
-        router.refresh()
+        // Redirect registered users to dashboard to select another quiz
+        router.push('/dashboard')
     }
 
     if (questions.length === 0) {
@@ -173,7 +184,7 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-cloud-gray via-white to-primary-blue/10 py-8 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 py-8 px-4">
             <div className="max-w-3xl mx-auto">
                 {/* Progress Bar */}
                 <QuizProgress
@@ -209,14 +220,14 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
                             {/* Feedback Message */}
                             <div
                                 className={`p-4 rounded-xl ${isCorrect
-                                    ? 'bg-grassy-green/10 border-2 border-grassy-green'
-                                    : 'bg-soft-red/10 border-2 border-soft-red'
+                                    ? 'bg-loop-green/10 border-2 border-loop-green'
+                                    : 'bg-destructive/10 border-2 border-destructive'
                                     }`}
                             >
                                 <div className="flex items-center gap-2">
                                     <span className="text-2xl">{isCorrect ? '🎉' : '❌'}</span>
                                     <div>
-                                        <p className={`font-fredoka font-bold text-lg ${isCorrect ? 'text-grassy-green' : 'text-soft-red'}`}>
+                                        <p className={`font-fredoka font-bold text-lg ${isCorrect ? 'text-loop-green' : 'text-destructive'}`}>
                                             {isCorrect ? '🎉 Awesome!' : 'Incorrect'}
                                         </p>
                                         {!isCorrect && (
@@ -225,7 +236,7 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
                                             </p>
                                         )}
                                         {isCorrect && (
-                                            <p className="text-sm text-grassy-green font-fredoka font-semibold mt-1">
+                                            <p className="text-sm text-loop-green font-fredoka font-semibold mt-1">
                                                 +{currentQuestion.points || 10} points!
                                             </p>
                                         )}
@@ -236,7 +247,7 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
                             {/* Next Button */}
                             <button
                                 onClick={handleNext}
-                                className="w-full bg-primary-blue hover:bg-primary-blue/90 text-white font-fredoka font-bold text-lg py-5 rounded-2xl transition-all transform hover:scale-105 shadow-xl cursor-pointer"
+                                className="w-full bg-loop-blue hover:bg-loop-blue/90 text-white font-fredoka font-bold text-lg py-5 rounded-2xl transition-all transform hover:scale-105 shadow-xl cursor-pointer"
                                 style={{ minHeight: 'var(--touch-target-min)' }}
                             >
                                 {currentIndex < questions.length - 1 ? 'Next Question →' : 'Finish Quiz 🎊'}
@@ -247,7 +258,7 @@ export function QuizClient({ questions, isGuest, subject, classStandard, chapter
 
                 {/* Guest Reminder */}
                 {isGuest && (
-                    <div className="mt-6 bg-sunshine-yellow/20 border-2 border-sunshine-yellow rounded-2xl p-4 text-center">
+                    <div className="mt-6 bg-loop-yellow/20 border-2 border-loop-yellow rounded-2xl p-4 text-center">
                         <p className="text-sm font-fredoka text-foreground">
                             📝 <strong>Guest Mode:</strong> Your progress won't be saved.{' '}
                             <a href="/auth/signup" className="underline font-semibold cursor-pointer">

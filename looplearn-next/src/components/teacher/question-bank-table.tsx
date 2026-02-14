@@ -82,15 +82,17 @@ export function QuestionBankTable() {
     }
 
     const handleDelete = async () => {
-        if (!confirm(`Are you sure you want to delete ${selectedIds.size} questions?`)) return
+        if (!confirm(`Are you sure you want to delete ${selectedIds.size} question(s)?\n\nThis will also delete:\n• All answer options\n• All fill-in-the-blank answers\n• All student progress for these questions\n\nThis action cannot be undone.`)) return
 
         setDeleting(true)
         try {
-            await deleteQuestions(Array.from(selectedIds))
+            const result = await deleteQuestions(Array.from(selectedIds))
             setSelectedIds(new Set())
+            alert(`Successfully deleted ${result.deletedCount || selectedIds.size} question(s) and related data!`)
             fetchData() // Refresh
-        } catch (err) {
-            alert('Failed to delete questions')
+        } catch (err: any) {
+            console.error('Delete error:', err)
+            alert(`Failed to delete questions: ${err.message || 'Unknown error'}\n\nPlease check the console for details.`)
         } finally {
             setDeleting(false)
         }

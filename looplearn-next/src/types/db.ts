@@ -31,3 +31,17 @@ export interface QuizQuestion {
 }
 
 export type Database = any // Stub if needed
+
+export interface Profile {
+    id: string
+    display_name: string
+    email?: string
+    role: 'student' | 'teacher' | 'admin'
+    class_standard?: number
+    points: number
+    school?: string
+    bio?: string
+    avatar_url?: string
+    created_at?: string
+    updated_at?: string
+}

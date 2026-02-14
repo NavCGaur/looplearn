@@ -1,0 +1,631 @@
+{
+    "questions": [
+        {
+            "question_text": "How many rational numbers exist between 1 and 2?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "Exactly 5",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "Between any two numbers, there are infinitely many rational numbers"
+                },
+                {
+                    "option_text": "Exactly 10",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "Between any two numbers, there are infinitely many rational numbers"
+                },
+                {
+                    "option_text": "Exactly 100",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "Between any two numbers, there are infinitely many rational numbers"
+                },
+                {
+                    "option_text": "Infinitely many",
+                    "display_order": 4,
+                    "is_correct": true,
+                    "explanation": "Correct! Between any two numbers, we can always find infinitely many rational numbers"
+                }
+            ]
+        },
+        {
+            "question_text": "Using the method of equal denominators, if 1 = 6/6 and 2 = 12/6, what is the FIRST rational number between them?",
+            "question_type": "fillblank",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "fillblank_answers": [
+                {
+                    "accepted_answer": "7/6",
+                    "is_case_sensitive": false,
+                    "is_primary": true
+                },
+                {
+                    "accepted_answer": "7 / 6",
+                    "is_case_sensitive": false,
+                    "is_primary": false
+                },
+                {
+                    "accepted_answer": "7/ 6",
+                    "is_case_sensitive": false,
+                    "is_primary": false
+                },
+                {
+                    "accepted_answer": "7 /6",
+                    "is_case_sensitive": false,
+                    "is_primary": false
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following is NOT a rational number between 3/5 (0.6) and 4/5 (0.8)?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "19/30 (≈ 0.633)",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "19/30 = 0.633, which is between 0.6 and 0.8"
+                },
+                {
+                    "option_text": "7/10 (= 0.7)",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "7/10 = 0.7, which is between 0.6 and 0.8"
+                },
+                {
+                    "option_text": "5/6 (≈ 0.833)",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": "Correct! 5/6 ≈ 0.833, which is GREATER than 4/5 (0.8)"
+                },
+                {
+                    "option_text": "21/30 (= 0.7)",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "21/30 = 0.7, which is between 0.6 and 0.8"
+                }
+            ]
+        },
+        {
+            "question_text": "After converting 3/5 = 18/30 and 4/5 = 24/30, what is the THIRD rational number between them?",
+            "question_type": "fillblank",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "fillblank_answers": [
+                {
+                    "accepted_answer": "21/30",
+                    "is_case_sensitive": false,
+                    "is_primary": true
+                },
+                {
+                    "accepted_answer": "21 / 30",
+                    "is_case_sensitive": false,
+                    "is_primary": false
+                },
+                {
+                    "accepted_answer": "7/10",
+                    "is_case_sensitive": false,
+                    "is_primary": false
+                },
+                {
+                    "accepted_answer": "7 / 10",
+                    "is_case_sensitive": false,
+                    "is_primary": false
+                }
+            ]
+        },
+        {
+            "question_text": "What is the approximate value of √3 on the number line?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "1.5",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "√3 ≈ 1.732, not 1.5"
+                },
+                {
+                    "option_text": "1.732",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! √3 ≈ 1.732"
+                },
+                {
+                    "option_text": "2.0",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "√3 is less than 2"
+                },
+                {
+                    "option_text": "1.414",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "1.414 is approximately √2, not √3"
+                }
+            ]
+        },
+        {
+            "question_text": "Are the square roots of ALL positive integers irrational?",
+            "question_type": "truefalse",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "True",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "Not all square roots are irrational. Perfect squares like √16 = 4 are rational"
+                },
+                {
+                    "option_text": "False",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! Perfect squares like √16 = 4, √25 = 5 are rational numbers"
+                }
+            ]
+        },
+        {
+            "question_text": "What is the decimal expansion of 10/3?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "3.33 (terminating)",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "10/3 is a non-terminating decimal"
+                },
+                {
+                    "option_text": "3.333... (non-terminating repeating)",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! 10/3 = 3.333... (3 repeats forever)"
+                },
+                {
+                    "option_text": "3.3 (terminating)",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "10/3 is a non-terminating decimal"
+                },
+                {
+                    "option_text": "3.030303... (non-terminating repeating)",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "10/3 = 3.333..., not 3.0303..."
+                }
+            ]
+        },
+        {
+            "question_text": "What is the decimal expansion of 7/8?",
+            "question_type": "fillblank",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "fillblank_answers": [
+                {
+                    "accepted_answer": "0.875",
+                    "is_case_sensitive": false,
+                    "is_primary": true
+                },
+                {
+                    "accepted_answer": ".875",
+                    "is_case_sensitive": false,
+                    "is_primary": false
+                }
+            ]
+        },
+        {
+            "question_text": "What is the decimal expansion of 1/7?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "0.14 (terminating)",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "1/7 is a non-terminating, repeating decimal"
+                },
+                {
+                    "option_text": "0.142857142857... (non-terminating repeating)",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! 1/7 = 0.142857142857... (142857 repeats)"
+                },
+                {
+                    "option_text": "0.1428571 (terminating)",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "1/7 is a non-terminating decimal"
+                },
+                {
+                    "option_text": "0.17 (terminating)",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "1/7 ≠ 0.17"
+                }
+            ]
+        },
+        {
+            "question_text": "Convert 0.3333... (recurring) to a fraction in the form p/q",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "3/10",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "3/10 = 0.3 (terminating), not 0.333..."
+                },
+                {
+                    "option_text": "1/3",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! 1/3 = 0.3333... (recurring)"
+                },
+                {
+                    "option_text": "3/9",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "While 3/9 = 1/3, the simplified form is 1/3"
+                },
+                {
+                    "option_text": "33/100",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "33/100 = 0.33 (terminating), not 0.333..."
+                }
+            ]
+        },
+        {
+            "question_text": "What is the maximum number of digits in the repeating block of the decimal expansion of 1/17?",
+            "question_type": "fillblank",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "hard",
+            "points": 15,
+            "is_active": true,
+            "fillblank_answers": [
+                {
+                    "accepted_answer": "16",
+                    "is_case_sensitive": false,
+                    "is_primary": true
+                },
+                {
+                    "accepted_answer": "sixteen",
+                    "is_case_sensitive": false,
+                    "is_primary": false
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following is an irrational number between 5/7 (≈0.714) and 9/11 (≈0.818)?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "0.75 (terminating decimal)",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "0.75 is a rational number (3/4), not irrational"
+                },
+                {
+                    "option_text": "0.720720072000... (non-terminating, non-repeating)",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! This is non-terminating and non-repeating, making it irrational"
+                },
+                {
+                    "option_text": "0.777... (repeating decimal)",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "0.777... = 7/9, which is rational, not irrational"
+                },
+                {
+                    "option_text": "0.8 (terminating decimal)",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "0.8 = 4/5, which is rational, not irrational"
+                }
+            ]
+        },
+        {
+            "question_text": "The number 3.765 lies between which two consecutive integers on the number line?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "Between 2 and 3",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "3.765 is greater than 3"
+                },
+                {
+                    "option_text": "Between 3 and 4",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! 3 < 3.765 < 4"
+                },
+                {
+                    "option_text": "Between 4 and 5",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "3.765 is less than 4"
+                },
+                {
+                    "option_text": "Between 7 and 8",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "3.765 is much less than 7"
+                }
+            ]
+        },
+        {
+            "question_text": "Simplify: (2√2 + 5√3) + (√2 - 3√3)",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "3√2 + 2√3",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": "Correct! Combine like terms: (2+1)√2 + (5-3)√3 = 3√2 + 2√3"
+                },
+                {
+                    "option_text": "2√2 + 5√3",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "You need to add the √2 terms and subtract the √3 terms"
+                },
+                {
+                    "option_text": "√2 + 8√3",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "Recheck the calculation: (2+1)√2 = 3√2 and (5-3)√3 = 2√3"
+                },
+                {
+                    "option_text": "4√2 + 3√3",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "Incorrect combination of terms"
+                }
+            ]
+        },
+        {
+            "question_text": "Simplify: (√3 + √7)(√3 - √7)",
+            "question_type": "fillblank",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "fillblank_answers": [
+                {
+                    "accepted_answer": "-4",
+                    "is_case_sensitive": false,
+                    "is_primary": true
+                },
+                {
+                    "accepted_answer": "- 4",
+                    "is_case_sensitive": false,
+                    "is_primary": false
+                },
+                {
+                    "accepted_answer": "negative 4",
+                    "is_case_sensitive": false,
+                    "is_primary": false
+                }
+            ]
+        },
+        {
+            "question_text": "After rationalizing 1/(7 + 3√3), the denominator becomes:",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "hard",
+            "points": 15,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "49",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "After rationalization: (7)² - (3√3)² = 49 - 27 = 22"
+                },
+                {
+                    "option_text": "22",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! Using (a+b)(a-b) = a²-b², we get 49 - 27 = 22"
+                },
+                {
+                    "option_text": "27",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "(3√3)² = 27, but the final denominator is 49 - 27 = 22"
+                },
+                {
+                    "option_text": "58",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "The correct answer is 49 - 27 = 22"
+                }
+            ]
+        },
+        {
+            "question_text": "What is the approximate value of √9.3?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "3.0",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "√9 = 3, but √9.3 is slightly more than 3"
+                },
+                {
+                    "option_text": "3.05",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! √9.3 ≈ 3.05 (since 9.3 is slightly more than 9)"
+                },
+                {
+                    "option_text": "4.65",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "This is too large; √9.3 is close to √9 = 3"
+                },
+                {
+                    "option_text": "9.3",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "This is the number itself, not its square root"
+                }
+            ]
+        },
+        {
+            "question_text": "Simplify: 7^(2/3) × 7^(1/5). The answer is 7 raised to what power?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "7^(3/8)",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "When multiplying with same base, add the exponents: 2/3 + 1/5"
+                },
+                {
+                    "option_text": "7^(13/15)",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! 2/3 + 1/5 = 10/15 + 3/15 = 13/15"
+                },
+                {
+                    "option_text": "7^(2/15)",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "Add the exponents, don't multiply them"
+                },
+                {
+                    "option_text": "7^(7/15)",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "2/3 + 1/5 = 13/15, not 7/15"
+                }
+            ]
+        },
+        {
+            "question_text": "Simplify: 10^(1/2) ÷ 10^(1/4). The answer is 10 raised to what power?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Number System",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "options": [
+                {
+                    "option_text": "10^(1/4)",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": "Correct! When dividing with same base, subtract exponents: 1/2 - 1/4 = 2/4 - 1/4 = 1/4"
+                },
+                {
+                    "option_text": "10^(3/4)",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "Subtract the exponents, not add: 1/2 - 1/4 = 1/4"
+                },
+                {
+                    "option_text": "10^2",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "When dividing, subtract exponents: 1/2 - 1/4 = 1/4"
+                },
+                {
+                    "option_text": "10^(1/8)",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "1/2 - 1/4 = 1/4, not 1/8"
+                }
+            ]
+        }
+    ]
+}

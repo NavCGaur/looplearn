@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { createClient } from '@/lib/supabase/client'
 
 export default function CompleteProfilePage() {
@@ -127,9 +128,16 @@ export default function CompleteProfilePage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2"
                     >
-                        {loading ? 'Saving...' : 'Complete Setup'}
+                        {loading ? (
+                            <>
+                                <LoadingSpinner size="sm" />
+                                <span>Saving...</span>
+                            </>
+                        ) : (
+                            'Complete Setup'
+                        )}
                     </button>
                 </form>
             </div>

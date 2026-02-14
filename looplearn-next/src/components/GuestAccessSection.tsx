@@ -144,14 +144,12 @@ const GuestAccessSection = () => {
     }, [])
 
     const handleStartQuiz = () => {
-        if (!selectedClass || !selectedSubject) return
+        if (!selectedClass || !selectedSubject || !selectedChapter) return
 
         const params = new URLSearchParams()
         params.set('class', selectedClass.toString())
         params.set('subject', selectedSubject)
-        if (selectedChapter && selectedChapter !== 'All Chapters') {
-            params.set('chapter', selectedChapter)
-        }
+        params.set('chapter', selectedChapter)
 
         router.push(`/quiz?${params.toString()}`)
     }
@@ -169,9 +167,7 @@ const GuestAccessSection = () => {
     if (selectedClass && selectedSubject) {
         const key = `${selectedClass}-${selectedSubject}`
         if (metadata.chapters[key]) {
-            displayChapters = ['All Chapters', ...metadata.chapters[key]]
-        } else {
-            displayChapters = ['All Chapters'] // Default if no chapters found
+            displayChapters = metadata.chapters[key]
         }
     }
 
@@ -285,7 +281,7 @@ const GuestAccessSection = () => {
                                     <div className="space-y-3">
                                         <label className="text-lg font-bold text-gray-700 flex items-center gap-3">
                                             <span className="w-8 h-8 rounded-full bg-purple-500 text-white text-sm flex items-center justify-center font-bold">3</span>
-                                            Choose Chapter (Optional)
+                                            Choose Chapter
                                         </label>
                                         <SelectButton
                                             label="Select Chapter"
@@ -301,7 +297,7 @@ const GuestAccessSection = () => {
                                         size="xl"
                                         className="w-full group mt-2 rounded-xl text-lg font-bold shadow-lg shadow-green-200 bg-[#4ADE80] hover:bg-[#22c55e] text-white cursor-pointer"
                                         onClick={handleStartQuiz}
-                                        disabled={!selectedClass || !selectedSubject}
+                                        disabled={!selectedClass || !selectedSubject || !selectedChapter}
                                     >
                                         <Rocket className="w-6 h-6 mr-2 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                                         Start Quiz
