@@ -38,3 +38,28 @@ export function getStartOfISTDay(date: Date = new Date()): Date {
 export function getISTDate(date: Date = new Date()): Date {
     return new Date(date.getTime() + IST_OFFSET_MS);
 }
+
+const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+/**
+ * Formats a date string as "5 Mar 2026" using pure UTC arithmetic — no Intl/locale involved.
+ * Produces the exact same string on Node.js and in every browser, preventing hydration mismatches.
+ */
+export function formatDate(dateStr: string): string {
+    const d = new Date(dateStr)
+    return `${d.getUTCDate()} ${MONTHS_SHORT[d.getUTCMonth()]} ${d.getUTCFullYear()}`
+}
+
+/**
+ * Formats a date string as "5 Mar, 10:30 AM" — short form with time.
+ * Uses UTC so output is consistent everywhere (no locale, no Intl).
+ */
+export function formatDateTime(dateStr: string): string {
+    const d = new Date(dateStr)
+    const h = d.getUTCHours()
+    const m = d.getUTCMinutes()
+    const ampm = h >= 12 ? 'PM' : 'AM'
+    const h12 = h % 12 || 12
+    const mm = String(m).padStart(2, '0')
+    return `${d.getUTCDate()} ${MONTHS_SHORT[d.getUTCMonth()]}, ${h12}:${mm} ${ampm}`
+}

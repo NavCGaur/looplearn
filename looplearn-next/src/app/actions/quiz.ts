@@ -16,15 +16,16 @@ export async function loadQuizQuestions(params: {
     limit?: number
     excludeQuestionIds?: string[]
     chapter?: string
+    mode?: 'standard' | 'chapter_review'
 }): Promise<QuizQuestion[]> {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
-    const { subject, classStandard, limit = 10, excludeQuestionIds = [], chapter } = params
+    const { subject, classStandard, limit = 10, excludeQuestionIds = [], chapter, mode = 'standard' } = params
 
     if (user) {
-        // Registered user: Load questions based on SRS
-        return loadQuestionsForUser(user.id, subject, limit, chapter)
+        // Registered user: Load questions based on SRS or Chapter Review
+        return loadQuestionsForUser(user.id, subject, limit, chapter, mode)
     } else {
         // Guest: Load random questions, excluding previously seen ones
         return loadQuestionsForGuest(subject, classStandard || 8, limit, excludeQuestionIds, chapter)
@@ -78,7 +79,11 @@ export async function getQuizMetadata() {
 
             while (remaining.length > 0) {
                 const current = remaining[0]
-                const fuse = new Fuse(remaining, { includeScore: true, threshold: 0.3 }) // 0.3 threshold for similarity
+                // Use a TIGHT threshold (0.15) so that distinct-but-related chapter names
+                // like "Motion" and "Laws Of Motion" are NOT collapsed into the same group.
+                // Previously at 0.3, "Laws Of Motion" (score ~0.23) merged with "Motion",
+                // causing chapter_review to return questions from both chapters.
+                const fuse = new Fuse(remaining, { includeScore: true, threshold: 0.15 })
                 const results = fuse.search(current)
 
                 // All matches (including itself) form a group
@@ -117,7 +122,8 @@ async function loadQuestionsForUser(
     userId: string,
     subject: string,
     limit: number,
-    chapter?: string
+    chapter?: string,
+    mode: 'standard' | 'chapter_review' = 'standard'
 ): Promise<QuizQuestion[]> {
     const supabase = await createClient()
 
@@ -129,6 +135,85 @@ async function loadQuestionsForUser(
         .single()
 
     if (!profile) return []
+
+    // CHAPTER REVIEW MODE: Fetch ALL questions for the chapter, randomized
+    if (mode === 'chapter_review' && chapter) {
+        // Strategy: reproduce the SAME Fuse.js clustering that getQuizMetadata uses
+        // to build the chapter dropdown. This ensures chapter_review fetches exactly
+        // the DB chapter variants that belong to the selected canonical chapter.
+        //
+        // Why this matters:
+        //   DB has "Laws Of Motion" (1 q) and "Force and Laws of Motion" (24 q).
+        //   Both cluster under the canonical "Laws Of Motion" in the dropdown.
+        //   chapter_review must query BOTH to return all 25 questions.
+        //
+        //   But "Motion" must NOT pull "Laws Of Motion" questions — and it won't,
+        //   because they fall into different clusters at threshold 0.15.
+
+        const { data: allChapterRows } = await supabase
+            .from('questions')
+            .select('chapter')
+            .eq('subject', subject)
+            .eq('class_standard', profile.class_standard)
+            .eq('is_active', true)
+
+        const rawChapters = [...new Set(allChapterRows?.map(q => q.chapter).filter(Boolean) || [])] as string[]
+
+        // Build the same cluster map as getQuizMetadata (threshold must match)
+        const CLUSTER_THRESHOLD = 0.15
+        const Fuse = require('fuse.js')
+
+        let remaining = [...rawChapters]
+        // Map from canonical name → all DB chapter variants in that cluster
+        const clusterMap: Map<string, string[]> = new Map()
+
+        while (remaining.length > 0) {
+            const current = remaining[0]
+            const fuse = new Fuse(remaining, { includeScore: true, threshold: CLUSTER_THRESHOLD })
+            const results = fuse.search(current)
+            const group = results.map((r: any) => r.item as string)
+
+            // Canonical name = first item, Title Cased (mirrors getQuizMetadata)
+            const canonical = current
+                .toLowerCase()
+                .replace(/&/g, 'and')
+                .split(' ')
+                .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(' ')
+                .trim()
+
+            clusterMap.set(canonical, group)
+            remaining = remaining.filter(r => !group.includes(r))
+        }
+
+        // Find the cluster whose canonical name case-insensitively matches selected chapter
+        const chapterLower = chapter.toLowerCase()
+        let targetChapters: string[] = [chapter] // fallback
+
+        for (const [canonical, variants] of clusterMap.entries()) {
+            if (canonical.toLowerCase() === chapterLower) {
+                targetChapters = variants
+                break
+            }
+        }
+
+        const { data: allQuestions } = await supabase
+            .from('questions')
+            .select(`
+                *,
+                question_options (*),
+                fillblank_answers (*)
+            `)
+            .eq('subject', subject)
+            .eq('class_standard', profile.class_standard)
+            .in('chapter', targetChapters)
+            .eq('is_active', true)
+
+        if (!allQuestions) return []
+
+        // Shuffle and return ALL
+        return allQuestions.sort(() => Math.random() - 0.5) as unknown as QuizQuestion[]
+    }
 
     const today = getStartOfISTDay(new Date())
     const todayISO = today.toISOString()
@@ -589,5 +674,92 @@ export async function logAnswer(params: {
         return { error: error.message }
     }
 
+    // Update last_active_at on profile
+    await supabase
+        .from('profiles')
+        .update({ last_active_at: new Date().toISOString() })
+        .eq('id', user.id)
+
     return { success: true }
+}
+
+/**
+ * Download all quiz data for offline use.
+ * Called by the student when they tap "Download for Offline Use".
+ * Returns all questions for their class + their current SRS progress.
+ * Only works if the teacher has enabled offline_access_enabled for this student.
+ */
+export async function downloadOfflineBundle() {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return { error: 'Not authenticated' }
+    }
+
+    // Verify offline access is enabled for this student
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('class_standard, offline_access_enabled')
+        .eq('id', user.id)
+        .single()
+
+    if (!profile) {
+        return { error: 'Profile not found' }
+    }
+
+    if (!profile.offline_access_enabled) {
+        return { error: 'Offline access not enabled. Ask your teacher to enable it.' }
+    }
+
+    const classStandard = profile.class_standard || 8
+
+    // Fetch ALL active questions for this student's class (all subjects)
+    const { data: questions, error: qError } = await supabase
+        .from('questions')
+        .select(`
+            id,
+            question_text,
+            question_type,
+            class_standard,
+            subject,
+            chapter,
+            difficulty,
+            points,
+            answer_explanation,
+            question_options (
+                id,
+                option_text,
+                display_order,
+                is_correct,
+                explanation
+            ),
+            fillblank_answers (
+                id,
+                accepted_answer,
+                is_case_sensitive,
+                is_primary
+            )
+        `)
+        .eq('is_active', true)
+        .lte('class_standard', classStandard)
+        .order('class_standard', { ascending: true })
+
+    if (qError) {
+        logSupabaseError('Error fetching offline bundle questions', qError)
+        return { error: 'Failed to fetch questions' }
+    }
+
+    // Fetch student's existing SRS progress
+    const { data: progress } = await supabase
+        .from('user_progress')
+        .select('question_id, ease_factor, interval_days, repetitions, next_review_date, last_reviewed, last_quality')
+        .eq('user_id', user.id)
+
+    return {
+        questions: questions || [],
+        progress: progress || [],
+        downloadedAt: new Date().toISOString(),
+        classStandard,
+    }
 }

@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createServiceRoleClient } from '@supabase/supabase-js'
 import { redirect } from 'next/navigation'
 
 export interface TeacherStats {
@@ -133,10 +134,56 @@ export async function getStudentsList() {
     // (Profiles RLS allows viewing all, but just to be safe and consistent)
     const { data: students } = await supabase
         .from('profiles')
-        .select('id, display_name, class_standard, points, created_at')
+        .select('id, display_name, class_standard, points, created_at, last_active_at, offline_access_enabled')
         .eq('role', 'student')
         .order('points', { ascending: false })
         .limit(100) // Safety limit
 
     return students || []
+}
+
+/**
+ * Toggle offline access for a specific student.
+ * Only teachers/admins can call this.
+ */
+export async function toggleOfflineAccess(studentId: string, enabled: boolean): Promise<{ success?: boolean; error?: string }> {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) return { error: 'Not authenticated' }
+
+    // Verify caller is teacher or admin
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+    if (profile?.role !== 'teacher' && profile?.role !== 'admin') {
+        return { error: 'Not authorized' }
+    }
+
+    // Use service role client to bypass RLS for updating other users' profiles
+    const adminClient = createServiceRoleClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false
+            }
+        }
+    )
+
+    const { error } = await adminClient
+        .from('profiles')
+        .update({ offline_access_enabled: enabled })
+        .eq('id', studentId)
+        .eq('role', 'student') // Safety: only update students
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    return { success: true }
 }

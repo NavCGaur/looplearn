@@ -4,6 +4,7 @@ export interface QuestionOption {
     display_order: number
     is_correct: boolean
     question_id?: string
+    explanation?: string
 }
 
 export interface FillBlankAnswer {
@@ -17,12 +18,13 @@ export interface FillBlankAnswer {
 export interface QuizQuestion {
     id: string
     question_text: string
-    question_type: 'mcq' | 'multiple_choice' | 'true_false' | 'fill_blank'
+    question_type: 'mcq' | 'multiple_choice' | 'true_false' | 'fill_blank' | 'truefalse' | 'fillblank'
     class_standard: number
     subject: string
     difficulty: 'easy' | 'medium' | 'hard'
     points: number
     chapter?: string
+    answer_explanation?: string
     is_active: boolean
     created_at?: string
     question_options?: QuestionOption[]

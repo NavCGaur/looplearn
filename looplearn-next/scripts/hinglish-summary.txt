@@ -1,0 +1,16 @@
+=== HINGLISH EVALUATION ===
+SCORE: 6/8
+
+OVERALL: Aapne apne answers mein basic concepts ko achhe se samajhkar likha hai. Kuch questions mein detail ki kami hai, lekin jo likha hai woh sahi aur relevant hai. Thodi aur practice se aap full marks score kar sakte hain!
+
+--- Q1: Describe Transport system in plants.
+Marks: 3/5
+Correct: Aapne transport system ki speed plants mein kam kyu hoti hai, uska reason sahi bataya (dead cells, stationary nature, less energy requirement) aur animals se compare bhi kiya. Diffusion aur osmosis ka role bhi sahi mention kiya, aur yeh bhi bataya ki plants mein xylem aur phloem jaise vascular tissues hote hain.
+Missing: Aapne xylem ka specific function (water aur minerals ka transport) clearly nahi likha. Phloem ka function bhi yahan detail mein nahi bataya. Transpiration pull, root pressure aur translocation jaise important mechanisms missing the, jo plant transport system ka crucial part hain.
+Tip: Jab transport system describe karein, toh xylem aur phloem ke functions ko detail mein explain karein aur transpiration pull, root pressure jaise processes ko bhi mention karna na bhoolein. Isse aapka answer aur complete lagega.
+
+--- Q2: Describe Phloem.
+Marks: 3/3
+Correct: Aapne phloem ko ek vascular tissue aur living cells se bana hua bataya, jo bilkul sahi hai. Phloem ka main function (translocation of food) aur yeh kya transport karta hai (soluble products of photosynthesis, amino acids, hormones) yeh bhi achhe se explain kiya. Bidirectional flow aur ATP energy requirement bhi correct points hain. Spring mein food transport ka example bhi bahut achha hai.
+Missing: Aapne phloem ke specific components (jaise sieve tubes, companion cells, phloem parenchyma/fibres) ko mention nahi kiya, although living cells mention karke aapne uska essence cover kar liya.
+Tip: Aapne phloem ko bahut detail mein describe kiya hai, jo bahut achha hai. Agli baar, aap iske specific cell types (sieve tubes, companion cells) ko bhi include kar sakte hain, taaki aapka answer aur bhi comprehensive ho.

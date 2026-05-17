@@ -1,0 +1,18 @@
+[
+  {
+    "question_number": 1,
+    "marks_awarded": 3,
+    "max_marks": 5,
+    "what_was_correct": "The student correctly described that the plant transport system is slower than in animals, is composed of dead cells (referring to xylem mostly), is stationary, and requires less energy. They accurately identified diffusion and osmosis as simple processes aiding transport from the soil and mentioned the presence of vascular tissues like xylem and phloem.",
+    "what_was_wrong": "The answer missed explicit descriptions of key transport mechanisms such as xylem's primary role in water transport (only implied), phloem's role in food transport (though addressed in Q2), transpiration pull, root pressure, and the specific concept of translocation.",
+    "suggestion": "To score higher, the student should explicitly detail the mechanisms of water transport (root pressure and transpiration pull through xylem) and food transport (translocation through phloem), along with the specific functions of xylem and phloem in the overall system."
+  },
+  {
+    "question_number": 2,
+    "marks_awarded": 3,
+    "max_marks": 3,
+    "what_was_correct": "The student provided a comprehensive description of phloem's function, accurately identifying it as a living vascular tissue involved in the translocation of food. They correctly stated that it transports soluble products of photosynthesis, amino acids, and hormones. Key characteristics like bidirectional flow and the energy-dependent transport of sucrose (using ATP), with an example of transport during spring from stored food, were also correctly mentioned.",
+    "what_was_wrong": "The student did not explicitly mention the specific cellular components of phloem tissue, such as sieve tubes, companion cells, phloem parenchyma, and phloem fibres.",
+    "suggestion": "To provide a complete description, the student should include the names of the specific cell types that constitute phloem tissue (sieve tubes, companion cells, phloem parenchyma, and phloem fibres)."
+  }
+]

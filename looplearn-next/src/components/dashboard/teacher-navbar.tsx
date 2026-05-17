@@ -4,9 +4,11 @@ import Link from 'next/link'
 import { signOut } from '@/app/actions/auth'
 import { LoopLearnXIcon } from '@/components/ui/brand-icons'
 import { Home } from 'lucide-react'
+import { NotificationBell } from '@/components/ui/notification-bell'
 
 interface TeacherNavbarProps {
     user: {
+        id: string
         name: string
         email?: string
     }
@@ -38,6 +40,12 @@ export function TeacherNavbar({ user }: TeacherNavbarProps) {
                             <span className="px-2 py-0.5 text-xs font-semibold bg-indigo-100 text-indigo-700 rounded-full">
                                 BETA
                             </span>
+                            <Link href="/teacher/assignments" className="text-xl font-bold text-gray-800 hover:text-indigo-600 transition-colors">
+                                Assignments
+                            </Link>
+                            <Link href="/teacher/hub" className="text-xl font-bold text-gray-800 hover:text-indigo-600 transition-colors">
+                                Hub 🚀
+                            </Link>
                         </div>
                     </div>
 
@@ -45,6 +53,13 @@ export function TeacherNavbar({ user }: TeacherNavbarProps) {
                         <Link href="/" className="hidden md:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
                             <Home className="w-4 h-4" />
                             Home
+                        </Link>
+
+                        <Link
+                            href="/teacher/assignments"
+                            className="hidden sm:block text-sm text-gray-600 hover:text-indigo-600 font-medium transition-colors"
+                        >
+                            Assignments
                         </Link>
 
                         <Link
@@ -57,6 +72,9 @@ export function TeacherNavbar({ user }: TeacherNavbarProps) {
                         <div className="w-px h-6 bg-gray-200 hidden sm:block" />
 
                         <div className="flex items-center gap-3">
+                            {/* Notification bell */}
+                            <NotificationBell userId={user.id} />
+
                             <span className="text-sm font-medium text-gray-700 hidden sm:block">
                                 {user.name}
                             </span>

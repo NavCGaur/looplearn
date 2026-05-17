@@ -1,0 +1,937 @@
+[
+  {
+    "id": 2,
+    "question": "Why do school bags often have wide straps instead of thin strings?",
+    "options": [
+      "To increase the force",
+      "To decrease the pressure on shoulders",
+      "To make the bag look bigger",
+      "To increase the pressure"
+    ],
+    "explanation": "A larger area (wide straps) reduces the pressure exerted by the weight of the bag on the shoulders, making it more comfortable to carry."
+  },
+  {
+    "id": 3,
+    "question": "Which of the following statements about air pressure is correct?",
+    "options": [
+      "Air exerts pressure only downwards",
+      "Air exerts pressure in all directions",
+      "Air pressure increases with altitude",
+      "Air pressure is highest at the top of a mountain"
+    ],
+    "explanation": "Air particles move in all directions and collide with surfaces, exerting pressure equally in all directions."
+  },
+  {
+    "id": 4,
+    "question": "What happens to the pressure of air when its speed increases?",
+    "options": [
+      "Pressure increases",
+      "Pressure remains same",
+      "Pressure decreases",
+      "Pressure becomes zero"
+    ],
+    "explanation": "According to Bernoulli's principle, an increase in the speed of a fluid (like air) is accompanied by a decrease in pressure."
+  },
+  {
+    "id": 5,
+    "question": "High-speed winds blowing over the roof of a hut can lift the roof because:",
+    "options": [
+      "High speed increases air pressure on top",
+      "High speed creates low pressure on top",
+      "The roof becomes lighter",
+      "The wind pushes the roof down"
+    ],
+    "explanation": "Fast wind over the roof reduces pressure above it. The higher pressure inside the hut then pushes the roof upwards."
+  },
+  {
+    "id": 6,
+    "question": "Air moves from a region of __________ pressure to a region of __________ pressure.",
+    "options": [
+      "Low, High",
+      "High, Low",
+      "Low, Zero",
+      "High, High"
+    ],
+    "explanation": "The difference in air pressure causes air to flow from areas where it is more concentrated (high pressure) to where it is less concentrated (low pressure)."
+  },
+  {
+    "id": 7,
+    "question": "On heating, air __________ and becomes __________.",
+    "options": [
+      "Contracts, Heavier",
+      "Expands, Lighter",
+      "Expands, Heavier",
+      "Contracts, Lighter"
+    ],
+    "explanation": "When air is heated, its particles move faster and spread out (expand), making it less dense and lighter than cold air."
+  },
+  {
+    "id": 9,
+    "question": "A balloon expands when we blow air into it because:",
+    "options": [
+      "The rubber becomes thin",
+      "Air inside exerts pressure on the walls",
+      "The temperature inside rises",
+      "The air outside pushes it"
+    ],
+    "explanation": "Adding more air particles increases collisions with the inner walls, creating internal pressure that stretches the balloon."
+  },
+  {
+    "id": 10,
+    "question": "What is the primary cause of wind circulation on Earth?",
+    "options": [
+      "Earth's gravity",
+      "Uneven heating of the Earth by the Sun",
+      "The Moon's phases",
+      "The depth of the oceans"
+    ],
+    "explanation": "Uneven heating between the equator and poles, and between land and water, creates pressure differences that drive wind."
+  },
+  {
+    "id": 11,
+    "question": "During the day in coastal areas, wind usually blows from:",
+    "options": [
+      "Land to Sea",
+      "Sea to Land",
+      "South to North",
+      "Mountains to Plains"
+    ],
+    "explanation": "Land heats up faster than water; the hot air over land rises, creating low pressure that draws in cooler air from the sea (Sea Breeze)."
+  },
+  {
+    "id": 12,
+    "question": "Which of the following is a characteristic of a thunderstorm?",
+    "options": [
+      "Calm winds and bright sun",
+      "Heavy rain, lightning, and thunder",
+      "Snowfall without wind",
+      "A dry heatwave"
+    ],
+    "explanation": "Thunderstorms develop in hot, humid tropical areas where rising warm air carries water droplets that freeze and fall, creating lightning and sound."
+  },
+  {
+    "id": 14,
+    "question": "Cyclones are known as __________ in the American continent.",
+    "options": [
+      "Typhoons",
+      "Hurricanes",
+      "Tornadoes",
+      "Cyclones"
+    ],
+    "explanation": "While they are the same weather phenomenon, they are called Hurricanes in the Atlantic and Typhoons in the Pacific."
+  },
+  {
+    "id": 15,
+    "question": "A dark funnel-shaped cloud that reaches from the sky to the ground is a:",
+    "options": [
+      "Monsoon",
+      "Cyclone",
+      "Tornado",
+      "Thunderstorm"
+    ],
+    "explanation": "Tornadoes are violent, rotating columns of air that descend from thunderstorms to the ground."
+  },
+  {
+    "id": 16,
+    "question": "Why are holes made in banners and hoardings hanging in the open?",
+    "options": [
+      "To make them look decorative",
+      "To let light pass through",
+      "To reduce the air pressure exerted by the wind",
+      "To save material"
+    ],
+    "explanation": "Holes allow air to pass through the banner, reducing the force/pressure exerted by the wind so the banner doesn't tear or fall."
+  },
+  {
+    "id": 17,
+    "question": "If you blow air between two hanging balloons, they will:",
+    "options": [
+      "Move away from each other",
+      "Move towards each other",
+      "Stay stationary",
+      "Burst immediately"
+    ],
+    "explanation": "Blowing air between them creates a region of low pressure; the higher pressure on the outside pushes the balloons toward each other."
+  },
+  {
+    "id": 18,
+    "question": "Thunder is caused by:",
+    "options": [
+      "Clouds hitting each other",
+      "The rapid expansion of air heated by lightning",
+      "Rain falling on the ground",
+      "Wind blowing through trees"
+    ],
+    "explanation": "Lightning heats the surrounding air so fast that it expands explosively, creating the sound wave we call thunder."
+  },
+  {
+    "id": 19,
+    "question": "During a thunderstorm, it is safest to take shelter in:",
+    "options": [
+      "An open field",
+      "Under a tall isolated tree",
+      "Inside a car or a building",
+      "Under an umbrella with a metal handle"
+    ],
+    "explanation": "Buildings and cars (acting as Faraday cages) protect you from lightning, whereas tall objects or open spaces increase risk."
+  },
+  {
+    "id": 20,
+    "question": "The 'Standard Unit' (SI) of pressure is:",
+    "options": [
+      "Newton",
+      "Pascal",
+      "Joule",
+      "Watt"
+    ],
+    "explanation": "One Pascal (Pa) is equal to one Newton per square meter (N/m²)."
+  },
+  {
+    "id": 21,
+    "question": "What is the direction of wind during the 'Winter Monsoon' in India?",
+    "options": [
+      "Sea to Land",
+      "Land to Sea",
+      "South to North",
+      "West to East"
+    ],
+    "explanation": "In winter, land cools faster than the sea. High pressure over land pushes dry winds toward the low pressure over the sea."
+  },
+  {
+    "id": 23,
+    "question": "What provides the energy for the formation of a cyclone?",
+    "options": [
+      "The Earth's rotation",
+      "Heat released when water vapor condenses into rain",
+      "The friction of wind on land",
+      "Magnetic fields"
+    ],
+    "explanation": "When water vapor changes back to liquid (rain), it releases heat into the atmosphere, which warms the air and fuels the cyclone's rotation."
+  },
+  {
+    "id": 24,
+    "question": "Which coast of India is more vulnerable to cyclones?",
+    "options": [
+      "West Coast",
+      "East Coast",
+      "Northern Coast",
+      "Western Ghats"
+    ],
+    "explanation": "The East Coast (Bay of Bengal) is generally more prone to frequent and intense cyclones compared to the West Coast."
+  },
+  {
+    "id": 25,
+    "question": "A person standing in the 'Eye' of a cyclone would experience:",
+    "options": [
+      "Violent winds and heavy rain",
+      "Calm weather and clear sky",
+      "Freezing temperatures",
+      "Dust storms"
+    ],
+    "explanation": "The eye is a low-pressure region of sinking air, which suppresses cloud formation and wind, creating a brief 'calm before the storm' effect."
+  },
+  {
+    "id": 26,
+    "question": "Which of the following is the fundamental idea of the particulate nature of matter?",
+    "options": [
+      "Matter is continuous like a sheet of glass",
+      "Matter is made up of tiny, discrete particles",
+      "Matter is only made of air and water",
+      "Matter has no empty spaces"
+    ],
+    "explanation": "Matter is not a continuous block; it is composed of very small particles with spaces between them."
+  },
+  {
+    "id": 28,
+    "question": "What happens to the movement of particles when the temperature of a substance increases?",
+    "options": [
+      "Particles stop moving",
+      "Particles move slower",
+      "Particles move faster",
+      "Particles become larger"
+    ],
+    "explanation": "Increasing temperature adds energy to the particles, causing them to move or vibrate more rapidly."
+  },
+  {
+    "id": 31,
+    "question": "When a crystal of potassium permanganate is placed in water, the purple colour spreads throughout. This proves that:",
+    "options": [
+      "Water is purple",
+      "Particles of matter are constantly moving",
+      "Potassium permanganate is a liquid",
+      "Water particles are stationary"
+    ],
+    "explanation": "The spreading of color occurs because the particles of both the crystal and the water are in constant random motion."
+  },
+  {
+    "id": 33,
+    "question": "Which of the following describes the 'Liquid' state?",
+    "options": [
+      "Fixed shape and fixed volume",
+      "No fixed shape but fixed volume",
+      "Fixed shape but no fixed volume",
+      "No fixed shape and no fixed volume"
+    ],
+    "explanation": "Liquids take the shape of the container they are in, but their volume remains constant because particles stay close together."
+  },
+  {
+    "id": 34,
+    "question": "What occupies the 'empty space' between particles in a gas?",
+    "options": [
+      "Air",
+      "Nothing (Vacuum)",
+      "Dust",
+      "Energy"
+    ],
+    "explanation": "The space between the fundamental particles of a pure substance is empty (void/vacuum)."
+  },
+  {
+    "id": 35,
+    "question": "Brownian motion describes:",
+    "options": [
+      "The regular pattern of solids",
+      "The zig-zag random motion of particles",
+      "The freezing of water",
+      "The weight of a gas"
+    ],
+    "explanation": "Brownian motion is the random, irregular movement of small particles (like pollen or dust) suspended in a fluid, caused by collisions with molecules."
+  },
+  {
+    "id": 36,
+    "question": "If you compress a gas in a syringe, what decreases?",
+    "options": [
+      "The mass of the particles",
+      "The size of individual particles",
+      "The space between particles",
+      "The number of particles"
+    ],
+    "explanation": "Compression brings the particles closer together, thereby reducing the empty space between them."
+  },
+  {
+    "id": 37,
+    "question": "A balloon expands when you blow air into it because:",
+    "options": [
+      "Air particles take up space and collide with the walls",
+      "Air particles are sticky",
+      "The balloon gets lighter",
+      "The air turns into a solid"
+    ],
+    "explanation": "Moving air particles collide with the inner walls of the balloon, exerting pressure that pushes the walls outward."
+  },
+  {
+    "id": 40,
+    "question": "The interparticle distance is maximum in:",
+    "options": [
+      "Ice",
+      "Water",
+      "Water Vapor",
+      "Mercury"
+    ],
+    "explanation": "Water vapor is the gaseous state of water, where particles are farthest apart."
+  },
+  {
+    "id": 41,
+    "question": "What happens when you dissolve sugar in water regarding the volume?",
+    "options": [
+      "Volume increases significantly",
+      "Volume decreases",
+      "Volume stays almost the same",
+      "Water disappears"
+    ],
+    "explanation": "Sugar particles fit into the small spaces between water particles, so the total volume does not increase noticeably."
+  },
+  {
+    "id": 43,
+    "question": "Which of the following is NOT an example of matter?",
+    "options": [
+      "Air",
+      "Feeling of cold",
+      "Raindrops",
+      "Sand"
+    ],
+    "explanation": "Matter must have mass and occupy space. A feeling is a sensation/emotion and does not consist of particles."
+  },
+  {
+    "id": 44,
+    "question": "When we pour a liquid from a flask into a bowl, it changes its:",
+    "options": [
+      "Volume",
+      "Mass",
+      "Shape",
+      "Density"
+    ],
+    "explanation": "Liquids have a fixed volume but no fixed shape; they take the shape of the container."
+  },
+  {
+    "id": 46,
+    "question": "A diver is able to cut through water in a swimming pool. Which property of matter does this observation show?",
+    "options": [
+      "Particles of water are very large",
+      "There are spaces between particles of water",
+      "Water has no mass",
+      "Water particles have no attraction"
+    ],
+    "explanation": "The ability to move through a substance indicates that there are spaces between its particles and the forces of attraction can be overcome."
+  },
+  {
+    "id": 47,
+    "question": "Diffusion occurs fastest in gases because:",
+    "options": [
+      "Gas particles are heavier",
+      "Gas particles have low kinetic energy",
+      "Gas particles move rapidly in all directions",
+      "Gases have no particles"
+    ],
+    "explanation": "Due to high speeds and large spaces between them, gas particles intermix with other particles very quickly."
+  },
+  {
+    "id": 50,
+    "question": "In the 'Activity with the Syringe', why was it impossible to push the piston when it was filled with sand?",
+    "options": [
+      "Sand is a gas",
+      "Sand particles are already very close (solids are incompressible)",
+      "The syringe was broken",
+      "Sand has no particles"
+    ],
+    "explanation": "Solids like sand have very little space between particles, making them nearly impossible to compress further."
+  },
+  {
+    "id": 53,
+    "question": "Which of these is a characteristic of a mixture but NOT a compound?",
+    "options": [
+      "Components are in a fixed ratio",
+      "It has a new set of properties",
+      "Components can be separated by physical methods",
+      "It is always homogeneous"
+    ],
+    "explanation": "Mixtures are physically combined, so their components can be separated using physical means like filtration or evaporation."
+  },
+  {
+    "id": 55,
+    "question": "Which of the following is an example of a homogeneous mixture?",
+    "options": [
+      "Saltwater solution",
+      "Chalk in water",
+      "Oil and water",
+      "Iron filings and sulfur"
+    ],
+    "explanation": "A homogeneous mixture has a uniform composition throughout; saltwater is a perfect example as the salt is evenly distributed."
+  },
+  {
+    "id": 57,
+    "question": "Water (H2O) is classified as a compound because:",
+    "options": [
+      "It can be separated by filtration",
+      "Hydrogen and Oxygen are chemically bonded in a 2:1 ratio",
+      "It exists in three states: solid, liquid, and gas",
+      "It is a mixture of two gases"
+    ],
+    "explanation": "Compounds have a fixed chemical composition and the elements involved are bonded together."
+  },
+  {
+    "id": 58,
+    "question": "Which of the following mixtures can be separated using a magnet?",
+    "options": [
+      "Salt and Sugar",
+      "Sand and Water",
+      "Iron filings and Sand",
+      "Sulfur and Charcoal"
+    ],
+    "explanation": "Iron is a magnetic material, so a magnet can easily pull iron filings out of a non-magnetic mixture like sand."
+  },
+  {
+    "id": 59,
+    "question": "Air is considered a mixture because:",
+    "options": [
+      "It is colorless",
+      "Its composition of gases can vary slightly",
+      "It is necessary for breathing",
+      "It contains only one type of molecule"
+    ],
+    "explanation": "Air contains various gases like Nitrogen, Oxygen, and CO2 that are not chemically bonded and whose proportions can change."
+  },
+  {
+    "id": 60,
+    "question": "When iron and sulfur are heated together to form iron sulfide, the product:",
+    "options": [
+      "Retains the magnetic property of iron",
+      "Can be separated by a magnet",
+      "Has entirely different properties from iron and sulfur",
+      "Is a yellow and black mixture"
+    ],
+    "explanation": "Iron sulfide is a compound; once formed, it loses the individual properties of its constituent elements."
+  },
+  {
+    "id": 61,
+    "question": "The horizontal rows in a Periodic Table are called:",
+    "options": [
+      "Groups",
+      "Periods",
+      "Columns",
+      "Families"
+    ],
+    "explanation": "The Periodic Table is arranged in horizontal rows called periods and vertical columns called groups."
+  },
+  {
+    "id": 65,
+    "question": "Brass is an alloy of Copper and Zinc. Brass is a:",
+    "options": [
+      "Compound",
+      "Solid solution (Mixture)",
+      "Element",
+      "Pure metal"
+    ],
+    "explanation": "Alloys like brass are mixtures because the metals are physically combined and can vary in proportions."
+  },
+  {
+    "id": 67,
+    "question": "The elements in a compound are combined in a:",
+    "options": [
+      "Random ratio",
+      "Varying ratio",
+      "Fixed ratio by mass",
+      "Ratio of 1:1 always"
+    ],
+    "explanation": "According to the Law of Definite Proportions, a chemical compound always contains its component elements in fixed ratio."
+  },
+  {
+    "id": 71,
+    "question": "Which scientist is famously associated with the development of the Periodic Table?",
+    "options": [
+      "Isaac Newton",
+      "Dmitri Mendeleev",
+      "Albert Einstein",
+      "Antoine Lavoisier"
+    ],
+    "explanation": "Mendeleev is known as the father of the Periodic Table for organizing elements based on their properties."
+  },
+  {
+    "id": 75,
+    "question": "What happens when sugar dissolves in water?",
+    "options": [
+      "A new compound is formed",
+      "A mixture is formed",
+      "Water breaks down into elements",
+      "Sugar atoms disappear"
+    ],
+    "explanation": "Sugar dissolving in water is a physical change that results in a homogeneous mixture (solution)."
+  },
+  {
+    "id": 76,
+    "question": "Which of the following is an example of a uniform (homogeneous) mixture?",
+    "options": [
+      "Chalk powder in water",
+      "Salt in water",
+      "Sand in water",
+      "Sawdust in water"
+    ],
+    "explanation": "A uniform mixture is one where components are evenly distributed throughout. Salt dissolves completely in water to form such a mixture."
+  },
+  {
+    "id": 77,
+    "question": "In a solution of sugar and water, sugar is the __________ and water is the __________.",
+    "options": [
+      "Solvent, Solute",
+      "Solute, Solvent",
+      "Solute, Solution",
+      "Solvent, Mixture"
+    ],
+    "explanation": "The substance being dissolved is the solute (sugar), and the substance that does the dissolving is the solvent (water)."
+  },
+  {
+    "id": 78,
+    "question": "Water is often called a 'Universal Solvent' because:",
+    "options": [
+      "It is found everywhere on Earth",
+      "It can dissolve a large variety of substances",
+      "It is used in all industrial processes",
+      "It is tasteless and odourless"
+    ],
+    "explanation": "Water has a unique ability to dissolve more substances than any other liquid, earning it the title of universal solvent."
+  },
+  {
+    "id": 79,
+    "question": "A solution in which no more solute can be dissolved at a given temperature is called a/an:",
+    "options": [
+      "Unsaturated solution",
+      "Dilute solution",
+      "Saturated solution",
+      "Concentrated solution"
+    ],
+    "explanation": "When a solvent has dissolved the maximum amount of solute possible at a specific temperature, it becomes saturated."
+  },
+  {
+    "id": 80,
+    "question": "What happens to the solubility of sugar in water if the temperature of the water is increased?",
+    "options": [
+      "It decreases",
+      "It increases",
+      "It remains the same",
+      "The sugar stops dissolving"
+    ],
+    "explanation": "Generally, increasing the temperature increases the solubility of solid solutes like sugar in a liquid solvent."
+  },
+  {
+    "id": 81,
+    "question": "Which of the following describes a 'dilute' solution?",
+    "options": [
+      "A solution with very little solute",
+      "A solution with a lot of solute",
+      "A solution that cannot dissolve more solute",
+      "A mixture of oil and water"
+    ],
+    "explanation": "A dilute solution contains a small amount of solute relative to the amount of solvent."
+  },
+  {
+    "id": 83,
+    "question": "Why do aquatic animals like fish survive in ponds and rivers?",
+    "options": [
+      "They breathe water directly",
+      "Oxygen from the air dissolves in the water",
+      "They produce their own oxygen",
+      "Water is made of oxygen atoms"
+    ],
+    "explanation": "Gases like oxygen dissolve in water, which aquatic animals use for respiration."
+  },
+  {
+    "id": 85,
+    "question": "Carbonated drinks (soda) are examples of:",
+    "options": [
+      "Solid in liquid solution",
+      "Gas in liquid solution",
+      "Liquid in liquid solution",
+      "Gas in gas solution"
+    ],
+    "explanation": "Carbon dioxide gas is dissolved in the liquid drink under pressure."
+  },
+  {
+    "id": 86,
+    "question": "Which factor does NOT affect how fast a solid solute dissolves in a liquid?",
+    "options": [
+      "Stirring the mixture",
+      "Temperature of the solvent",
+      "Size of the solute particles",
+      "The shape of the container"
+    ],
+    "explanation": "While stirring, heat, and particle size (crushing) affect the rate of dissolution, the container's shape does not."
+  },
+  {
+    "id": 87,
+    "question": "If you have a saturated solution of salt, how can you make it unsaturated without adding more water?",
+    "options": [
+      "By cooling it",
+      "By heating it",
+      "By stirring it faster",
+      "By adding more salt"
+    ],
+    "explanation": "Heating increases solubility, allowing the solution to hold more solute, thus making it temporarily unsaturated."
+  },
+  {
+    "id": 88,
+    "question": "Soft drinks fizz when opened because:",
+    "options": [
+      "The liquid evaporates",
+      "The pressure decreases, reducing gas solubility",
+      "The temperature increases",
+      "The liquid reacts with air"
+    ],
+    "explanation": "Gases are more soluble at high pressure. Opening the bottle drops the pressure, causing the dissolved CO2 to escape."
+  },
+  {
+    "id": 89,
+    "question": "What is 'solubility'?",
+    "options": [
+      "The total volume of a solution",
+      "The speed at which a solute dissolves",
+      "The maximum amount of solute that can dissolve in a specific amount of solvent at a certain temperature",
+      "The ability of a liquid to flow"
+    ],
+    "explanation": "Solubility is the measure of how much solute can be held by a solvent under specific conditions."
+  },
+  {
+    "id": 92,
+    "question": "When sugar is dissolved in water, the volume of the water does not increase significantly because:",
+    "options": [
+      "Sugar is lighter than water",
+      "Sugar particles fit into the empty spaces between water molecules",
+      "Sugar turns into water",
+      "The water evaporates"
+    ],
+    "explanation": "Liquid molecules have small spaces between them; dissolved solute particles occupy these spaces."
+  },
+  {
+    "id": 94,
+    "question": "How can you separate a mixture of sand and salt?",
+    "options": [
+      "By evaporation directly",
+      "Dissolve in water, filter the sand, then evaporate the water",
+      "Use a magnet",
+      "By sieving"
+    ],
+    "explanation": "Salt is soluble in water but sand is not. Dissolving allows you to filter the sand and then recover salt by evaporation."
+  },
+  {
+    "id": 95,
+    "question": "The components of an Oral Rehydration Solution (ORS) are:",
+    "options": [
+      "Sugar, sand, and water",
+      "Salt, chalk, and water",
+      "Sugar, salt, and water",
+      "Only sugar and water"
+    ],
+    "explanation": "ORS is a uniform mixture of sugar and salt in water used to treat dehydration."
+  },
+  {
+    "id": 96,
+    "question": "Why is it easier to dissolve sugar in hot milk than in cold milk?",
+    "options": [
+      "Hot milk is thinner",
+      "High temperature increases the rate of dissolving",
+      "Cold milk reacts with sugar",
+      "Sugar evaporates in hot milk"
+    ],
+    "explanation": "Heating the solvent increases the kinetic energy and solubility, making the solute dissolve faster and in greater amounts."
+  },
+  {
+    "id": 97,
+    "question": "Which of the following is NOT a property of a true solution?",
+    "options": [
+      "It is uniform throughout",
+      "The solute particles can be seen with a naked eye",
+      "The solute does not settle down over time",
+      "It can pass through a filter paper"
+    ],
+    "explanation": "In a true solution, particles are so small they are invisible to the eye and do not settle."
+  },
+  {
+    "id": 98,
+    "question": "Tincture of iodine is a solution used as an antiseptic. What is the solvent in it?",
+    "options": [
+      "Water",
+      "Iodine",
+      "Alcohol",
+      "Oil"
+    ],
+    "explanation": "Tincture of iodine is iodine (solute) dissolved in alcohol (solvent)."
+  },
+  {
+    "id": 99,
+    "question": "What happens when you add more and more solute to a fixed amount of solvent?",
+    "options": [
+      "The solution becomes more dilute",
+      "The solution becomes more concentrated",
+      "The solvent evaporates",
+      "The solute disappears"
+    ],
+    "explanation": "Adding more solute increases its ratio to the solvent, making the solution more concentrated."
+  },
+  {
+    "id": 101,
+    "question": "Which of the following is an example of a uniform (homogeneous) mixture?",
+    "options": [
+      "Chalk powder in water",
+      "Salt in water",
+      "Sand in water",
+      "Sawdust in water"
+    ],
+    "explanation": "A uniform mixture is one where components are evenly distributed throughout. Salt dissolves completely in water to form such a mixture."
+  },
+  {
+    "id": 102,
+    "question": "In a solution of sugar and water, sugar is the __________ and water is the __________.",
+    "options": [
+      "Solvent, Solute",
+      "Solute, Solvent",
+      "Solute, Solution",
+      "Solvent, Mixture"
+    ],
+    "explanation": "The substance being dissolved is the solute (sugar), and the substance that does the dissolving is the solvent (water)."
+  },
+  {
+    "id": 103,
+    "question": "Water is often called a 'Universal Solvent' because:",
+    "options": [
+      "It is found everywhere on Earth",
+      "It can dissolve a large variety of substances",
+      "It is used in all industrial processes",
+      "It is tasteless and odourless"
+    ],
+    "explanation": "Water has a unique ability to dissolve more substances than any other liquid, earning it the title of universal solvent."
+  },
+  {
+    "id": 104,
+    "question": "A solution in which no more solute can be dissolved at a given temperature is called a/an:",
+    "options": [
+      "Unsaturated solution",
+      "Dilute solution",
+      "Saturated solution",
+      "Concentrated solution"
+    ],
+    "explanation": "When a solvent has dissolved the maximum amount of solute possible at a specific temperature, it becomes saturated."
+  },
+  {
+    "id": 105,
+    "question": "What happens to the solubility of sugar in water if the temperature of the water is increased?",
+    "options": [
+      "It decreases",
+      "It increases",
+      "It remains the same",
+      "The sugar stops dissolving"
+    ],
+    "explanation": "Generally, increasing the temperature increases the solubility of solid solutes like sugar in a liquid solvent."
+  },
+  {
+    "id": 106,
+    "question": "Which of the following describes a 'dilute' solution?",
+    "options": [
+      "A solution with very little solute",
+      "A solution with a lot of solute",
+      "A solution that cannot dissolve more solute",
+      "A mixture of oil and water"
+    ],
+    "explanation": "A dilute solution contains a small amount of solute relative to the amount of solvent."
+  },
+  {
+    "id": 108,
+    "question": "Why do aquatic animals like fish survive in ponds and rivers?",
+    "options": [
+      "They breathe water directly",
+      "Oxygen from the air dissolves in the water",
+      "They produce their own oxygen",
+      "Water is made of oxygen atoms"
+    ],
+    "explanation": "Gases like oxygen dissolve in water, which aquatic animals use for respiration."
+  },
+  {
+    "id": 110,
+    "question": "Carbonated drinks (soda) are examples of:",
+    "options": [
+      "Solid in liquid solution",
+      "Gas in liquid solution",
+      "Liquid in liquid solution",
+      "Gas in gas solution"
+    ],
+    "explanation": "Carbon dioxide gas is dissolved in the liquid drink under pressure."
+  },
+  {
+    "id": 111,
+    "question": "Which factor does NOT affect how fast a solid solute dissolves in a liquid?",
+    "options": [
+      "Stirring the mixture",
+      "Temperature of the solvent",
+      "Size of the solute particles",
+      "The shape of the container"
+    ],
+    "explanation": "While stirring, heat, and particle size (crushing) affect the rate of dissolution, the container's shape does not."
+  },
+  {
+    "id": 112,
+    "question": "If you have a saturated solution of salt, how can you make it unsaturated without adding more water?",
+    "options": [
+      "By cooling it",
+      "By heating it",
+      "By stirring it faster",
+      "By adding more salt"
+    ],
+    "explanation": "Heating increases solubility, allowing the solution to hold more solute, thus making it temporarily unsaturated."
+  },
+  {
+    "id": 113,
+    "question": "Soft drinks fizz when opened because:",
+    "options": [
+      "The liquid evaporates",
+      "The pressure decreases, reducing gas solubility",
+      "The temperature increases",
+      "The liquid reacts with air"
+    ],
+    "explanation": "Gases are more soluble at high pressure. Opening the bottle drops the pressure, causing the dissolved CO2 to escape."
+  },
+  {
+    "id": 114,
+    "question": "What is 'solubility'?",
+    "options": [
+      "The total volume of a solution",
+      "The speed at which a solute dissolves",
+      "The maximum amount of solute that can dissolve in a specific amount of solvent at a certain temperature",
+      "The ability of a liquid to flow"
+    ],
+    "explanation": "Solubility is the measure of how much solute can be held by a solvent under specific conditions."
+  },
+  {
+    "id": 117,
+    "question": "When sugar is dissolved in water, the volume of the water does not increase significantly because:",
+    "options": [
+      "Sugar is lighter than water",
+      "Sugar particles fit into the empty spaces between water molecules",
+      "Sugar turns into water",
+      "The water evaporates"
+    ],
+    "explanation": "Liquid molecules have small spaces between them; dissolved solute particles occupy these spaces."
+  },
+  {
+    "id": 119,
+    "question": "How can you separate a mixture of sand and salt?",
+    "options": [
+      "By evaporation directly",
+      "Dissolve in water, filter the sand, then evaporate the water",
+      "Use a magnet",
+      "By sieving"
+    ],
+    "explanation": "Salt is soluble in water but sand is not. Dissolving allows you to filter the sand and then recover salt by evaporation."
+  },
+  {
+    "id": 120,
+    "question": "The components of an Oral Rehydration Solution (ORS) are:",
+    "options": [
+      "Sugar, sand, and water",
+      "Salt, chalk, and water",
+      "Sugar, salt, and water",
+      "Only sugar and water"
+    ],
+    "explanation": "ORS is a uniform mixture of sugar and salt in water used to treat dehydration."
+  },
+  {
+    "id": 121,
+    "question": "Why is it easier to dissolve sugar in hot milk than in cold milk?",
+    "options": [
+      "Hot milk is thinner",
+      "High temperature increases the rate of dissolving",
+      "Cold milk reacts with sugar",
+      "Sugar evaporates in hot milk"
+    ],
+    "explanation": "Heating the solvent increases the kinetic energy and solubility, making the solute dissolve faster and in greater amounts."
+  },
+  {
+    "id": 122,
+    "question": "Which of the following is NOT a property of a true solution?",
+    "options": [
+      "It is uniform throughout",
+      "The solute particles can be seen with a naked eye",
+      "The solute does not settle down over time",
+      "It can pass through a filter paper"
+    ],
+    "explanation": "In a true solution, particles are so small they are invisible to the eye and do not settle."
+  },
+  {
+    "id": 123,
+    "question": "Tincture of iodine is a solution used as an antiseptic. What is the solvent in it?",
+    "options": [
+      "Water",
+      "Iodine",
+      "Alcohol",
+      "Oil"
+    ],
+    "explanation": "Tincture of iodine is iodine (solute) dissolved in alcohol (solvent)."
+  },
+  {
+    "id": 124,
+    "question": "What happens when you add more and more solute to a fixed amount of solvent?",
+    "options": [
+      "The solution becomes more dilute",
+      "The solution becomes more concentrated",
+      "The solvent evaporates",
+      "The solute disappears"
+    ],
+    "explanation": "Adding more solute increases its ratio to the solvent, making the solution more concentrated."
+  }
+]

@@ -32,6 +32,7 @@ export async function getLeaderboardData(classStandard?: number) {
             leaderboard: [],
             currentUser: null,
             userRank: null,
+            hasError: true
         }
     }
 

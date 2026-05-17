@@ -9,9 +9,10 @@ interface MCQQuestionProps {
     onAnswer: (answer: string, correct: boolean) => void
     answered: boolean
     selectedAnswer: string | null
+    disabled?: boolean
 }
 
-export function MCQQuestion({ question, onAnswer, answered, selectedAnswer }: MCQQuestionProps) {
+export function MCQQuestion({ question, onAnswer, answered, selectedAnswer, disabled }: MCQQuestionProps) {
     const [hoveredOption, setHoveredOption] = useState<string | null>(null)
 
     // Shuffle options once per question using Fisher-Yates algorithm
@@ -35,7 +36,7 @@ export function MCQQuestion({ question, onAnswer, answered, selectedAnswer }: MC
     })
 
     const handleOptionClick = (optionId: string, isCorrect: boolean) => {
-        if (answered) return
+        if (answered || disabled) return
         onAnswer(optionId, isCorrect)
     }
 
@@ -97,13 +98,13 @@ export function MCQQuestion({ question, onAnswer, answered, selectedAnswer }: MC
                     <button
                         key={option.id}
                         onClick={() => handleOptionClick(option.id, option.is_correct)}
-                        onMouseEnter={() => !answered && setHoveredOption(option.id)}
+                        onMouseEnter={() => !answered && !disabled && setHoveredOption(option.id)}
                         onMouseLeave={() => setHoveredOption(null)}
-                        disabled={answered}
+                        disabled={answered || disabled}
                         className={`w-full p-5 rounded-2xl border-2 text-left transition-all transform ${getOptionStyle(
                             option.id,
                             option.is_correct
-                        )} ${!answered ? 'cursor-pointer' : 'cursor-default'}`}
+                        )} ${!answered && !disabled ? 'cursor-pointer' : 'cursor-default opacity-60'}`}
                         style={{ minHeight: 'var(--touch-target-min)' }}
                     >
                         <div className="flex items-center gap-3">

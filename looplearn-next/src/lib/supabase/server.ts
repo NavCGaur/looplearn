@@ -38,18 +38,23 @@ export async function createClient() {
  */
 export async function getUser() {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    try {
+        const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user) {
+        if (!user) {
+            return null
+        }
+
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single()
+
+        return { user, profile }
+    } catch (error) {
+        console.error('Error getting user:', error)
         return null
     }
-
-    const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-
-    return { user, profile }
 }
 

@@ -60,6 +60,7 @@ async function verify() {
         if (optCount > 0) console.log(`  -> ${optCount} Options`);
         if (ansCount > 0) console.log(`  -> ${ansCount} FillBlank Answers`);
     }
+    console.log(`\nFINAL CHECK: Total Questions = ${count}`);
 }
 
 verify();

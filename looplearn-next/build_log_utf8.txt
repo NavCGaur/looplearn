@@ -1,0 +1,123 @@
+﻿
+> looplearn-next@0.1.0 build
+> next build
+
+npm : ΓÜá Warning: Next.js inferred your workspace 
+root, but it may not be correct.
+At line:1 char:1
++ npm run build > build_log.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ΓÜá W 
+   arning: Ne...not be correct.:String) [], Remot  
+  eException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ We detected multiple lockfiles and selected the 
+directory of 
+C:\Users\verti\NewLoopLearn\package-lock.json as 
+the root directory.
+ To silence this warning, set `turbopack.root` in 
+your Next.js config, or consider removing one of 
+the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/co
+nfig/next-config-js/turbopack#root-directory for 
+more information.
+ Detected additional lockfiles: 
+   * C:\Users\verti\NewLoopLearn\looplearn-next\pac
+kage-lock.json
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Turbopack build encountered 3 warnings:
+[next]/internal/font/google/fredoka_148bb32f.module
+.css
+Error while requesting resource
+There was an issue establishing a connection while 
+requesting https://fonts.googleapis.com/css2?family
+=Fredoka:wght@300;400;500;600;700&display=swap
+
+Import trace:
+  Server Component:
+    [next]/internal/font/google/fredoka_148bb32f.mo
+dule.css
+    [next]/internal/font/google/fredoka_148bb32f.js
+    ./looplearn-next/src/app/layout.tsx
+
+
+[next]/internal/font/google/geist_a71539c9.module.c
+ss
+Error while requesting resource
+There was an issue establishing a connection while 
+requesting https://fonts.googleapis.com/css2?family
+=Geist:wght@100..900&display=swap
+
+Import trace:
+  Server Component:
+    [next]/internal/font/google/geist_a71539c9.modu
+le.css
+    [next]/internal/font/google/geist_a71539c9.js
+    ./looplearn-next/src/app/layout.tsx
+
+
+[next]/internal/font/google/geist_mono_8d43a2aa.mod
+ule.css
+Error while requesting resource
+There was an issue establishing a connection while 
+requesting https://fonts.googleapis.com/css2?family
+=Geist+Mono:wght@100..900&display=swap
+
+Import trace:
+  Server Component:
+    [next]/internal/font/google/geist_mono_8d43a2aa
+.module.css
+    
+[next]/internal/font/google/geist_mono_8d43a2aa.js
+    ./looplearn-next/src/app/layout.tsx
+
+
+
+> Build error occurred
+Error: Turbopack build failed with 3 errors:
+[next]/internal/font/google/fredoka_148bb32f.module
+.css
+next/font: error:
+Failed to fetch `Fredoka` from Google Fonts.
+
+Import trace:
+  Server Component:
+    [next]/internal/font/google/fredoka_148bb32f.mo
+dule.css
+    [next]/internal/font/google/fredoka_148bb32f.js
+    ./looplearn-next/src/app/layout.tsx
+
+
+[next]/internal/font/google/geist_a71539c9.module.c
+ss
+next/font: error:
+Failed to fetch `Geist` from Google Fonts.
+
+Import trace:
+  Server Component:
+    [next]/internal/font/google/geist_a71539c9.modu
+le.css
+    [next]/internal/font/google/geist_a71539c9.js
+    ./looplearn-next/src/app/layout.tsx
+
+
+[next]/internal/font/google/geist_mono_8d43a2aa.mod
+ule.css
+next/font: error:
+Failed to fetch `Geist Mono` from Google Fonts.
+
+Import trace:
+  Server Component:
+    [next]/internal/font/google/geist_mono_8d43a2aa
+.module.css
+    
+[next]/internal/font/google/geist_mono_8d43a2aa.js
+    ./looplearn-next/src/app/layout.tsx
+
+
+    at ignore-listed frames

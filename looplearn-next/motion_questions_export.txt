@@ -1,0 +1,345 @@
+# Motion (Class 9) Questions
+
+Q1: Newton's ___ law states that every action has an equal and opposite reaction
+Answer: __________
+
+Q2: Which has more inertia: a rubber ball or a stone of the same size?
+A) Rubber ball
+B) Stone
+C) Both have equal inertia
+D) Cannot be determined
+
+Q3: Which has more inertia: a bicycle or a train?
+A) Bicycle
+B) Train
+C) Both have equal inertia
+D) Depends on speed
+
+Q4: Inertia of an object depends on its:
+A) Speed
+B) Mass
+C) Shape
+D) Color
+
+Q5: Why do leaves fall off when we vigorously shake a tree branch?
+A) Wind blows them away
+B) Inertia of leaves resists branch motion
+C) Gravity pulls them down
+D) Leaves are already dead
+
+Q6: Why do you fall forward when a moving bus suddenly stops?
+A) Bus pushes you forward
+B) Inertia keeps your body moving forward
+C) Gravity pulls you forward
+D) Air resistance pushes you
+
+Q7: Why do you fall backward when a bus starts moving from rest?
+A) Bus pulls you backward
+B) Inertia keeps your body at rest while bus moves
+C) Air pushes you back
+D) Seat belt pulls you back
+
+Q8: How can a horse pull a cart if action and reaction are equal and opposite?
+A) Newton's third law doesn't apply here
+B) Ground pushes horse forward in reaction to horse pushing ground back
+C) Horse is stronger than the cart
+D) Cart helps push the horse
+
+Q9: Why is it difficult for a fireman to hold a hose ejecting water at high velocity?
+A) Water is too heavy
+B) Reaction force pushes hose backward
+C) Hose is slippery
+D) Fireman is tired
+
+Q10: When a carpet is beaten with a stick, why does dust come out?
+A) Stick breaks the dust particles
+B) Inertia of dust resists carpet's motion
+C) Wind blows dust away
+D) Gravity pulls dust down
+
+Q11: Why should luggage on a bus roof be tied with a rope?
+A) To prevent theft
+B) Inertia can make it fall during sudden motion changes
+C) Wind will blow it away
+D) Rain will damage it
+
+Q12: A cricket ball rolling on level ground slows down and stops. Why?
+A) Batsman didn't hit hard enough
+B) Force of friction opposes the motion
+C) Ball naturally wants to stop
+D) Gravity pulls it down
+
+Q13: What is momentum?
+A) Mass × acceleration
+B) Mass × velocity
+C) ½ × mass × velocity²
+D) Force × time
+
+Q14: According to Newton's first law of motion, an object will continue in its state of rest or uniform motion unless:
+A) It gets tired
+B) An unbalanced external force acts on it
+C) Time passes
+D) It wants to stop
+
+Q15: Newton's second law of motion can be expressed as:
+A) F = m/a
+B) F = ma
+C) F = m + a
+D) F = m - a
+
+Q16: Newton's third law of motion states:
+A) Force equals mass times acceleration
+B) For every action, there's equal and opposite reaction
+C) Objects remain at rest or in motion
+D) Momentum is conserved
+
+Q17: What is the SI unit of momentum?
+A) Newton (N)
+B) kg·m/s
+C) Joule (J)
+D) kg·m/s²
+
+Q18: The law of conservation of momentum states that:
+A) Momentum always increases
+B) Total momentum remains constant in absence of external force
+C) Momentum is always zero
+D) Faster objects have less momentum
+
+Q19: If two objects collide and stick together, what happens to their total momentum?
+A) It doubles
+B) It remains the same
+C) It becomes zero
+D) It is lost as heat
+
+Q20: A truck and a car are moving with the same velocity. Which has more momentum?
+A) Car
+B) Truck
+C) Both have equal momentum
+D) Cannot be determined
+
+Q21: When you push a wall, it doesn't move. According to Newton's third law, does the wall push back?
+A) True
+B) False
+
+Q22: If a moving cabinet requires 200 N force to move at constant velocity, what is the friction force?
+A) 0 N
+B) 200 N
+C) 100 N
+D) 400 N
+
+Q23: Two objects of equal mass move in opposite directions with equal speed and collide, sticking together. What is their velocity after collision?
+A) Double the original speed
+B) Zero (they come to rest)
+C) Same as original speed
+D) Half the original speed
+
+Q24: Why doesn't a massive parked truck move when you push it with small force?
+A) Newton's third law doesn't apply
+B) Static friction cancels your applied force
+C) Truck is too heavy to move
+D) You're pushing in wrong direction
+
+Q25: What is the relationship between force and momentum?
+A) Force equals momentum
+B) Force is rate of change of momentum
+C) Force is square of momentum
+D) Force and momentum are unrelated
+
+Q26: A particle moves in a circular path of radius r. What is the displacement after half a circle?
+A) Zero
+B) πr
+C) 2r
+D) 2πr
+
+Q27: A body is thrown vertically upward with velocity u. The greatest height h it will reach is:
+A) u/g
+B) u²/2g
+C) u²/g
+D) u/2g
+
+Q28: The numerical ratio of displacement to distance for a moving object is:
+A) Always less than 1
+B) Always equal to 1
+C) Always more than 1
+D) Equal to or less than 1
+
+Q29: If displacement of an object is proportional to square of time (s ∝ t²), the object moves with:
+A) Uniform velocity
+B) Uniform acceleration
+C) Increasing acceleration
+D) Decreasing acceleration
+
+Q30: A horizontal line in a velocity-time (v-t) graph indicates:
+A) Uniform motion
+B) Object at rest
+C) Non-uniform motion
+D) Uniform acceleration
+
+Q31: A boy on a merry-go-round moving at constant speed of 10 m/s is:
+A) At rest
+B) Moving with no acceleration
+C) In accelerated motion
+D) Moving with uniform velocity
+
+Q32: Area under a velocity-time (v-t) graph represents:
+A) Displacement
+B) Velocity
+C) Acceleration
+D) Time
+
+Q33: Slope of a velocity-time graph gives:
+Answer: __________
+
+Q34: In which case are distance moved and magnitude of displacement equal?
+A) Car moving on a straight road
+B) Car moving in circular path
+C) Pendulum moving to and fro
+D) Earth revolving around Sun
+
+Q35: Can displacement be zero even if distance traveled is not zero?
+A) True
+B) False
+
+Q36: An object moving with uniform velocity has:
+A) Zero acceleration
+B) Constant acceleration
+C) Variable acceleration
+D) Negative acceleration
+
+Q37: A car accelerates from rest at 5 m/s² for 8 seconds. What is its final velocity?
+A) 13 m/s
+B) 40 m/s
+C) 5 m/s
+D) 160 m/s
+
+Q38: A motorcyclist goes from A to B at 30 km/h and returns at 20 km/h. Average speed is:
+A) 25 km/h
+B) 24 km/h
+C) 20 km/h
+D) 30 km/h
+
+Q39: A cyclist moves at constant velocity of 20 m/s. What is the acceleration?
+Answer: __________
+
+Q40: Two objects dropped from heights 150m and 100m simultaneously. After 2s, what is the difference in heights?
+A) 50 m
+B) 30 m
+C) 20 m
+D) 0 m
+
+Q41: What does a steeper slope in a distance-time graph indicate?
+A) Higher speed
+B) Lower speed
+C) Object at rest
+D) Negative velocity
+
+Q42: A stone thrown vertically upward reaches maximum height then falls down. At maximum height:
+A) Velocity is zero
+B) Acceleration is zero
+C) Both velocity and acceleration are zero
+D) Velocity is maximum
+
+Q43: Retardation means:
+A) Negative acceleration (slowing down)
+B) Positive acceleration (speeding up)
+C) Zero acceleration
+D) Constant velocity
+
+Q44: Which equation of motion does NOT contain acceleration 'a'?
+A) v = u + at
+B) s = ut + ½at²
+C) v² = u² + 2as
+D) All equations contain 'a'
+
+Q45: If the initial velocity u = 0, the equation for distance: s = ½at²?
+A) True
+B) False
+
+Q46: Distance traveled in nth second for object starting from rest is proportional to:
+A) n
+B) (2n - 1)
+C) n²
+D) 2n
+
+Q47: What does the area under a distance-time graph represent?
+A) Has no physical significance
+B) Displacement
+C) Velocity
+D) Acceleration
+
+Q48: An object completes one full circle. What is its displacement?
+Answer: __________
+
+Q49: Odometer in a vehicle measures:
+A) Distance
+B) Displacement
+C) Speed
+D) Acceleration
+
+Q50: Speedometer in a vehicle measures:
+A) Instantaneous speed
+B) Average speed
+C) Velocity
+D) Distance
+
+Q51: An object starts from rest and travels 20m in 2s. Its acceleration is:
+A) 5 m/s²
+B) 10 m/s²
+C) 20 m/s²
+D) 40 m/s²
+
+
+
+# Answer Key
+
+Q1: third
+Q2: B (Stone)
+Q3: B (Train)
+Q4: B (Mass)
+Q5: B (Inertia of leaves resists branch motion)
+Q6: B (Inertia keeps your body moving forward)
+Q7: B (Inertia keeps your body at rest while bus moves)
+Q8: B (Ground pushes horse forward in reaction to horse pushing ground back)
+Q9: B (Reaction force pushes hose backward)
+Q10: B (Inertia of dust resists carpet's motion)
+Q11: B (Inertia can make it fall during sudden motion changes)
+Q12: B (Force of friction opposes the motion)
+Q13: B (Mass × velocity)
+Q14: B (An unbalanced external force acts on it)
+Q15: B (F = ma)
+Q16: B (For every action, there's equal and opposite reaction)
+Q17: B (kg·m/s)
+Q18: B (Total momentum remains constant in absence of external force)
+Q19: B (It remains the same)
+Q20: B (Truck)
+Q21: A (True)
+Q22: B (200 N)
+Q23: B (Zero (they come to rest))
+Q24: B (Static friction cancels your applied force)
+Q25: B (Force is rate of change of momentum)
+Q26: C (2r)
+Q27: B (u²/2g)
+Q28: D (Equal to or less than 1)
+Q29: B (Uniform acceleration)
+Q30: A (Uniform motion)
+Q31: C (In accelerated motion)
+Q32: A (Displacement)
+Q33: acceleration
+Q34: A (Car moving on a straight road)
+Q35: A (True)
+Q36: A (Zero acceleration)
+Q37: B (40 m/s)
+Q38: B (24 km/h)
+Q39: 0
+Q40: A (50 m)
+Q41: A (Higher speed)
+Q42: A (Velocity is zero)
+Q43: A (Negative acceleration (slowing down))
+Q44: D (All equations contain 'a')
+Q45: A (True)
+Q46: B ((2n - 1))
+Q47: A (Has no physical significance)
+Q48: 0
+Q49: A (Distance)
+Q50: A (Instantaneous speed)
+Q51: B (10 m/s²)

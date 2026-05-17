@@ -1,0 +1,3704 @@
+{
+    "questions": [
+        {
+            "question_text": "Pressure is defined as the force acting per unit ________ of a surface.",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Pressure is the ratio of force to the area over which it is applied (P = F/A).",
+            "options": [
+                {
+                    "option_text": "Volume",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Area",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Length",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Mass",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Why do school bags often have wide straps instead of thin strings?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "A larger area (wide straps) reduces the pressure exerted by the weight of the bag on the shoulders, making it more comfortable to carry.",
+            "options": [
+                {
+                    "option_text": "To increase the force",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "To decrease the pressure on shoulders",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "To make the bag look bigger",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "To increase the pressure",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following statements about air pressure is correct?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Air particles move in all directions and collide with surfaces, exerting pressure equally in all directions.",
+            "options": [
+                {
+                    "option_text": "Air exerts pressure only downwards",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Air exerts pressure in all directions",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Air pressure increases with altitude",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Air pressure is highest at the top of a mountain",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What happens to the pressure of air when its speed increases?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "According to Bernoulli's principle, an increase in the speed of a fluid (like air) is accompanied by a decrease in pressure.",
+            "options": [
+                {
+                    "option_text": "Pressure increases",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Pressure remains same",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Pressure decreases",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Pressure becomes zero",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "High-speed winds blowing over the roof of a hut can lift the roof because:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Fast wind over the roof reduces pressure above it. The higher pressure inside the hut then pushes the roof upwards.",
+            "options": [
+                {
+                    "option_text": "High speed increases air pressure on top",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "High speed creates low pressure on top",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The roof becomes lighter",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The wind pushes the roof down",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Air moves from a region of __________ pressure to a region of __________ pressure.",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "The difference in air pressure causes air to flow from areas where it is more concentrated (high pressure) to where it is less concentrated (low pressure).",
+            "options": [
+                {
+                    "option_text": "Low, High",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "High, Low",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Low, Zero",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "High, High",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "On heating, air __________ and becomes __________.",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "When air is heated, its particles move faster and spread out (expand), making it less dense and lighter than cold air.",
+            "options": [
+                {
+                    "option_text": "Contracts, Heavier",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Expands, Lighter",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Expands, Heavier",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Contracts, Lighter",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which instrument is used to measure wind speed?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "An anemometer is a device used for measuring the speed and direction of the wind.",
+            "options": [
+                {
+                    "option_text": "Barometer",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Thermometer",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Anemometer",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Manometer",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "A balloon expands when we blow air into it because:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Adding more air particles increases collisions with the inner walls, creating internal pressure that stretches the balloon.",
+            "options": [
+                {
+                    "option_text": "The rubber becomes thin",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Air inside exerts pressure on the walls",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The temperature inside rises",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The air outside pushes it",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What is the primary cause of wind circulation on Earth?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Uneven heating between the equator and poles, and between land and water, creates pressure differences that drive wind.",
+            "options": [
+                {
+                    "option_text": "Earth's gravity",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Uneven heating of the Earth by the Sun",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The Moon's phases",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The depth of the oceans",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "During the day in coastal areas, wind usually blows from:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Land heats up faster than water; the hot air over land rises, creating low pressure that draws in cooler air from the sea (Sea Breeze).",
+            "options": [
+                {
+                    "option_text": "Land to Sea",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sea to Land",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "South to North",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Mountains to Plains",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following is a characteristic of a thunderstorm?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Thunderstorms develop in hot, humid tropical areas where rising warm air carries water droplets that freeze and fall, creating lightning and sound.",
+            "options": [
+                {
+                    "option_text": "Calm winds and bright sun",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Heavy rain, lightning, and thunder",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Snowfall without wind",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "A dry heatwave",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The center of a cyclone is a calm area called the:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "The 'eye' of a cyclone is a low-pressure area with very light winds and clear skies, surrounded by high-speed rotating winds.",
+            "options": [
+                {
+                    "option_text": "Head",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Tail",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Eye",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Core",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Cyclones are known as __________ in the American continent.",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "While they are the same weather phenomenon, they are called Hurricanes in the Atlantic and Typhoons in the Pacific.",
+            "options": [
+                {
+                    "option_text": "Typhoons",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Hurricanes",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Tornadoes",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Cyclones",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "A dark funnel-shaped cloud that reaches from the sky to the ground is a:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Tornadoes are violent, rotating columns of air that descend from thunderstorms to the ground.",
+            "options": [
+                {
+                    "option_text": "Monsoon",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Cyclone",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Tornado",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Thunderstorm",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Why are holes made in banners and hoardings hanging in the open?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Holes allow air to pass through the banner, reducing the force/pressure exerted by the wind so the banner doesn't tear or fall.",
+            "options": [
+                {
+                    "option_text": "To make them look decorative",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "To let light pass through",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "To reduce the air pressure exerted by the wind",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "To save material",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "If you blow air between two hanging balloons, they will:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Blowing air between them creates a region of low pressure; the higher pressure on the outside pushes the balloons toward each other.",
+            "options": [
+                {
+                    "option_text": "Move away from each other",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Move towards each other",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Stay stationary",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Burst immediately",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Thunder is caused by:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Lightning heats the surrounding air so fast that it expands explosively, creating the sound wave we call thunder.",
+            "options": [
+                {
+                    "option_text": "Clouds hitting each other",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The rapid expansion of air heated by lightning",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Rain falling on the ground",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Wind blowing through trees",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "During a thunderstorm, it is safest to take shelter in:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Buildings and cars (acting as Faraday cages) protect you from lightning, whereas tall objects or open spaces increase risk.",
+            "options": [
+                {
+                    "option_text": "An open field",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Under a tall isolated tree",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Inside a car or a building",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Under an umbrella with a metal handle",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The 'Standard Unit' (SI) of pressure is:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "One Pascal (Pa) is equal to one Newton per square meter (N/m²).",
+            "options": [
+                {
+                    "option_text": "Newton",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Pascal",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Joule",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Watt",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What is the direction of wind during the 'Winter Monsoon' in India?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "In winter, land cools faster than the sea. High pressure over land pushes dry winds toward the low pressure over the sea.",
+            "options": [
+                {
+                    "option_text": "Sea to Land",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Land to Sea",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "South to North",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "West to East",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "If a force of 100 N is applied to an area of 2 m², the pressure is:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Pressure = Force / Area = 100 N / 2 m² = 50 Pa.",
+            "options": [
+                {
+                    "option_text": "200 Pa",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "50 Pa",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "100 Pa",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "25 Pa",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What provides the energy for the formation of a cyclone?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "When water vapor changes back to liquid (rain), it releases heat into the atmosphere, which warms the air and fuels the cyclone's rotation.",
+            "options": [
+                {
+                    "option_text": "The Earth's rotation",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Heat released when water vapor condenses into rain",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The friction of wind on land",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Magnetic fields",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which coast of India is more vulnerable to cyclones?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "The East Coast (Bay of Bengal) is generally more prone to frequent and intense cyclones compared to the West Coast.",
+            "options": [
+                {
+                    "option_text": "West Coast",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "East Coast",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Northern Coast",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Western Ghats",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "A person standing in the 'Eye' of a cyclone would experience:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Pressure, Winds, Storms, and Cyclones",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "The eye is a low-pressure region of sinking air, which suppresses cloud formation and wind, creating a brief 'calm before the storm' effect.",
+            "options": [
+                {
+                    "option_text": "Violent winds and heavy rain",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Calm weather and clear sky",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Freezing temperatures",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Dust storms",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following is the fundamental idea of the particulate nature of matter?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Matter is not a continuous block; it is composed of very small particles with spaces between them.",
+            "options": [
+                {
+                    "option_text": "Matter is continuous like a sheet of glass",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Matter is made up of tiny, discrete particles",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Matter is only made of air and water",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Matter has no empty spaces",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "In which state of matter are the particles packed most closely together in a fixed, regular pattern?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "In solids, particles are closely packed with very strong forces of attraction, giving them a fixed shape.",
+            "options": [
+                {
+                    "option_text": "Liquid",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Gas",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Solid",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Plasma",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What happens to the movement of particles when the temperature of a substance increases?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Increasing temperature adds energy to the particles, causing them to move or vibrate more rapidly.",
+            "options": [
+                {
+                    "option_text": "Particles stop moving",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Particles move slower",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Particles move faster",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Particles become larger",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The smell of hot sizzling food reaches you several metres away, but to get the smell from cold food you have to go close. This is due to:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Diffusion is the intermixing of particles. At higher temperatures, particles move faster and diffuse more quickly into the air.",
+            "options": [
+                {
+                    "option_text": "Evaporation",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Diffusion",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Condensation",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sublimation",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which state of matter is highly compressible?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Gases have large spaces between particles, allowing them to be easily pushed closer together under pressure.",
+            "options": [
+                {
+                    "option_text": "Solid",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Liquid",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Gas",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Metal",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "When a crystal of potassium permanganate is placed in water, the purple colour spreads throughout. This proves that:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "The spreading of color occurs because the particles of both the crystal and the water are in constant random motion.",
+            "options": [
+                {
+                    "option_text": "Water is purple",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Particles of matter are constantly moving",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Potassium permanganate is a liquid",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Water particles are stationary",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The force of attraction between particles is weakest in:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Oxygen is a gas. In gases, the forces of attraction between particles are negligible compared to liquids and solids.",
+            "options": [
+                {
+                    "option_text": "Oxygen",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Water",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Iron",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sugar",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following describes the 'Liquid' state?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Liquids take the shape of the container they are in, but their volume remains constant because particles stay close together.",
+            "options": [
+                {
+                    "option_text": "Fixed shape and fixed volume",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "No fixed shape but fixed volume",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Fixed shape but no fixed volume",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "No fixed shape and no fixed volume",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What occupies the 'empty space' between particles in a gas?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "The space between the fundamental particles of a pure substance is empty (void/vacuum).",
+            "options": [
+                {
+                    "option_text": "Air",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Nothing (Vacuum)",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Dust",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Energy",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Brownian motion describes:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Brownian motion is the random, irregular movement of small particles (like pollen or dust) suspended in a fluid, caused by collisions with molecules.",
+            "options": [
+                {
+                    "option_text": "The regular pattern of solids",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The zig-zag random motion of particles",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The freezing of water",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The weight of a gas",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "If you compress a gas in a syringe, what decreases?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Compression brings the particles closer together, thereby reducing the empty space between them.",
+            "options": [
+                {
+                    "option_text": "The mass of the particles",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The size of individual particles",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The space between particles",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The number of particles",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "A balloon expands when you blow air into it because:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Moving air particles collide with the inner walls of the balloon, exerting pressure that pushes the walls outward.",
+            "options": [
+                {
+                    "option_text": "Air particles take up space and collide with the walls",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Air particles are sticky",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The balloon gets lighter",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The air turns into a solid",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following cannot flow?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Wood is a solid. Particles in a solid are held in fixed positions and cannot slide over each other to flow.",
+            "options": [
+                {
+                    "option_text": "Water",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Honey",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Air",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Wood",
+                    "display_order": 4,
+                    "is_correct": true,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Two atoms of Hydrogen combine to form a stable particle called a:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "When atoms combine chemically, they form a molecule, which is the smallest unit of a substance that can exist independently.",
+            "options": [
+                {
+                    "option_text": "Proton",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Molecule",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Mixture",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Solution",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The interparticle distance is maximum in:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Water vapor is the gaseous state of water, where particles are farthest apart.",
+            "options": [
+                {
+                    "option_text": "Ice",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Water",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Water Vapor",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Mercury",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What happens when you dissolve sugar in water regarding the volume?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Sugar particles fit into the small spaces between water particles, so the total volume does not increase noticeably.",
+            "options": [
+                {
+                    "option_text": "Volume increases significantly",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Volume decreases",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Volume stays almost the same",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Water disappears",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Particles in a __________ only vibrate about their fixed positions.",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "In solids, the kinetic energy is low and forces are strong, so particles cannot move away from their fixed spots.",
+            "options": [
+                {
+                    "option_text": "Liquid",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Solid",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Gas",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Solution",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following is NOT an example of matter?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Matter must have mass and occupy space. A feeling is a sensation/emotion and does not consist of particles.",
+            "options": [
+                {
+                    "option_text": "Air",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Feeling of cold",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Raindrops",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sand",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "When we pour a liquid from a flask into a bowl, it changes its:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Liquids have a fixed volume but no fixed shape; they take the shape of the container.",
+            "options": [
+                {
+                    "option_text": "Volume",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Mass",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Shape",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Density",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The density of matter is generally highest in which state?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Because particles are most closely packed in solids, they usually have the most mass per unit volume.",
+            "options": [
+                {
+                    "option_text": "Solid",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Liquid",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Gas",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It is same for all",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "A diver is able to cut through water in a swimming pool. Which property of matter does this observation show?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "The ability to move through a substance indicates that there are spaces between its particles and the forces of attraction can be overcome.",
+            "options": [
+                {
+                    "option_text": "Particles of water are very large",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "There are spaces between particles of water",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Water has no mass",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Water particles have no attraction",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Diffusion occurs fastest in gases because:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Due to high speeds and large spaces between them, gas particles intermix with other particles very quickly.",
+            "options": [
+                {
+                    "option_text": "Gas particles are heavier",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Gas particles have low kinetic energy",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Gas particles move rapidly in all directions",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Gases have no particles",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following can be termed 'fluids'?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Fluids are substances that can flow. Both liquids and gases have this ability.",
+            "options": [
+                {
+                    "option_text": "Solids and Liquids",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Liquids and Gases",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Solids and Gases",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Only Liquids",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "If you put a drop of ink in a glass of water, it spreads without stirring. This process is:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Diffusion is the movement of particles from an area of higher concentration to lower concentration.",
+            "options": [
+                {
+                    "option_text": "Filtration",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sedimentation",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Diffusion",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Evaporation",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "In the 'Activity with the Syringe', why was it impossible to push the piston when it was filled with sand?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Particulate Nature of Matter",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Solids like sand have very little space between particles, making them nearly impossible to compress further.",
+            "options": [
+                {
+                    "option_text": "Sand is a gas",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sand particles are already very close (solids are incompressible)",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The syringe was broken",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sand has no particles",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following is the simplest form of matter that cannot be broken down into simpler substances by chemical means?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "An element is a pure substance made of only one kind of atom and cannot be split into simpler substances.",
+            "options": [
+                {
+                    "option_text": "Compound",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Mixture",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Element",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Solution",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "When two or more elements combine chemically in a fixed ratio, they form a:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "A compound is a substance formed when atoms of two or more elements bond together chemically in a definite proportion by mass.",
+            "options": [
+                {
+                    "option_text": "Mixture",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Compound",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Alloy",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Isotope",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of these is a characteristic of a mixture but NOT a compound?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Mixtures are physically combined, so their components can be separated using physical means like filtration or evaporation.",
+            "options": [
+                {
+                    "option_text": "Components are in a fixed ratio",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It has a new set of properties",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Components can be separated by physical methods",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It is always homogeneous",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The chemical formula for Common Salt is:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Common salt is the compound Sodium Chloride, represented by the formula NaCl.",
+            "options": [
+                {
+                    "option_text": "H2O",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "CO2",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "NaCl",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "C12H22O11",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following is an example of a homogeneous mixture?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "A homogeneous mixture has a uniform composition throughout; saltwater is a perfect example as the salt is evenly distributed.",
+            "options": [
+                {
+                    "option_text": "Saltwater solution",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Chalk in water",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Oil and water",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Iron filings and sulfur",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The symbol for the element Gold is:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Au comes from the Latin word 'Aurum', which means gold.",
+            "options": [
+                {
+                    "option_text": "Ag",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Au",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Fe",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Cu",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Water (H2O) is classified as a compound because:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Compounds have a fixed chemical composition and the elements involved are bonded together.",
+            "options": [
+                {
+                    "option_text": "It can be separated by filtration",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Hydrogen and Oxygen are chemically bonded in a 2:1 ratio",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It exists in three states: solid, liquid, and gas",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It is a mixture of two gases",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following mixtures can be separated using a magnet?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Iron is a magnetic material, so a magnet can easily pull iron filings out of a non-magnetic mixture like sand.",
+            "options": [
+                {
+                    "option_text": "Salt and Sugar",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sand and Water",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Iron filings and Sand",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sulfur and Charcoal",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Air is considered a mixture because:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Air contains various gases like Nitrogen, Oxygen, and CO2 that are not chemically bonded and whose proportions can change.",
+            "options": [
+                {
+                    "option_text": "It is colorless",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Its composition of gases can vary slightly",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It is necessary for breathing",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It contains only one type of molecule",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "When iron and sulfur are heated together to form iron sulfide, the product:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Iron sulfide is a compound; once formed, it loses the individual properties of its constituent elements.",
+            "options": [
+                {
+                    "option_text": "Retains the magnetic property of iron",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Can be separated by a magnet",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Has entirely different properties from iron and sulfur",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Is a yellow and black mixture",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The horizontal rows in a Periodic Table are called:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "The Periodic Table is arranged in horizontal rows called periods and vertical columns called groups.",
+            "options": [
+                {
+                    "option_text": "Groups",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Periods",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Columns",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Families",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of these is a noble gas?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Helium is a noble gas (Group 18) because it is very stable and rarely reacts with other elements.",
+            "options": [
+                {
+                    "option_text": "Oxygen",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Nitrogen",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Helium",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Chlorine",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "A mixture of oil and water is an example of a:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Oil and water do not mix uniformly and form visible separate layers, making it a heterogeneous mixture.",
+            "options": [
+                {
+                    "option_text": "Homogeneous mixture",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Heterogeneous mixture",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Pure substance",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Compound",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What is the smallest unit of a compound that maintains its chemical properties?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "A molecule is the smallest particle of a compound that has the chemical properties of that compound.",
+            "options": [
+                {
+                    "option_text": "Atom",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Electron",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Molecule",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Nucleus",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Brass is an alloy of Copper and Zinc. Brass is a:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Alloys like brass are mixtures because the metals are physically combined and can vary in proportions.",
+            "options": [
+                {
+                    "option_text": "Compound",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Solid solution (Mixture)",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Element",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Pure metal",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following is NOT matter?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Matter must have mass and occupy space. Light is a form of energy and does not have mass.",
+            "options": [
+                {
+                    "option_text": "Oxygen gas",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Water vapor",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Light",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Dust",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The elements in a compound are combined in a:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "According to the Law of Definite Proportions, a chemical compound always contains its component elements in fixed ratio.",
+            "options": [
+                {
+                    "option_text": "Random ratio",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Varying ratio",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Fixed ratio by mass",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Ratio of 1:1 always",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "If you stir sand into water, you create a:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Sand in water is a suspension, a type of heterogeneous mixture where particles settle down over time.",
+            "options": [
+                {
+                    "option_text": "Solution",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Compound",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Suspension",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Element",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which gas is used in advertising signs for its bright glow when electricity passes through it?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Neon is widely used in neon signs because it emits a bright reddish-orange glow.",
+            "options": [
+                {
+                    "option_text": "Hydrogen",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Nitrogen",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Neon",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Argon",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Pure gold is 24 carats. 22 carat gold is a:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "22 carat gold contains other metals like copper or silver to make it harder, making it a mixture (alloy).",
+            "options": [
+                {
+                    "option_text": "Pure element",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Compound",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Mixture",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Noble gas",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which scientist is famously associated with the development of the Periodic Table?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Mendeleev is known as the father of the Periodic Table for organizing elements based on their properties.",
+            "options": [
+                {
+                    "option_text": "Isaac Newton",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Dmitri Mendeleev",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Albert Einstein",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Antoine Lavoisier",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of these is a diatomic element (exists naturally as a molecule of two atoms)?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Oxygen naturally exists as O2, meaning two oxygen atoms are bonded together.",
+            "options": [
+                {
+                    "option_text": "Helium",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Carbon",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Oxygen",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Gold",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Distilled water is a/an:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Distilled water consists only of H2O molecules, making it a pure compound.",
+            "options": [
+                {
+                    "option_text": "Element",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Compound",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Homogeneous mixture",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Heterogeneous mixture",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The process of separating a solid from a liquid by pouring it through a porous material is called:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Filtration is a physical method used to separate insoluble solids from a liquid mixture.",
+            "options": [
+                {
+                    "option_text": "Evaporation",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Filtration",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Decantation",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Distillation",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What happens when sugar dissolves in water?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "Nature of Matter: Elements, Compounds, and Mixtures",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Sugar dissolving in water is a physical change that results in a homogeneous mixture (solution).",
+            "options": [
+                {
+                    "option_text": "A new compound is formed",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "A mixture is formed",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Water breaks down into elements",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sugar atoms disappear",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following is an example of a uniform (homogeneous) mixture?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "A uniform mixture is one where components are evenly distributed throughout. Salt dissolves completely in water to form such a mixture.",
+            "options": [
+                {
+                    "option_text": "Chalk powder in water",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Salt in water",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sand in water",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sawdust in water",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "In a solution of sugar and water, sugar is the __________ and water is the __________.",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "The substance being dissolved is the solute (sugar), and the substance that does the dissolving is the solvent (water).",
+            "options": [
+                {
+                    "option_text": "Solvent, Solute",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Solute, Solvent",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Solute, Solution",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Solvent, Mixture",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Water is often called a 'Universal Solvent' because:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Water has a unique ability to dissolve more substances than any other liquid, earning it the title of universal solvent.",
+            "options": [
+                {
+                    "option_text": "It is found everywhere on Earth",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It can dissolve a large variety of substances",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It is used in all industrial processes",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It is tasteless and odourless",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "A solution in which no more solute can be dissolved at a given temperature is called a/an:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "When a solvent has dissolved the maximum amount of solute possible at a specific temperature, it becomes saturated.",
+            "options": [
+                {
+                    "option_text": "Unsaturated solution",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Dilute solution",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Saturated solution",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Concentrated solution",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What happens to the solubility of sugar in water if the temperature of the water is increased?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Generally, increasing the temperature increases the solubility of solid solutes like sugar in a liquid solvent.",
+            "options": [
+                {
+                    "option_text": "It decreases",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It increases",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It remains the same",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The sugar stops dissolving",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following describes a 'dilute' solution?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "A dilute solution contains a small amount of solute relative to the amount of solvent.",
+            "options": [
+                {
+                    "option_text": "A solution with very little solute",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "A solution with a lot of solute",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "A solution that cannot dissolve more solute",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "A mixture of oil and water",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which process is used to recover salt from sea water?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Evaporation allows the water to turn into vapor, leaving behind the solid salt crystals.",
+            "options": [
+                {
+                    "option_text": "Filtration",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Decantation",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Evaporation",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Condensation",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Why do aquatic animals like fish survive in ponds and rivers?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Gases like oxygen dissolve in water, which aquatic animals use for respiration.",
+            "options": [
+                {
+                    "option_text": "They breathe water directly",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Oxygen from the air dissolves in the water",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "They produce their own oxygen",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Water is made of oxygen atoms",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What is the result of mixing two or more substances that do not chemically react?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "A mixture is formed when two or more substances are combined physically without a chemical reaction.",
+            "options": [
+                {
+                    "option_text": "A new element",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "A mixture",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "A compound",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "A solid",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Carbonated drinks (soda) are examples of:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Carbon dioxide gas is dissolved in the liquid drink under pressure.",
+            "options": [
+                {
+                    "option_text": "Solid in liquid solution",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Gas in liquid solution",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Liquid in liquid solution",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Gas in gas solution",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which factor does NOT affect how fast a solid solute dissolves in a liquid?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "While stirring, heat, and particle size (crushing) affect the rate of dissolution, the container's shape does not.",
+            "options": [
+                {
+                    "option_text": "Stirring the mixture",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Temperature of the solvent",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Size of the solute particles",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The shape of the container",
+                    "display_order": 4,
+                    "is_correct": true,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "If you have a saturated solution of salt, how can you make it unsaturated without adding more water?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Heating increases solubility, allowing the solution to hold more solute, thus making it temporarily unsaturated.",
+            "options": [
+                {
+                    "option_text": "By cooling it",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "By heating it",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "By stirring it faster",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "By adding more salt",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Soft drinks fizz when opened because:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Gases are more soluble at high pressure. Opening the bottle drops the pressure, causing the dissolved CO2 to escape.",
+            "options": [
+                {
+                    "option_text": "The liquid evaporates",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The pressure decreases, reducing gas solubility",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The temperature increases",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The liquid reacts with air",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What is 'solubility'?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Solubility is the measure of how much solute can be held by a solvent under specific conditions.",
+            "options": [
+                {
+                    "option_text": "The total volume of a solution",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The speed at which a solute dissolves",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The maximum amount of solute that can dissolve in a specific amount of solvent at a certain temperature",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The ability of a liquid to flow",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of these is a solution of a gas in a gas?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Air is a homogeneous mixture (solution) of various gases like nitrogen, oxygen, and others.",
+            "options": [
+                {
+                    "option_text": "Fog",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Air",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Soda water",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Smoke",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Small round cakes of salt in Ningel village are wrapped in:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "As mentioned in the 'Living Heritage' section, traditional salt cakes are shaped using banana leaves.",
+            "options": [
+                {
+                    "option_text": "Plastic sheets",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Banana leaves",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Aluminium foil",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Paper",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "When sugar is dissolved in water, the volume of the water does not increase significantly because:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Liquid molecules have small spaces between them; dissolved solute particles occupy these spaces.",
+            "options": [
+                {
+                    "option_text": "Sugar is lighter than water",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sugar particles fit into the empty spaces between water molecules",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sugar turns into water",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The water evaporates",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following will form a non-uniform (heterogeneous) mixture with water?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Oil and water do not mix and form distinct layers, creating a non-uniform mixture.",
+            "options": [
+                {
+                    "option_text": "Honey",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Lemon juice",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Oil",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Alcohol",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "How can you separate a mixture of sand and salt?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Salt is soluble in water but sand is not. Dissolving allows you to filter the sand and then recover salt by evaporation.",
+            "options": [
+                {
+                    "option_text": "By evaporation directly",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Dissolve in water, filter the sand, then evaporate the water",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Use a magnet",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "By sieving",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "The components of an Oral Rehydration Solution (ORS) are:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "ORS is a uniform mixture of sugar and salt in water used to treat dehydration.",
+            "options": [
+                {
+                    "option_text": "Sugar, sand, and water",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Salt, chalk, and water",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sugar, salt, and water",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Only sugar and water",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Why is it easier to dissolve sugar in hot milk than in cold milk?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Heating the solvent increases the kinetic energy and solubility, making the solute dissolve faster and in greater amounts.",
+            "options": [
+                {
+                    "option_text": "Hot milk is thinner",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "High temperature increases the rate of dissolving",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Cold milk reacts with sugar",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Sugar evaporates in hot milk",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Which of the following is NOT a property of a true solution?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "hard",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "In a true solution, particles are so small they are invisible to the eye and do not settle.",
+            "options": [
+                {
+                    "option_text": "It is uniform throughout",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The solute particles can be seen with a naked eye",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The solute does not settle down over time",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "It can pass through a filter paper",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "Tincture of iodine is a solution used as an antiseptic. What is the solvent in it?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Tincture of iodine is iodine (solute) dissolved in alcohol (solvent).",
+            "options": [
+                {
+                    "option_text": "Water",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Iodine",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Alcohol",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Oil",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "What happens when you add more and more solute to a fixed amount of solvent?",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Adding more solute increases its ratio to the solvent, making the solution more concentrated.",
+            "options": [
+                {
+                    "option_text": "The solution becomes more dilute",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The solution becomes more concentrated",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The solvent evaporates",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "The solute disappears",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        },
+        {
+            "question_text": "A solution of two or more metals, or a metal and a non-metal, is called a/an:",
+            "question_type": "mcq",
+            "class_standard": 8,
+            "subject": "science",
+            "chapter": "The Amazing World of Solutes, Solvents, and Solutions",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Alloys are solid-in-solid solutions, such as brass (zinc in copper).",
+            "options": [
+                {
+                    "option_text": "Amalgam",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Alloy",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Compound",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": ""
+                },
+                {
+                    "option_text": "Element",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": ""
+                }
+            ]
+        }
+    ]
+}

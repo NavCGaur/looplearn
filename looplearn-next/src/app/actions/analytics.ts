@@ -360,6 +360,7 @@ export async function getStudentActivityLogs(studentId: string) {
                 subject,
                 difficulty,
                 question_options (
+                    id,
                     option_text,
                     is_correct
                 ),
@@ -378,15 +379,25 @@ export async function getStudentActivityLogs(studentId: string) {
         return []
     }
 
+
     return logs.map(log => {
-        // Determine correct answer text
-        let correctAnswer = 'N/A'
         const q = log.questions as any
 
+        // Determine correct answer text and format given answer
+        let correctAnswer = 'N/A'
+        let formattedGivenAnswer = log.given_answer
+
         if (q) {
-            if (log.question_type === 'mcq' && q.question_options) {
+            if (['mcq', 'truefalse'].includes(log.question_type) && q.question_options) {
+                // Resolve correct answer
                 const correctOpt = q.question_options.find((o: any) => o.is_correct)
                 correctAnswer = correctOpt ? correctOpt.option_text : 'N/A'
+
+                // Resolve given answer from ID to Text if it's a UUID
+                const selectedOpt = q.question_options.find((o: any) => o.id === log.given_answer)
+                if (selectedOpt) {
+                    formattedGivenAnswer = selectedOpt.option_text
+                }
             } else if (log.question_type === 'fillblank' && q.fillblank_answers) {
                 const correctAns = q.fillblank_answers.find((a: any) => a.is_primary)
                 correctAnswer = correctAns ? correctAns.accepted_answer : (q.fillblank_answers[0]?.accepted_answer || 'N/A')
@@ -398,7 +409,7 @@ export async function getStudentActivityLogs(studentId: string) {
             questionText: q?.question_text || 'Unknown Question',
             subject: q?.subject || 'N/A',
             difficulty: q?.difficulty || 'N/A',
-            givenAnswer: log.given_answer,
+            givenAnswer: formattedGivenAnswer,
             correctAnswer,
             isCorrect: log.is_correct,
             timeTaken: log.time_taken_seconds,

@@ -8,7 +8,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Clock, CheckCircle2, XCircle, Activity } from 'lucide-react'
 import { getStudentActivityLogs } from '@/app/actions/analytics'
 
@@ -67,10 +66,11 @@ export function StudentActivityLog({ studentId, studentName }: StudentActivityLo
                     <DialogTitle className="flex items-center gap-2">
                         <Activity className="w-5 h-5 text-indigo-600" />
                         Activity Log: {studentName}
+                        {!loading && <span className="text-gray-500 text-sm font-normal">({logs.length} items)</span>}
                     </DialogTitle>
                 </DialogHeader>
 
-                <ScrollArea className="flex-1 pr-4">
+                <div className="flex-1 overflow-y-auto pr-4 min-h-0">
                     {loading ? (
                         <div className="flex justify-center p-8">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
@@ -138,7 +138,7 @@ export function StudentActivityLog({ studentId, studentName }: StudentActivityLo
                             ))}
                         </div>
                     )}
-                </ScrollArea>
+                </div>
             </DialogContent>
         </Dialog>
     )

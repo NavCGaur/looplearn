@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { getQuizMetadata } from "@/app/actions/quiz";
+import { startGuestSession } from "@/app/actions/guest";
 import { cn } from "@/lib/utils";
 
 // --- Components ---
@@ -127,6 +128,7 @@ const GuestAccessSection = () => {
     const [selectedClass, setSelectedClass] = useState<number | null>(null)
     const [selectedSubject, setSelectedSubject] = useState<string>('')
     const [selectedChapter, setSelectedChapter] = useState<string>('')
+    const [starting, setStarting] = useState(false)
 
     const [metadata, setMetadata] = useState<{
         classes: number[]
@@ -143,15 +145,32 @@ const GuestAccessSection = () => {
         loadMetadata()
     }, [])
 
-    const handleStartQuiz = () => {
-        if (!selectedClass || !selectedSubject || !selectedChapter) return
+    const handleStartQuiz = async () => {
+        if (!selectedClass || !selectedSubject || !selectedChapter || starting) return
 
+        console.log('[GuestAccess] Start quiz clicked', { selectedClass, selectedSubject, selectedChapter })
+        setStarting(true)
         const params = new URLSearchParams()
         params.set('class', selectedClass.toString())
         params.set('subject', selectedSubject)
         params.set('chapter', selectedChapter)
 
-        router.push(`/quiz?${params.toString()}`)
+        // Create guest session and pass ID via URL (cookies unreliable across client-side nav)
+        const result = await startGuestSession({
+            classStandard: selectedClass,
+            subject: selectedSubject,
+            chapter: selectedChapter
+        })
+
+        console.log('[GuestAccess] startGuestSession result:', result)
+
+        if (result.sessionId) {
+            params.set('guestSession', result.sessionId)
+        }
+
+        const url = `/quiz?${params.toString()}`
+        console.log('[GuestAccess] Navigating to:', url)
+        router.push(url)
     }
 
     // Derived Display Data
@@ -295,12 +314,12 @@ const GuestAccessSection = () => {
                                     {/* Start Quiz Button */}
                                     <Button
                                         size="xl"
-                                        className="w-full group mt-2 rounded-xl text-lg font-bold shadow-lg shadow-green-200 bg-[#4ADE80] hover:bg-[#22c55e] text-white cursor-pointer"
+                                        className="w-full group mt-2 rounded-xl text-lg font-bold shadow-lg shadow-green-200 bg-[#4ADE80] hover:bg-[#22c55e] text-white cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                                         onClick={handleStartQuiz}
-                                        disabled={!selectedClass || !selectedSubject || !selectedChapter}
+                                        disabled={!selectedClass || !selectedSubject || !selectedChapter || starting}
                                     >
                                         <Rocket className="w-6 h-6 mr-2 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                                        Start Quiz
+                                        {starting ? 'Starting...' : 'Start Quiz'}
                                     </Button>
                                 </CardContent>
                             </Card>

@@ -38,6 +38,7 @@ CREATE TABLE questions (
   -- Metadata
   points INT DEFAULT 10,
   is_active BOOLEAN DEFAULT true,
+  answer_explanation TEXT,
   created_by UUID REFERENCES auth.users(id),
   created_at TIMESTAMPTZ DEFAULT NOW()
 );

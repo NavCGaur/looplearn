@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { getQuizMetadata } from '@/app/actions/quiz'
+import { startGuestSession } from '@/app/actions/guest'
 import { logError } from '@/lib/utils/client-error-logger'
 import {
     BookOpen,
@@ -35,6 +36,7 @@ export function GuestQuizSetup() {
     const [selectedClass, setSelectedClass] = useState<number | null>(null)
     const [selectedSubject, setSelectedSubject] = useState<string | null>(null)
     const [selectedChapter, setSelectedChapter] = useState<string>('') // Empty string = all chapters
+    const [starting, setStarting] = useState(false)
 
     useEffect(() => {
         async function loadMetadata() {
@@ -53,15 +55,32 @@ export function GuestQuizSetup() {
         loadMetadata()
     }, [])
 
-    const handleStartQuiz = () => {
-        if (!selectedClass || !selectedSubject) return
+    const handleStartQuiz = async () => {
+        if (!selectedClass || !selectedSubject || starting) return
 
+        setStarting(true)
         const params = new URLSearchParams()
         params.set('subject', selectedSubject)
         params.set('class', selectedClass.toString())
         if (selectedChapter) {
             params.set('chapter', selectedChapter)
         }
+
+        // Initialize the guest session and pass session ID via URL (cookie is unreliable across client-side nav)
+        const result = await startGuestSession({
+            classStandard: selectedClass,
+            subject: selectedSubject,
+            chapter: selectedChapter || undefined
+        })
+
+        console.log('[Setup] startGuestSession result:', result)
+
+        if (result.sessionId) {
+            params.set('guestSession', result.sessionId)
+        }
+
+        const url = `/quiz?${params.toString()}`
+        console.log('[Setup] Navigating to:', url)
 
         router.push(`/quiz?${params.toString()}`)
     }
@@ -243,14 +262,14 @@ export function GuestQuizSetup() {
                         {/* Start Button */}
                         <button
                             onClick={handleStartQuiz}
-                            disabled={!selectedClass || !selectedSubject}
-                            className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-lg ${selectedClass && selectedSubject
+                            disabled={!selectedClass || !selectedSubject || starting}
+                            className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-lg ${selectedClass && selectedSubject && !starting
                                 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-blue-500/30 hover:scale-[1.02] cursor-pointer'
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                 }`}
                         >
-                            <Play className="w-5 h-5 fill-current" />
-                            Start Quiz
+                            {starting ? <LoadingSpinner size="sm" className="text-white" /> : <Play className="w-5 h-5 fill-current" />}
+                            {starting ? 'Starting...' : 'Start Quiz'}
                         </button>
 
                         {/* Sign Up Benefits Hook - Moved here */}

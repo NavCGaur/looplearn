@@ -1,0 +1,29 @@
+=== GEMINI EVALUATION RESULT ===
+
+Q1: Describe Transport system in plants
+Marks: 3/5
+
+CORRECT:
+The student correctly described that the plant transport system is slower than in animals due to plants being composed of dead cells, stationary, and requiring less energy. They correctly mentioned that simple processes like diffusion and osmosis help in material transport from the soil and identified the presence of vascular tissues like xylem and phloem.
+
+WRONG:
+The answer missed explicitly stating that xylem transports water and phloem transports food. Key mechanisms of plant transport such as transpiration pull, root pressure, and the concept of translocation were not mentioned.
+
+TIP:
+To earn full marks, explicitly detail the specific substances transported by xylem (water and minerals) and phloem (food), and describe the primary mechanisms driving this transport, such as transpiration pull, root pressure, and translocation.
+
+---
+
+Q2: Describe Phloem
+Marks: 2/3
+
+CORRECT:
+The student correctly described phloem's function in the translocation of food, specifying the transport of soluble products of photosynthesis, amino acids, and hormones. They also correctly mentioned the bidirectional nature of the flow and that sucrose transport uses energy from ATP.
+
+WRONG:
+The answer did not include the specific structural components of phloem, such as sieve tubes, companion cells, phloem parenchyma, and phloem fibres.
+
+TIP:
+For a complete description of phloem, include its main structural components (sieve tubes, companion cells, phloem parenchyma, and phloem fibres) along with their respective roles.
+
+TOTAL: 5/8

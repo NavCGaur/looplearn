@@ -1,0 +1,51 @@
+[!] Still failing: Q"What happens to the pressure of air when its speed increases?" | Correct count: 2
+[!] Still failing: Q"Air moves from a region of __________ pressure to a region of __________ pressure." | Correct count: 2
+[!] Still failing: Q"During the day in coastal areas, wind usually blows from:" | Correct count: 2
+[!] Still failing: Q"Cyclones are known as __________ in the American continent." | Correct count: 2
+[!] Still failing: Q"A dark funnel-shaped cloud that reaches from the sky to the ground is a:" | Correct count: 2
+[!] Still failing: Q"During a thunderstorm, it is safest to take shelter in:" | Correct count: 2
+[!] Still failing: Q"The 'Standard Unit' (SI) of pressure is:" | Correct count: 2
+[!] Still failing: Q"What is the direction of wind during the 'Winter Monsoon' in India?" | Correct count: 2
+[!] Still failing: Q"If a force of 100 N is applied to an area of 2 m², the pressure is:" | Correct count: 2
+[!] Still failing: Q"Which coast of India is more vulnerable to cyclones?" | Correct count: 2
+[!] Still failing: Q"Which of the following is the fundamental idea of the particulate nature of matter?" | Correct count: 2
+[!] Still failing: Q"In which state of matter are the particles packed most closely together in a fixed, regular pattern?" | Correct count: 3
+[!] Still failing: Q"What happens to the movement of particles when the temperature of a substance increases?" | Correct count: 2
+[!] Still failing: Q"The smell of hot sizzling food reaches you several metres away, but to get the smell from cold food you have to go close. This is due to:" | Correct count: 2
+[!] Still failing: Q"Which state of matter is highly compressible?" | Correct count: 2
+[!] Still failing: Q"When a crystal of potassium permanganate is placed in water, the purple colour spreads throughout. This proves that:" | Correct count: 2
+[!] Still failing: Q"What occupies the 'empty space' between particles in a gas?" | Correct count: 2
+[!] Still failing: Q"Which of the following cannot flow?" | Correct count: 2
+[!] Still failing: Q"Two atoms of Hydrogen combine to form a stable particle called a:" | Correct count: 2
+[!] Still failing: Q"The interparticle distance is maximum in:" | Correct count: 2
+[!] Still failing: Q"What happens when you dissolve sugar in water regarding the volume?" | Correct count: 2
+[!] Still failing: Q"Particles in a __________ only vibrate about their fixed positions." | Correct count: 3
+[!] Still failing: Q"Which of the following is NOT an example of matter?" | Correct count: 2
+[!] Still failing: Q"When we pour a liquid from a flask into a bowl, it changes its:" | Correct count: 2
+[!] Still failing: Q"The density of matter is generally highest in which state?" | Correct count: 2
+[!] Still failing: Q"Diffusion occurs fastest in gases because:" | Correct count: 2
+[!] Still failing: Q"If you put a drop of ink in a glass of water, it spreads without stirring. This process is:" | Correct count: 3
+[!] Still failing: Q"In the 'Activity with the Syringe', why was it impossible to push the piston when it was filled with sand?" | Correct count: 2
+[!] Still failing: Q"Which of the following is the simplest form of matter that cannot be broken down into simpler substances by chemical means?" | Correct count: 3
+[!] Still failing: Q"When two or more elements combine chemically in a fixed ratio, they form a:" | Correct count: 3
+[!] Still failing: Q"The symbol for the element Gold is:" | Correct count: 2
+[!] Still failing: Q"When iron and sulfur are heated together to form iron sulfide, the product:" | Correct count: 2
+[!] Still failing: Q"The horizontal rows in a Periodic Table are called:" | Correct count: 2
+[!] Still failing: Q"Which of these is a noble gas?" | Correct count: 2
+[!] Still failing: Q"A mixture of oil and water is an example of a:" | Correct count: 2
+[!] Still failing: Q"Brass is an alloy of Copper and Zinc. Brass is a:" | Correct count: 3
+[!] Still failing: Q"The elements in a compound are combined in a:" | Correct count: 2
+[!] Still failing: Q"If you stir sand into water, you create a:" | Correct count: 3
+[!] Still failing: Q"Pure gold is 24 carats. 22 carat gold is a:" | Correct count: 2
+[!] Still failing: Q"Which of these is a diatomic element (exists naturally as a molecule of two atoms)?" | Correct count: 2
+[!] Still failing: Q"Distilled water is a/an:" | Correct count: 3
+[!] Still failing: Q"The process of separating a solid from a liquid by pouring it through a porous material is called:" | Correct count: 2
+[!] Still failing: Q"In a solution of sugar and water, sugar is the __________ and water is the __________." | Correct count: 2
+[!] Still failing: Q"Which of the following describes a 'dilute' solution?" | Correct count: 2
+[!] Still failing: Q"Which process is used to recover salt from sea water?" | Correct count: 2
+[!] Still failing: Q"Why do aquatic animals like fish survive in ponds and rivers?" | Correct count: 2
+[!] Still failing: Q"Soft drinks fizz when opened because:" | Correct count: 2
+[!] Still failing: Q"Which of the following will form a non-uniform (heterogeneous) mixture with water?" | Correct count: 2
+[!] Still failing: Q"Tincture of iodine is a solution used as an antiseptic. What is the solvent in it?" | Correct count: 3
+[!] Still failing: Q"A solution of two or more metals, or a metal and a non-metal, is called a/an:" | Correct count: 4
+Successfully generated batch_18_insert.sql with 100 unique questions.

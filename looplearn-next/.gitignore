@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# sensitive data
+docs/FullBackup-14-02-26.json
+docs/duplicate_questions.json

@@ -1,0 +1,625 @@
+[
+  {
+    "id": "fb621581-a057-4200-bca2-fbae293bc659",
+    "question": "What is the SI unit of force?",
+    "subject": "science",
+    "class": 8,
+    "correct_answer": "Newton (N)"
+  },
+  {
+    "id": "0ac17a16-e87c-4f38-95bf-baee8261a02c",
+    "question": "Newton's ___ law states that every action has an equal and opposite reaction",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "5fd7924a-e009-42c1-b3e2-c30a113c02e5",
+    "question": "What is the chemical formula for water?",
+    "subject": "science",
+    "class": 8,
+    "correct_answer": "$H_2O$"
+  },
+  {
+    "id": "8dab4470-a3e7-4a65-8149-c6c4d26fd934",
+    "question": "Which gas is essential for photosynthesis?",
+    "subject": "science",
+    "class": 8,
+    "correct_answer": "Carbon Dioxide ($CO_2$)"
+  },
+  {
+    "id": "4f73c89b-65fa-4292-84bc-d6ddb619c2b9",
+    "question": "The powerhouse of the cell is called ___",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "63e03850-9c89-4dfd-9d45-4003aa08723c",
+    "question": "The chemical symbol for gold is ___",
+    "subject": "science",
+    "class": 8,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "73cfe095-9395-4c52-92d1-2d6263bb2cf0",
+    "question": "An atom is the smallest particle of an element that can take part in a chemical ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "b560616e-8d10-4d51-bff3-b3a9d11a09bf",
+    "question": "The law of conservation of mass states that mass can neither be created nor ____ in a chemical reaction.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "3be7b9d2-0a43-4de6-9808-415a0a94871b",
+    "question": "The number of moles of a substance is equal to its given mass divided by its molar ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "7b3d393c-8701-4e50-8ba6-32fa63c645f2",
+    "question": "The molecular mass of a substance is the sum of the atomic masses of all the atoms in a molecule, and its unit is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "a3ecdb66-36f6-4ae3-898b-4b947a5d9472",
+    "question": "Dalton's atomic theory proposed that all matter is made up of tiny, indivisible particles called ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "527d0489-bb12-4067-9785-3316e08fa6c0",
+    "question": "According to the law of constant proportions, a pure chemical compound always contains the same elements in the same proportion by ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "d84cdb8c-6393-4e94-b567-07ada0e1f5eb",
+    "question": "The unit used to measure the atomic mass of an atom is called the atomic mass unit, or ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "fba0815f-73bf-482a-acfc-2e276f56dfb2",
+    "question": "One mole of any substance contains exactly $6.022 \\times 10^{23}$ particles, which is known as the ____ constant.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "d025efcb-0532-42ab-bdcf-f06104229622",
+    "question": "If 12 grams of carbon react completely with 32 grams of oxygen to form carbon dioxide ($\text{CO}_2$), then according to the law of constant proportions, how many grams of oxygen would react with 36 grams of carbon? ____ grams",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "6a311725-bf41-44f9-b3a4-a10cf04ab682",
+    "question": "The law of definite proportions states that a chemical compound always contains the same elements in the same ____ by ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "97cc7168-cafc-4c1e-84b0-1645f4b44549",
+    "question": "The law of multiple proportions explains that when two elements combine to form more than one compound, the masses of one element that combine with a fixed mass of the other element are in a ____ ratio.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "83fdcc1d-24e5-42ff-be31-a4a37d17f2a7",
+    "question": "According to the law of conservation of mass, mass is neither ____ nor ____ during a chemical reaction.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "4b4ded7e-425f-4275-ae3c-18d01cf3b1f7",
+    "question": "When hydrogen and oxygen combine to form water ($\text{H}_2\text{O}$), the ratio of the masses of hydrogen to oxygen is approximately 1:8.  If 2 grams of hydrogen react completely, then the mass of water formed will be approximately ____ grams.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "785a3e5a-8dac-4917-bf3b-9c3d402744b8",
+    "question": "The number of atoms in one molecule of ammonia, $\\text{NH}_3$, is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "5ad2a84f-2681-4785-bb4e-879b5713b6f5",
+    "question": "The molecular formula for water is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "1041d31d-a12a-45ba-8979-33297bd774ff",
+    "question": "The charge on the ammonium ion is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "e66aec49-2a2a-4990-a753-54591b3adaad",
+    "question": "A mole is the amount of substance that contains as many particles as there are atoms in exactly 12 g of the ____ isotope.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "3d039d2f-f940-43ae-aaa3-4a6f853df6a9",
+    "question": "The molar mass of a substance is numerically equal to its molecular mass or formula unit mass in grams, and its unit is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "59f90bce-cc86-49ee-8751-f767a6066552",
+    "question": "One mole of any substance contains Avogadro's number of ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "de409a3a-63a1-496a-9e53-113ef1513f2a",
+    "question": "The chemical formula for carbon dioxide is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "34bccfd5-48d9-4d23-a0f8-d69077ccc56c",
+    "question": "The formula unit mass of calcium chloride, $\\text{CaCl}_2$, is ____ u.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "86efd632-3542-4f57-b5e8-f796119937da",
+    "question": "The molecular mass of nitric acid, $\\text{HNO}_3$, is ____ u.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "0e0d140b-8ab2-4892-ac10-5033003dbd2b",
+    "question": "The formula unit mass of a substance is used for ionic compounds like ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "d41f8c33-b232-465b-8c89-dd9128d8e9d1",
+    "question": "The chemical symbol for the carbonate ion is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "ac2eea8d-9378-4810-8a57-cae9628e4ed9",
+    "question": "A positively charged ion is called a ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "de4c7f8d-04dd-4abb-bd7d-e32eaaf2c0be",
+    "question": "The unit of molecular mass and formula unit mass is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "6f9eb8c9-70ee-48ae-8055-a9f2cbea7b74",
+    "question": "The valency of the sulphate ion is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "62fe357e-0bf3-4bbc-9c1c-3ce891e5c46c",
+    "question": "The combining capacity of an element is known as its ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "3debc05e-3643-49c3-bbaa-0eddeb51e142",
+    "question": "The molecular mass of a substance is the sum of the atomic masses of all the atoms in a ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "b443c782-0b9a-4287-95fb-8a5b1bdc170b",
+    "question": "A group of atoms carrying a charge is known as a ____ ion.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "a33d9889-ee77-4290-aed7-ce6a1feab672",
+    "question": "The value of Avogadro's constant is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "39f8c1bd-7e36-44e4-a5c5-f4d7f70a6c1b",
+    "question": "The chemical formula of sodium oxide is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "42edc425-4cd4-410e-b390-5edcf305a55d",
+    "question": "The number of atoms in a molecule of an element is called its ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "bea53958-82fc-4351-b77d-f23e8789b9c7",
+    "question": "Neutrons are subatomic particles that have no electrical charge and are located in the ____ of an atom.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "5e0157b4-35fa-4bda-bba8-7bc28efb24d5",
+    "question": "The number of protons in an atom determines its atomic number, represented by the symbol ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "51a15276-858a-4e6d-a091-0beda9053e99",
+    "question": "The maximum number of electrons that can be accommodated in the outermost shell (n=4) is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "ab24e2d6-0997-48a6-a3b3-adbe1a512290",
+    "question": "The central, positively charged part of an atom is called the ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "8ee7d3c9-c84b-4cfb-9698-0e8ac41010a1",
+    "question": "The mass of an electron is considered to be negligible compared to the mass of a ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "80366f63-d1d8-407a-8337-c3f9e9488f47",
+    "question": "The valency of an element is the combining capacity of its atom, and it is determined by the number of ____ in its outermost shell.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "a4d2124b-3bca-4227-ae36-dfa1b71a7697",
+    "question": "Rutherford's alpha-particle scattering experiment led to the discovery of the ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "601586eb-3741-48d7-9126-f497bb30fe38",
+    "question": "The mass number of an atom is the sum of the number of protons and ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "8c840723-db51-4b25-9289-8340096a4706",
+    "question": "The formula for calculating the maximum number of electrons in a shell is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "26b3c92c-a841-4825-a5a8-ca9d77b7a748",
+    "question": "Isotopes are atoms of the same element with the same number of protons but a different number of ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "4fb0ae51-a856-45a0-b78c-1b14d80c0229",
+    "question": "The molecular mass of water ($\text{H}_2\text{O}$) is approximately ____ amu.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "afdc3992-54f5-4eaa-9c70-aa9372747f8b",
+    "question": "The molecular mass of carbon dioxide ($\text{CO}_2$) is calculated by adding the atomic mass of one carbon atom and ____ oxygen atoms.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "28c8099c-b228-4d41-8b99-02597b63c5d9",
+    "question": "If the atomic mass of oxygen is 16 amu and that of hydrogen is 1 amu, then the molecular mass of hydrogen peroxide ($\text{H}_2\text{O}_2$) is ____ amu.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "e5f00915-6f86-4b6b-93b0-b6d4dfd722f4",
+    "question": "The molecular mass of water ($\text{H}_2\text{O}$) is approximately ____ amu, considering the atomic mass of hydrogen as 1 amu and oxygen as 16 amu.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "19f5b06c-2327-43d4-8832-e1a2aff6474a",
+    "question": "If the molecular mass of carbon dioxide ($\text{CO}_2$) is 44 amu, and the atomic mass of carbon is 12 amu, then the atomic mass of oxygen is ____ amu.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "e6169bf5-5114-48bd-9769-548cd34ea171",
+    "question": "According to Dalton's atomic theory, atoms of the same element are ____ in mass and properties.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "ec4c97b8-86c7-48e0-a32d-f25e245bfbd3",
+    "question": "Dalton's atomic theory postulates that atoms cannot be ____ or ____ during a chemical reaction.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "d32bdc09-88e2-47c0-be8e-7c41606e470d",
+    "question": "An atom consists of a nucleus containing ____ and ____, surrounded by ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "ef3b0b62-e9c0-4988-848c-dca5ab2aab3f",
+    "question": "The number of protons in the nucleus of an atom is called its ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "1424e7fa-aa7c-46f3-803b-b82deaa2db11",
+    "question": "Isotopes of an element have the same number of ____ but a different number of ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "b2f91d96-2048-44ee-b7be-ab51d01eb905",
+    "question": "The relative atomic mass of an element is the average mass of its ____, taking into account their relative abundances.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "ec89a179-2203-4296-aa7f-ee642ad9c8bf",
+    "question": "A molecule of water ($\text{H}_2\text{O}$) is formed by the ____ bond between two hydrogen atoms and one oxygen atom.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "6d1185c8-22a8-4f1f-9e1e-b1533914ee1c",
+    "question": "The chemical formula for glucose is ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "726e0648-dcb4-4364-9c4a-289c212b9140",
+    "question": "The process of atoms losing or gaining electrons to form ions is called ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "fa5b0a30-fe2d-4dfa-b62d-efb83b393958",
+    "question": "The process by which a solid directly changes into a gas without passing through the liquid state is called ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "c4f6c330-381a-426e-a8c7-b48c017e5706",
+    "question": "Liquids have a definite ____ but an indefinite ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "f5f69568-ebf4-4275-a4a3-319815414c0b",
+    "question": "The state of matter that is characterized by having both definite shape and definite volume is the ____ state.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "35c69988-780d-453c-a797-7cf285fdc8c0",
+    "question": "The process by which a solid directly changes into a gas is called ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "0389d673-3601-4606-a70c-17cff71b7655",
+    "question": "The force of attraction between the particles of a substance is called ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "6736bc5d-f5cc-474a-acb8-f7d7e2440e2d",
+    "question": "The density of water is maximum at ____ °C.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "9bd2aa80-c96b-4efa-bcc2-31d3b7197b58",
+    "question": "The change in state from gas to liquid is called ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "8b5b1536-3d5d-4694-9a9e-37d1166f3c65",
+    "question": "The amount of space occupied by a substance is called its ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "c3a5f2fb-1a71-4143-8017-203c85a59fec",
+    "question": "The temperature at which a solid changes into a liquid is called its ____ point.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "4b043ef1-7b6e-4ec5-bf13-9c6dd0ceb1b2",
+    "question": "The process of converting a gas into a liquid is called ____.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "a3bdc2de-a5d2-4cdf-9d17-f46faa7ee23d",
+    "question": "The particles of matter are in constant ____ motion.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "ff5c609a-7519-4a21-bf72-7bf6e26567a5",
+    "question": "Diffusion is faster in ____ than in solids.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "4deba18f-8780-4c05-8c57-04fd74813945",
+    "question": "The temperature at which a liquid changes into a gas is called its ____ point.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "f2dd288a-9ffd-4318-9bd2-26c5e9214a4d",
+    "question": "Solids have a ____ shape and volume.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "7039b277-dc99-4619-8984-67dabc489c0f",
+    "question": "Gases have ____ shape and volume.",
+    "subject": "science",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "4f814040-a865-46fe-acf6-dfc7cfe7a543",
+    "question": "Using the method of equal denominators, if 1 = 6/6 and 2 = 12/6, what is the FIRST rational number between them?",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "58caeb0f-f0df-4595-bff9-908301fd0947",
+    "question": "After converting 3/5 = 18/30 and 4/5 = 24/30, what is the THIRD rational number between them?",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "a88489ee-848f-4d36-acb5-8530d0184342",
+    "question": "What is the decimal expansion of 7/8?",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "17ca5842-7b6f-4069-975a-8e60c04b1aa4",
+    "question": "What is the maximum number of digits in the repeating block of the decimal expansion of 1/17?",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "05ea6c1b-e562-480f-82ca-d0e73f81e909",
+    "question": "Simplify: (√3 + √7)(√3 - √7)",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "459b854b-e829-4627-85f4-183e2df4a7d8",
+    "question": "What is the value of the polynomial 5x - 4x² + 3 at x = -1?",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "e19b3503-8a53-4fd4-b3ad-0a16a6d05b9f",
+    "question": "If x + y + z = 15 and x² + y² + z² = 83, what is the value of (xy + yz + xz)?",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "f3fce3a9-5c2a-4155-8a22-cda4a4030c00",
+    "question": "If a + b + c = 15 and a² + b² + c² = 83, what is the value of a³ + b³ + c³ - 3abc?",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "3f9e3d78-9e97-4e29-9a49-e05e70c9edd5",
+    "question": "If (x - 1/x) = 4, what is the value of (x⁴ + 1/x⁴)?",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "fa7d8b4b-5dd7-4017-87c5-491f2dbdfcf7",
+    "question": "For the polynomial (2x³ + ax² + x + b) to have both (x + 2) and (2x - 1) as factors, what is the value of a?",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  },
+  {
+    "id": "3ed9cd69-bdd4-44f8-b549-73fc30a4343e",
+    "question": "For the polynomial (2x³ + ax² + x + b) to have both (x + 2) and (2x - 1) as factors, what is the value of b?",
+    "subject": "mathematics",
+    "class": 9,
+    "correct_answer": "Unknown"
+  }
+]

@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { getActiveAssignmentsForStudent } from './assignments'
 
 /**
  * Get dashboard data for the current user
@@ -17,7 +18,7 @@ export async function getDashboardData() {
     // Get user profile
     const { data: profile } = await supabase
         .from('profiles')
-        .select('*')
+        .select('*, offline_access_enabled')
         .eq('id', user.id)
         .single()
 
@@ -95,6 +96,10 @@ export async function getDashboardData() {
         .order('next_review_date', { ascending: true })
         .limit(10)
 
+    const { data: assignments } = profile.class_standard
+        ? await getActiveAssignmentsForStudent(profile.class_standard)
+        : { data: [] }
+
     return {
         user: {
             id: user.id,
@@ -103,6 +108,7 @@ export async function getDashboardData() {
             role: profile.role,
             class: profile.class_standard,
             points: profile.points,
+            offlineAccessEnabled: profile.offline_access_enabled || false,
         },
         stats: {
             totalAnswered: totalAnswered || 0,
@@ -114,6 +120,7 @@ export async function getDashboardData() {
             classRank: leaderboard?.class_rank || null,
         },
         upcomingReviews: upcomingReviews || [],
+        assignments: assignments || [],
     }
 }
 

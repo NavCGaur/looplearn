@@ -3,15 +3,16 @@ import { LeaderboardClient } from './LeaderboardSectionClient';
 
 const LeaderboardSection = async () => {
     // Fetch real leaderboard data
-    const { leaderboard } = await getLeaderboardData()
+    const { leaderboard, hasError } = await getLeaderboardData()
 
     // Get top 5 for homepage display
-    const topFive = leaderboard.slice(0, 5)
+    const topFive = leaderboard && leaderboard.length > 0 ? leaderboard.slice(0, 5) : []
 
     return (
         <LeaderboardClient
             topFive={topFive}
-            totalCount={leaderboard.length}
+            totalCount={leaderboard ? leaderboard.length : 0}
+            hasError={hasError || false}
         />
     );
 };

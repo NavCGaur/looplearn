@@ -17,11 +17,46 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 async function insertQuestions() {
     const jsonPath = path.join(__dirname, '../docs/MATHS_QUESTIONS.json');
     const jsonData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-    const questions = jsonData.questions;
 
-    console.log(`Found ${questions.length} questions to insert.`);
+    let questionsToInsert = [];
 
-    for (const q of questions) {
+    // Flatten the structure if it's nested
+    if (jsonData.formula_quizzes) {
+        console.log('Detected nested "formula_quizzes" structure.');
+        jsonData.formula_quizzes.forEach(quiz => {
+            const { subject, chapter, category, class_standard, questions } = quiz;
+            if (questions) {
+                questions.forEach(q => {
+                    // Inherit subject, chapter, and class_standard if missing in question
+                    // Append category/formula_reference to explanation
+                    let explanation = q.answer_explanation || '';
+                    if (q.formula_reference) {
+                        explanation += `\n\nFormula Reference: ${q.formula_reference}`;
+                    }
+
+                    questionsToInsert.push({
+                        ...q,
+                        subject: q.subject || subject,
+                        chapter: q.chapter || chapter,
+                        class_standard: q.class_standard || class_standard,
+                        answer_explanation: explanation
+                    });
+                });
+            }
+        });
+    } else if (jsonData.questions) {
+        questionsToInsert = jsonData.questions;
+    }
+
+    console.log(`Found ${questionsToInsert.length} questions to insert.`);
+
+    for (const q of questionsToInsert) {
+        // Validate required fields again just in case
+        if (!q.subject || !q.chapter) {
+            console.error(`Skipping question due to missing subject/chapter: "${q.question_text.substring(0, 30)}..."`);
+            continue;
+        }
+
         console.log(`Inserting question: "${q.question_text.substring(0, 50)}..."`);
 
         // 1. Insert Question
@@ -36,6 +71,7 @@ async function insertQuestions() {
                 difficulty: q.difficulty,
                 points: q.points,
                 is_active: q.is_active,
+                answer_explanation: q.answer_explanation,
                 created_by: TEACHER_UUID
             })
             .select()

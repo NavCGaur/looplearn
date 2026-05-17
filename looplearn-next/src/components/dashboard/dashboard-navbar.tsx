@@ -4,9 +4,11 @@ import Link from 'next/link'
 import { signOut } from '@/app/actions/auth'
 import { LoopLearnXIcon } from '@/components/ui/brand-icons'
 import { Home, LogOut, BarChart3 } from 'lucide-react'
+import { NotificationBell } from '@/components/ui/notification-bell'
 
 interface DashboardNavbarProps {
     user: {
+        id: string
         name: string
         role: string
         class: number | null
@@ -58,7 +60,10 @@ export function DashboardNavbar({ user }: DashboardNavbarProps) {
                             </Link>
                         )}
 
-                        <div className="flex items-center gap-2 pl-2 border-l border-gray-100">
+                        <div className="flex items-center gap-2 pl-2 border-l border-gray-100 overflow-visible">
+                            {/* Notification bell */}
+                            <NotificationBell userId={user.id} />
+
                             <div className="text-right hidden sm:block">
                                 <p className="text-sm font-fredoka font-bold text-gray-900 leading-none">{user.name}</p>
                                 <p className="text-xs font-fredoka text-gray-500">Class {user.class || 'N/A'}</p>

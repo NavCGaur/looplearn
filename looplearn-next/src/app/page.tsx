@@ -8,11 +8,12 @@ import LeaderboardSection from '@/components/LeaderboardSection'
 
 import { redirect } from 'next/navigation'
 
-export default async function Home({ searchParams }: { searchParams: { code?: string } }) {
+export default async function Home({ searchParams }: { searchParams: Promise<{ code?: string }> }) {
   // Fallback: If user lands here with an auth code, redirect them to the callback
-  if (searchParams?.code) {
+  const params = await searchParams
+  if (params?.code) {
     const next = '/dashboard'
-    redirect(`/auth/callback?code=${searchParams.code}&next=${next}`)
+    redirect(`/auth/callback?code=${params.code}&next=${next}`)
   }
 
   const user = await getUser()

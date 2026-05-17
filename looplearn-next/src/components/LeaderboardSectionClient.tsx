@@ -16,6 +16,7 @@ interface LeaderboardPlayer {
 interface LeaderboardClientProps {
     topFive: LeaderboardPlayer[]
     totalCount: number
+    hasError?: boolean
 }
 
 const getRankIcon = (rank: number) => {
@@ -73,7 +74,7 @@ const getStreak = (points: number) => {
     return Math.floor(points / 100)
 }
 
-export function LeaderboardClient({ topFive, totalCount }: LeaderboardClientProps) {
+export function LeaderboardClient({ topFive, totalCount, hasError }: LeaderboardClientProps) {
     return (
         <section id="leaderboard" className="py-20 md:py-28 relative overflow-hidden">
             {/* Background decorations */}
@@ -128,7 +129,12 @@ export function LeaderboardClient({ topFive, totalCount }: LeaderboardClientProp
 
                     {/* Leaderboard Rows */}
                     <div className="space-y-3">
-                        {topFive.length > 0 ? (
+                        {hasError ? (
+                            <div className="text-center py-12 bg-card/50 rounded-2xl border-2 border-red-500/20">
+                                <p className="text-4xl mb-3">⚠️</p>
+                                <p className="text-muted-foreground">Unable to load leaderboard. Please connect to internet and try again later.</p>
+                            </div>
+                        ) : topFive.length > 0 ? (
                             topFive.map((player, index) => (
                                 <motion.div
                                     key={player.id}

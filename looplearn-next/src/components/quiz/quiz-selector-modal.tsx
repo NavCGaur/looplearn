@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { getQuizMetadata } from '@/app/actions/quiz'
 import { cn } from '@/lib/utils'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { getAllCachedQuestions } from '@/lib/offline/db'
 
 interface QuizSelectorModalProps {
     isOpen: boolean
@@ -74,6 +75,7 @@ export function QuizSelectorModal({ isOpen, onClose, userClass }: QuizSelectorMo
     const router = useRouter()
     const [selectedSubject, setSelectedSubject] = useState<string>('')
     const [selectedChapter, setSelectedChapter] = useState<string>('')
+    const [reviewAll, setReviewAll] = useState(false)
     const [loading, setLoading] = useState(false)
     const [starting, setStarting] = useState(false) // Loading state for quiz start
     const [metadata, setMetadata] = useState<{
@@ -87,9 +89,38 @@ export function QuizSelectorModal({ isOpen, onClose, userClass }: QuizSelectorMo
         if (isOpen) {
             async function loadMetadata() {
                 setLoading(true)
-                const data = await getQuizMetadata()
-                setMetadata(data)
-                setLoading(false)
+                try {
+                    // Online path: fetch from server
+                    const data = await getQuizMetadata()
+                    setMetadata(data)
+                } catch {
+                    // Offline path: derive metadata from locally cached questions
+                    try {
+                        const cached = await getAllCachedQuestions()
+                        const classesSet = new Set<number>()
+                        const subjectsMap: Record<number, Set<string>> = {}
+                        const chaptersMap: Record<string, Set<string>> = {}
+                        cached.forEach(q => {
+                            classesSet.add(q.class_standard)
+                            if (!subjectsMap[q.class_standard]) subjectsMap[q.class_standard] = new Set()
+                            subjectsMap[q.class_standard].add(q.subject)
+                            if (q.chapter) {
+                                const key = `${q.class_standard}-${q.subject}`
+                                if (!chaptersMap[key]) chaptersMap[key] = new Set()
+                                chaptersMap[key].add(q.chapter)
+                            }
+                        })
+                        const subjects: Record<number, string[]> = {}
+                        Object.keys(subjectsMap).forEach(k => { subjects[+k] = Array.from(subjectsMap[+k]).sort() })
+                        const chapters: Record<string, string[]> = {}
+                        Object.keys(chaptersMap).forEach(k => { chapters[k] = Array.from(chaptersMap[k]).sort() })
+                        setMetadata({ classes: Array.from(classesSet).sort(), subjects, chapters })
+                    } catch (dbErr) {
+                        console.error('Failed to load offline metadata from IndexedDB', dbErr)
+                    }
+                } finally {
+                    setLoading(false)
+                }
             }
             loadMetadata()
         }
@@ -100,6 +131,7 @@ export function QuizSelectorModal({ isOpen, onClose, userClass }: QuizSelectorMo
         if (!isOpen) {
             setSelectedSubject('')
             setSelectedChapter('')
+            setReviewAll(false)
             setStarting(false)
         }
     }, [isOpen])
@@ -111,6 +143,9 @@ export function QuizSelectorModal({ isOpen, onClose, userClass }: QuizSelectorMo
         const params = new URLSearchParams()
         params.set('subject', selectedSubject)
         params.set('chapter', selectedChapter)
+        if (reviewAll) {
+            params.set('mode', 'chapter_review')
+        }
 
         // Navigate first, modal will close automatically when component unmounts
         router.push(`/quiz?${params.toString()}`)
@@ -235,6 +270,24 @@ export function QuizSelectorModal({ isOpen, onClose, userClass }: QuizSelectorMo
                                             onChange={setSelectedChapter}
                                             disabled={!selectedSubject}
                                         />
+                                    </div>
+
+                                    {/* Review All Option */}
+                                    <div className="flex items-center gap-3 px-1">
+                                        <input
+                                            type="checkbox"
+                                            id="reviewAll"
+                                            checked={reviewAll}
+                                            onChange={(e) => setReviewAll(e.target.checked)}
+                                            disabled={!selectedChapter}
+                                            className="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                        />
+                                        <label
+                                            htmlFor="reviewAll"
+                                            className={`text-base font-medium select-none cursor-pointer ${!selectedChapter ? 'text-gray-400' : 'text-gray-700'}`}
+                                        >
+                                            Review all questions in this chapter
+                                        </label>
                                     </div>
 
                                     {/* Start Button */}

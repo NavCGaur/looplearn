@@ -1,0 +1,27 @@
+[!] Warning: Q"During the day in coastal areas, wind usually blows from:" has 2 correct options. Options: Land to Sea | Sea to Land | South to North | Mountains to Plains
+[!] Warning: Q"What is the direction of wind during the 'Winter Monsoon' in India?" has 2 correct options. Options: Sea to Land | Land to Sea | South to North | West to East
+[!] Warning: Q"In which state of matter are the particles packed most closely together in a fixed, regular pattern?" has 2 correct options. Options: Liquid | Gas | Solid | Plasma
+[!] Warning: Q"The smell of hot sizzling food reaches you several metres away, but to get the smell from cold food you have to go close. This is due to:" has 2 correct options. Options: Evaporation | Diffusion | Condensation | Sublimation
+[!] Warning: Q"Which state of matter is highly compressible?" has 2 correct options. Options: Solid | Liquid | Gas | Metal
+[!] Warning: Q"What occupies the 'empty space' between particles in a gas?" has 2 correct options. Options: Air | Nothing (Vacuum) | Dust | Energy
+[!] Warning: Q"Which of the following cannot flow?" has 2 correct options. Options: Water | Honey | Air | Wood
+[!] Warning: Q"Two atoms of Hydrogen combine to form a stable particle called a:" has 2 correct options. Options: Proton | Molecule | Mixture | Solution
+[!] Warning: Q"Particles in a __________ only vibrate about their fixed positions." has 2 correct options. Options: Liquid | Solid | Gas | Solution
+[!] Warning: Q"Which of the following is NOT an example of matter?" has 2 correct options. Options: Air | Feeling of cold | Raindrops | Sand
+[!] Warning: Q"The density of matter is generally highest in which state?" has 2 correct options. Options: Solid | Liquid | Gas | It is same for all
+[!] Warning: Q"If you put a drop of ink in a glass of water, it spreads without stirring. This process is:" has 3 correct options. Options: Filtration | Sedimentation | Diffusion | Evaporation
+[!] Warning: Q"Which of the following is the simplest form of matter that cannot be broken down into simpler substances by chemical means?" has 3 correct options. Options: Compound | Mixture | Element | Solution
+[!] Warning: Q"When two or more elements combine chemically in a fixed ratio, they form a:" has 3 correct options. Options: Mixture | Compound | Alloy | Isotope
+[!] Warning: Q"Which of these is a noble gas?" has 2 correct options. Options: Oxygen | Nitrogen | Helium | Chlorine
+[!] Warning: Q"A mixture of oil and water is an example of a:" has 2 correct options. Options: Homogeneous mixture | Heterogeneous mixture | Pure substance | Compound
+[!] Warning: Q"Brass is an alloy of Copper and Zinc. Brass is a:" has 3 correct options. Options: Compound | Solid solution (Mixture) | Element | Pure metal
+[!] Warning: Q"If you stir sand into water, you create a:" has 3 correct options. Options: Solution | Compound | Suspension | Element
+[!] Warning: Q"Pure gold is 24 carats. 22 carat gold is a:" has 2 correct options. Options: Pure element | Compound | Mixture | Noble gas
+[!] Warning: Q"Which of these is a diatomic element (exists naturally as a molecule of two atoms)?" has 2 correct options. Options: Helium | Carbon | Oxygen | Gold
+[!] Warning: Q"Distilled water is a/an:" has 3 correct options. Options: Element | Compound | Homogeneous mixture | Heterogeneous mixture
+[!] Warning: Q"The process of separating a solid from a liquid by pouring it through a porous material is called:" has 2 correct options. Options: Evaporation | Filtration | Decantation | Distillation
+[!] Warning: Q"Which process is used to recover salt from sea water?" has 2 correct options. Options: Filtration | Decantation | Evaporation | Condensation
+[!] Warning: Q"Which of the following will form a non-uniform (heterogeneous) mixture with water?" has 2 correct options. Options: Honey | Lemon juice | Oil | Alcohol
+[!] Warning: Q"Tincture of iodine is a solution used as an antiseptic. What is the solvent in it?" has 2 correct options. Options: Water | Iodine | Alcohol | Oil
+[!] Warning: Q"A solution of two or more metals, or a metal and a non-metal, is called a/an:" has 3 correct options. Options: Amalgam | Alloy | Compound | Element
+Successfully generated batch_18_insert.sql with 100 unique questions.

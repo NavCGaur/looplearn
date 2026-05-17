@@ -1,0 +1,7 @@
+﻿src/app/actions/assignments.ts(9,10): error TS2305: Module '"./ai"' has no exported member 'evaluateAssignmentAnswers'.
+src/components/student/assignment-submitter.tsx(7,30): error TS2307: Cannot find module '@/lib/utils/image-stitcher' or its corresponding type declarations.
+src/components/student/assignment-submitter.tsx(8,37): error TS2307: Cannot find module '@/components/dashboard/quick-practice-result' or its corresponding type declarations.
+src/components/student/assignment-submitter.tsx(9,24): error TS2307: Cannot find module '@/components/ui/switch' or its corresponding type declarations.
+src/components/student/assignment-submitter.tsx(10,23): error TS2307: Cannot find module '@/components/ui/label' or its corresponding type declarations.
+src/components/student/assignment-submitter.tsx(208,51): error TS7006: Parameter 'checked' implicitly has an 'any' type.
+src/components/teacher/assignments-list-client.tsx(6,37): error TS2307: Cannot find module '@/components/dashboard/quick-practice-result' or its corresponding type declarations.

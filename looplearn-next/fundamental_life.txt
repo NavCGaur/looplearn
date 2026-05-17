@@ -1,0 +1,1211 @@
+{
+  "questions": [
+    {
+      "question_text": "What did Robert Hooke observe in a thin slice of cork using his microscope?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "In 1665, Robert Hooke looked at a thin slice of cork and noticed it was made of many tiny, box-like compartments. He thought they looked like a honeycomb!",
+      "options": [
+        { "option_text": "A honeycomb structure with many little compartments", "display_order": 1, "is_correct": true, "explanation": "Correct! These 'little rooms' were the first cells ever described." },
+        { "option_text": "Tiny swimming bacteria", "display_order": 2, "is_correct": false, "explanation": "Bacteria are living cells; Hooke observed dead cork tissue." },
+        { "option_text": "Continuous smooth fibers", "display_order": 3, "is_correct": false, "explanation": "He actually saw distinct compartments, not smooth fibers." },
+        { "option_text": "Large crystals of salt", "display_order": 4, "is_correct": false, "explanation": "Cork is organic material, not mineral crystals." }
+      ]
+    },
+    {
+      "question_text": "In what year did Robert Hooke make his landmark observation of cork cells?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Hooke made this chance observation in 1665, marking the very beginning of our understanding of the building blocks of life.",
+      "options": [
+        { "option_text": "1665", "display_order": 1, "is_correct": true, "explanation": "Spot on! This was the year biology changed forever." },
+        { "option_text": "1831", "display_order": 2, "is_correct": false, "explanation": "1831 was when the nucleus was discovered." },
+        { "option_text": "1774", "display_order": 3, "is_correct": false, "explanation": "This is a century after the actual discovery." },
+        { "option_text": "1940", "display_order": 4, "is_correct": false, "explanation": "1940 was when the electron microscope became available." }
+      ]
+    },
+    {
+      "question_text": "The word 'cell' is derived from a Latin word. What does it mean?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The term 'cell' comes from the Latin word 'cella'. Hooke used it because the compartments looked like the small rooms (cells) monks lived in!",
+      "options": [
+        { "option_text": "A little room", "display_order": 1, "is_correct": true, "explanation": "Exactly! It describes the tiny enclosed spaces he saw." },
+        { "option_text": "A large building", "display_order": 2, "is_correct": false, "explanation": "Cells are the smallest units, not large buildings." },
+        { "option_text": "A drop of water", "display_order": 3, "is_correct": false, "explanation": "Though cells contain fluid, the word refers to the space/room." },
+        { "option_text": "A hard stone", "display_order": 4, "is_correct": false, "explanation": "Cells are structural units, not stones." }
+      ]
+    },
+    {
+      "question_text": "Who was the first person to discover free-living cells in pond water in 1674?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "While Hooke saw dead cork cells, Antonie van Leeuwenhoek used an improved microscope to see living, moving cells in pond water!",
+      "options": [
+        { "option_text": "Leeuwenhoek", "display_order": 1, "is_correct": true, "explanation": "Great job! He was a pioneer in microbiology." },
+        { "option_text": "Robert Brown", "display_order": 2, "is_correct": false, "explanation": "Robert Brown discovered the nucleus later on." },
+        { "option_text": "Purkinje", "display_order": 3, "is_correct": false, "explanation": "Purkinje is known for coining the term 'protoplasm'." },
+        { "option_text": "Virchow", "display_order": 4, "is_correct": false, "explanation": "Virchow contributed to the Cell Theory regarding cell division." }
+      ]
+    },
+    {
+      "question_text": "In 1831, which scientist discovered the nucleus inside the cell?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Robert Brown was the scientist who identified the nucleus as a central component of the cell in 1831.",
+      "options": [
+        { "option_text": "Robert Brown", "display_order": 1, "is_correct": true, "explanation": "Correct! He identified the 'brain' of the cell." },
+        { "option_text": "Robert Hooke", "display_order": 2, "is_correct": false, "explanation": "Hooke discovered the cell itself, but not the nucleus." },
+        { "option_text": "Schleiden", "display_order": 3, "is_correct": false, "explanation": "Schleiden was a botanist who helped form the Cell Theory." },
+        { "option_text": "Schwann", "display_order": 4, "is_correct": false, "explanation": "Schwann was a zoologist who helped form the Cell Theory." }
+      ]
+    },
+    {
+      "question_text": "Which scientist coined the term 'protoplasm' for the fluid substance of the cell in 1839?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Purkinje used the word 'protoplasm' to describe the living fluid found within the cell.",
+      "options": [
+        { "option_text": "Purkinje", "display_order": 1, "is_correct": true, "explanation": "Correct! This term refers to the cell's living matter." },
+        { "option_text": "Virchow", "display_order": 2, "is_correct": false, "explanation": "Virchow focused on how cells reproduce." },
+        { "option_text": "Leeuwenhoek", "display_order": 3, "is_correct": false, "explanation": "Leeuwenhoek focused on observing living cells." },
+        { "option_text": "Robert Brown", "display_order": 4, "is_correct": false, "explanation": "Robert Brown focused on the nucleus." }
+      ]
+    },
+    {
+      "question_text": "Which two biologists are credited with presenting the Cell Theory?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Schleiden (1838) and Schwann (1839) proposed that all plants and animals are composed of cells, forming the basis of the Cell Theory.",
+      "options": [
+        { "option_text": "Schleiden and Schwann", "display_order": 1, "is_correct": true, "explanation": "Perfect! One studied plants and the other studied animals." },
+        { "option_text": "Hooke and Brown", "display_order": 2, "is_correct": false, "explanation": "They made individual discoveries but didn't present the unified theory." },
+        { "option_text": "Watson and Crick", "display_order": 3, "is_correct": false, "explanation": "They discovered the structure of DNA much later." },
+        { "option_text": "Purkinje and Virchow", "display_order": 4, "is_correct": false, "explanation": "They refined the theory but didn't initiate it." }
+      ]
+    },
+    {
+      "question_text": "Who expanded the Cell Theory by suggesting that all cells arise from pre-existing cells?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Rudolf Virchow added a vital pillar to the Cell Theory in 1855: 'Omnis cellula e cellula', meaning all cells come from other cells.",
+      "options": [
+        { "option_text": "Virchow", "display_order": 1, "is_correct": true, "explanation": "Exactly! This explained how life continues and grows." },
+        { "option_text": "Leeuwenhoek", "display_order": 2, "is_correct": false, "explanation": "He was an early observer, not the theory's expander." },
+        { "option_text": "Robert Hooke", "display_order": 3, "is_correct": false, "explanation": "He discovered cells but didn't know their origin." },
+        { "option_text": "Robert Brown", "display_order": 4, "is_correct": false, "explanation": "He discovered the nucleus." }
+      ]
+    },
+    {
+      "question_text": "When was the electron microscope discovered, allowing scientists to see complex cell structures?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The invention of the electron microscope in 1940 was a huge leap! It allowed us to see organelles much smaller than what light microscopes could show.",
+      "options": [
+        { "option_text": "1940", "display_order": 1, "is_correct": true, "explanation": "Correct! This opened up the world of sub-cellular biology." },
+        { "option_text": "1831", "display_order": 2, "is_correct": false, "explanation": "That was the era of light microscopes." },
+        { "option_text": "1665", "display_order": 3, "is_correct": false, "explanation": "This was when the very first simple microscope was used by Hooke." },
+        { "option_text": "1900", "display_order": 4, "is_correct": false, "explanation": "Too early; the technology wasn't advanced enough yet." }
+      ]
+    },
+    {
+      "question_text": "What is the biological name for the 'inner skin' of an onion bulb used in experiments?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The thin, transparent layer we peel from the onion is the epidermis. It's perfect for seeing cells under a microscope!",
+      "options": [
+        { "option_text": "Epidermis", "display_order": 1, "is_correct": true, "explanation": "You got it! It's the outer layer of cells." },
+        { "option_text": "Endodermis", "display_order": 2, "is_correct": false, "explanation": "Endodermis is an internal layer, not the surface skin." },
+        { "option_text": "Cortex", "display_order": 3, "is_correct": false, "explanation": "Cortex is the tissue located between the epidermis and vascular tissue." },
+        { "option_text": "Xylem", "display_order": 4, "is_correct": false, "explanation": "Xylem is involved in water transport, not skin structure." }
+      ]
+    },
+    {
+      "question_text": "Why is an onion peel placed in a watch-glass containing water before observation?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Water keeps the peel hydrated so it doesn't dry out or curl up, ensuring you get a clear view of the flat cells.",
+      "options": [
+        { "option_text": "To prevent the peel from getting folded or drying out", "display_order": 1, "is_correct": true, "explanation": "Correct! Maintaining the shape and moisture is key." },
+        { "option_text": "To kill any bacteria on the peel", "display_order": 2, "is_correct": false, "explanation": "Plain water doesn't kill bacteria effectively." },
+        { "option_text": "To make the cells grow larger", "display_order": 3, "is_correct": false, "explanation": "Water won't make the cells grow in such a short time." },
+        { "option_text": "To change the color of the cells", "display_order": 4, "is_correct": false, "explanation": "Water is colorless; we use stains for color." }
+      ]
+    },
+    {
+      "question_text": "Which solution is commonly used to stain onion peel cells for better visibility?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Safranin is a red stain that helps highlight the cell wall and nucleus in plant cells like onion peel.",
+      "options": [
+        { "option_text": "Safranin solution", "display_order": 1, "is_correct": true, "explanation": "Exactly! It provides the contrast needed to see the cell parts." },
+        { "option_text": "Methylene blue", "display_order": 2, "is_correct": false, "explanation": "This is usually used for animal cells like cheek cells." },
+        { "option_text": "Iodine only", "display_order": 3, "is_correct": false, "explanation": "While iodine can be used, safranin is the standard for onion peel in this context." },
+        { "option_text": "Salt solution", "display_order": 4, "is_correct": false, "explanation": "Salt solution is used to study osmosis, not for staining." }
+      ]
+    },
+    {
+      "question_text": "Do onion peel cells look different if they are taken from onions of different sizes?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "No matter how big or small the onion is, the basic structural unit (the cell) remains the same in appearance and function.",
+      "options": [
+        { "option_text": "No, they all look the same", "display_order": 1, "is_correct": true, "explanation": "Correct! The size of the organism doesn't change the basic cell structure." },
+        { "option_text": "Yes, large onions have much larger cells", "display_order": 2, "is_correct": false, "explanation": "Large onions just have *more* cells, not necessarily larger ones." },
+        { "option_text": "Yes, small onions have square cells", "display_order": 3, "is_correct": false, "explanation": "The shape remains consistent across onion sizes." },
+        { "option_text": "No, but they have different colors", "display_order": 4, "is_correct": false, "explanation": "The basic structure and color under a stain remain similar." }
+      ]
+    },
+    {
+      "question_text": "Which of the following is an example of a unicellular organism?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Unicellular organisms, like Amoeba, perform all their life functions within a single cell!",
+      "options": [
+        { "option_text": "Amoeba", "display_order": 1, "is_correct": true, "explanation": "Spot on! Amoeba is a classic example of a single-celled life form." },
+        { "option_text": "Human", "display_order": 2, "is_correct": false, "explanation": "Humans are multicellular, made of trillions of cells." },
+        { "option_text": "Mushroom", "display_order": 3, "is_correct": false, "explanation": "Mushrooms are multicellular fungi." },
+        { "option_text": "Onion", "display_order": 4, "is_correct": false, "explanation": "An onion is a multicellular plant." }
+      ]
+    },
+    {
+      "question_text": "According to the Cell Theory, how do multicellular organisms originate?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Every complex organism starts its journey as a single cell (the zygote) that divides repeatedly to form a whole body.",
+      "options": [
+        { "option_text": "They originate from a single cell through division", "display_order": 1, "is_correct": true, "explanation": "Correct! Growth happens by adding more cells through division." },
+        { "option_text": "They are formed by spontaneous generation from soil", "display_order": 2, "is_correct": false, "explanation": "Life only comes from pre-existing life." },
+        { "option_text": "They are made of non-living matter that becomes alive", "display_order": 3, "is_correct": false, "explanation": "The cell itself is the basic unit of life." },
+        { "option_text": "They appear fully formed without any precursors", "display_order": 4, "is_correct": false, "explanation": "All life has a cellular beginning." }
+      ]
+    },
+    {
+      "question_text": "Which of these is a specific type of cell found in the human body?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The human body contains many specialized cells, like Nerve cells, which are designed for sending signals.",
+      "options": [
+        { "option_text": "Nerve cell", "display_order": 1, "is_correct": true, "explanation": "Correct! These are specialized for communication." },
+        { "option_text": "Xylem cell", "display_order": 2, "is_correct": false, "explanation": "Xylem is found in plants, not humans." },
+        { "option_text": "Epidermal peel cell", "display_order": 3, "is_correct": false, "explanation": "This refers specifically to the onion peel used in labs." },
+        { "option_text": "Chloroplast cell", "display_order": 4, "is_correct": false, "explanation": "Humans don't have chloroplasts; we can't photosynthesize!" }
+      ]
+    },
+    {
+      "question_text": "What primarily determines the specific shape and size of a cell?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Form follows function! A cell's shape and size are perfectly suited to the job it has to do in the body.",
+      "options": [
+        { "option_text": "The specific function the cell performs", "display_order": 1, "is_correct": true, "explanation": "Exactly! For example, nerve cells are long to transmit signals over distances." },
+        { "option_text": "The age of the organism", "display_order": 2, "is_correct": false, "explanation": "Age might affect health, but function dictates the basic shape." },
+        { "option_text": "The amount of food available", "display_order": 3, "is_correct": false, "explanation": "Food affects size but doesn't usually determine the fundamental shape." },
+        { "option_text": "Random chance", "display_order": 4, "is_correct": false, "explanation": "Biological structures are highly organized, not random." }
+      ]
+    },
+    {
+      "question_text": "Which of the following human cells has a fixed and typical shape?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "While some cells (like Amoeba) change shape, others like the Nerve cell have a very specific, permanent structure to do their job.",
+      "options": [
+        { "option_text": "Nerve cell", "display_order": 1, "is_correct": true, "explanation": "Correct! Its long, branched shape is fixed for transmitting impulses." },
+        { "option_text": "Amoeba", "display_order": 2, "is_correct": false, "explanation": "Amoeba is not a human cell and it constantly changes shape." },
+        { "option_text": "White Blood Cell (WBC)", "display_order": 3, "is_correct": false, "explanation": "WBCs can change shape to squeeze through vessel walls." },
+        { "option_text": "Fat cell", "display_order": 4, "is_correct": false, "explanation": "Fat cells can swell and shrink significantly based on storage." }
+      ]
+    },
+    {
+      "question_text": "What are the specialized structures within a cell that perform specific tasks called?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Just like our body has organs (heart, lungs), a cell has tiny 'organs' called organelles that keep it running!",
+      "options": [
+        { "option_text": "Cell organelles", "display_order": 1, "is_correct": true, "explanation": "Spot on! Examples include mitochondria and ribosomes." },
+        { "option_text": "Tissues", "display_order": 2, "is_correct": false, "explanation": "Tissues are groups of cells, not structures *inside* a cell." },
+        { "option_text": "Organs", "display_order": 3, "is_correct": false, "explanation": "Organs are groups of tissues." },
+        { "option_text": "Membranes", "display_order": 4, "is_correct": false, "explanation": "Membranes are just one part of the cell structure." }
+      ]
+    },
+    {
+      "question_text": "Which three features are almost always present in every cell?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Nearly all cells share a basic plan: a boundary (membrane), a control center (nucleus), and a filling (cytoplasm).",
+      "options": [
+        { "option_text": "Plasma membrane, nucleus, and cytoplasm", "display_order": 1, "is_correct": true, "explanation": "Correct! These are the 'Big Three' components." },
+        { "option_text": "Cell wall, chloroplasts, and vacuoles", "display_order": 2, "is_correct": false, "explanation": "These are primarily found in plant cells, not all cells." },
+        { "option_text": "Mitochondria, Golgi, and Lysosomes", "display_order": 3, "is_correct": false, "explanation": "These are organelles, but not the three primary structural regions." },
+        { "option_text": "DNA, RNA, and Ribosomes", "display_order": 4, "is_correct": false, "explanation": "While essential, they are usually categorized within the Big Three areas." }
+      ]
+    },
+    {
+      "question_text": "Why is the plasma membrane referred to as a 'selectively permeable membrane'?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The membrane acts like a security guard; it allows essential things in and out but blocks others to protect the cell.",
+      "options": [
+        { "option_text": "Because it permits the entry and exit of only some materials", "display_order": 1, "is_correct": true, "explanation": "Precisely! It's picky about what passes through." },
+        { "option_text": "Because it is completely waterproof", "display_order": 2, "is_correct": false, "explanation": "It must allow water and nutrients through to survive." },
+        { "option_text": "Because it allows everything to enter freely", "display_order": 3, "is_correct": false, "explanation": "If it did that, the cell could be easily poisoned or damaged." },
+        { "option_text": "Because it is made of solid bone", "display_order": 4, "is_correct": false, "explanation": "It is a flexible layer made of lipids and proteins." }
+      ]
+    },
+    {
+      "question_text": "By which process do gases like $CO_{2}$ and $O_{2}$ move across the cell membrane?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Diffusion is the natural movement of substances from where they are crowded (high concentration) to where they are sparse (low concentration).",
+      "options": [
+        { "option_text": "Diffusion", "display_order": 1, "is_correct": true, "explanation": "Correct! Gases move naturally this way without using energy." },
+        { "option_text": "Osmosis", "display_order": 2, "is_correct": false, "explanation": "Osmosis refers specifically to the movement of water." },
+        { "option_text": "Active transport", "display_order": 3, "is_correct": false, "explanation": "Active transport requires energy, which isn't usually needed for these gases." },
+        { "option_text": "Endocytosis", "display_order": 4, "is_correct": false, "explanation": "This involves engulfing large particles, not gas molecules." }
+      ]
+    },
+    {
+      "question_text": "What is the specific name for the movement of water molecules through a selectively permeable membrane?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Osmosis is just a special type of diffusion that applies only to water moving through a membrane.",
+      "options": [
+        { "option_text": "Osmosis", "display_order": 1, "is_correct": true, "explanation": "Perfect! This is vital for maintaining cell hydration." },
+        { "option_text": "Transpiration", "display_order": 2, "is_correct": false, "explanation": "Transpiration is the loss of water vapor from plant leaves." },
+        { "option_text": "Evaporation", "display_order": 3, "is_correct": false, "explanation": "Evaporation is a physical process, not necessarily through a membrane." },
+        { "option_text": "Filtration", "display_order": 4, "is_correct": false, "explanation": "Filtration is based on pressure and pore size, not just concentration." }
+      ]
+    },
+    {
+      "question_text": "What will likely happen to a cell placed in a 'hypotonic' solution?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "In a hypotonic solution, there is more water outside the cell than inside. Water rushes in, causing the cell to swell up like a balloon!",
+      "options": [
+        { "option_text": "The cell gains water and swells up", "display_order": 1, "is_correct": true, "explanation": "Correct! 'Hypo' means low (low solute, high water)." },
+        { "option_text": "The cell loses water and shrinks", "display_order": 2, "is_correct": false, "explanation": "This happens in a hypertonic solution." },
+        { "option_text": "The cell remains the same size", "display_order": 3, "is_correct": false, "explanation": "This happens in an isotonic solution." },
+        { "option_text": "The cell immediately divides", "display_order": 4, "is_correct": false, "explanation": "Water movement doesn't trigger immediate division." }
+      ]
+    },
+    {
+      "question_text": "How is an 'isotonic' solution defined in relation to a cell?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "'Iso' means equal. In an isotonic solution, the concentration of water is the same inside and outside, so there is no net movement.",
+      "options": [
+        { "option_text": "A solution with exactly the same water concentration as the cell", "display_order": 1, "is_correct": true, "explanation": "Spot on! The cell stays happy and stable here." },
+        { "option_text": "A solution with much more salt than the cell", "display_order": 2, "is_correct": false, "explanation": "This would be a hypertonic solution." },
+        { "option_text": "A solution with no salt at all", "display_order": 3, "is_correct": false, "explanation": "This would be a hypotonic solution." },
+        { "option_text": "A solution that is frozen solid", "display_order": 4, "is_correct": false, "explanation": "The physical state doesn't define tonicity." }
+      ]
+    },
+    {
+      "question_text": "What happens to a cell when it is placed in a 'hypertonic' solution?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "A hypertonic solution has very little water compared to the cell. Water leaves the cell to balance things out, causing the cell to shrink.",
+      "options": [
+        { "option_text": "The cell loses water and will shrink", "display_order": 1, "is_correct": true, "explanation": "Correct! 'Hyper' means high (high solute, low water)." },
+        { "option_text": "The cell gains water and swells", "display_order": 2, "is_correct": false, "explanation": "This happens in a hypotonic solution." },
+        { "option_text": "The cell explodes immediately", "display_order": 3, "is_correct": false, "explanation": "Shrinking is the primary effect of losing water." },
+        { "option_text": "The cell turns into a plant cell", "display_order": 4, "is_correct": false, "explanation": "Solutions cannot change the type of cell." }
+      ]
+    },
+    {
+      "question_text": "The plasma membrane is flexible and made of which organic molecules?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The membrane is a 'fluid mosaic' made primarily of lipids (fats) and proteins. This allows it to be flexible and functional.",
+      "options": [
+        { "option_text": "Lipids and proteins", "display_order": 1, "is_correct": true, "explanation": "Exactly! These are the building blocks of the membrane." },
+        { "option_text": "Cellulose and sugar", "display_order": 2, "is_correct": false, "explanation": "Cellulose is found in the cell wall, not the plasma membrane." },
+        { "option_text": "DNA and RNA", "display_order": 3, "is_correct": false, "explanation": "These are genetic materials found inside the cell." },
+        { "option_text": "Vitamins and minerals", "display_order": 4, "is_correct": false, "explanation": "While present in the cell, they don't form the main structure of the membrane." }
+      ]
+    },
+    {
+      "question_text": "What is 'endocytosis'?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Endocytosis is like the cell 'eating'. The flexible membrane folds around food particles from the outside to bring them in. Amoeba does this!",
+      "options": [
+        { "option_text": "The process by which a cell engulfs food from its external environment", "display_order": 1, "is_correct": true, "explanation": "Correct! 'Endo' means inside, 'cytosis' refers to the cell." },
+        { "option_text": "The process of a cell dividing into two", "display_order": 2, "is_correct": false, "explanation": "That is mitosis or meiosis." },
+        { "option_text": "The process of water leaving the cell", "display_order": 3, "is_correct": false, "explanation": "That's related to osmosis/plasmolysis." },
+        { "option_text": "The process of building a cell wall", "display_order": 4, "is_correct": false, "explanation": "Cell wall synthesis is different from endocytosis." }
+      ]
+    },
+    {
+      "question_text": "What is the chemical composition of an eggshell?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Eggshells are hard and protective because they are made of Calcium Carbonate ($CaCO_{3}$).",
+      "options": [
+        { "option_text": "Calcium carbonate", "display_order": 1, "is_correct": true, "explanation": "Correct! This is what dissolves when put in dilute acid." },
+        { "option_text": "Sodium chloride", "display_order": 2, "is_correct": false, "explanation": "That is common table salt." },
+        { "option_text": "Cellulose", "display_order": 3, "is_correct": false, "explanation": "Cellulose is found in plants, not eggshells." },
+        { "option_text": "Pure protein", "display_order": 4, "is_correct": false, "explanation": "While the egg contains protein, the shell is mineral-based." }
+      ]
+    },
+    {
+      "question_text": "Why does a de-shelled egg swell when placed in pure water?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Pure water is hypotonic compared to the inside of the egg. Because of osmosis, water moves into the egg, causing it to increase in size.",
+      "options": [
+        { "option_text": "Because water passes into it by osmosis", "display_order": 1, "is_correct": true, "explanation": "Spot on! The egg membrane is selectively permeable." },
+        { "option_text": "Because the egg is absorbing air", "display_order": 2, "is_correct": false, "explanation": "Air doesn't cause this swelling in water." },
+        { "option_text": "Because the egg is getting cooked", "display_order": 3, "is_correct": false, "explanation": "Osmosis doesn't require heat." },
+        { "option_text": "Because the proteins are expanding", "display_order": 4, "is_correct": false, "explanation": "It's the influx of water that causes the change." }
+      ]
+    },
+    {
+      "question_text": "What will happen to a de-shelled egg if it is placed in a concentrated salt solution?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Concentrated salt water is hypertonic. It draws water *out* of the egg, making the egg look shriveled.",
+      "options": [
+        { "option_text": "The egg shrinks because water passes out of it", "display_order": 1, "is_correct": true, "explanation": "Correct! Water moves from high concentration (inside) to low (outside)." },
+        { "option_text": "The egg swells even more", "display_order": 2, "is_correct": false, "explanation": "This only happens in pure or very dilute water." },
+        { "option_text": "The egg turns into a salt crystal", "display_order": 3, "is_correct": false, "explanation": "It stays an egg, just a shrunken one." },
+        { "option_text": "Nothing happens", "display_order": 4, "is_correct": false, "explanation": "Osmosis will definitely occur across the membrane." }
+      ]
+    },
+    {
+      "question_text": "What happens to dry raisins when they are soaked in plain water for some time?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Dry raisins have very little water inside. Plain water moves into the raisins through osmosis, making them plump and swollen.",
+      "options": [
+        { "option_text": "They gain water and swell", "display_order": 1, "is_correct": true, "explanation": "Correct! This is a great everyday example of osmosis." },
+        { "option_text": "They lose weight and dissolve", "display_order": 2, "is_correct": false, "explanation": "They actually gain weight due to the added water." },
+        { "option_text": "They turn into grapes immediately", "display_order": 3, "is_correct": false, "explanation": "They swell, but they don't reverse the drying process completely." },
+        { "option_text": "They remain hard and dry", "display_order": 4, "is_correct": false, "explanation": "The skin of the raisin allows water to pass through." }
+      ]
+    },
+    {
+      "question_text": "What is the rigid outer covering present in plant cells but absent in animal cells?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Plant cells have an extra layer of protection called the Cell Wall. It gives them strength and a fixed shape.",
+      "options": [
+        { "option_text": "Cell wall", "display_order": 1, "is_correct": true, "explanation": "Exactly! It's what makes plants sturdy." },
+        { "option_text": "Nuclear membrane", "display_order": 2, "is_correct": false, "explanation": "Both plant and animal cells (eukaryotes) have this." },
+        { "option_text": "Plasma membrane", "display_order": 3, "is_correct": false, "explanation": "Both cell types have a plasma membrane." },
+        { "option_text": "Cytoplasm", "display_order": 4, "is_correct": false, "explanation": "Cytoplasm is found in all living cells." }
+      ]
+    },
+    {
+      "question_text": "What is the primary complex substance that makes up the plant cell wall?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Cellulose is a complex carbohydrate that provides structural strength to plants, helping them stand tall.",
+      "options": [
+        { "option_text": "Cellulose", "display_order": 1, "is_correct": true, "explanation": "Correct! It's a very tough and durable material." },
+        { "option_text": "Starch", "display_order": 2, "is_correct": false, "explanation": "Starch is for energy storage, not structural support." },
+        { "option_text": "Glucose", "display_order": 3, "is_correct": false, "explanation": "Glucose is a simple sugar used for energy." },
+        { "option_text": "Chitin", "display_order": 4, "is_correct": false, "explanation": "Chitin is found in fungi and insect shells, not plants." }
+      ]
+    },
+    {
+      "question_text": "What is 'plasmolysis'?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "When a living plant cell loses water, the contents of the cell shrink and pull away from the rigid cell wall. This specific process is called plasmolysis.",
+      "options": [
+        { "option_text": "The shrinkage of cell contents away from the cell wall due to water loss", "display_order": 1, "is_correct": true, "explanation": "Precisely! The wall stays put, but the inside shrivels." },
+        { "option_text": "The bursting of a cell due to too much water", "display_order": 2, "is_correct": false, "explanation": "That is the opposite of plasmolysis." },
+        { "option_text": "The movement of the nucleus into the cytoplasm", "display_order": 3, "is_correct": false, "explanation": "The nucleus stays within the shrinking protoplasm." },
+        { "option_text": "The process of food being made by chloroplasts", "display_order": 4, "is_correct": false, "explanation": "That is photosynthesis." }
+      ]
+    },
+    {
+      "question_text": "What are chloroplasts?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Chloroplasts are the 'solar panels' of the plant cell. They contain chlorophyll, which captures sunlight to make food.",
+      "options": [
+        { "option_text": "Small green granules in plant cells containing chlorophyll", "display_order": 1, "is_correct": true, "explanation": "Correct! They give plants their green color." },
+        { "option_text": "The part of the cell that produces proteins", "display_order": 2, "is_correct": false, "explanation": "That is the ribosome's job." },
+        { "option_text": "Fluid inside the nucleus", "display_order": 3, "is_correct": false, "explanation": "That would be nucleoplasm." },
+        { "option_text": "Tiny bags of digestive enzymes", "display_order": 4, "is_correct": false, "explanation": "Those are lysosomes." }
+      ]
+    },
+    {
+      "question_text": "Can plasmolysis or osmosis occur in dead cells?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Osmosis and plasmolysis are properties of *living* membranes. Once a cell is dead, its membrane no longer functions to control water movement in this way.",
+      "options": [
+        { "option_text": "No, only living cells can perform osmosis", "display_order": 1, "is_correct": true, "explanation": "Correct! Vitality is required for these membrane processes." },
+        { "option_text": "Yes, it happens in both living and dead cells", "display_order": 2, "is_correct": false, "explanation": "Dead cells lose the ability to maintain concentration gradients." },
+        { "option_text": "Only if the dead cell is very large", "display_order": 3, "is_correct": false, "explanation": "Size doesn't matter; life does." },
+        { "option_text": "Yes, but it happens much faster in dead cells", "display_order": 4, "is_correct": false, "explanation": "In dead cells, the membrane becomes fully permeable and leaks." }
+      ]
+    },
+    {
+      "question_text": "How do cell walls help plants, fungi, and bacteria in very dilute (hypotonic) surroundings?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The cell wall acts like a strong cage. Even when water rushes in and creates high pressure (turgor pressure), the wall prevents the cell from bursting.",
+      "options": [
+        { "option_text": "They allow cells to withstand high pressure without bursting", "display_order": 1, "is_correct": true, "explanation": "Exactly! It provides structural counter-pressure." },
+        { "option_text": "They prevent any water from entering the cell", "display_order": 2, "is_correct": false, "explanation": "Water still enters, but the cell is protected." },
+        { "option_text": "They help the cell move away from the water", "display_order": 3, "is_correct": false, "explanation": "Cell walls are rigid and don't help with movement." },
+        { "option_text": "They make the cell dissolve faster", "display_order": 4, "is_correct": false, "explanation": "The wall actually preserves the cell's integrity." }
+      ]
+    },
+    {
+      "question_text": "Which solution is typically used to stain human cheek cells for observation?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Methylene blue is a popular stain for animal cells because it highlights the nucleus and makes the cell structure stand out against a clear background.",
+      "options": [
+        { "option_text": "Methylene blue solution", "display_order": 1, "is_correct": true, "explanation": "Correct! It gives animal cells a nice blue tint." },
+        { "option_text": "Safranin", "display_order": 2, "is_correct": false, "explanation": "Safranin is usually used for plant tissues." },
+        { "option_text": "Orange juice", "display_order": 3, "is_correct": false, "explanation": "Not a scientific stain!" },
+        { "option_text": "Concentrated $H_{2}SO_{4}$", "display_order": 4, "is_correct": false, "explanation": "That is a strong acid that would destroy the cells." }
+      ]
+    },
+    {
+      "question_text": "What do we call the double-layered covering that surrounds the nucleus?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The nuclear membrane protects the DNA and has pores to allow certain materials to pass between the nucleus and the cytoplasm.",
+      "options": [
+        { "option_text": "Nuclear membrane", "display_order": 1, "is_correct": true, "explanation": "Correct! It keeps the 'brain' of the cell separate." },
+        { "option_text": "Plasma membrane", "display_order": 2, "is_correct": false, "explanation": "That's the outer boundary of the whole cell." },
+        { "option_text": "Cell wall", "display_order": 3, "is_correct": false, "explanation": "The cell wall is on the very outside of plant cells." },
+        { "option_text": "Cytoplasm", "display_order": 4, "is_correct": false, "explanation": "Cytoplasm is the fluid filling the cell." }
+      ]
+    },
+    {
+      "question_text": "What are chromosomes made of?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Chromosomes are long molecules of DNA tightly wrapped around proteins. They carry all our genetic instructions.",
+      "options": [
+        { "option_text": "DNA and protein", "display_order": 1, "is_correct": true, "explanation": "Precisely! DNA is the code, and protein provides the structure." },
+        { "option_text": "RNA and lipids", "display_order": 2, "is_correct": false, "explanation": "Chromosomes are primarily DNA-based." },
+        { "option_text": "Sugar and phosphate only", "display_order": 3, "is_correct": false, "explanation": "These are parts of DNA, but chromosomes also need proteins." },
+        { "option_text": "Starch and cellulose", "display_order": 4, "is_correct": false, "explanation": "These are plant structural materials." }
+      ]
+    },
+    {
+      "question_text": "What are the functional segments of DNA called?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Genes are the specific parts of DNA that tell the cell how to build proteins and determine our traits (like eye color).",
+      "options": [
+        { "option_text": "Genes", "display_order": 1, "is_correct": true, "explanation": "Correct! You 'inherit' these from your parents." },
+        { "option_text": "Ribosomes", "display_order": 2, "is_correct": false, "explanation": "Ribosomes read the instructions, but they aren't the segments of DNA." },
+        { "option_text": "Centrosomes", "display_order": 3, "is_correct": false, "explanation": "Centrosomes help in cell division." },
+        { "option_text": "Nucleoids", "display_order": 4, "is_correct": false, "explanation": "A nucleoid is a region in prokaryotes where DNA is found." }
+      ]
+    },
+    {
+      "question_text": "What is 'chromatin' material?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "When a cell is just doing its daily work and not dividing, its DNA looks like a tangled mess of thread. This is chromatin.",
+      "options": [
+        { "option_text": "An entangled mass of thread-like structures", "display_order": 1, "is_correct": true, "explanation": "Correct! It condenses into chromosomes only when the cell is ready to divide." },
+        { "option_text": "The liquid part of the nucleus", "display_order": 2, "is_correct": false, "explanation": "That's nucleoplasm." },
+        { "option_text": "The outer layer of the cell", "display_order": 3, "is_correct": false, "explanation": "That's the plasma membrane." },
+        { "option_text": "A type of green pigment", "display_order": 4, "is_correct": false, "explanation": "That's chlorophyll." }
+      ]
+    },
+    {
+      "question_text": "In prokaryotes, what do we call the undefined nuclear region that lacks a membrane?",
+      "question_type": "mcq",
+      "class_standard": "9",
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Prokaryotes (like bacteria) don't have a 'fancy' nucleus. Their DNA just sits in a clump called a nucleoid.",
+      "options": [
+        { "option_text": "Nucleoid", "display_order": 1, "is_correct": true, "explanation": "Correct! It's like a nucleus but without the wall." },
+        { "option_text": "Nucleus", "display_order": 2, "is_correct": false, "explanation": "A true nucleus has a membrane, which prokaryotes lack." },
+        { "option_text": "Nucleolus", "display_order": 3, "is_correct": false, "explanation": "The nucleolus is a structure *inside* a eukaryotic nucleus." },
+        { "option_text": "Cytoplasm", "display_order": 4, "is_correct": false, "explanation": "Cytoplasm is the whole fluid area, not just the DNA region." }
+      ]
+    },
+    {
+      "question_text": "What is the primary difference between prokaryotic and eukaryotic cells regarding the nucleus?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The word 'prokaryote' means 'before nucleus' (primitive), while 'eukaryote' means 'true nucleus' (advanced).",
+      "options": [
+        { "option_text": "Prokaryotes lack a nuclear membrane while eukaryotes have one", "display_order": 1, "is_correct": true, "explanation": "Spot on! This is the most fundamental difference." },
+        { "option_text": "Prokaryotes have many nuclei while eukaryotes have one", "display_order": 2, "is_correct": false, "explanation": "Prokaryotes don't even have one properly defined nucleus." },
+        { "option_text": "Only prokaryotes have DNA", "display_order": 3, "is_correct": false, "explanation": "Both types of cells must have DNA to function." },
+        { "option_text": "Eukaryotes are only found in water", "display_order": 4, "is_correct": false, "explanation": "Eukaryotes include plants, animals, and fungi living everywhere." }
+      ]
+    },
+    {
+      "question_text": "What is the fluid content found inside the plasma membrane?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Cytoplasm is the jelly-like substance that fills the cell and houses all the organelles.",
+      "options": [
+        { "option_text": "Cytoplasm", "display_order": 1, "is_correct": true, "explanation": "Correct! It's where most cellular activities happen." },
+        { "option_text": "Nucleoplasm", "display_order": 2, "is_correct": false, "explanation": "This is only the fluid found *inside* the nucleus." },
+        { "option_text": "Serum", "display_order": 3, "is_correct": false, "explanation": "Serum is a component of blood, not an intracellular fluid." },
+        { "option_text": "Water only", "display_order": 4, "is_correct": false, "explanation": "While it's mostly water, it contains many solutes and organelles." }
+      ]
+    },
+    {
+      "question_text": "Why are viruses not considered 'alive' until they enter a living host body?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Viruses are very simple. They lack a cell membrane and the machinery to perform life processes on their own. They must 'hijack' a host cell to function.",
+      "options": [
+        { "option_text": "Because they lack any membranes and cellular machinery", "display_order": 1, "is_correct": true, "explanation": "Correct! They don't meet the full criteria for being a 'cell'." },
+        { "option_text": "Because they are too small to be seen", "display_order": 2, "is_correct": false, "explanation": "Size doesn't determine if something is alive; many bacteria are also tiny." },
+        { "option_text": "Because they only eat electricity", "display_order": 3, "is_correct": false, "explanation": "Viruses don't 'eat' in the traditional sense." },
+        { "option_text": "Because they are made of metal", "display_order": 4, "is_correct": false, "explanation": "Viruses are organic, made of genetic material and protein." }
+      ]
+    },
+    {
+      "question_text": "What are the two types of Endoplasmic Reticulum (ER)?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The ER is a network of tubes. Some are bumpy (Rough) and some are smooth (Smooth) based on whether ribosomes are attached.",
+      "options": [
+        { "option_text": "Rough ER (RER) and Smooth ER (SER)", "display_order": 1, "is_correct": true, "explanation": "Perfect! RER makes proteins, and SER makes lipids." },
+        { "option_text": "Hard ER and Soft ER", "display_order": 2, "is_correct": false, "explanation": "The scientific terms are 'Rough' and 'Smooth'." },
+        { "option_text": "Primary ER and Secondary ER", "display_order": 3, "is_correct": false, "explanation": "They are categorized by texture, not by order of formation." },
+        { "option_text": "Inner ER and Outer ER", "display_order": 4, "is_correct": false, "explanation": "They are spread throughout the cytoplasm, not just inner/outer." }
+      ]
+    },
+    {
+      "question_text": "What gives the Rough Endoplasmic Reticulum (RER) its bumpy or rough appearance?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Ribosomes are like tiny protein factories. When they stick to the surface of the ER, it looks rough under a microscope.",
+      "options": [
+        { "option_text": "Ribosomes attached to its surface", "display_order": 1, "is_correct": true, "explanation": "Correct! These are the sites of protein synthesis." },
+        { "option_text": "Sugar crystals", "display_order": 2, "is_correct": false, "explanation": "Sugar is processed in the cell but doesn't coat the ER." },
+        { "option_text": "Tiny holes in the membrane", "display_order": 3, "is_correct": false, "explanation": "It's the particles on top, not holes, that give the texture." },
+        { "option_text": "Mitochondria", "display_order": 4, "is_correct": false, "explanation": "Mitochondria are separate organelles altogether." }
+      ]
+    },
+    {
+      "question_text": "Which organelle is specifically known as the site of protein manufacture?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Ribosomes take instructions from the DNA and use them to build proteins, which are the building blocks of the body.",
+      "options": [
+        { "option_text": "Ribosomes", "display_order": 1, "is_correct": true, "explanation": "Correct! You can find them floating in cytoplasm or on the RER." },
+        { "option_text": "Lysosomes", "display_order": 2, "is_correct": false, "explanation": "Lysosomes break things down; they don't build proteins." },
+        { "option_text": "Vacuoles", "display_order": 3, "is_correct": false, "explanation": "Vacuoles are for storage." },
+        { "option_text": "Golgi apparatus", "display_order": 4, "is_correct": false, "explanation": "Golgi packages proteins but doesn't make them." }
+      ]
+    },
+    {
+      "question_text": "What is the process of building the cell membrane using proteins and lipids called?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "'Biogenesis' means the creation of life/biological parts. Since the ER helps make the proteins and lipids for the membrane, the process is called membrane biogenesis.",
+      "options": [
+        { "option_text": "Membrane biogenesis", "display_order": 1, "is_correct": true, "explanation": "Correct! This is a key function of the Endoplasmic Reticulum." },
+        { "option_text": "Photosynthesis", "display_order": 2, "is_correct": false, "explanation": "This is making food from sunlight." },
+        { "option_text": "Endocytosis", "display_order": 3, "is_correct": false, "explanation": "This is the cell taking in food." },
+        { "option_text": "Plasmolysis", "display_order": 4, "is_correct": false, "explanation": "This is the shrinkage of the cell." }
+      ]
+    },
+    {
+      "question_text": "In vertebrate liver cells, what is a crucial function of the Smooth Endoplasmic Reticulum (SER)?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The liver is our body's filter. The SER in liver cells works hard to neutralize and clear out harmful drugs and toxins.",
+      "options": [
+        { "option_text": "Detoxifying many poisons and drugs", "display_order": 1, "is_correct": true, "explanation": "Precisely! It's the cell's internal cleanup crew for toxins." },
+        { "option_text": "Storing genetic information", "display_order": 2, "is_correct": false, "explanation": "That's the nucleus's job." },
+        { "option_text": "Capturing sunlight", "display_order": 3, "is_correct": false, "explanation": "That's the chloroplast's job." },
+        { "option_text": "Producing digestive enzymes", "display_order": 4, "is_correct": false, "explanation": "This is mostly done by the RER and Golgi." }
+      ]
+    },
+    {
+      "question_text": "What are 'cisterns' in the context of the Golgi apparatus?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The Golgi apparatus looks like a stack of pancakes. Each 'pancake' is a membrane-bound sac called a cistern.",
+      "options": [
+        { "option_text": "Stacks of membrane-bound vesicles arranged parallel to each other", "display_order": 1, "is_correct": true, "explanation": "Correct! This arrangement helps in efficient packaging." },
+        { "option_text": "The liquid inside the mitochondria", "display_order": 2, "is_correct": false, "explanation": "That is called the matrix." },
+        { "option_text": "Small holes in the cell wall", "display_order": 3, "is_correct": false, "explanation": "Those are plasmodesmata." },
+        { "option_text": "The tails of sperm cells", "display_order": 4, "is_correct": false, "explanation": "Those are flagella." }
+      ]
+    },
+    {
+      "question_text": "Which organelle is directly involved in the formation of lysosomes?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The Golgi apparatus modifies and packages substances. One of the things it 'packages' is the digestive enzymes that make up lysosomes.",
+      "options": [
+        { "option_text": "Golgi apparatus", "display_order": 1, "is_correct": true, "explanation": "Correct! It's like the shipping and receiving center." },
+        { "option_text": "Mitochondria", "display_order": 2, "is_correct": false, "explanation": "Mitochondria focus on energy, not packaging." },
+        { "option_text": "Chloroplast", "display_order": 3, "is_correct": false, "explanation": "Chloroplasts focus on food production." },
+        { "option_text": "Nucleus", "display_order": 4, "is_correct": false, "explanation": "The nucleus provides the blueprints but doesn't do the physical packaging." }
+      ]
+    },
+    {
+      "question_text": "Why are lysosomes often referred to as 'suicide bags' of the cell?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Lysosomes contain very strong enzymes. If a cell is badly damaged, the lysosomes might burst and digest the entire cell to clear it away!",
+      "options": [
+        { "option_text": "Because their enzymes can digest their own cell if it gets damaged", "display_order": 1, "is_correct": true, "explanation": "Correct! It's a way for the body to remove old or broken cells." },
+        { "option_text": "Because they contain poisonous gas", "display_order": 2, "is_correct": false, "explanation": "They contain digestive enzymes, not gas." },
+        { "option_text": "Because they explode when they touch water", "display_order": 3, "is_correct": false, "explanation": "They are perfectly stable in the cytoplasm unless the cell is in trouble." },
+        { "option_text": "Because they help the cell commit crimes", "display_order": 4, "is_correct": false, "explanation": "They are vital for health and recycling within the cell." }
+      ]
+    },
+    {
+      "question_text": "Which organelle is widely known as the 'powerhouse of the cell'?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Mitochondria take in nutrients and break them down to create energy-rich molecules (ATP) for the cell.",
+      "options": [
+        { "option_text": "Mitochondria", "display_order": 1, "is_correct": true, "explanation": "You got it! They generate the power needed for life." },
+        { "option_text": "Vacuole", "display_order": 2, "is_correct": false, "explanation": "Vacuoles are for storage, not power production." },
+        { "option_text": "Ribosome", "display_order": 3, "is_correct": false, "explanation": "Ribosomes make proteins, not energy." },
+        { "option_text": "Nucleus", "display_order": 4, "is_correct": false, "explanation": "The nucleus is the control center, not the powerhouse." }
+      ]
+    },
+    {
+      "question_text": "What does the acronym ATP stand for in biology?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "ATP is the energy currency of the cell. Whenever the cell needs to do work, it 'spends' ATP molecules.",
+      "options": [
+        { "option_text": "Adenosine triphosphate", "display_order": 1, "is_correct": true, "explanation": "Correct! It's the primary energy carrier in all living things." },
+        { "option_text": "Ammonium total phosphate", "display_order": 2, "is_correct": false, "explanation": "That is not a biological energy molecule." },
+        { "option_text": "Advanced tension particle", "display_order": 3, "is_correct": false, "explanation": "Sounds cool, but it's not the correct name!" },
+        { "option_text": "Adenine triple protein", "display_order": 4, "is_correct": false, "explanation": "It's a nucleotide-based molecule, not a protein." }
+      ]
+    },
+    {
+      "question_text": "Which two organelles are unique because they have their own DNA and ribosomes?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Mitochondria and Plastids are like 'cells within a cell'. Because they have their own DNA and ribosomes, they can even make some of their own proteins!",
+      "options": [
+        { "option_text": "Mitochondria and Plastids", "display_order": 1, "is_correct": true, "explanation": "Spot on! This suggests they might have been independent organisms long ago." },
+        { "option_text": "Golgi and ER", "display_order": 2, "is_correct": false, "explanation": "These rely entirely on the nucleus for instructions." },
+        { "option_text": "Lysosomes and Vacuoles", "display_order": 3, "is_correct": false, "explanation": "These are simple sacs and don't have their own DNA." },
+        { "option_text": "Nucleus and Ribosomes", "display_order": 4, "is_correct": false, "explanation": "The nucleus *contains* DNA, but ribosomes are made of RNA and protein." }
+      ]
+    },
+    {
+      "question_text": "What are the two main types of plastids found in plant cells?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Plastids are either colored (Chromoplasts) to attract pollinators or colorless (Leucoplasts) to store food.",
+      "options": [
+        { "option_text": "Chromoplasts and Leucoplasts", "display_order": 1, "is_correct": true, "explanation": "Correct! Chloroplasts are a specific type of chromoplast." },
+        { "option_text": "Protoplasts and Cytoplasts", "display_order": 2, "is_correct": false, "explanation": "These terms refer to parts of the cell, not plastid types." },
+        { "option_text": "Green plastids and Red plastids", "display_order": 3, "is_correct": false, "explanation": "While they can be those colors, the scientific names are broader." },
+        { "option_text": "Smooth and Rough plastids", "display_order": 4, "is_correct": false, "explanation": "This naming convention is for the ER." }
+      ]
+    },
+    {
+      "question_text": "What is the primary function of leucoplasts in a plant cell?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Leucoplasts are storage specialists! They don't have color because they are busy holding onto starch, oils, and proteins.",
+      "options": [
+        { "option_text": "Storage of starch, oils, and protein granules", "display_order": 1, "is_correct": true, "explanation": "Correct! They are like the cell's pantry." },
+        { "option_text": "Photosynthesis", "display_order": 2, "is_correct": false, "explanation": "That's the job of chloroplasts." },
+        { "option_text": "Energy production", "display_order": 3, "is_correct": false, "explanation": "That's the job of mitochondria." },
+        { "option_text": "Protein synthesis", "display_order": 4, "is_correct": false, "explanation": "That's the job of ribosomes." }
+      ]
+    },
+    {
+      "question_text": "What is the internal matrix or material of a chloroplast called?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Inside a chloroplast, there are stacks of membranes sitting in a fluid called the stroma.",
+      "options": [
+        { "option_text": "Stroma", "display_order": 1, "is_correct": true, "explanation": "Correct! This is where some parts of photosynthesis occur." },
+        { "option_text": "Matrix", "display_order": 2, "is_correct": false, "explanation": "Matrix is the fluid inside mitochondria." },
+        { "option_text": "Cytosol", "display_order": 3, "is_correct": false, "explanation": "Cytosol is the fluid part of the general cytoplasm." },
+        { "option_text": "Lumen", "display_order": 4, "is_correct": false, "explanation": "Lumen refers to the space inside the membrane sacs (thylakoids)." }
+      ]
+    },
+    {
+      "question_text": "In some plant cells, what percentage of the cell volume can vacuoles occupy?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Plant vacuoles are huge! They push the other organelles to the edge to provide pressure that keeps the plant upright.",
+      "options": [
+        { "option_text": "50% to 90%", "display_order": 1, "is_correct": true, "explanation": "Correct! They take up most of the space in mature plant cells." },
+        { "option_text": "Less than 10%", "display_order": 2, "is_correct": false, "explanation": "This might be true for animal cells, but not plants." },
+        { "option_text": "Exactly 100%", "display_order": 3, "is_correct": false, "explanation": "The cell still needs room for the nucleus and other parts!" },
+        { "option_text": "25% at most", "display_order": 4, "is_correct": false, "explanation": "They can grow much larger than 25%." }
+      ]
+    },
+    {
+      "question_text": "What are the two main types of cell division?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "easy",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Cells reproduce in two ways: Mitosis (for making identical copies) and Meiosis (for making reproductive cells).",
+      "options": [
+        { "option_text": "Mitosis and meiosis", "display_order": 1, "is_correct": true, "explanation": "Correct! These are the two paths of cell reproduction." },
+        { "option_text": "Fission and fusion", "display_order": 2, "is_correct": false, "explanation": "These are nuclear or bacterial processes, not the standard eukaryotic divisions." },
+        { "option_text": "Osmosis and diffusion", "display_order": 3, "is_correct": false, "explanation": "These are transport processes, not division." },
+        { "option_text": "Growth and decay", "display_order": 4, "is_correct": false, "explanation": "These are general life stages, not specific types of division." }
+      ]
+    },
+    {
+      "question_text": "Which type of cell division is primarily used for growth and tissue repair?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Mitosis makes exact duplicates. This is perfect for when you need more cells to grow taller or to heal a cut!",
+      "options": [
+        { "option_text": "Mitosis", "display_order": 1, "is_correct": true, "explanation": "Precisely! It maintains the same number of chromosomes." },
+        { "option_text": "Meiosis", "display_order": 2, "is_correct": false, "explanation": "Meiosis is only for making gametes (sperm and eggs)." },
+        { "option_text": "Endocytosis", "display_order": 3, "is_correct": false, "explanation": "This is a feeding process, not division." },
+        { "option_text": "Plasmolysis", "display_order": 4, "is_correct": false, "explanation": "This is cell shrinkage, not growth." }
+      ]
+    },
+    {
+      "question_text": "How many daughter cells are produced from one mother cell during mitosis?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "In mitosis, one cell splits once to become two identical twin daughter cells.",
+      "options": [
+        { "option_text": "Two identical daughter cells", "display_order": 1, "is_correct": true, "explanation": "Correct! They are clones of the original cell." },
+        { "option_text": "Four unique daughter cells", "display_order": 2, "is_correct": false, "explanation": "This happens in meiosis." },
+        { "option_text": "One new cell and one dead cell", "display_order": 3, "is_correct": false, "explanation": "Both cells are normally healthy and functional." },
+        { "option_text": "Hundreds of tiny cells", "display_order": 4, "is_correct": false, "explanation": "Mitosis only produces two cells at a time." }
+      ]
+    },
+    {
+      "question_text": "Which specific cell division process is used to produce gametes (eggs and sperm)?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Meiosis reduces the chromosome count by half so that when an egg and sperm meet, the baby has the correct total number!",
+      "options": [
+        { "option_text": "Meiosis", "display_order": 1, "is_correct": true, "explanation": "Correct! This is essential for sexual reproduction." },
+        { "option_text": "Mitosis", "display_order": 2, "is_correct": false, "explanation": "Mitosis is for body cells, not reproductive ones." },
+        { "option_text": "Binary fission", "display_order": 3, "is_correct": false, "explanation": "This is how bacteria reproduce." },
+        { "option_text": "Budding", "display_order": 4, "is_correct": false, "explanation": "This is a form of asexual reproduction found in organisms like yeast." }
+      ]
+    },
+    {
+      "question_text": "How many new cells are produced from a single mother cell after meiosis?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Meiosis involves two rounds of division, resulting in four daughter cells from just one mother cell.",
+      "options": [
+        { "option_text": "Four new cells", "display_order": 1, "is_correct": true, "explanation": "Correct! These cells eventually become gametes." },
+        { "option_text": "Two new cells", "display_order": 2, "is_correct": false, "explanation": "This is the result of mitosis." },
+        { "option_text": "Eight new cells", "display_order": 3, "is_correct": false, "explanation": "The standard meiotic process yields four." },
+        { "option_text": "Six new cells", "display_order": 4, "is_correct": false, "explanation": "The math leads to 2, then 4 cells." }
+      ]
+    },
+    {
+      "question_text": "How does the chromosome count in daughter cells produced by meiosis compare to the mother cell?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Meiosis is a 'reduction division'. It cuts the chromosome number in half so that offspring aren't born with double the DNA they need.",
+      "options": [
+        { "option_text": "Half the number compared to the mother cell", "display_order": 1, "is_correct": true, "explanation": "Precisely! This keeps the species' chromosome count stable." },
+        { "option_text": "Double the number compared to the mother cell", "display_order": 2, "is_correct": false, "explanation": "That would lead to genetic problems." },
+        { "option_text": "The exact same number", "display_order": 3, "is_correct": false, "explanation": "This is true for mitosis, not meiosis." },
+        { "option_text": "Zero chromosomes", "display_order": 4, "is_correct": false, "explanation": "A cell cannot function without chromosomes." }
+      ]
+    },
+    {
+      "question_text": "In the potato osmosis experiment, why does water gather in the hollowed-out potato cups containing sugar or salt?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "The sugar/salt inside the potato cup creates a high concentration. Water from the outside (low concentration) moves through the potato cells into the cup by osmosis.",
+      "options": [
+        { "option_text": "Due to osmosis, as the concentration is higher inside the cup", "display_order": 1, "is_correct": true, "explanation": "Correct! Water always tries to dilute the concentrated area." },
+        { "option_text": "The potato is melting into liquid", "display_order": 2, "is_correct": false, "explanation": "The potato remains solid; it's just water moving." },
+        { "option_text": "Gravity is pulling water in", "display_order": 3, "is_correct": false, "explanation": "Gravity affects water, but osmosis is the driving force here." },
+        { "option_text": "The salt is creating water out of thin air", "display_order": 4, "is_correct": false, "explanation": "Water is moving from the surrounding dish, not appearing from air." }
+      ]
+    },
+    {
+      "question_text": "Why is an empty potato cup (Cup A) used in the osmosis experiment?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "medium",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "In science, a 'control' is necessary to show that the results are actually caused by the variable we changed (in this case, adding sugar/salt).",
+      "options": [
+        { "option_text": "It serves as a control for comparison", "display_order": 1, "is_correct": true, "explanation": "Exactly! It shows that water doesn't just gather on its own." },
+        { "option_text": "To store extra sugar for later", "display_order": 2, "is_correct": false, "explanation": "The experiment is about osmosis, not storage." },
+        { "option_text": "To see if the potato will grow a new plant", "display_order": 3, "is_correct": false, "explanation": "The potato has been cut, so it won't grow in this setup." },
+        { "option_text": "Because it looks better in the diagram", "display_order": 4, "is_correct": false, "explanation": "It has a critical scientific purpose, not just visual." }
+      ]
+    },
+    {
+      "question_text": "Why does water NOT gather in a potato cup that has been boiled?",
+      "question_type": "mcq",
+      "class_standard": 9,
+      "subject": "science",
+      "chapter": "The Fundamental Unit of Life",
+      "difficulty": "hard",
+      "points": 10,
+      "is_active": true,
+      "answer_explanation": "Osmosis only works through living membranes. Boiling kills the potato cells and destroys their membranes, so they can no longer control water movement.",
+      "options": [
+        { "option_text": "Because boiling kills the cells, preventing osmosis", "display_order": 1, "is_correct": true, "explanation": "Spot on! Living cells are required for osmosis to happen." },
+        { "option_text": "Because boiled potatoes are waterproof", "display_order": 2, "is_correct": false, "explanation": "Actually, boiled potatoes are more leaky, but they don't perform osmosis." },
+        { "option_text": "Because the sugar evaporates", "display_order": 3, "is_correct": false, "explanation": "Sugar doesn't evaporate; it stays in the cup." },
+        { "option_text": "Because boiled water is heavier", "display_order": 4, "is_correct": false, "explanation": "The weight of the water isn't the issue; the health of the cells is." }
+      ]
+    }
+  ]
+}

@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { QuizSelectorModal } from '@/components/quiz/quiz-selector-modal'
 import { DashboardNavbar } from './dashboard-navbar'
+import { OfflineDownloadButton } from './offline-download-button'
+import { formatDate } from '@/lib/date-utils'
 
 interface DashboardData {
     user: {
@@ -13,6 +15,7 @@ interface DashboardData {
         role: string
         class: number | null
         points: number
+        offlineAccessEnabled: boolean
     }
     stats: {
         totalAnswered: number
@@ -24,10 +27,11 @@ interface DashboardData {
         classRank: number | null
     }
     upcomingReviews: any[]
+    assignments: any[]
 }
 
 export function DashboardClient({ data }: { data: DashboardData }) {
-    const { user, stats, upcomingReviews } = data
+    const { user, stats, upcomingReviews, assignments } = data
     const [showQuizSelector, setShowQuizSelector] = useState(false)
 
 
@@ -147,11 +151,78 @@ export function DashboardClient({ data }: { data: DashboardData }) {
                                     <span className="text-2xl">🚀</span>
                                     <div>
                                         <h3 className="font-semibold text-gray-800 text-sm">Space Hangman</h3>
-                                        <p className="text-xs text-gray-600">Learn & Play</p>
+                                        <p className="text-xs text-gray-600">Learn &amp; Play</p>
+                                    </div>
+                                </Link>
+
+                                <Link
+                                    href="/student/subjective-test"
+                                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-teal-50 to-emerald-50 rounded-lg hover:shadow-md transition-shadow cursor-pointer border border-teal-200"
+                                >
+                                    <span className="text-2xl">✍️</span>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-800 text-sm">Answer Evaluator</h3>
+                                        <p className="text-xs text-gray-600">Upload &amp; get AI feedback</p>
+                                    </div>
+                                </Link>
+
+                                <Link
+                                    href="/student/quick-practice"
+                                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-violet-50 to-indigo-50 rounded-lg hover:shadow-md transition-shadow cursor-pointer border border-violet-200"
+                                >
+                                    <span className="text-2xl">📝</span>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-800 text-sm">Quick Practice</h3>
+                                        <p className="text-xs text-gray-600">Self-written Q&amp;A · Instant marks</p>
                                     </div>
                                 </Link>
                             </div>
                         </div>
+
+                        {/* Open Assignments Section */}
+                        {assignments && assignments.length > 0 && (
+                            <div className="bg-white rounded-xl shadow-md p-5 border border-indigo-100">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                        <span className="text-xl">📋</span> Sample Paper Solutions
+                                    </h2>
+                                </div>
+                                <div className="space-y-3">
+                                    {assignments.map(assignment => {
+                                        const isDone = assignment.submission?.status === 'ok'
+
+                                        return (
+                                            <div key={assignment.id} className="p-4 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                                <div>
+                                                    <h3 className="font-bold text-gray-900">{assignment.title}</h3>
+                                                    <div className="flex items-center gap-2 mt-1">
+                                                        <span className="text-xs px-2 py-0.5 bg-gray-100 rounded font-medium text-gray-600">{assignment.subject}</span>
+                                                        <span className="text-xs text-gray-400">
+                                                            {formatDate(assignment.created_at)}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                {isDone ? (
+                                                    <div className="flex items-center gap-3">
+                                                        <span className="text-sm font-bold text-green-600 bg-green-50 px-3 py-1.5 rounded-lg border border-green-200">
+                                                            {assignment.submission.total_marks} / {assignment.submission.max_marks} Marks
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <Link
+                                                        href={`/student/assignments/${assignment.id}`}
+                                                        className="px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700 transition-colors shrink-0 text-center"
+                                                    >
+                                                        Submit Solution →
+                                                    </Link>
+                                                )}
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Progress Overview */}
                         <div className="bg-white rounded-xl shadow-md p-5">
@@ -264,6 +335,11 @@ export function DashboardClient({ data }: { data: DashboardData }) {
                                     : 'Start your learning streak today!'}
                             </p>
                         </div>
+
+                        {/* Offline Download — shown only when teacher has enabled it */}
+                        {user.offlineAccessEnabled && (
+                            <OfflineDownloadButton />
+                        )}
                     </div>
                 </div>
             </div>

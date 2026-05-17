@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { convertGuestSession } from '@/app/actions/guest'
 
 export async function GET(request: Request) {
     const requestUrl = new URL(request.url)
@@ -55,6 +56,14 @@ export async function GET(request: Request) {
         }
 
         console.log('Auth Callback: User found', { userId: user.id })
+
+        // Convert guest session if one exists
+        try {
+            await convertGuestSession(user.id)
+            console.log('Auth Callback: Guest session conversion attempted')
+        } catch (convertError) {
+            console.error('Auth Callback: Guest session conversion failed', convertError)
+        }
 
         if (user) {
             // Check if profile exists

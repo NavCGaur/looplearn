@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { signOut } from '@/app/actions/auth'
 import { TeacherStats } from '@/app/actions/teacher-dashboard'
@@ -12,8 +13,10 @@ import {
     Zap,
     TrendingUp,
     PlusCircle,
-    Layout
+    Layout,
+    Upload
 } from 'lucide-react'
+import { UploadAssignmentModal } from '@/components/teacher/upload-assignment-modal'
 
 interface TeacherDashboardProps {
     data: {
@@ -29,6 +32,7 @@ interface TeacherDashboardProps {
 
 export function TeacherDashboardClient({ data }: TeacherDashboardProps) {
     const { user, stats } = data
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
 
     const handleSignOut = async () => {
         await signOut()
@@ -176,6 +180,36 @@ export function TeacherDashboardClient({ data }: TeacherDashboardProps) {
                                         View student list and individual performance analytics.
                                     </p>
                                 </Link>
+
+                                <Link
+                                    href="/teacher/quick-practice-review"
+                                    className="group p-4 bg-gradient-to-br from-violet-50 to-indigo-50 border border-violet-200 rounded-xl hover:border-violet-400 hover:shadow-md transition-all"
+                                >
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <div className="p-2 bg-violet-100 rounded-lg">
+                                            <span className="text-xl">📋</span>
+                                        </div>
+                                        <h3 className="font-bold text-gray-800">Quick Practice Review</h3>
+                                    </div>
+                                    <p className="text-gray-500 text-sm">
+                                        View student answer sheets · See Gemini's evaluation · Flag incorrect gradings.
+                                    </p>
+                                </Link>
+
+                                <button
+                                    onClick={() => setIsUploadModalOpen(true)}
+                                    className="group p-4 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all text-left"
+                                >
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <div className="p-2 bg-blue-100 rounded-lg">
+                                            <Upload className="w-6 h-6 text-blue-600" />
+                                        </div>
+                                        <h3 className="font-bold text-gray-800">Upload Assignment</h3>
+                                    </div>
+                                    <p className="text-gray-500 text-sm">
+                                        Upload a question paper for students to solve and submit answers.
+                                    </p>
+                                </button>
                             </div>
                         </section>
 
@@ -274,6 +308,11 @@ export function TeacherDashboardClient({ data }: TeacherDashboardProps) {
                     </div>
                 </div>
             </main>
+
+            <UploadAssignmentModal
+                isOpen={isUploadModalOpen}
+                onClose={() => setIsUploadModalOpen(false)}
+            />
         </div>
     )
 }

@@ -50,6 +50,36 @@ export default async function GeneratorPage() {
                     </p>
                 </div>
 
+                {/* PDF Mode Banner */}
+                <Link
+                    href="/teacher/generator/pdf"
+                    className="group flex items-center gap-4 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-2xl p-5 mb-4 shadow-lg hover:shadow-xl hover:scale-[1.01] transition-all text-white"
+                >
+                    <span className="text-4xl">📄</span>
+                    <div className="flex-1">
+                        <p className="font-bold text-lg">Generate from Chapter PDF</p>
+                        <p className="text-violet-200 text-sm">
+                            Upload a PDF and Gemini will read it and create questions directly from the content — no typing needed.
+                        </p>
+                    </div>
+                    <span className="text-2xl group-hover:translate-x-1 transition-transform">→</span>
+                </Link>
+
+                {/* Subjective Evaluator Banner */}
+                <Link
+                    href="/teacher/subjective-test"
+                    className="group flex items-center gap-4 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-5 mb-8 shadow-lg hover:shadow-xl hover:scale-[1.01] transition-all text-white"
+                >
+                    <span className="text-4xl">✍️</span>
+                    <div className="flex-1">
+                        <p className="font-bold text-lg">New: AI Answer Evaluator</p>
+                        <p className="text-emerald-100 text-sm">
+                            Students upload handwritten answers — Gemini grades them stepwise with marks &amp; feedback, like a real examiner.
+                        </p>
+                    </div>
+                    <span className="text-2xl group-hover:translate-x-1 transition-transform">→</span>
+                </Link>
+
                 <QuestionGenerator />
 
             </main>

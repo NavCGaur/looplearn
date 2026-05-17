@@ -24,6 +24,7 @@ export default async function StudentAnalyticsPage({ params }: { params: Promise
         .single()
 
     const navbarUser = {
+        id: user?.id || '',
         name: profile?.display_name || user?.email || 'Teacher',
         email: user?.email
     }

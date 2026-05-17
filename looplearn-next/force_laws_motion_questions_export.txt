@@ -1,0 +1,176 @@
+# Force and Laws of Motion (Class 9) Questions
+
+Q1: Newton's ___ law states that every action has an equal and opposite reaction
+Answer: __________
+
+Q2: Which has more inertia: a rubber ball or a stone of the same size?
+A) Rubber ball
+B) Stone
+C) Both have equal inertia
+D) Cannot be determined
+
+Q3: Which has more inertia: a bicycle or a train?
+A) Bicycle
+B) Train
+C) Both have equal inertia
+D) Depends on speed
+
+Q4: Inertia of an object depends on its:
+A) Speed
+B) Mass
+C) Shape
+D) Color
+
+Q5: Why do leaves fall off when we vigorously shake a tree branch?
+A) Wind blows them away
+B) Inertia of leaves resists branch motion
+C) Gravity pulls them down
+D) Leaves are already dead
+
+Q6: Why do you fall forward when a moving bus suddenly stops?
+A) Bus pushes you forward
+B) Inertia keeps your body moving forward
+C) Gravity pulls you forward
+D) Air resistance pushes you
+
+Q7: Why do you fall backward when a bus starts moving from rest?
+A) Bus pulls you backward
+B) Inertia keeps your body at rest while bus moves
+C) Air pushes you back
+D) Seat belt pulls you back
+
+Q8: How can a horse pull a cart if action and reaction are equal and opposite?
+A) Newton's third law doesn't apply here
+B) Ground pushes horse forward in reaction to horse pushing ground back
+C) Horse is stronger than the cart
+D) Cart helps push the horse
+
+Q9: Why is it difficult for a fireman to hold a hose ejecting water at high velocity?
+A) Water is too heavy
+B) Reaction force pushes hose backward
+C) Hose is slippery
+D) Fireman is tired
+
+Q10: When a carpet is beaten with a stick, why does dust come out?
+A) Stick breaks the dust particles
+B) Inertia of dust resists carpet's motion
+C) Wind blows dust away
+D) Gravity pulls dust down
+
+Q11: Why should luggage on a bus roof be tied with a rope?
+A) To prevent theft
+B) Inertia can make it fall during sudden motion changes
+C) Wind will blow it away
+D) Rain will damage it
+
+Q12: A cricket ball rolling on level ground slows down and stops. Why?
+A) Batsman didn't hit hard enough
+B) Force of friction opposes the motion
+C) Ball naturally wants to stop
+D) Gravity pulls it down
+
+Q13: What is momentum?
+A) Mass × acceleration
+B) Mass × velocity
+C) ½ × mass × velocity²
+D) Force × time
+
+Q14: According to Newton's first law of motion, an object will continue in its state of rest or uniform motion unless:
+A) It gets tired
+B) An unbalanced external force acts on it
+C) Time passes
+D) It wants to stop
+
+Q15: Newton's second law of motion can be expressed as:
+A) F = m/a
+B) F = ma
+C) F = m + a
+D) F = m - a
+
+Q16: Newton's third law of motion states:
+A) Force equals mass times acceleration
+B) For every action, there's equal and opposite reaction
+C) Objects remain at rest or in motion
+D) Momentum is conserved
+
+Q17: What is the SI unit of momentum?
+A) Newton (N)
+B) kg·m/s
+C) Joule (J)
+D) kg·m/s²
+
+Q18: The law of conservation of momentum states that:
+A) Momentum always increases
+B) Total momentum remains constant in absence of external force
+C) Momentum is always zero
+D) Faster objects have less momentum
+
+Q19: If two objects collide and stick together, what happens to their total momentum?
+A) It doubles
+B) It remains the same
+C) It becomes zero
+D) It is lost as heat
+
+Q20: A truck and a car are moving with the same velocity. Which has more momentum?
+A) Car
+B) Truck
+C) Both have equal momentum
+D) Cannot be determined
+
+Q21: When you push a wall, it doesn't move. According to Newton's third law, does the wall push back?
+A) True
+B) False
+
+Q22: If a moving cabinet requires 200 N force to move at constant velocity, what is the friction force?
+A) 0 N
+B) 200 N
+C) 100 N
+D) 400 N
+
+Q23: Two objects of equal mass move in opposite directions with equal speed and collide, sticking together. What is their velocity after collision?
+A) Double the original speed
+B) Zero (they come to rest)
+C) Same as original speed
+D) Half the original speed
+
+Q24: Why doesn't a massive parked truck move when you push it with small force?
+A) Newton's third law doesn't apply
+B) Static friction cancels your applied force
+C) Truck is too heavy to move
+D) You're pushing in wrong direction
+
+Q25: What is the relationship between force and momentum?
+A) Force equals momentum
+B) Force is rate of change of momentum
+C) Force is square of momentum
+D) Force and momentum are unrelated
+
+
+
+# Answer Key
+
+Q1: third
+Q2: B (Stone)
+Q3: B (Train)
+Q4: B (Mass)
+Q5: B (Inertia of leaves resists branch motion)
+Q6: B (Inertia keeps your body moving forward)
+Q7: B (Inertia keeps your body at rest while bus moves)
+Q8: B (Ground pushes horse forward in reaction to horse pushing ground back)
+Q9: B (Reaction force pushes hose backward)
+Q10: B (Inertia of dust resists carpet's motion)
+Q11: B (Inertia can make it fall during sudden motion changes)
+Q12: B (Force of friction opposes the motion)
+Q13: B (Mass × velocity)
+Q14: B (An unbalanced external force acts on it)
+Q15: B (F = ma)
+Q16: B (For every action, there's equal and opposite reaction)
+Q17: B (kg·m/s)
+Q18: B (Total momentum remains constant in absence of external force)
+Q19: B (It remains the same)
+Q20: B (Truck)
+Q21: A (True)
+Q22: B (200 N)
+Q23: B (Zero (they come to rest))
+Q24: B (Static friction cancels your applied force)
+Q25: B (Force is rate of change of momentum)

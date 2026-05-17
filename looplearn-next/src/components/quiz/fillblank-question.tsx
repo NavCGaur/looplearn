@@ -10,14 +10,15 @@ interface FillBlankQuestionProps {
     onAnswer: (answer: string, correct: boolean) => void
     answered: boolean
     userAnswer: string | null
+    disabled?: boolean
 }
 
-export function FillBlankQuestion({ question, onAnswer, answered, userAnswer }: FillBlankQuestionProps) {
+export function FillBlankQuestion({ question, onAnswer, answered, userAnswer, disabled }: FillBlankQuestionProps) {
     const [input, setInput] = useState('')
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        if (answered || !input.trim()) return
+        if (answered || disabled || !input.trim()) return
 
         const acceptedAnswers = question.fillblank_answers?.map(a => a.accepted_answer) || []
         const isCorrect = fuzzyMatchAnswer(input, acceptedAnswers, 0.2)
@@ -65,8 +66,8 @@ export function FillBlankQuestion({ question, onAnswer, answered, userAnswer }: 
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        disabled={answered}
-                        placeholder="answer here"
+                        disabled={answered || disabled}
+                        placeholder={disabled ? "Please read the question first..." : "answer here"}
                         className={`w-full px-4 py-3 text-lg border-2 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all ${answered
                             ? userAnswer && fuzzyMatchAnswer(userAnswer, question.fillblank_answers?.map(a => a.accepted_answer) || [], 0.2)
                                 ? 'border-green-500 bg-green-50'
@@ -81,7 +82,7 @@ export function FillBlankQuestion({ question, onAnswer, answered, userAnswer }: 
                 {!answered && (
                     <button
                         type="submit"
-                        disabled={!input.trim()}
+                        disabled={!input.trim() || disabled}
                         className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     >
                         Check Answer

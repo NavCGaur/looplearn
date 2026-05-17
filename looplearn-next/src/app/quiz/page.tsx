@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
 
 interface QuizPageProps {
-    searchParams: Promise<{ subject?: string; class?: string; excludeIds?: string; chapter?: string }>
+    searchParams: Promise<{ subject?: string; class?: string; excludeIds?: string; chapter?: string; mode?: string; guestSession?: string }>
 }
 
 function QuizLoading() {
@@ -23,6 +23,8 @@ async function QuizContent({ searchParams }: QuizPageProps) {
     const classStandard = params.class ? parseInt(params.class) : undefined
     const excludeIds = params.excludeIds ? params.excludeIds.split(',').filter(Boolean) : []
     const chapter = params.chapter
+    const mode = params.mode === 'chapter_review' ? 'chapter_review' : 'standard'
+    const guestSession = params.guestSession // Session ID passed via URL
 
     const user = await getUser()
     const isGuest = !user
@@ -33,11 +35,13 @@ async function QuizContent({ searchParams }: QuizPageProps) {
         classStandard: classStandard || user?.profile?.class_standard || 8,
         excludeQuestionIds: isGuest ? excludeIds : undefined,
         chapter,
+        mode,
     })
 
     return <QuizClient
         questions={questions}
         isGuest={isGuest}
+        guestSessionId={guestSession}
         subject={subject}
         classStandard={classStandard || user?.profile?.class_standard || 8}
         chapter={chapter}

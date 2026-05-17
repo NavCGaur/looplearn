@@ -1,629 +1,811 @@
 {
     "questions": [
         {
-            "question_text": "How many rational numbers exist between 1 and 2?",
-            "question_type": "mcq",
-            "class_standard": 9,
-            "subject": "mathematics",
-            "chapter": "Number System",
-            "difficulty": "easy",
-            "points": 10,
-            "is_active": true,
-            "options": [
-                {
-                    "option_text": "Exactly 5",
-                    "display_order": 1,
-                    "is_correct": false,
-                    "explanation": "Between any two numbers, there are infinitely many rational numbers"
-                },
-                {
-                    "option_text": "Exactly 10",
-                    "display_order": 2,
-                    "is_correct": false,
-                    "explanation": "Between any two numbers, there are infinitely many rational numbers"
-                },
-                {
-                    "option_text": "Exactly 100",
-                    "display_order": 3,
-                    "is_correct": false,
-                    "explanation": "Between any two numbers, there are infinitely many rational numbers"
-                },
-                {
-                    "option_text": "Infinitely many",
-                    "display_order": 4,
-                    "is_correct": true,
-                    "explanation": "Correct! Between any two numbers, we can always find infinitely many rational numbers"
-                }
-            ]
-        },
-        {
-            "question_text": "Using the method of equal denominators, if 1 = 6/6 and 2 = 12/6, what is the FIRST rational number between them?",
+            "question_text": "How many sides does a quadrilateral have?",
             "question_type": "fillblank",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
+            "chapter": "Quadrilaterals",
             "difficulty": "easy",
             "points": 10,
             "is_active": true,
+            "answer_explanation": "Quadrilateral means 'four sides' (quad = four, lateral = sides). It's a closed 2D polygon with 4 sides, 4 vertices, and 4 angles.",
             "fillblank_answers": [
                 {
-                    "accepted_answer": "7/6",
+                    "accepted_answer": "4",
                     "is_case_sensitive": false,
                     "is_primary": true
                 },
                 {
-                    "accepted_answer": "7 / 6",
-                    "is_case_sensitive": false,
-                    "is_primary": false
-                },
-                {
-                    "accepted_answer": "7/ 6",
-                    "is_case_sensitive": false,
-                    "is_primary": false
-                },
-                {
-                    "accepted_answer": "7 /6",
+                    "accepted_answer": "four",
                     "is_case_sensitive": false,
                     "is_primary": false
                 }
             ]
         },
         {
-            "question_text": "Which of the following is NOT a rational number between 3/5 (0.6) and 4/5 (0.8)?",
+            "question_text": "Which of the following is NOT a type of quadrilateral?",
             "question_type": "mcq",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
-            "difficulty": "medium",
-            "points": 10,
-            "is_active": true,
-            "options": [
-                {
-                    "option_text": "19/30 (≈ 0.633)",
-                    "display_order": 1,
-                    "is_correct": false,
-                    "explanation": "19/30 = 0.633, which is between 0.6 and 0.8"
-                },
-                {
-                    "option_text": "7/10 (= 0.7)",
-                    "display_order": 2,
-                    "is_correct": false,
-                    "explanation": "7/10 = 0.7, which is between 0.6 and 0.8"
-                },
-                {
-                    "option_text": "5/6 (≈ 0.833)",
-                    "display_order": 3,
-                    "is_correct": true,
-                    "explanation": "Correct! 5/6 ≈ 0.833, which is GREATER than 4/5 (0.8)"
-                },
-                {
-                    "option_text": "21/30 (= 0.7)",
-                    "display_order": 4,
-                    "is_correct": false,
-                    "explanation": "21/30 = 0.7, which is between 0.6 and 0.8"
-                }
-            ]
-        },
-        {
-            "question_text": "After converting 3/5 = 18/30 and 4/5 = 24/30, what is the THIRD rational number between them?",
-            "question_type": "fillblank",
-            "class_standard": 9,
-            "subject": "mathematics",
-            "chapter": "Number System",
-            "difficulty": "medium",
-            "points": 10,
-            "is_active": true,
-            "fillblank_answers": [
-                {
-                    "accepted_answer": "21/30",
-                    "is_case_sensitive": false,
-                    "is_primary": true
-                },
-                {
-                    "accepted_answer": "21 / 30",
-                    "is_case_sensitive": false,
-                    "is_primary": false
-                },
-                {
-                    "accepted_answer": "7/10",
-                    "is_case_sensitive": false,
-                    "is_primary": false
-                },
-                {
-                    "accepted_answer": "7 / 10",
-                    "is_case_sensitive": false,
-                    "is_primary": false
-                }
-            ]
-        },
-        {
-            "question_text": "What is the approximate value of √3 on the number line?",
-            "question_type": "mcq",
-            "class_standard": 9,
-            "subject": "mathematics",
-            "chapter": "Number System",
+            "chapter": "Quadrilaterals",
             "difficulty": "easy",
             "points": 10,
             "is_active": true,
+            "answer_explanation": "Pentagon has 5 sides. Quadrilaterals include: rectangle, square, parallelogram, rhombus, trapezium, and kite - all with 4 sides.",
             "options": [
                 {
-                    "option_text": "1.5",
+                    "option_text": "Rectangle",
                     "display_order": 1,
                     "is_correct": false,
-                    "explanation": "√3 ≈ 1.732, not 1.5"
+                    "explanation": "Rectangle is a quadrilateral with 4 right angles"
                 },
                 {
-                    "option_text": "1.732",
+                    "option_text": "Trapezium",
                     "display_order": 2,
-                    "is_correct": true,
-                    "explanation": "Correct! √3 ≈ 1.732"
-                },
-                {
-                    "option_text": "2.0",
-                    "display_order": 3,
                     "is_correct": false,
-                    "explanation": "√3 is less than 2"
+                    "explanation": "Trapezium is a quadrilateral with one pair of parallel sides"
                 },
                 {
-                    "option_text": "1.414",
+                    "option_text": "Pentagon",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": "Correct! Pentagon has 5 sides, not 4"
+                },
+                {
+                    "option_text": "Rhombus",
                     "display_order": 4,
                     "is_correct": false,
-                    "explanation": "1.414 is approximately √2, not √3"
+                    "explanation": "Rhombus is a quadrilateral with all sides equal"
                 }
             ]
         },
         {
-            "question_text": "Are the square roots of ALL positive integers irrational?",
+            "question_text": "Which quadrilateral has diagonals that are equal and bisect each other at 90°?",
+            "question_type": "fillblank",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "answer_explanation": "Square has diagonals that are: (1) equal in length, (2) bisect each other, and (3) perpendicular (meet at 90°). Rectangle has equal diagonals but not at 90°.",
+            "fillblank_answers": [
+                {
+                    "accepted_answer": "square",
+                    "is_case_sensitive": false,
+                    "is_primary": true
+                }
+            ]
+        },
+        {
+            "question_text": "What is the sum of all interior angles of a quadrilateral?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Sum of interior angles = (n-2) × 180° where n = number of sides. For quadrilateral: (4-2) × 180° = 2 × 180° = 360°.",
+            "options": [
+                {
+                    "option_text": "180°",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "This is sum for a triangle (3 sides)"
+                },
+                {
+                    "option_text": "360°",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! All quadrilaterals have angle sum = 360°"
+                },
+                {
+                    "option_text": "540°",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "This is sum for a pentagon (5 sides)"
+                },
+                {
+                    "option_text": "720°",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "This is sum for a hexagon (6 sides)"
+                }
+            ]
+        },
+        {
+            "question_text": "In a parallelogram, one angle is 80°. What are the measures of the other three angles?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "answer_explanation": "In parallelogram: opposite angles are equal, adjacent angles are supplementary (sum=180°). If one angle = 80°, opposite = 80°. Adjacent angles = 180° - 80° = 100°.",
+            "options": [
+                {
+                    "option_text": "80°, 100°, 100°",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": "Correct! Opposite angles equal (80°), adjacent supplementary (100°)"
+                },
+                {
+                    "option_text": "80°, 80°, 120°",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "Sum would be 360° but angles don't follow parallelogram rules"
+                },
+                {
+                    "option_text": "90°, 90°, 100°",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "Opposite angles must be equal in parallelogram"
+                },
+                {
+                    "option_text": "100°, 80°, 120°",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "Adjacent angles sum should be 180°"
+                }
+            ]
+        },
+        {
+            "question_text": "In a parallelogram, opposite angles are:",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Key property of parallelogram: opposite angles are equal. Also, adjacent angles are supplementary (sum = 180°).",
+            "options": [
+                {
+                    "option_text": "Equal",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": "Correct! Opposite angles in parallelogram are always equal"
+                },
+                {
+                    "option_text": "Supplementary",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "Adjacent angles are supplementary, not opposite"
+                },
+                {
+                    "option_text": "Complementary",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "Complementary means sum = 90°, not true here"
+                },
+                {
+                    "option_text": "Unequal",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "Opposite angles are always equal in parallelogram"
+                }
+            ]
+        },
+        {
+            "question_text": "Is it possible to have a quadrilateral with all obtuse angles (each > 90°)?",
             "question_type": "truefalse",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
-            "difficulty": "easy",
-            "points": 10,
+            "chapter": "Quadrilaterals",
+            "difficulty": "medium",
+            "points": 15,
             "is_active": true,
+            "answer_explanation": "False - If all 4 angles are obtuse (>90°), their sum would exceed 4×90° = 360°. But quadrilateral angle sum must equal exactly 360°. Impossible!",
             "options": [
                 {
                     "option_text": "True",
                     "display_order": 1,
                     "is_correct": false,
-                    "explanation": "Not all square roots are irrational. Perfect squares like √16 = 4 are rational"
+                    "explanation": "Four obtuse angles would sum to more than 360°"
                 },
                 {
                     "option_text": "False",
                     "display_order": 2,
                     "is_correct": true,
-                    "explanation": "Correct! Perfect squares like √16 = 4, √25 = 5 are rational numbers"
+                    "explanation": "Correct! Sum would exceed 360°, which violates angle sum property"
                 }
             ]
         },
         {
-            "question_text": "What is the decimal expansion of 10/3?",
+            "question_text": "In a trapezium ABCD with AB∥CD, if ∠A = 55° and ∠B = 70°, what is ∠D?",
             "question_type": "mcq",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
-            "difficulty": "easy",
-            "points": 10,
-            "is_active": true,
-            "options": [
-                {
-                    "option_text": "3.33 (terminating)",
-                    "display_order": 1,
-                    "is_correct": false,
-                    "explanation": "10/3 is a non-terminating decimal"
-                },
-                {
-                    "option_text": "3.333... (non-terminating repeating)",
-                    "display_order": 2,
-                    "is_correct": true,
-                    "explanation": "Correct! 10/3 = 3.333... (3 repeats forever)"
-                },
-                {
-                    "option_text": "3.3 (terminating)",
-                    "display_order": 3,
-                    "is_correct": false,
-                    "explanation": "10/3 is a non-terminating decimal"
-                },
-                {
-                    "option_text": "3.030303... (non-terminating repeating)",
-                    "display_order": 4,
-                    "is_correct": false,
-                    "explanation": "10/3 = 3.333..., not 3.0303..."
-                }
-            ]
-        },
-        {
-            "question_text": "What is the decimal expansion of 7/8?",
-            "question_type": "fillblank",
-            "class_standard": 9,
-            "subject": "mathematics",
-            "chapter": "Number System",
-            "difficulty": "easy",
-            "points": 10,
-            "is_active": true,
-            "fillblank_answers": [
-                {
-                    "accepted_answer": "0.875",
-                    "is_case_sensitive": false,
-                    "is_primary": true
-                },
-                {
-                    "accepted_answer": ".875",
-                    "is_case_sensitive": false,
-                    "is_primary": false
-                }
-            ]
-        },
-        {
-            "question_text": "What is the decimal expansion of 1/7?",
-            "question_type": "mcq",
-            "class_standard": 9,
-            "subject": "mathematics",
-            "chapter": "Number System",
-            "difficulty": "medium",
-            "points": 10,
-            "is_active": true,
-            "options": [
-                {
-                    "option_text": "0.14 (terminating)",
-                    "display_order": 1,
-                    "is_correct": false,
-                    "explanation": "1/7 is a non-terminating, repeating decimal"
-                },
-                {
-                    "option_text": "0.142857142857... (non-terminating repeating)",
-                    "display_order": 2,
-                    "is_correct": true,
-                    "explanation": "Correct! 1/7 = 0.142857142857... (142857 repeats)"
-                },
-                {
-                    "option_text": "0.1428571 (terminating)",
-                    "display_order": 3,
-                    "is_correct": false,
-                    "explanation": "1/7 is a non-terminating decimal"
-                },
-                {
-                    "option_text": "0.17 (terminating)",
-                    "display_order": 4,
-                    "is_correct": false,
-                    "explanation": "1/7 ≠ 0.17"
-                }
-            ]
-        },
-        {
-            "question_text": "Convert 0.3333... (recurring) to a fraction in the form p/q",
-            "question_type": "mcq",
-            "class_standard": 9,
-            "subject": "mathematics",
-            "chapter": "Number System",
+            "chapter": "Quadrilaterals",
             "difficulty": "medium",
             "points": 15,
             "is_active": true,
+            "answer_explanation": "In trapezium, angles on same side (between parallel lines) are supplementary: ∠A + ∠D = 180°. So ∠D = 180° - 55° = 125°.",
             "options": [
                 {
-                    "option_text": "3/10",
+                    "option_text": "125°",
                     "display_order": 1,
-                    "is_correct": false,
-                    "explanation": "3/10 = 0.3 (terminating), not 0.333..."
-                },
-                {
-                    "option_text": "1/3",
-                    "display_order": 2,
                     "is_correct": true,
-                    "explanation": "Correct! 1/3 = 0.3333... (recurring)"
+                    "explanation": "Correct! ∠A + ∠D = 180° → ∠D = 180° - 55° = 125°"
                 },
                 {
-                    "option_text": "3/9",
+                    "option_text": "110°",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "This is ∠C (180° - 70°), not ∠D"
+                },
+                {
+                    "option_text": "55°",
                     "display_order": 3,
                     "is_correct": false,
-                    "explanation": "While 3/9 = 1/3, the simplified form is 1/3"
+                    "explanation": "∠D is not equal to ∠A in trapezium"
                 },
                 {
-                    "option_text": "33/100",
+                    "option_text": "70°",
                     "display_order": 4,
                     "is_correct": false,
-                    "explanation": "33/100 = 0.33 (terminating), not 0.333..."
+                    "explanation": "This is ∠B, not ∠D"
                 }
             ]
         },
         {
-            "question_text": "What is the maximum number of digits in the repeating block of the decimal expansion of 1/17?",
-            "question_type": "fillblank",
+            "question_text": "If angles of a parallelogram are in ratio 1:2, and one angle is x, what are all angles?",
+            "question_type": "mcq",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
+            "chapter": "Quadrilaterals",
             "difficulty": "hard",
-            "points": 15,
+            "points": 20,
             "is_active": true,
-            "fillblank_answers": [
+            "answer_explanation": "Adjacent angles sum to 180°: x + 2x = 180°, so 3x = 180°, x = 60°. Angles are: 60°, 120°, 60°, 120° (opposite angles equal).",
+            "options": [
                 {
-                    "accepted_answer": "16",
-                    "is_case_sensitive": false,
-                    "is_primary": true
+                    "option_text": "60°, 120°, 60°, 120°",
+                    "display_order": 1,
+                    "is_correct": true,
+                    "explanation": "Correct! x + 2x = 180° → x = 60°, 2x = 120°"
                 },
                 {
-                    "accepted_answer": "sixteen",
-                    "is_case_sensitive": false,
-                    "is_primary": false
+                    "option_text": "45°, 90°, 45°, 90°",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "These don't sum to 180° for adjacent angles"
+                },
+                {
+                    "option_text": "90°, 90°, 90°, 90°",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "This is rectangle, not matching 1:2 ratio"
+                },
+                {
+                    "option_text": "30°, 60°, 30°, 60°",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "Adjacent angles don't sum to 180°"
                 }
             ]
         },
         {
-            "question_text": "Which of the following is an irrational number between 5/7 (≈0.714) and 9/11 (≈0.818)?",
+            "question_text": "If angles of a quadrilateral are in ratio 2:5:4:1, what is the smallest angle?",
             "question_type": "mcq",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
+            "chapter": "Quadrilaterals",
             "difficulty": "medium",
             "points": 15,
             "is_active": true,
+            "answer_explanation": "Let angles be 2x, 5x, 4x, x. Sum: 2x + 5x + 4x + x = 360° → 12x = 360° → x = 30°. Smallest angle = x = 30°.",
             "options": [
                 {
-                    "option_text": "0.75 (terminating decimal)",
+                    "option_text": "30°",
                     "display_order": 1,
-                    "is_correct": false,
-                    "explanation": "0.75 is a rational number (3/4), not irrational"
-                },
-                {
-                    "option_text": "0.720720072000... (non-terminating, non-repeating)",
-                    "display_order": 2,
                     "is_correct": true,
-                    "explanation": "Correct! This is non-terminating and non-repeating, making it irrational"
+                    "explanation": "Correct! 12x = 360° → x = 30° (smallest ratio value)"
                 },
                 {
-                    "option_text": "0.777... (repeating decimal)",
+                    "option_text": "60°",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "This is 2x, not the smallest (x)"
+                },
+                {
+                    "option_text": "120°",
                     "display_order": 3,
                     "is_correct": false,
-                    "explanation": "0.777... = 7/9, which is rational, not irrational"
+                    "explanation": "This is 4x, not smallest"
                 },
                 {
-                    "option_text": "0.8 (terminating decimal)",
+                    "option_text": "150°",
                     "display_order": 4,
                     "is_correct": false,
-                    "explanation": "0.8 = 4/5, which is rational, not irrational"
+                    "explanation": "This is 5x (largest), not smallest"
                 }
             ]
         },
         {
-            "question_text": "The number 3.765 lies between which two consecutive integers on the number line?",
+            "question_text": "A quadrilateral with opposite sides equal is called:",
             "question_type": "mcq",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
+            "chapter": "Quadrilaterals",
             "difficulty": "easy",
             "points": 10,
             "is_active": true,
+            "answer_explanation": "Parallelogram has opposite sides equal and parallel. This includes rectangles, squares, and rhombuses as special cases.",
             "options": [
                 {
-                    "option_text": "Between 2 and 3",
+                    "option_text": "Trapezium",
                     "display_order": 1,
                     "is_correct": false,
-                    "explanation": "3.765 is greater than 3"
+                    "explanation": "Trapezium has only one pair of parallel sides"
                 },
                 {
-                    "option_text": "Between 3 and 4",
+                    "option_text": "Kite",
                     "display_order": 2,
-                    "is_correct": true,
-                    "explanation": "Correct! 3 < 3.765 < 4"
-                },
-                {
-                    "option_text": "Between 4 and 5",
-                    "display_order": 3,
                     "is_correct": false,
-                    "explanation": "3.765 is less than 4"
+                    "explanation": "Kite has two pairs of adjacent sides equal, not opposite"
                 },
                 {
-                    "option_text": "Between 7 and 8",
+                    "option_text": "Parallelogram",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": "Correct! Parallelogram has both pairs of opposite sides equal"
+                },
+                {
+                    "option_text": "Cyclic quadrilateral",
                     "display_order": 4,
                     "is_correct": false,
-                    "explanation": "3.765 is much less than 7"
+                    "explanation": "Cyclic means vertices lie on a circle, not about sides"
                 }
             ]
         },
         {
-            "question_text": "Simplify: (2√2 + 5√3) + (√2 - 3√3)",
+            "question_text": "In a rhombus with ∠ABC = 50°, what is ∠ACD? (AC is diagonal)",
             "question_type": "mcq",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
-            "difficulty": "medium",
-            "points": 15,
+            "chapter": "Quadrilaterals",
+            "difficulty": "hard",
+            "points": 20,
             "is_active": true,
+            "answer_explanation": "In rhombus, diagonal bisects the angle. ∠BCD = ∠ABC = 50° (opposite angles). Diagonal AC bisects ∠BCD, so ∠ACD = 50°/2 = 25°.",
             "options": [
                 {
-                    "option_text": "3√2 + 2√3",
+                    "option_text": "25°",
                     "display_order": 1,
                     "is_correct": true,
-                    "explanation": "Correct! Combine like terms: (2+1)√2 + (5-3)√3 = 3√2 + 2√3"
+                    "explanation": "Correct! Diagonal bisects angle: ∠ACD = 50°/2 = 25°"
                 },
                 {
-                    "option_text": "2√2 + 5√3",
+                    "option_text": "50°",
                     "display_order": 2,
                     "is_correct": false,
-                    "explanation": "You need to add the √2 terms and subtract the √3 terms"
+                    "explanation": "That's the full angle ∠ABC, not half"
                 },
                 {
-                    "option_text": "√2 + 8√3",
+                    "option_text": "40°",
                     "display_order": 3,
                     "is_correct": false,
-                    "explanation": "Recheck the calculation: (2+1)√2 = 3√2 and (5-3)√3 = 2√3"
+                    "explanation": "Diagonal bisects the angle, giving 25°"
                 },
                 {
-                    "option_text": "4√2 + 3√3",
+                    "option_text": "90°",
                     "display_order": 4,
                     "is_correct": false,
-                    "explanation": "Incorrect combination of terms"
+                    "explanation": "Diagonals are perpendicular, but that's not ∠ACD"
                 }
             ]
         },
         {
-            "question_text": "Simplify: (√3 + √7)(√3 - √7)",
-            "question_type": "fillblank",
+            "question_text": "Which property is TRUE for a rectangle?",
+            "question_type": "mcq",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
+            "chapter": "Quadrilaterals",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Rectangle has all angles = 90°, opposite sides equal, and diagonals equal (but not perpendicular). It's a special parallelogram.",
+            "options": [
+                {
+                    "option_text": "All sides are equal",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "Only square has all sides equal"
+                },
+                {
+                    "option_text": "All angles are 90°",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! Rectangle has four right angles"
+                },
+                {
+                    "option_text": "Diagonals are perpendicular",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "Rectangle diagonals are equal but not perpendicular"
+                },
+                {
+                    "option_text": "Only one pair of sides is parallel",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "Both pairs of opposite sides are parallel"
+                }
+            ]
+        },
+        {
+            "question_text": "Which property is TRUE for a rhombus?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Rhombus has all sides equal, opposite angles equal, diagonals bisect each other at 90°, but angles are NOT all 90° (that's a square).",
+            "options": [
+                {
+                    "option_text": "All angles are 90°",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "Only square (special rhombus) has all angles 90°"
+                },
+                {
+                    "option_text": "All sides are equal",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! Rhombus has all four sides equal"
+                },
+                {
+                    "option_text": "Diagonals are equal",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "Rhombus diagonals are unequal (unlike rectangle)"
+                },
+                {
+                    "option_text": "Only opposite sides are equal",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "All sides are equal, not just opposite"
+                }
+            ]
+        },
+        {
+            "question_text": "A square is a special case of:",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
             "difficulty": "medium",
             "points": 15,
             "is_active": true,
+            "answer_explanation": "Square satisfies properties of rectangle (all angles 90°), rhombus (all sides equal), and parallelogram (opposite sides parallel). It's the most specific quadrilateral.",
+            "options": [
+                {
+                    "option_text": "Only rectangle",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "Square is also rhombus and parallelogram"
+                },
+                {
+                    "option_text": "Only rhombus",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "Square is also rectangle and parallelogram"
+                },
+                {
+                    "option_text": "Rectangle, rhombus, and parallelogram",
+                    "display_order": 3,
+                    "is_correct": true,
+                    "explanation": "Correct! Square has properties of all three"
+                },
+                {
+                    "option_text": "Trapezium",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "Square has two pairs of parallel sides, not one"
+                }
+            ]
+        },
+        {
+            "question_text": "In a kite, which sides are equal?",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "medium",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Kite has two pairs of consecutive (adjacent) equal sides. Like: AB = AD and CB = CD. Opposite sides are NOT equal.",
+            "options": [
+                {
+                    "option_text": "Opposite sides",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "Kite has adjacent sides equal, not opposite"
+                },
+                {
+                    "option_text": "Two pairs of adjacent sides",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! Kite has two pairs of consecutive equal sides"
+                },
+                {
+                    "option_text": "All sides",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "All sides equal would be rhombus, not kite"
+                },
+                {
+                    "option_text": "No sides are equal",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "Kite specifically has adjacent sides equal"
+                }
+            ]
+        },
+        {
+            "question_text": "A trapezium has how many pairs of parallel sides?",
+            "question_type": "fillblank",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "easy",
+            "points": 10,
+            "is_active": true,
+            "answer_explanation": "Trapezium has exactly one pair of parallel sides (called bases). The other two sides are non-parallel (called legs).",
             "fillblank_answers": [
                 {
-                    "accepted_answer": "-4",
+                    "accepted_answer": "1",
                     "is_case_sensitive": false,
                     "is_primary": true
                 },
                 {
-                    "accepted_answer": "- 4",
-                    "is_case_sensitive": false,
-                    "is_primary": false
-                },
-                {
-                    "accepted_answer": "negative 4",
+                    "accepted_answer": "one",
                     "is_case_sensitive": false,
                     "is_primary": false
                 }
             ]
         },
         {
-            "question_text": "After rationalizing 1/(7 + 3√3), the denominator becomes:",
+            "question_text": "Diagonals of a rectangle are:",
             "question_type": "mcq",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
-            "difficulty": "hard",
-            "points": 15,
-            "is_active": true,
-            "options": [
-                {
-                    "option_text": "49",
-                    "display_order": 1,
-                    "is_correct": false,
-                    "explanation": "After rationalization: (7)² - (3√3)² = 49 - 27 = 22"
-                },
-                {
-                    "option_text": "22",
-                    "display_order": 2,
-                    "is_correct": true,
-                    "explanation": "Correct! Using (a+b)(a-b) = a²-b², we get 49 - 27 = 22"
-                },
-                {
-                    "option_text": "27",
-                    "display_order": 3,
-                    "is_correct": false,
-                    "explanation": "(3√3)² = 27, but the final denominator is 49 - 27 = 22"
-                },
-                {
-                    "option_text": "58",
-                    "display_order": 4,
-                    "is_correct": false,
-                    "explanation": "The correct answer is 49 - 27 = 22"
-                }
-            ]
-        },
-        {
-            "question_text": "What is the approximate value of √9.3?",
-            "question_type": "mcq",
-            "class_standard": 9,
-            "subject": "mathematics",
-            "chapter": "Number System",
-            "difficulty": "medium",
+            "chapter": "Quadrilaterals",
+            "difficulty": "easy",
             "points": 10,
             "is_active": true,
+            "answer_explanation": "Rectangle diagonals are equal in length and bisect each other, but are NOT perpendicular. Only square has perpendicular diagonals among rectangles.",
             "options": [
                 {
-                    "option_text": "3.0",
+                    "option_text": "Equal and bisect each other",
                     "display_order": 1,
-                    "is_correct": false,
-                    "explanation": "√9 = 3, but √9.3 is slightly more than 3"
-                },
-                {
-                    "option_text": "3.05",
-                    "display_order": 2,
                     "is_correct": true,
-                    "explanation": "Correct! √9.3 ≈ 3.05 (since 9.3 is slightly more than 9)"
+                    "explanation": "Correct! Rectangle diagonals are equal and bisect each other"
                 },
                 {
-                    "option_text": "4.65",
+                    "option_text": "Equal and perpendicular",
+                    "display_order": 2,
+                    "is_correct": false,
+                    "explanation": "Equal yes, but perpendicular only in square"
+                },
+                {
+                    "option_text": "Unequal but perpendicular",
                     "display_order": 3,
                     "is_correct": false,
-                    "explanation": "This is too large; √9.3 is close to √9 = 3"
+                    "explanation": "Rectangle diagonals are equal, not unequal"
                 },
                 {
-                    "option_text": "9.3",
+                    "option_text": "Unequal and don't bisect",
                     "display_order": 4,
                     "is_correct": false,
-                    "explanation": "This is the number itself, not its square root"
+                    "explanation": "Diagonals are equal and do bisect each other"
                 }
             ]
         },
         {
-            "question_text": "Simplify: 7^(2/3) × 7^(1/5). The answer is 7 raised to what power?",
+            "question_text": "Diagonals of a rhombus:",
             "question_type": "mcq",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
+            "chapter": "Quadrilaterals",
             "difficulty": "medium",
             "points": 15,
             "is_active": true,
+            "answer_explanation": "Rhombus diagonals bisect each other at 90° (perpendicular) and bisect the angles, but are NOT equal in length (unlike rectangle).",
             "options": [
                 {
-                    "option_text": "7^(3/8)",
+                    "option_text": "Are equal",
                     "display_order": 1,
                     "is_correct": false,
-                    "explanation": "When multiplying with same base, add the exponents: 2/3 + 1/5"
+                    "explanation": "Rhombus diagonals are unequal (only square has equal)"
                 },
                 {
-                    "option_text": "7^(13/15)",
+                    "option_text": "Bisect each other at 90°",
                     "display_order": 2,
                     "is_correct": true,
-                    "explanation": "Correct! 2/3 + 1/5 = 10/15 + 3/15 = 13/15"
+                    "explanation": "Correct! Diagonals are perpendicular bisectors"
                 },
                 {
-                    "option_text": "7^(2/15)",
+                    "option_text": "Are parallel",
                     "display_order": 3,
                     "is_correct": false,
-                    "explanation": "Add the exponents, don't multiply them"
+                    "explanation": "Diagonals intersect, they're not parallel"
                 },
                 {
-                    "option_text": "7^(7/15)",
+                    "option_text": "Don't bisect each other",
                     "display_order": 4,
                     "is_correct": false,
-                    "explanation": "2/3 + 1/5 = 13/15, not 7/15"
+                    "explanation": "They do bisect each other at 90°"
                 }
             ]
         },
         {
-            "question_text": "Simplify: 10^(1/2) ÷ 10^(1/4). The answer is 10 raised to what power?",
+            "question_text": "If one angle of a parallelogram is a right angle, then it is a:",
             "question_type": "mcq",
             "class_standard": 9,
             "subject": "mathematics",
-            "chapter": "Number System",
+            "chapter": "Quadrilaterals",
             "difficulty": "medium",
             "points": 15,
             "is_active": true,
+            "answer_explanation": "If one angle of parallelogram = 90°, all angles = 90° (opposite angles equal, adjacent supplementary). This makes it a rectangle.",
             "options": [
                 {
-                    "option_text": "10^(1/4)",
+                    "option_text": "Rhombus",
                     "display_order": 1,
-                    "is_correct": true,
-                    "explanation": "Correct! When dividing with same base, subtract exponents: 1/2 - 1/4 = 2/4 - 1/4 = 1/4"
-                },
-                {
-                    "option_text": "10^(3/4)",
-                    "display_order": 2,
                     "is_correct": false,
-                    "explanation": "Subtract the exponents, not add: 1/2 - 1/4 = 1/4"
+                    "explanation": "Rhombus has all sides equal, not necessarily 90° angles"
                 },
                 {
-                    "option_text": "10^2",
+                    "option_text": "Rectangle",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! One 90° angle makes all angles 90° in parallelogram"
+                },
+                {
+                    "option_text": "Square",
                     "display_order": 3,
                     "is_correct": false,
-                    "explanation": "When dividing, subtract exponents: 1/2 - 1/4 = 1/4"
+                    "explanation": "Need all sides equal too, not just 90° angles"
                 },
                 {
-                    "option_text": "10^(1/8)",
+                    "option_text": "Trapezium",
                     "display_order": 4,
                     "is_correct": false,
-                    "explanation": "1/2 - 1/4 = 1/4, not 1/8"
+                    "explanation": "It's still a parallelogram, specifically rectangle"
+                }
+            ]
+        },
+        {
+            "question_text": "Angle bisectors of a parallelogram form which quadrilateral?",
+            "question_type": "fillblank",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "hard",
+            "points": 20,
+            "is_active": true,
+            "answer_explanation": "When angle bisectors of a parallelogram intersect, they form a rectangle. The angles where bisectors meet are all 90°.",
+            "fillblank_answers": [
+                {
+                    "accepted_answer": "rectangle",
+                    "is_case_sensitive": false,
+                    "is_primary": true
+                }
+            ]
+        },
+        {
+            "question_text": "In a parallelogram, diagonal divides it into:",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "answer_explanation": "One diagonal of a parallelogram divides it into two congruent (equal) triangles by SSS or SAS congruence. Both triangles have same area.",
+            "options": [
+                {
+                    "option_text": "Two unequal triangles",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "Triangles formed are congruent (equal)"
+                },
+                {
+                    "option_text": "Two congruent triangles",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! Diagonal creates two equal triangles"
+                },
+                {
+                    "option_text": "Four triangles",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "One diagonal makes 2 triangles, not 4"
+                },
+                {
+                    "option_text": "Two rectangles",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "Diagonal creates triangles, not rectangles"
+                }
+            ]
+        },
+        {
+            "question_text": "Midpoints of sides of any quadrilateral, when joined, form:",
+            "question_type": "mcq",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "hard",
+            "points": 20,
+            "is_active": true,
+            "answer_explanation": "Varignon's theorem: Joining midpoints of any quadrilateral's sides forms a parallelogram. This is always true, regardless of the original quadrilateral type.",
+            "options": [
+                {
+                    "option_text": "Rectangle",
+                    "display_order": 1,
+                    "is_correct": false,
+                    "explanation": "Only if diagonals of original are equal"
+                },
+                {
+                    "option_text": "Parallelogram",
+                    "display_order": 2,
+                    "is_correct": true,
+                    "explanation": "Correct! Varignon's theorem - always forms parallelogram"
+                },
+                {
+                    "option_text": "Rhombus",
+                    "display_order": 3,
+                    "is_correct": false,
+                    "explanation": "Only if diagonals of original are perpendicular"
+                },
+                {
+                    "option_text": "Square",
+                    "display_order": 4,
+                    "is_correct": false,
+                    "explanation": "Only if diagonals are equal and perpendicular"
+                }
+            ]
+        },
+        {
+            "question_text": "If diagonals of a parallelogram are equal, it is a:",
+            "question_type": "fillblank",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "answer_explanation": "Parallelogram with equal diagonals is a rectangle. If diagonals are also perpendicular, it becomes a square.",
+            "fillblank_answers": [
+                {
+                    "accepted_answer": "rectangle",
+                    "is_case_sensitive": false,
+                    "is_primary": true
+                }
+            ]
+        },
+        {
+            "question_text": "If diagonals of a quadrilateral bisect each other at right angles, it is a:",
+            "question_type": "fillblank",
+            "class_standard": 9,
+            "subject": "mathematics",
+            "chapter": "Quadrilaterals",
+            "difficulty": "medium",
+            "points": 15,
+            "is_active": true,
+            "answer_explanation": "Quadrilateral with diagonals that bisect each other perpendicularly (at 90°) is a rhombus. If also equal, it's a square.",
+            "fillblank_answers": [
+                {
+                    "accepted_answer": "rhombus",
+                    "is_case_sensitive": false,
+                    "is_primary": true
                 }
             ]
         }

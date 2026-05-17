@@ -1,0 +1,332 @@
+# Gravitation (Class 9) Questions
+
+Q1: Two objects of different masses falling freely near the surface of the moon would:
+A) Have same velocities at any instant
+B) Have different accelerations
+C) Experience forces of same magnitude
+D) Undergo a change in their inertia
+
+Q2: Where is the value of acceleration due to gravity (g) least?
+A) At the poles
+B) At the equator
+C) Same everywhere on Earth
+D) At the center of Earth
+
+Q3: If masses of both objects are halved (without changing distance), the gravitational force becomes:
+A) F/4
+B) F/2
+C) F
+D) 2F
+
+Q4: A boy whirls a stone in a horizontal circle. If the string breaks, the stone will:
+A) Continue in circular path
+B) Move toward the center
+C) Move tangent to the circular path
+D) Move perpendicular away from boy
+
+Q5: An object floats with more volume outside liquid in d₁, less in d₃. Which is correct about densities?
+A) d₁ > d₂ > d₃
+B) d₁ > d₂ < d₃
+C) d₁ < d₂ > d₃
+D) d₁ < d₂ < d₃
+
+Q6: In the relation F = GMm/d², the quantity G is:
+A) Depends on value of g at the place
+B) Used only when Earth is one mass
+C) Greatest at Earth's surface
+D) Universal constant of nature
+
+Q7: Law of gravitation gives the gravitational force between:
+A) Earth and a point mass only
+B) Earth and Sun only
+C) Any two bodies having mass
+D) Two charged bodies only
+
+Q8: The value of G in the law of gravitation:
+A) Depends on mass of Earth only
+B) Depends on radius of Earth only
+C) Depends on both mass and radius of Earth
+D) Independent of mass and radius of Earth
+
+Q9: If mass of each particle is doubled (distance unchanged), gravitational force becomes:
+A) 1/4 times
+B) 4 times
+C) 1/2 times
+D) Unchanged
+
+Q10: What holds the atmosphere to the Earth?
+Answer: __________
+
+Q11: The force between two unit masses separated by unit distance is called:
+A) Gravitational potential
+B) Acceleration due to gravity
+C) Gravitational field
+D) Universal gravitational constant
+
+Q12: What is the weight of an object at the center of the Earth?
+A) Zero
+B) Infinite
+C) R times surface weight
+D) 1/R² times surface weight
+
+Q13: An object weighs 10 N in air and 8 N when fully immersed in water. What is the buoyant force?
+A) 2 N
+B) 8 N
+C) 10 N
+D) 18 N
+
+Q14: A box has dimensions 60×40×20 cm. Pressure is maximum when which face forms the base?
+A) 60 cm × 40 cm face (2400 cm²)
+B) 40 cm × 20 cm face (800 cm²)
+C) 60 cm × 20 cm face (1200 cm²)
+D) Same in all cases
+
+Q15: Apple falls from tree. If F₁ is force on apple by Earth and F₂ is force on Earth by apple, then:
+A) F₁ is much greater than F₂
+B) F₂ is much greater than F₁
+C) F₁ is slightly greater than F₂
+D) F₁ and F₂ are equal
+
+Q16: What provides the centripetal force for a planet revolving around the Sun?
+Answer: __________
+
+Q17: A stone is thrown horizontally and another is dropped from same height simultaneously. Which reaches ground first?
+A) Stone thrown horizontally
+B) Stone dropped vertically
+C) Both reach simultaneously
+D) Depends on mass
+
+Q18: If Earth's gravity suddenly becomes zero, the Moon would:
+A) Continue in circular orbit
+B) Fall into the Sun
+C) Move in straight line tangent to orbit
+D) Stop moving
+
+Q19: Packets dropped from same height at equator and pole. Which takes longer to reach ground?
+A) Both take same time
+B) Equator packet takes longer
+C) Pole packet takes longer
+D) Cannot be determined
+
+Q20: Weight on Moon is 1/6 of Earth. A person can lift 15 kg on Earth. Maximum mass liftable on Moon?
+A) 15 kg
+B) 30 kg
+C) 60 kg
+D) 90 kg
+
+Q21: Why doesn't Earth fall into the Sun despite Sun's gravitational pull?
+A) Sun's gravity is too weak
+B) Centripetal and centrifugal forces balance
+C) Earth is too massive
+D) There's no gravity in space
+
+Q22: Two bricks tied together will fall faster than one brick under gravity. Is this correct?
+A) True
+B) False
+
+Q23: Buoyant force experienced by an object depends on:
+A) Only mass of object
+B) Volume displaced and liquid density
+C) Only shape of object
+D) Only temperature
+
+Q24: A cube immersed in saturated salt solution experiences greater buoyant force than in water because:
+A) Salt solution has higher temperature
+B) Salt solution has higher density
+C) Cube expands in salt solution
+D) Salt pushes the cube up
+
+Q25: If a cube's sides are reduced from 5 cm to 4 cm, buoyant force will:
+A) Increase
+B) Decrease
+C) Remain same
+D) Become zero
+
+Q26: State the universal law of gravitation.
+A) F ∝ m₁m₂/r²
+B) F ∝ m₁m₂/r
+C) F ∝ m₁m₂
+D) F ∝ 1/r²
+
+Q27: What is free fall?
+A) Falling under gravity only
+B) Falling with parachute
+C) Falling very slowly
+D) Falling without acceleration
+
+Q28: What is acceleration due to gravity (g)?
+A) Acceleration of freely falling objects
+B) Speed of falling objects
+C) Force of gravity
+D) Weight of object
+
+Q29: What is the value of acceleration due to gravity on Earth's surface?
+A) 9.8 m/s²
+B) 9.8 m/s
+C) 6.67 × 10⁻¹¹
+D) 1.6 m/s²
+
+Q30: Mass is measured in kg, weight is measured in:
+Answer: __________
+
+Q31: Which quantity remains constant everywhere: mass or weight?
+A) Mass
+B) Weight
+C) Both
+D) Neither
+
+Q32: Why is weight on Moon 1/6th of weight on Earth?
+A) Moon has less mass and smaller radius
+B) Moon has no atmosphere
+C) Moon is farther from Sun
+D) Objects are lighter on Moon
+
+Q33: Why is school bag with thin strap difficult to hold?
+A) High pressure due to small contact area
+B) Bag is heavier with thin strap
+C) Thin strap breaks easily
+D) Friction is less
+
+Q34: What is buoyancy?
+A) Upward force by liquid on immersed object
+B) Downward force by gravity
+C) Sideways force in liquid
+D) Force between two objects
+
+Q35: An object floats if its density is:
+A) Less than liquid density
+B) Greater than liquid density
+C) Equal to liquid density
+D) Doesn't depend on density
+
+Q36: Your mass on weighing machine is 42 kg. Is your actual mass more or less?
+A) More than 42 kg
+B) Less than 42 kg
+C) Exactly 42 kg
+D) Cannot be determined
+
+Q37: If distance between objects is halved, gravitational force becomes:
+A) 4 times
+B) 2 times
+C) 1/4 times
+D) 1/2 times
+
+Q38: Why don't heavy objects fall faster than light objects?
+A) Acceleration g is same for all masses
+B) Heavier objects have less gravity
+C) Air slows heavy objects more
+D) Heavy objects fall slower
+
+Q39: Earth and Moon attract each other. Which exerts greater force?
+A) Both exert equal force
+B) Earth exerts greater force
+C) Moon exerts greater force
+D) Depends on distance
+
+Q40: If Earth attracts Moon, why doesn't Earth move toward Moon?
+A) Earth does move, but very slightly (huge mass)
+B) Earth doesn't attract Moon
+C) No force on Earth
+D) Earth is fixed in space
+
+Q41: If both masses are doubled, gravitational force becomes:
+A) 4 times
+B) 2 times
+C) 8 times
+D) Remains same
+
+Q42: What is the gravitational force between Earth and object called?
+Answer: __________
+
+Q43: Why does sheet of paper fall slower than crumpled paper ball?
+A) Sheet has larger surface area, more air resistance
+B) Sheet is lighter
+C) Ball has more gravity
+D) Sheet has less acceleration
+
+Q44: Gold weighs less at equator than at poles because:
+A) g is less at equator than poles
+B) Mass decreases at equator
+C) Gold expands at equator
+D) Air pressure is different
+
+Q45: What is the direction of buoyant force?
+Answer: __________
+
+Q46: Why does plastic block come up when released underwater?
+A) Buoyant force > weight (less dense than water)
+B) Plastic is lighter
+C) Water pushes it up
+D) Air inside plastic
+
+Q47: If substance density is 2.5 g/cm³ and water density is 1 g/cm³, the substance will:
+A) Sink
+B) Float
+C) Remain suspended
+D) Cannot be determined
+
+Q48: Universal law of gravitation explains which phenomena?
+A) All of the above: orbits, tides, weight, planetary motion
+B) Only planetary motion
+C) Only weight on Earth
+D) Only Moon's orbit
+
+Q49: Cotton bag and iron bar both show 100 kg on weighing machine. Which is actually heavier?
+A) Cotton bag
+B) Iron bar
+C) Both equal
+D) Cannot be determined
+
+
+
+# Answer Key
+
+Q1: A (Have same velocities at any instant)
+Q2: B (At the equator)
+Q3: A (F/4)
+Q4: C (Move tangent to the circular path)
+Q5: D (d₁ < d₂ < d₃)
+Q6: D (Universal constant of nature)
+Q7: C (Any two bodies having mass)
+Q8: D (Independent of mass and radius of Earth)
+Q9: B (4 times)
+Q10: gravity
+Q11: D (Universal gravitational constant)
+Q12: A (Zero)
+Q13: A (2 N)
+Q14: B (40 cm × 20 cm face (800 cm²))
+Q15: D (F₁ and F₂ are equal)
+Q16: gravitational force
+Q17: C (Both reach simultaneously)
+Q18: C (Move in straight line tangent to orbit)
+Q19: B (Equator packet takes longer)
+Q20: D (90 kg)
+Q21: B (Centripetal and centrifugal forces balance)
+Q22: B (False)
+Q23: B (Volume displaced and liquid density)
+Q24: B (Salt solution has higher density)
+Q25: B (Decrease)
+Q26: A (F ∝ m₁m₂/r²)
+Q27: A (Falling under gravity only)
+Q28: A (Acceleration of freely falling objects)
+Q29: A (9.8 m/s²)
+Q30: newton
+Q31: A (Mass)
+Q32: A (Moon has less mass and smaller radius)
+Q33: A (High pressure due to small contact area)
+Q34: A (Upward force by liquid on immersed object)
+Q35: A (Less than liquid density)
+Q36: A (More than 42 kg)
+Q37: A (4 times)
+Q38: A (Acceleration g is same for all masses)
+Q39: A (Both exert equal force)
+Q40: A (Earth does move, but very slightly (huge mass))
+Q41: A (4 times)
+Q42: weight
+Q43: A (Sheet has larger surface area, more air resistance)
+Q44: A (g is less at equator than poles)
+Q45: upward
+Q46: A (Buoyant force > weight (less dense than water))
+Q47: A (Sink)
+Q48: A (All of the above: orbits, tides, weight, planetary motion)
+Q49: A (Cotton bag)

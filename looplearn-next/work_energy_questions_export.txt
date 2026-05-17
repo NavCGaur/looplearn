@@ -1,0 +1,181 @@
+# Work and Energy (Class 9) Questions
+
+Q1: What is work done when a force of 7 N displaces an object by 8 m in the direction of force?
+A) 15 J
+B) 56 J
+C) 1 J
+D) 0 J
+
+Q2: When do we say work is done?
+A) Only when force acts on object
+B) Only when object moves
+C) When force acts AND causes displacement
+D) When object changes shape
+
+Q3: Define 1 Joule of work.
+A) Work done by 1 N force over 1 m
+B) Work done by 2 N force over 1 m
+C) Work done by 1 N force over 2 m
+D) Force of 1 N acting for 1 second
+
+Q4: What is the SI unit of work?
+Answer: __________
+
+Q5: What is kinetic energy?
+A) Energy due to position
+B) Energy due to motion
+C) Energy due to heat
+D) Energy stored in springs
+
+Q6: What is the formula for kinetic energy?
+A) mv
+B) ½mv²
+C) mv²
+D) mgh
+
+Q7: If velocity is doubled, kinetic energy becomes:
+A) 2 times
+B) 4 times
+C) 8 times
+D) Remains same
+
+Q8: If velocity is tripled, kinetic energy becomes:
+A) 3 times
+B) 6 times
+C) 9 times
+D) 27 times
+
+Q9: What is power?
+A) Total work done
+B) Rate of doing work
+C) Force applied
+D) Energy stored
+
+Q10: What is the SI unit of power?
+Answer: __________
+
+Q11: Define 1 watt of power.
+A) 1 J of work in 1 s
+B) 2 J of work in 1 s
+C) 1 J of work in 2 s
+D) 1 N of force
+
+Q12: A lamp consumes 1000 J in 10 s. Its power is:
+A) 10 W
+B) 100 W
+C) 1000 W
+D) 10000 W
+
+Q13: A person swimming in a pond is doing work because:
+A) Force causes displacement
+B) Getting tired means work
+C) Moving in water always is work
+D) Water is heavy
+
+Q14: A donkey carrying a load on its back (walking horizontally). Is work done?
+A) Yes, because donkey is tired
+B) No, force perpendicular to displacement
+C) Yes, load is heavy
+D) Yes, donkey is moving
+
+Q15: Is work done when food grains dry in the sun?
+A) True
+B) False
+
+Q16: Work done by gravity when object thrown at angle returns to same horizontal level is:
+A) Zero
+B) Positive
+C) Negative
+D) Depends on distance
+
+Q17: Energy transformation in a battery-powered bulb is:
+A) Chemical → Electrical → Light + Heat
+B) Electrical → Chemical
+C) Light → Electrical
+D) Heat → Light
+
+Q18: Work done on object moving horizontally on table by gravity is:
+A) Zero
+B) Positive
+C) Negative
+D) Depends on mass
+
+Q19: Does potential energy decrease violate conservation of energy when object falls freely?
+A) True
+B) False
+
+Q20: Energy transformation when riding a bicycle is:
+A) Muscular → Mechanical + Heat
+B) Electrical → Mechanical
+C) Heat → Mechanical
+D) Light → Mechanical
+
+Q21: When pushing a huge rock that doesn't move, where does your energy go?
+A) Converted to heat in body
+B) Transferred to rock
+C) Disappears completely
+D) Stored in muscles
+
+Q22: 1 unit of electrical energy equals:
+A) 1 kWh = 3.6 × 10⁶ J
+B) 1 kWh = 1000 J
+C) 1 kWh = 3600 J
+D) 1 kWh = 1 J
+
+Q23: Work done by gravity on satellite moving around Earth is:
+A) Zero
+B) Positive
+C) Negative
+D) Very large
+
+Q24: Can there be displacement without force?
+A) True
+B) False
+
+Q25: Person holds bundle on head for 30 min. Is work done in physics sense?
+A) True
+B) False
+
+Q26: Law of conservation of energy states:
+A) Energy cannot be created or destroyed
+B) Energy can be created
+C) Energy can be destroyed
+D) Energy always increases
+
+Q27: What happens to kinetic energy of freely falling object when it hits the ground?
+A) Converts to heat, sound, and deformation
+B) Disappears completely
+C) Returns to potential energy
+D) Increases further
+
+
+
+# Answer Key
+
+Q1: B (56 J)
+Q2: C (When force acts AND causes displacement)
+Q3: A (Work done by 1 N force over 1 m)
+Q4: joule
+Q5: B (Energy due to motion)
+Q6: B (½mv²)
+Q7: B (4 times)
+Q8: C (9 times)
+Q9: B (Rate of doing work)
+Q10: watt
+Q11: A (1 J of work in 1 s)
+Q12: B (100 W)
+Q13: A (Force causes displacement)
+Q14: B (No, force perpendicular to displacement)
+Q15: B (False)
+Q16: A (Zero)
+Q17: A (Chemical → Electrical → Light + Heat)
+Q18: A (Zero)
+Q19: B (False)
+Q20: A (Muscular → Mechanical + Heat)
+Q21: A (Converted to heat in body)
+Q22: A (1 kWh = 3.6 × 10⁶ J)
+Q23: A (Zero)
+Q24: A (True)
+Q25: B (False)
+Q26: A (Energy cannot be created or destroyed)
+Q27: A (Converts to heat, sound, and deformation)
