@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { saveHomeworkPlan, getNextHwNumber, HomeworkPlan } from '@/app/actions/homework'
+import { HomeworkPlan } from '@/app/actions/homework'
+import { saveHomeworkPlan, getNextHwNumber } from '@/app/actions/homework-actions'
 import { Loader2, Save, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']

@@ -1,4 +1,4 @@
-'use server'
+// Plain server module (no 'use server' directive to allow direct imports in api routes)
 
 // ============================================
 // AI Server Actions — LoopLearn

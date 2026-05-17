@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { HomeworkSubmissionStatus } from '@/app/actions/homework'
-import { updateStudentPhone } from '@/app/actions/homework'
+import { updateStudentPhone } from '@/app/actions/homework-actions'
 import { X, Phone, Loader2 } from 'lucide-react'
 
 interface Props {

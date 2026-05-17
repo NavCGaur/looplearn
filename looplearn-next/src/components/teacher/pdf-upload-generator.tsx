@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
-import { generateQuestionsFromPDF, saveQuestionsToDatabase, type GeneratedQuestion, type Difficulty, type QuestionType } from '@/app/actions/ai'
+import { generateQuestionsFromPDF, saveQuestionsToDatabase } from '@/app/actions/ai-actions'
+import { type GeneratedQuestion, type Difficulty, type QuestionType } from '@/app/actions/ai'
 import { FormulaText } from '@/components/ui/formula-text'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
 

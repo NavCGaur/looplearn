@@ -1,4 +1,4 @@
-'use server'
+// Plain server module (no 'use server' directive to allow direct imports in api routes)
 
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'

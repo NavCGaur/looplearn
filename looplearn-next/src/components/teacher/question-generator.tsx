@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { generateQuestions, saveQuestionsToDatabase, type GeneratedQuestion, type Difficulty, type QuestionType } from '@/app/actions/ai'
+import { generateQuestions, saveQuestionsToDatabase } from '@/app/actions/ai-actions'
+import { type GeneratedQuestion, type Difficulty, type QuestionType } from '@/app/actions/ai'
 import { FormulaText } from '@/components/ui/formula-text'
 import { useRouter } from 'next/navigation'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
