@@ -2,7 +2,8 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
-import { evaluateQuickPracticeSheet } from './ai'
+import { evaluateQuickPracticeSheet, evaluateTextWithGemini, PreviousSubmissionContext } from './ai'
+import { saveChatMessages, getChatWindow, getStudentMemory, isMemoryStale, updateStudentMemory } from './memory'
 
 function createAdminClient() {
     return createSupabaseClient(
@@ -302,13 +303,28 @@ export async function processWhatsAppSubmission(params: {
             upsert: false,
         })
 
-    // 4. Evaluate with Gemini
+    // 4. Fetch previous submission for this plan (for memory-aware feedback on re-submissions)
+    let previousSubmission: { marks_obtained: number | null; max_marks: number | null; ai_feedback: string | null } | null = null
+    if (plan) {
+        const { data: prevSub } = await adminClient
+            .from('homework_submissions')
+            .select('marks_obtained, max_marks, ai_feedback')
+            .eq('plan_id', plan.id)
+            .eq('student_id', student.id)
+            .single()
+        if (prevSub?.marks_obtained != null) {
+            previousSubmission = prevSub
+        }
+    }
 
+    // 5. Evaluate with Gemini (pass previous submission for comparison)
     const evalResult = await evaluateQuickPracticeSheet(
         params.imageBase64,
         params.mimeType as 'image/jpeg' | 'image/png' | 'image/webp',
-        'hinglish'
+        'hinglish',
+        previousSubmission   // ← Memory context for improvement feedback
     )
+
 
     const marksObtained = evalResult?.data?.totalMarks ?? null
     const maxMarks = evalResult?.data?.maxMarks ?? null
@@ -334,19 +350,30 @@ export async function processWhatsAppSubmission(params: {
             }, { onConflict: 'plan_id,student_id' })
     }
 
-    // 6. Build WhatsApp feedback message
+    // 6. Build detailed WhatsApp feedback message
     const name = student.display_name ?? 'Student'
     const subject = plan?.subject ?? ''
     const hwNum = plan ? `HW #${plan.hw_number}` : ''
     const marksLine = marksObtained != null && maxMarks != null
         ? `⭐ Marks: ${marksObtained}/${maxMarks}`
         : ''
+
+    const questionFeedbacks = evalResult?.data?.questions?.map(q => {
+        return `*Q${q.question_number}* (${q.marks_awarded}/${q.max_marks} Marks):\n` +
+               `✔️ *Correct:* ${q.what_was_correct}\n` +
+               `❌ *Improve:* ${q.what_was_wrong}\n` +
+               `💡 *Tip:* ${q.suggestion}`;
+    }).join('\n\n') || '';
+
     const feedbackText = [
-        `✅ ${name}, homework submit ho gaya!`,
+        `✅ *${name}, homework submit ho gaya!*`,
         subject ? `📚 ${subject}${hwNum ? ` — ${hwNum}` : ''}` : '',
         marksLine,
         '',
-        aiFeedback ?? '',
+        overallComment ? `📝 *Overall Performance:* ${overallComment}` : '',
+        '',
+        `📋 *Detailed Analysis:*`,
+        questionFeedbacks
     ].filter(Boolean).join('\n')
 
     return {
@@ -582,4 +609,215 @@ export async function getWeeklySummaryMessages(weekStart: string): Promise<{
         }
     }
     return messages
+}
+
+// ── WhatsApp Bridge: process incoming text message ────────────
+// Called by /api/whatsapp/receive for messageType === 'text'
+// Handles utility commands, typed answers, and academic doubts
+
+export async function processWhatsAppTextSubmission(params: {
+    phone: string     // Student's phone number (no +)
+    textBody: string  // Raw text from student's WhatsApp message
+}): Promise<{
+    success: boolean
+    replyText: string
+}> {
+    const adminClient = createAdminClient()
+
+    // 1. Lookup student by phone
+    const { data: student, error: studentErr } = await adminClient
+        .from('profiles')
+        .select('id, display_name, class_standard, whatsapp_phone')
+        .eq('whatsapp_phone', params.phone)
+        .eq('role', 'student')
+        .single()
+
+    if (studentErr || !student) {
+        return {
+            success: false,
+            replyText: '❌ Aapka number registered nahi hai. Apne teacher se contact karo.',
+        }
+    }
+
+    const name = student.display_name ?? 'Student'
+    const command = params.textBody.toLowerCase().trim()
+
+    // 2. Utility command: HELP / greetings
+    if (['help', 'hi', 'hello', 'helo', 'hey', 'start'].includes(command)) {
+        return {
+            success: true,
+            replyText: `👋 Hello ${name}! Main hoon LoopLearn AI. 🤖\n\n` +
+                `📚 *Mujhe use karo:*\n` +
+                `✍️ Answers type karo — "Q1: HCF hai 15, Q2: LCM hai 45"\n` +
+                `📸 Ya apne answers ki photo bhejo\n` +
+                `🤔 Doubt pucho — "Photosynthesis kya hota hai?"\n` +
+                `📋 *homework* likho — aaj ka task dekhne ke liye\n` +
+                `📊 *status* likho — apne marks dekhne ke liye`,
+        }
+    }
+
+    // 3. Utility command: STATUS / marks
+    if (['status', 'marks', 'score', 'mera score'].includes(command)) {
+        const today = new Date()
+        const monday = new Date(today)
+        monday.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1))
+        const weekStart = monday.toISOString().split('T')[0]
+
+        const { data: plans } = await adminClient
+            .from('homework_plans')
+            .select('id, subject, hw_number')
+            .eq('class_standard', student.class_standard)
+            .eq('week_start', weekStart)
+
+        if (!plans?.length) {
+            return {
+                success: true,
+                replyText: `📊 *${name}* — Class ${student.class_standard}\n\nIs hafte abhi koi homework assign nahi hua hai.`,
+            }
+        }
+
+        const { data: subs } = await adminClient
+            .from('homework_submissions')
+            .select('plan_id, marks_obtained, max_marks, status')
+            .eq('student_id', student.id)
+            .in('plan_id', plans.map(p => p.id))
+
+        const subsMap = new Map((subs ?? []).map(s => [s.plan_id, s]))
+        const lines = plans.map(p => {
+            const sub = subsMap.get(p.id)
+            if (sub?.marks_obtained != null) {
+                return `✅ ${p.subject} HW #${p.hw_number}: ${sub.marks_obtained}/${sub.max_marks} marks`
+            }
+            if (sub?.status === 'missing') return `❌ ${p.subject} HW #${p.hw_number}: Missing`
+            return `⏳ ${p.subject} HW #${p.hw_number}: Pending`
+        })
+
+        const totalObtained = (subs ?? []).reduce((s, r) => s + (r.marks_obtained ?? 0), 0)
+        const totalMax = (subs ?? []).reduce((s, r) => s + (r.max_marks ?? 0), 0)
+
+        return {
+            success: true,
+            replyText: `📊 *${name}* — Class ${student.class_standard}\n` +
+                `Is hafte ki progress:\n\n${lines.join('\n')}\n\n` +
+                (totalMax > 0 ? `🏆 Total: ${totalObtained}/${totalMax} marks` : ''),
+        }
+    }
+
+    // 4. Utility command: HOMEWORK / hw / task
+    if (['homework', 'hw', 'task', 'aaj ka homework', 'aaj ka hw'].includes(command)) {
+        const today = new Date()
+        const dayOfWeek = today.getDay() === 0 ? 7 : today.getDay()
+        const monday = new Date(today)
+        monday.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1))
+        const weekStart = monday.toISOString().split('T')[0]
+
+        const { data: plans } = await adminClient
+            .from('homework_plans')
+            .select('subject, hw_number, task_description, due_time')
+            .eq('class_standard', student.class_standard)
+            .eq('week_start', weekStart)
+            .eq('day_of_week', dayOfWeek)
+
+        if (!plans?.length) {
+            return {
+                success: true,
+                replyText: `📋 Aaj ke liye koi homework assign nahi kiya gaya, ${name}! 🎉\nAram karo ya pichle topics revise karo.`,
+            }
+        }
+
+        const hwLines = plans.map(p =>
+            `📚 *${p.subject} — HW #${p.hw_number}*\n${p.task_description}\n⏰ Due: ${p.due_time?.slice(0, 5) ?? '18:00'}`
+        ).join('\n\n')
+
+        return {
+            success: true,
+            replyText: `📋 *Aaj ka homework, ${name}:*\n\n${hwLines}\n\nAnswers type karo ya photo bhejo! 💪`,
+        }
+    }
+
+    // 5. Not a command — fetch context and send to Gemini for classification + response
+    const today = new Date()
+    const dayOfWeek = today.getDay() === 0 ? 7 : today.getDay()
+    const monday = new Date(today)
+    monday.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1))
+    const weekStart = monday.toISOString().split('T')[0]
+
+    const { data: todayPlans } = await adminClient
+        .from('homework_plans')
+        .select('id, subject, hw_number, task_description')
+        .eq('class_standard', student.class_standard)
+        .eq('week_start', weekStart)
+        .eq('day_of_week', dayOfWeek)
+
+    // Fetch previous submissions for memory context
+    const previousSubmissions: PreviousSubmissionContext[] = []
+    if (todayPlans?.length) {
+        const { data: prevSubs } = await adminClient
+            .from('homework_submissions')
+            .select('plan_id, marks_obtained, max_marks, ai_feedback')
+            .eq('student_id', student.id)
+            .in('plan_id', todayPlans.map(p => p.id))
+
+        if (prevSubs?.length) {
+            const planMap = new Map(todayPlans.map(p => [p.id, p]))
+            for (const sub of prevSubs) {
+                const plan = planMap.get(sub.plan_id)
+                if (plan && sub.marks_obtained != null) {
+                    previousSubmissions.push({
+                        subject: plan.subject,
+                        hw_number: plan.hw_number,
+                        marks_obtained: sub.marks_obtained,
+                        max_marks: sub.max_marks,
+                        ai_feedback: sub.ai_feedback,
+                    })
+                }
+            }
+        }
+    }
+
+    // 6. Fetch Tier 1: Sliding window (last 6 chat messages for conversational continuity)
+    const chatHistory = await getChatWindow(student.id, 6)
+
+    // 7. Fetch Tier 2: Personalized learning profile
+    //    If profile is stale (>48h), trigger an inline update using recent messages
+    let learningProfile = await getStudentMemory(student.id)
+    const memoryStale = await isMemoryStale(student.id)
+    if (memoryStale && chatHistory.length > 0) {
+        console.log(`[Memory] Profile stale for ${name} — triggering inline refresh`)
+        const updateResult = await updateStudentMemory(
+            student.id, name, learningProfile, chatHistory
+        )
+        if (updateResult.newProfile) learningProfile = updateResult.newProfile
+    }
+
+    // 8. Call Gemini — single call to classify + respond
+    //    Inject both Tier 1 (conversational history) and Tier 2 (learning profile)
+    const aiResult = await evaluateTextWithGemini({
+        textBody: params.textBody,
+        studentName: name,
+        studentClass: student.class_standard,
+        todayPlans: (todayPlans ?? []).map(p => ({
+            subject: p.subject,
+            task_description: p.task_description,
+            hw_number: p.hw_number,
+        })),
+        previousSubmissions,
+        language: 'hinglish',
+        chatHistory,       // Tier 1: last 6 messages for conversational flow
+        learningProfile,   // Tier 2: personalized learning facts
+    })
+
+    // 9. Save interaction to chat_messages (atomic batch insert)
+    //    This is the input to the nightly summarization job
+    if (aiResult.success) {
+        // Fire-and-forget — don't await, don't block the reply
+        saveChatMessages(student.id, params.textBody, aiResult.replyText).catch(e =>
+            console.error('[Memory] saveChatMessages failed silently:', e.message)
+        )
+    }
+
+    return {
+        success: aiResult.success,
+        replyText: aiResult.replyText,
+    }
 }

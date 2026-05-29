@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { processWhatsAppSubmission } from '@/app/actions/homework'
+import { processWhatsAppSubmission, processWhatsAppTextSubmission } from '@/app/actions/homework'
 
 // Shared secret between VPS and Next.js
 const BOT_SECRET = process.env.WHATSAPP_BOT_SECRET
@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
         imageBase64?: string
         mimeType?: string
         messageType?: string
+        textBody?: string   // Text content from student's typed message
     }
 
     try {
@@ -25,25 +26,50 @@ export async function POST(req: NextRequest) {
     }
 
     const { phone, imageBase64, mimeType, messageType } = body
-
     if (!phone) {
         return NextResponse.json({ error: 'Missing phone' }, { status: 400 })
     }
+    const cleanPhone = phone.replace(/@.*$/, '').replace(/\D/g, '')
+    console.log(`[API Webhook] Incoming - Phone: ${cleanPhone}, Type: ${messageType}, HasImage: ${!!imageBase64}`)
 
-    // 2. Reject text messages — image only
-    if (messageType === 'text' || !imageBase64) {
+    if (!cleanPhone) {
+        return NextResponse.json({ error: 'Missing phone' }, { status: 400 })
+    }
+
+    // 2. Route text messages to the text handler
+    if (messageType === 'text') {
+        const textBody = body.textBody?.trim() ?? ''
+        if (!textBody) {
+            return NextResponse.json({
+                success: false,
+                replyText: '❓ Kuch likho! Aapka message empty tha.',
+            })
+        }
+        console.log(`[API Webhook] Text message from ${cleanPhone}: "${textBody.slice(0, 80)}"`)
+        const result = await processWhatsAppTextSubmission({
+            phone: cleanPhone,
+            textBody,
+        })
+        return NextResponse.json({ success: result.success, replyText: result.replyText })
+    }
+
+    // 3. Reject non-image, non-text messages (video, audio, documents)
+    if (!imageBase64) {
+        console.log(`[API Webhook] Unsupported type from ${cleanPhone}: ${messageType}`)
         return NextResponse.json({
             success: false,
-            replyText: 'Photo bhejo! Text submissions accept nahi hoti. Apne answers ki clear photo lo aur bhejo. 📸',
+            replyText: '📸 Photo bhejo ya kuch type karo. Video/audio accept nahi hote.',
         })
     }
 
-    // 3. Process the image submission
+    // 4. Process the image submission (existing flow — unchanged)
+    console.log(`[API Webhook] Processing photo submission for ${cleanPhone}...`)
     const result = await processWhatsAppSubmission({
-        phone,
+        phone: cleanPhone,
         imageBase64,
         mimeType: mimeType ?? 'image/jpeg',
     })
+    console.log(`[API Webhook] Result for ${cleanPhone}:`, JSON.stringify(result))
 
     if (!result.success) {
         if (result.error === 'unregistered') {

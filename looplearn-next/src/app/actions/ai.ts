@@ -636,7 +636,12 @@ ${questionList}
 export async function evaluateQuickPracticeSheet(
     imageBase64: string,
     imageMimeType: 'image/jpeg' | 'image/png' | 'image/webp',
-    feedbackLanguage: 'english' | 'hinglish' = 'english'
+    feedbackLanguage: 'english' | 'hinglish' = 'english',
+    previousSubmission?: {   // Pass previous submission for memory-aware feedback
+        marks_obtained: number | null
+        max_marks: number | null
+        ai_feedback: string | null
+    } | null
 ): Promise<{ success: boolean; data?: QuickPracticeEvalResult; error?: string }> {
     try {
         if (!process.env.GOOGLE_GEMINI_API_KEY) {
@@ -648,6 +653,20 @@ export async function evaluateQuickPracticeSheet(
         const languageInstructions = feedbackLanguage === 'hinglish'
             ? `Write ALL feedback fields in Hinglish (natural mix of conversational Hindi in Roman script + English). Keep scientific terms, formulas, and CBSE keywords in English. Do NOT use Devanagari script.`
             : `Write all feedback in clear, simple English that a secondary school student can understand.`
+
+        // ── Previous submission memory block ────────────────────────────────
+        const memorySection = previousSubmission?.marks_obtained != null
+            ? `**Previous Attempt Context (IMPORTANT — use for improvement feedback):**
+The student has submitted this same homework before.
+- Previous score: ${previousSubmission.marks_obtained}/${previousSubmission.max_marks} marks
+- Previous feedback: "${previousSubmission.ai_feedback ?? 'N/A'}"
+In the overall_comment and suggestion fields: compare this attempt to the previous one.
+If the student improved (more correct points, better steps, fewer errors): mention it warmly and specifically (e.g. "Pichli baar Q2 galat tha, is baar sahi kiya — bahut achha!").
+If same mistakes remain: acknowledge the effort but gently point it out again with a concrete tip.
+Do NOT treat this as a first attempt — recognize their growth or persistence.
+
+`
+            : ''
 
         const prompt = `You are an experienced CBSE examiner evaluating a student's handwritten answer sheet.
 
@@ -674,10 +693,9 @@ The image contains a self-written practice sheet where the student has written:
 - NEVER award more marks than the question's maximum
 - If you cannot detect a question number or its marks clearly, make a reasonable best-effort guess
 
+${memorySection}**Feedback Language:** ${languageInstructions}
 
-**Feedback Language:** ${languageInstructions}
-
-**Tone:** Supportive and encouraging. Acknowledge what was right before pointing out mistakes. Phrase missing marks as a learning opportunity, not a failure.
+**Tone:** Supportive, encouraging, and DIRECT. Address the student directly in the second person (e.g., use "Aapne", "Aapka", "Aap" in Hinglish, or "You", "Your" in English). NEVER address them in the third person (do NOT use "Student", "Student ne", "Student ko", "He", "She", or "They"). Talk to them as if you are their personal friendly tutor! Acknowledge what was right before pointing out mistakes. Phrase missing marks as a learning opportunity, not a failure.
 
 **CRITICAL: Return ONLY a valid JSON object. No markdown, no prose outside the JSON. Use this exact schema:**
 {
@@ -698,6 +716,7 @@ The image contains a self-written practice sheet where the student has written:
     }
   ]
 }`
+
 
         const result = await model.generateContent([
             { inlineData: { mimeType: imageMimeType, data: imageBase64 } },
@@ -916,3 +935,182 @@ The following ${answerImages.length} image(s) are the STUDENT'S HANDWRITTEN ANSW
         return { success: false, error: error.message }
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WHATSAPP TEXT: Evaluate typed message from student (answers OR doubt)
+// Called by processWhatsAppTextSubmission in homework.ts
+// Single Gemini call: classifies intent and responds in one shot
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface PreviousSubmissionContext {
+    subject: string
+    hw_number: number
+    marks_obtained: number | null
+    max_marks: number | null
+    ai_feedback: string | null
+}
+
+export async function evaluateTextWithGemini(params: {
+    textBody: string
+    studentName: string
+    studentClass: number
+    todayPlans: { subject: string; task_description: string; hw_number: number }[]
+    previousSubmissions: PreviousSubmissionContext[]
+    language?: 'hinglish' | 'english'
+    // Three-Tier Memory System:
+    chatHistory?: { role: 'user' | 'assistant'; content: string }[]  // Tier 1
+    learningProfile?: string | null                                   // Tier 2
+}): Promise<{
+    success: boolean
+    replyText: string
+    detectedIntent: 'answers' | 'doubt' | 'unclear' | 'error'
+    detectedSubject?: string
+    error?: string
+}> {
+    try {
+        if (!process.env.GOOGLE_GEMINI_API_KEY) {
+            throw new Error('Gemini API Key not configured')
+        }
+
+        const model = genAI.getGenerativeModel({
+            model: 'gemini-2.5-flash',
+            generationConfig: { temperature: 0.4, topP: 0.9 },
+        })
+
+        // ── Build today's homework context ──────────────────────────────────
+        const todayHomeworkBlock = params.todayPlans.length > 0
+            ? params.todayPlans.map(p =>
+                `• ${p.subject} (HW #${p.hw_number}): ${p.task_description}`
+            ).join('\n')
+            : 'Aaj koi homework assign nahi kiya gaya hai.'
+
+        // ── Build previous submission memory block ─────────────────────────
+        const memoryBlock = params.previousSubmissions.length > 0
+            ? `**Student's Previous Submission History (use this for improvement feedback):**\n` +
+              params.previousSubmissions.map(ps => {
+                  if (ps.marks_obtained != null) {
+                      return `• ${ps.subject} HW #${ps.hw_number}: Got ${ps.marks_obtained}/${ps.max_marks} marks. Feedback: "${ps.ai_feedback ?? 'N/A'}"`
+                  }
+                  return `• ${ps.subject} HW #${ps.hw_number}: Submitted (no marks yet)`
+              }).join('\n')
+            : '**Previous Submission History:** This is the student\'s first interaction today.'
+
+        // ── Build Tier 2: Personalized learning profile block ────────────────
+        const profileBlock = params.learningProfile
+            ? `**${params.studentName}'s Learning Profile (use this to personalize your tutoring style):**
+${params.learningProfile}`
+            : ''
+
+        // ── Build Tier 1: Conversation history block ─────────────────────────
+        const historyBlock = (params.chatHistory && params.chatHistory.length > 0)
+            ? `**Recent Conversation History (for context — most recent at bottom):**
+${params.chatHistory.map(m => `${m.role === 'user' ? `${params.studentName}` : 'LoopLearn AI'}: ${m.content}`).join('\n')}`
+            : ''
+
+        // ── Build the prompt ─────────────────────────────────────────────────
+        const prompt = `You are LoopLearn — a friendly, supportive AI homework tutor for CBSE students in India (Class 6-10). You act as a personal tutor who knows each student individually.
+
+**Student Profile:**
+- Name: ${params.studentName}
+- Class: ${params.studentClass}
+
+${profileBlock}
+
+**Today's Assigned Homework:**
+${todayHomeworkBlock}
+
+${memoryBlock}
+
+${historyBlock}
+
+**Student's Current Message:**
+"${params.textBody}"
+
+---
+
+**YOUR TASK:** Read the message and determine what the student needs, then respond accordingly.
+
+**SCENARIO A — TYPED ANSWERS:** Student is submitting typed answers (e.g. "Q1: HCF is 15", "Q1 answer photosynthesis mein sunlight chahiye")
+→ Identify the subject (from message content + today's homework)
+→ Grade each answer against today's homework task for that subject
+→ Award partial marks per correct point
+→ If student improved vs their previous attempt, explicitly mention it with warmth
+→ Reference their learning profile to give personalized advice (e.g. if they struggle with units, remind them)
+→ Give per-answer feedback, then total marks
+
+**SCENARIO B — ACADEMIC DOUBT:** Student is asking a concept question
+→ Act as a personal tutor who knows this student
+→ Tailor your explanation based on their learning profile (e.g. if they learn better with examples, use examples)
+→ Explain clearly in 3-5 lines with a real-world example
+→ Encourage them to apply it in their homework
+
+**SCENARIO C — FOLLOW-UP / REFERENCE TO PREVIOUS MESSAGE:**
+→ Use the conversation history above to understand what they are referring to
+→ Provide context-aware response (e.g. if they say "explain step 3 again", look at your previous reply)
+
+**SCENARIO D — UNCLEAR:** If you genuinely cannot tell what the student means
+→ Ask ONE specific clarifying question only
+→ Suggest: type "help" for guidance
+
+**RESPONSE RULES (very important):**
+1. Always reply in Hinglish: conversational Hindi in Roman script + English for technical terms
+2. NEVER use Devanagari script
+3. Address student DIRECTLY: use "Aapne", "Aap", "Aapka" — NEVER third person
+4. Keep responses concise: doubts ≤ 400 characters, graded answers ≤ 800 characters
+5. Start the first line of your response with: INTENT:[answers|doubt|unclear] (this will be stripped before sending)
+6. After the INTENT line, write only the WhatsApp message to send — no JSON, no extra labels
+
+Example start:
+INTENT:doubt
+HCF aur LCM mein difference yeh hai...`
+
+        const result = await model.generateContent(prompt)
+        let rawText = result.response.text().trim()
+
+        // ── Parse intent tag from first line ──────────────────────────────
+        const lines = rawText.split('\n')
+        const intentLine = lines[0]?.trim() ?? ''
+        let detectedIntent: 'answers' | 'doubt' | 'unclear' | 'error' = 'unclear'
+        let detectedSubject: string | undefined
+
+        if (intentLine.startsWith('INTENT:')) {
+            const intentValue = intentLine.replace('INTENT:', '').trim().toLowerCase()
+            if (intentValue === 'answers') detectedIntent = 'answers'
+            else if (intentValue === 'doubt') detectedIntent = 'doubt'
+            else detectedIntent = 'unclear'
+            // Remove the intent tag line from the actual reply
+            rawText = lines.slice(1).join('\n').trim()
+        }
+
+        // ── Try to detect subject from reply for logging ──────────────────
+        const subjectKeywords: Record<string, string[]> = {
+            'Maths': ['hcf', 'lcm', 'equation', 'number', 'calculate', 'algebra', 'geometry', 'fraction'],
+            'Science': ['cell', 'plant', 'animal', 'force', 'gravity', 'photosynthesis', 'atom', 'chemical', 'motion', 'energy'],
+            'English': ['grammar', 'poem', 'story', 'active', 'passive', 'tense', 'comprehension', 'essay', 'verb', 'noun'],
+        }
+        const lowerText = params.textBody.toLowerCase()
+        for (const [subject, keywords] of Object.entries(subjectKeywords)) {
+            if (keywords.some(k => lowerText.includes(k))) {
+                detectedSubject = subject
+                break
+            }
+        }
+
+        return {
+            success: true,
+            replyText: rawText,
+            detectedIntent,
+            detectedSubject,
+        }
+
+    } catch (error: any) {
+        console.error('evaluateTextWithGemini error:', error)
+        return {
+            success: false,
+            replyText: '⚠️ AI se response nahi mila. Thodi der baad try karo.',
+            detectedIntent: 'error',
+            error: error.message,
+        }
+    }
+}
+
