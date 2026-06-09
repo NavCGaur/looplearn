@@ -54,21 +54,28 @@ async function handleIncomingMessage(sock, msg) {
     const isText = !!(content?.conversation || content?.extendedTextMessage?.text)
 
     if (isText) {
-        // Reject text submissions
+        // Extract the actual text body the student typed
+        const textBody = content?.conversation
+            || content?.extendedTextMessage?.text
+            || ''
+
+        if (!textBody.trim()) return // Ignore empty/blank messages
+
         await callApi('/api/whatsapp/receive', {
             phone,
             messageType: 'text',
+            textBody: textBody.trim(), // Pass the actual message content
         }).then(data => {
             if (data?.replyText) queueMessage(sock, jid, data.replyText)
         }).catch(() => {
-            queueMessage(sock, jid, '⚠️ Kuch problem aayi. Thodi der baad dobara try karo.')
+            queueMessage(sock, jid, 'Kuch problem aayi. Thodi der baad dobara try karo.')
         })
         return
     }
 
     if (imageMsg) {
         // Send acknowledgement immediately (before Gemini eval which takes 20-40s)
-        queueMessage(sock, jid, '📸 Photo mila! Evaluate ho raha hai... thodi der ruko. ⏳')
+        queueMessage(sock, jid, 'Photo submit ho rahi hai, please 2 minute wait kariye response ke liye.')
 
         // Download image
         let imageBuffer
@@ -77,7 +84,7 @@ async function handleIncomingMessage(sock, msg) {
             imageBuffer = await downloadMediaMessage(msg, 'buffer', {})
         } catch (e) {
             console.error('Image download error:', e.message)
-            queueMessage(sock, jid, '❌ Photo download nahi hua. Dobara bhejo.')
+            queueMessage(sock, jid, 'Photo download nahi hua. Dobara bhejo.')
             return
         }
 
@@ -90,17 +97,17 @@ async function handleIncomingMessage(sock, msg) {
             mimeType,
             messageType: 'image',
         }).then(data => {
-            const reply = data?.replyText ?? '⚠️ Evaluation failed. Dobara try karo.'
+            const reply = data?.replyText ?? 'Evaluation failed. Dobara try karo.'
             queueMessage(sock, jid, reply)
         }).catch(e => {
             console.error('API error:', e.message)
-            queueMessage(sock, jid, '⚠️ Server se connect nahi hua. Thodi der baad try karo.')
+            queueMessage(sock, jid, 'Server se connect nahi hua. Thodi der baad try karo.')
         })
         return
     }
 
     // Unsupported message type (video, audio, document)
-    queueMessage(sock, jid, '📸 Sirf photo bhejo. Video, audio ya documents accept nahi hote.')
+    queueMessage(sock, jid, 'Sirf photo bhejo. Video, audio ya documents accept nahi hote.')
 }
 
 // ── Call LoopLearnX API ────────────────────────────────────

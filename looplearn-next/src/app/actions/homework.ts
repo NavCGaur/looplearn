@@ -326,9 +326,20 @@ export async function processWhatsAppSubmission(params: {
     )
 
 
+    const questionsList = evalResult?.data?.questions ?? []
+    const name = student.display_name ?? 'Student'
+
+    if (questionsList.length === 0) {
+        return {
+            success: true,
+            feedbackText: `⚠️ *${name}*, aapki photo clear nahi hai ya usme answers nahi dikh rahe hain. Please ek saaf, seedhi aur achhi light wali photo kheench kar dobara try kijiye!`,
+            studentName: name,
+        }
+    }
+
     const marksObtained = evalResult?.data?.totalMarks ?? null
     const maxMarks = evalResult?.data?.maxMarks ?? null
-    const overallComment = evalResult?.data?.questions?.[0]?.overall_comment ?? null
+    const overallComment = questionsList[0]?.overall_comment ?? null
     const aiFeedback = overallComment ?? evalResult?.data?.detected_subject ?? null
 
     // 5. Upsert submission (latest wins on duplicate)
@@ -351,7 +362,6 @@ export async function processWhatsAppSubmission(params: {
     }
 
     // 6. Build detailed WhatsApp feedback message
-    const name = student.display_name ?? 'Student'
     const subject = plan?.subject ?? ''
     const hwNum = plan ? `HW #${plan.hw_number}` : ''
     const marksLine = marksObtained != null && maxMarks != null

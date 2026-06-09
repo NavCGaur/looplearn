@@ -21,6 +21,31 @@ let currentQr = null
 let currentQrImage = null // Data URL for the QR code image
 let schedulerStarted = false
 
+// ── Deaf-Session Heartbeat Monitor ──────────────────────────────────────────
+// Baileys WebSocket can enter a "deaf" state: appears connected but stops
+// processing incoming messages. This monitor detects that and forces reconnect.
+let lastMessageProcessedAt = Date.now()
+const DEAF_SESSION_TIMEOUT_MS = 2 * 60 * 60 * 1000 // 2 hours (avoid constant reconnects when idle)
+
+function updateLastMessageTime() {
+    lastMessageProcessedAt = Date.now()
+}
+
+// Start heartbeat check every 60 seconds
+setInterval(() => {
+    if (botStatus !== 'connected') return
+    const silentFor = Date.now() - lastMessageProcessedAt
+    if (silentFor > DEAF_SESSION_TIMEOUT_MS) {
+        console.warn(`⚠️ [Heartbeat] No messages processed in ${Math.round(silentFor / 1000)}s — possible deaf session. Forcing reconnect.`)
+        botStatus = 'disconnected'
+        if (sock) {
+            try { sock.end(undefined) } catch (_) {}
+        }
+        setTimeout(connectToWhatsApp, 2000)
+    }
+}, 60 * 1000)
+
+
 app.get('/', (req, res) => {
     let statusColor = 'text-yellow-500'
     let statusText = 'Starting...'
@@ -200,6 +225,7 @@ async function connectToWhatsApp() {
             currentQr = null
             currentQrImage = null
             console.log('✅ LoopLearn WhatsApp bot connected successfully!')
+            lastMessageProcessedAt = Date.now() // Reset heartbeat watchdog timer on success
             
             // Start cron scheduler once connected (only start once)
             if (!schedulerStarted) {
@@ -216,6 +242,7 @@ async function connectToWhatsApp() {
         if (type !== 'notify') return
         for (const msg of messages) {
             if (msg.key.fromMe) continue // Skip own messages
+            updateLastMessageTime()      // Reset deaf-session timer
             await handleIncomingMessage(sock, msg)
         }
     })
