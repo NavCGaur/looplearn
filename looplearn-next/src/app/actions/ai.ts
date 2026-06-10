@@ -634,7 +634,7 @@ ${questionList}
  *   Ans: ...
  */
 export async function evaluateQuickPracticeSheet(
-    imageBase64: string,
+    imageBase64: string | string[],
     imageMimeType: 'image/jpeg' | 'image/png' | 'image/webp',
     feedbackLanguage: 'english' | 'hinglish' = 'english',
     previousSubmission?: {   // Pass previous submission for memory-aware feedback
@@ -718,8 +718,12 @@ ${memorySection}**Feedback Language:** ${languageInstructions}
 }`
 
 
+        const imageParts = Array.isArray(imageBase64)
+            ? imageBase64.map(b => ({ inlineData: { mimeType: imageMimeType, data: b } }))
+            : [{ inlineData: { mimeType: imageMimeType, data: imageBase64 } }]
+
         const result = await model.generateContent([
-            { inlineData: { mimeType: imageMimeType, data: imageBase64 } },
+            ...imageParts,
             prompt,
         ])
 
@@ -1113,4 +1117,124 @@ HCF aur LCM mein difference yeh hai...`
         }
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FEATURE 3, 5, 6: Validation step before evaluation
+// ─────────────────────────────────────────────────────────────────────────────
+export interface ValidationResult {
+    page: number
+    status: 'ok' | 'cutoff' | 'unreadable' | 'poor_lighting' | 'questions_only' | 'answers_only'
+    reason?: string
+}
+
+export interface HomeworkValidationResponse {
+    success: boolean
+    pages: ValidationResult[]
+    questionsFound: boolean
+    answersFound: boolean
+    answers_only: boolean
+    question_reconstruction_confidence?: number
+    error?: string
+}
+
+export async function validateHomeworkPages(
+    images: { base64: string; mimeType: string }[]
+): Promise<HomeworkValidationResponse> {
+    try {
+        if (!process.env.GOOGLE_GEMINI_API_KEY) {
+            throw new Error('Gemini API Key not configured')
+        }
+
+        const model = genAI.getGenerativeModel({
+            model: 'gemini-2.5-flash',
+            generationConfig: {
+                temperature: 0.1,
+                topP: 1,
+                topK: 1,
+                responseMimeType: 'application/json',
+            },
+        })
+
+        const systemPrompt = `You are a strict CBSE classroom teaching assistant. Your task is to validate a student's uploaded homework images BEFORE grading.`
+
+        const validationPrompt = `
+Analyze the attached ${images.length} page(s) of handwritten student homework. The images are sent in chronological order (Page 1 first, Page 2 second, etc.).
+
+For each page, evaluate and report on the following quality metrics:
+1. Is the image readable and clear?
+2. Is the handwriting readable?
+3. Is the page cut off or incomplete (bottom/sides missing)?
+4. Is the lighting sufficient (not too dark or heavily shadowed)?
+5. Are questions visible?
+6. Are answers visible?
+
+**Validation Status Rules for each page:**
+- set status to "cutoff" if the image shows the notebook page but crucial bottom or side sections of the text are cut off.
+- set status to "unreadable" if the handwriting is completely illegible or blurry.
+- set status to "poor_lighting" if it is too dark or shadowed to read.
+- set status to "questions_only" if that page only contains questions without answers.
+- set status to "answers_only" if that page contains student answers but the corresponding questions are not written.
+- Otherwise, set status to "ok".
+
+**Overall Submission Rules:**
+- "questionsFound": Set to true if questions are present anywhere in the submission.
+- "answersFound": Set to true if answers/solutions are present anywhere in the submission.
+- "answers_only": Set to true if the student has provided ONLY answers and completely omitted the questions.
+- "question_reconstruction_confidence": If the student only sent answers, estimate how confidently we can reconstruct the questions from the context of their answers (scale 0.0 to 1.0). If they did not send only answers, set this to 1.0.
+
+**CRITICAL: Return ONLY a valid JSON object matching this schema:**
+{
+  "pages": [
+    {
+      "page": 1,
+      "status": "ok | cutoff | unreadable | poor_lighting | questions_only | answers_only",
+      "reason": "Specify a brief, clear reason in English explaining the issue if not 'ok', otherwise leave empty."
+    }
+  ],
+  "questionsFound": true | false,
+  "answersFound": true | false,
+  "answers_only": true | false,
+  "question_reconstruction_confidence": 0.95
+}
+`
+
+        // Build list of image parts for the multimodal call
+        const imageParts = images.map(img => ({
+            inlineData: {
+                data: img.base64,
+                mimeType: img.mimeType,
+            },
+        }))
+
+        const result = await model.generateContent([
+            systemPrompt,
+            ...imageParts,
+            validationPrompt,
+        ])
+
+        const responseText = result.response.text().trim()
+        const parsed = JSON.parse(responseText.replace(/```json/g, '').replace(/```/g, '').trim())
+
+        return {
+            success: true,
+            pages: parsed.pages || [],
+            questionsFound: parsed.questionsFound ?? true,
+            answersFound: parsed.answersFound ?? true,
+            answers_only: parsed.answers_only ?? false,
+            question_reconstruction_confidence: parsed.question_reconstruction_confidence ?? 1.0,
+        }
+
+    } catch (error: any) {
+        console.error('Homework Validation Error:', error)
+        return {
+            success: false,
+            pages: [],
+            questionsFound: false,
+            answersFound: false,
+            answers_only: false,
+            error: error.message,
+        }
+    }
+}
+
 

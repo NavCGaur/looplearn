@@ -2,8 +2,9 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
-import { evaluateQuickPracticeSheet, evaluateTextWithGemini, PreviousSubmissionContext } from './ai'
+import { evaluateQuickPracticeSheet, evaluateTextWithGemini, PreviousSubmissionContext, validateHomeworkPages } from './ai'
 import { saveChatMessages, getChatWindow, getStudentMemory, isMemoryStale, updateStudentMemory } from './memory'
+import { getActiveSession, createSession, addPageToSession, updateSessionStatus, SessionPage } from './sessions'
 
 function createAdminClient() {
     return createSupabaseClient(
@@ -271,26 +272,9 @@ export async function processWhatsAppSubmission(params: {
         }
     }
 
-    // 2. Find today's homework plan for this student's class
-    //    Gemini will extract HW number/date from the image — we try to match it
-    const today = new Date()
-    const dayOfWeek = today.getDay() === 0 ? 7 : today.getDay()
-    const monday = new Date(today)
-    monday.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1))
-    const weekStart = monday.toISOString().split('T')[0]
+    const name = student.display_name ?? 'Student'
 
-    const { data: plans } = await adminClient
-        .from('homework_plans')
-        .select('*')
-        .eq('class_standard', student.class_standard)
-        .eq('week_start', weekStart)
-        .eq('day_of_week', dayOfWeek)
-
-    // Default to first plan for today if multiple subjects
-    // (student's class may have multiple subjects today — use first)
-    const plan = plans?.[0] ?? null
-
-    // 3. Upload image to storage
+    // 2. Upload image to Supabase Storage
     const timestamp = Date.now()
     const ext = params.mimeType.includes('png') ? 'png' : 'jpg'
     const storagePath = `whatsapp/${student.id}/${timestamp}.${ext}`
@@ -303,93 +287,67 @@ export async function processWhatsAppSubmission(params: {
             upsert: false,
         })
 
-    // 4. Fetch previous submission for this plan (for memory-aware feedback on re-submissions)
-    let previousSubmission: { marks_obtained: number | null; max_marks: number | null; ai_feedback: string | null } | null = null
-    if (plan) {
-        const { data: prevSub } = await adminClient
-            .from('homework_submissions')
-            .select('marks_obtained, max_marks, ai_feedback')
-            .eq('plan_id', plan.id)
-            .eq('student_id', student.id)
-            .single()
-        if (prevSub?.marks_obtained != null) {
-            previousSubmission = prevSub
+    // 3. Manage multi-image submission session state machine
+    const session = await getActiveSession(student.id)
+
+    if (!session) {
+        // No active session: Start a new submission session
+        const firstPage: SessionPage = {
+            page: 1,
+            path: storagePath,
+            status: 'ok',
+            mimeType: params.mimeType
         }
-    }
+        await createSession(student.id, firstPage)
 
-    // 5. Evaluate with Gemini (pass previous submission for comparison)
-    const evalResult = await evaluateQuickPracticeSheet(
-        params.imageBase64,
-        params.mimeType as 'image/jpeg' | 'image/png' | 'image/webp',
-        'hinglish',
-        previousSubmission   // ← Memory context for improvement feedback
-    )
-
-
-    const questionsList = evalResult?.data?.questions ?? []
-    const name = student.display_name ?? 'Student'
-
-    if (questionsList.length === 0) {
         return {
             success: true,
-            feedbackText: `⚠️ *${name}*, aapki photo clear nahi hai ya usme answers nahi dikh rahe hain. Please ek saaf, seedhi aur achhi light wali photo kheench kar dobara try kijiye!`,
-            studentName: name,
+            feedbackText: `✅ *Page 1 receive ho gayi.* \n\nAgar aur pages hain toh send kijiye, nahi toh review karke *DONE* type kijiye submit karne ke liye.`,
+            studentName: name
         }
-    }
+    } else {
+        // Active session exists: Check for page corrections
+        const firstReuploadPage = session.pages.find(p => p.status === 'needs_reupload')
+        
+        if (firstReuploadPage) {
+            // Replace the first page requiring correction
+            firstReuploadPage.path = storagePath
+            firstReuploadPage.status = 'ok'
+            firstReuploadPage.reason = null
+            firstReuploadPage.mimeType = params.mimeType
 
-    const marksObtained = evalResult?.data?.totalMarks ?? null
-    const maxMarks = evalResult?.data?.maxMarks ?? null
-    const overallComment = questionsList[0]?.overall_comment ?? null
-    const aiFeedback = overallComment ?? evalResult?.data?.detected_subject ?? null
+            await updateSessionStatus(session.id, 'active', session.pages)
 
-    // 5. Upsert submission (latest wins on duplicate)
-    if (plan) {
-        await adminClient
-            .from('homework_submissions')
-            .upsert({
-                plan_id: plan.id,
-                student_id: student.id,
-                submission_type: 'whatsapp',
-                image_path: storagePath,
-                marks_obtained: marksObtained,
-                max_marks: maxMarks,
-                ai_feedback: aiFeedback,
-                raw_ai_response: evalResult as any,
-                status: 'submitted',
-                submitted_at: new Date().toISOString(),
-                evaluated_at: new Date().toISOString(),
-            }, { onConflict: 'plan_id,student_id' })
-    }
+            const nextReuploadPage = session.pages.find(p => p.status === 'needs_reupload')
+            if (nextReuploadPage) {
+                return {
+                    success: true,
+                    feedbackText: `✅ *Page ${firstReuploadPage.page} ki replacement mil gayi.*\n\nAb please *Page ${nextReuploadPage.page}* ki clean replacement send kijiye.`,
+                    studentName: name
+                }
+            } else {
+                return {
+                    success: true,
+                    feedbackText: `✅ *Saare corrections receive ho gaye!*\n\nHomework evaluate karne ke liye please *DONE* type kijiye.`,
+                    studentName: name
+                }
+            }
+        } else {
+            // Append as a new page
+            const newPageNum = session.pages.length + 1
+            await addPageToSession(session.id, {
+                page: newPageNum,
+                path: storagePath,
+                status: 'ok',
+                mimeType: params.mimeType
+            })
 
-    // 6. Build detailed WhatsApp feedback message
-    const subject = plan?.subject ?? ''
-    const hwNum = plan ? `HW #${plan.hw_number}` : ''
-    const marksLine = marksObtained != null && maxMarks != null
-        ? `⭐ Marks: ${marksObtained}/${maxMarks}`
-        : ''
-
-    const questionFeedbacks = evalResult?.data?.questions?.map(q => {
-        return `*Q${q.question_number}* (${q.marks_awarded}/${q.max_marks} Marks):\n` +
-               `✔️ *Correct:* ${q.what_was_correct}\n` +
-               `❌ *Improve:* ${q.what_was_wrong}\n` +
-               `💡 *Tip:* ${q.suggestion}`;
-    }).join('\n\n') || '';
-
-    const feedbackText = [
-        `✅ *${name}, homework submit ho gaya!*`,
-        subject ? `📚 ${subject}${hwNum ? ` — ${hwNum}` : ''}` : '',
-        marksLine,
-        '',
-        overallComment ? `📝 *Overall Performance:* ${overallComment}` : '',
-        '',
-        `📋 *Detailed Analysis:*`,
-        questionFeedbacks
-    ].filter(Boolean).join('\n')
-
-    return {
-        success: true,
-        feedbackText,
-        studentName: name,
+            return {
+                success: true,
+                feedbackText: `✅ *Page ${newPageNum} receive ho gayi.*\n\nAgar aur pages hain toh send kijiye, nahi toh homework submit karne ke liye *DONE* type kijiye.`,
+                studentName: name
+            }
+        }
     }
 }
 
@@ -651,6 +609,228 @@ export async function processWhatsAppTextSubmission(params: {
 
     const name = student.display_name ?? 'Student'
     const command = params.textBody.toLowerCase().trim()
+
+    // 1.5. Utility command: DONE — process current multi-image submission
+    if (command === 'done') {
+        const session = await getActiveSession(student.id)
+        if (!session) {
+            return {
+                success: true,
+                replyText: `⚠️ Aapka koi active submission session nahi mila. Pehle answers ki photos bhejiye, phir *DONE* likhiye.`
+            }
+        }
+
+        const remainingReupload = session.pages.find(p => p.status === 'needs_reupload')
+        if (remainingReupload) {
+            return {
+                success: true,
+                replyText: `⚠️ Aapka submission incomplete hai. Please *Page ${remainingReupload.page}* ki replacement photo bhejiye.`
+            }
+        }
+
+        // Set session status to processing
+        await updateSessionStatus(session.id, 'processing')
+
+        // Fetch all images from storage and convert to base64
+        const imagesToValidate: { base64: string; mimeType: string }[] = []
+        for (const page of session.pages) {
+            const { data, error } = await adminClient.storage
+                .from('assignment-papers')
+                .download(page.path)
+            
+            if (error || !data) {
+                console.error(`[Session] Failed to download path ${page.path}:`, error?.message)
+                continue
+            }
+            const buffer = Buffer.from(await data.arrayBuffer())
+            imagesToValidate.push({
+                base64: buffer.toString('base64'),
+                mimeType: page.mimeType || 'image/jpeg'
+            })
+        }
+
+        if (imagesToValidate.length === 0) {
+            await updateSessionStatus(session.id, 'failed')
+            return {
+                success: true,
+                replyText: `❌ Aapki photos load nahi ho payin. Please dobara bhej kar try kijiye.`
+            }
+        }
+
+        // Run Gemini Validation Step
+        const validation = await validateHomeworkPages(imagesToValidate)
+        if (!validation.success) {
+            await updateSessionStatus(session.id, 'failed')
+            return {
+                success: true,
+                replyText: `⚠️ AI validation fail ho gaya. Please thodi der baad dobara *DONE* likh kar submit kijiye.`
+            }
+        }
+
+        // Update pages validation status
+        let hasErrors = false
+        const updatedPages = session.pages.map((p, idx) => {
+            const pageVal = validation.pages.find(v => v.page === p.page) || validation.pages[idx]
+            if (pageVal && pageVal.status !== 'ok') {
+                hasErrors = true
+                p.status = pageVal.status as any
+                p.reason = pageVal.reason || null
+            } else {
+                p.status = 'ok'
+                p.reason = null
+            }
+            return p
+        })
+
+        if (hasErrors) {
+            await updateSessionStatus(session.id, 'needs_reupload', updatedPages)
+            
+            const errorDetails = updatedPages
+                .filter(p => p.status !== 'ok')
+                .map(p => {
+                    const statusLabel: Record<string, string> = {
+                        cutoff: 'Cut-off / incomplete',
+                        unreadable: 'Blurry / unreadable',
+                        poor_lighting: 'Poor lighting',
+                        questions_only: 'Only questions (no answers)',
+                        answers_only: 'Only answers (no questions)'
+                    }
+                    return `• *Page ${p.page}*: ${statusLabel[p.status] || p.status} (${p.reason || 'adjust photo'})`
+                }).join('\n')
+
+            const readablePages = updatedPages
+                .filter(p => p.status === 'ok')
+                .map(p => p.page)
+                .join(', ')
+
+            const readLine = readablePages ? `Main pages ${readablePages} ko read kar paya.\n\n` : ''
+
+            return {
+                success: true,
+                replyText: `⚠️ *Validation failed!*\n\n${readLine}Kuch pages mein problem aayi hai:\n${errorDetails}\n\n*Aapko poora homework dobara bhejne ki zaroorat nahi hai.* Bas upar bataye gaye pages ki new clean photo send kijiye.`
+            }
+        }
+
+        // Validation Passed! Check scenarios (Questions-Only / Answers-Only)
+        if (validation.questionsFound && !validation.answersFound) {
+            await updateSessionStatus(session.id, 'active') // keep active
+            return {
+                success: true,
+                replyText: `📝 Main questions toh dekh pa raha hoon par aapke *answers* nahi mil rahe. Please answers likh kar page ki photo bhejiye!`
+            }
+        }
+
+        if (validation.answers_only || (!validation.questionsFound && validation.answersFound)) {
+            const confidence = validation.question_reconstruction_confidence ?? 1.0
+            if (confidence < 0.85) {
+                await updateSessionStatus(session.id, 'active') // keep active
+                return {
+                    success: true,
+                    replyText: `🤔 Main aapke answers dekh pa raha hoon par confidently questions reconstruct nahi kar pa raha (Confidence: ${Math.round(confidence * 100)}%). Please questions ke sath photo bhejiye.`
+                }
+            }
+        }
+
+        // Proceed to evaluation
+        const today = new Date()
+        const dayOfWeek = today.getDay() === 0 ? 7 : today.getDay()
+        const monday = new Date(today)
+        monday.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1))
+        const weekStart = monday.toISOString().split('T')[0]
+
+        const { data: plans } = await adminClient
+            .from('homework_plans')
+            .select('*')
+            .eq('class_standard', student.class_standard)
+            .eq('week_start', weekStart)
+            .eq('day_of_week', dayOfWeek)
+
+        const plan = plans?.[0] ?? null
+
+        let previousSubmission: any = null
+        if (plan) {
+            const { data: prevSub } = await adminClient
+                .from('homework_submissions')
+                .select('marks_obtained, max_marks, ai_feedback')
+                .eq('plan_id', plan.id)
+                .eq('student_id', student.id)
+                .single()
+            if (prevSub?.marks_obtained != null) {
+                previousSubmission = prevSub
+            }
+        }
+
+        const base64List = imagesToValidate.map(img => img.base64)
+
+        const evalResult = await evaluateQuickPracticeSheet(
+            base64List,
+            'image/jpeg',
+            'hinglish',
+            previousSubmission
+        )
+
+        if (!evalResult.success) {
+            await updateSessionStatus(session.id, 'failed')
+            return {
+                success: true,
+                replyText: `⚠️ Evaluation step failed. Please try again later by typing *DONE*.`
+            }
+        }
+
+        const marksObtained = evalResult?.data?.totalMarks ?? null
+        const maxMarks = evalResult?.data?.maxMarks ?? null
+        const overallComment = evalResult?.data?.questions?.[0]?.overall_comment ?? null
+        const aiFeedback = overallComment ?? evalResult?.data?.detected_subject ?? null
+
+        if (plan) {
+            await adminClient
+                .from('homework_submissions')
+                .upsert({
+                    plan_id: plan.id,
+                    student_id: student.id,
+                    submission_type: 'whatsapp',
+                    image_path: session.pages[0].path,
+                    marks_obtained: marksObtained,
+                    max_marks: maxMarks,
+                    ai_feedback: aiFeedback,
+                    raw_ai_response: evalResult as any,
+                    status: 'submitted',
+                    submitted_at: new Date().toISOString(),
+                    evaluated_at: new Date().toISOString(),
+                }, { onConflict: 'plan_id,student_id' })
+        }
+
+        await updateSessionStatus(session.id, 'completed')
+
+        const subject = plan?.subject ?? ''
+        const hwNum = plan ? `HW #${plan.hw_number}` : ''
+        const marksLine = marksObtained != null && maxMarks != null
+            ? `⭐ Marks: ${marksObtained}/${maxMarks}`
+            : ''
+
+        const questionFeedbacks = evalResult?.data?.questions?.map(q => {
+            return `*Q${q.question_number}* (${q.marks_awarded}/${q.max_marks} Marks):\n` +
+                   `✔️ *Correct:* ${q.what_was_correct}\n` +
+                   `❌ *Improve:* ${q.what_was_wrong}\n` +
+                   `💡 *Tip:* ${q.suggestion}`;
+        }).join('\n\n') || '';
+
+        const feedbackText = [
+            `✅ *${name}, homework submit aur evaluate ho gaya!*`,
+            subject ? `📚 ${subject}${hwNum ? ` — ${hwNum}` : ''}` : '',
+            marksLine,
+            '',
+            overallComment ? `📝 *Overall Performance:* ${overallComment}` : '',
+            '',
+            `📋 *Detailed Analysis:*`,
+            questionFeedbacks
+        ].filter(Boolean).join('\n')
+
+        return {
+            success: true,
+            replyText: feedbackText
+        }
+    }
 
     // 2. Utility command: HELP / greetings
     if (['help', 'hi', 'hello', 'helo', 'hey', 'start'].includes(command)) {

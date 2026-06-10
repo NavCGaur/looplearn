@@ -22,6 +22,8 @@ Traditional studying often leads to quick forgetting. LoopLearnX uses algorithmi
 ## ✨ Features
 
 - **🤖 WhatsApp AI Tutor & Homework Automation**: Persistently connected Baileys-based WhatsApp bot (deployed on VPS via PM2) allowing students to submit homework as photos or text, ask doubts, and receive grading/feedback directly on their phones.
+- **📝 Stateful WhatsApp Homework Submission Sessions**: Tracks student uploads across multiple photos dynamically using `whatsapp_submission_sessions`. Students queue pages and type `DONE` to submit.
+- **🔍 Gemini Vision Page Validation & Selective Reupload**: Validates every page using Gemini Vision before grading to check for clarity, lighting, cutoff content, and questions/answers balance. If any page has issues, it prompts the student to reupload *only* the problematic page instead of resubmitting the entire set.
 - **🧠 Three-Tier AI Tutor Memory System**: Features a Short-Term Sliding Window (last 6 messages) for real-time conversational flow, a Mid-Term Personalized Learning Profile (strengths, weaknesses, progress distilled nightly via Cron), and planned Long-Term Curriculum RAG.
 - **🧠 Spaced Repetition System (SRS)**: Algorithmic scheduling of questions to maximize retention and minimize study time.
 - **🔄 Non-Repetition Logic**: Smart session handling ensures students and guests don't see the same question twice in a single session.
@@ -103,6 +105,7 @@ All AI features are powered by `gemini-2.5-flash` via the Google Generative AI S
 | **Quick Practice Sheet Scan** | Student's self-written Q&A photo | Auto-detects class/subject/chapter, then evaluates |
 | **Assignment Paper Extraction** | Teacher's question paper (one or more images) | Structured question list with marks |
 | **Assignment Answer Grading** | Extracted questions + student answer photos | Per-question marks, feedback, total score |
+| **Multi-Page Image Validation** | Array of image base64s | Per-page status check (cutoff, poor_lighting, blurry, questions/answers detection) |
 
 **Key implementation details:**
 - Multi-page documents send each page as a **separate image part** in the same `generateContent` call.
@@ -123,7 +126,17 @@ To deliver a conversational, personalized tutor experience via WhatsApp, LoopLea
   * **Lazy Safety Net**: If the profile is detected as older than 48 hours via `is_memory_stale()`, it is lazily updated inline on the hot path.
 * **Tier 3 — Long-Term (Curriculum RAG - Planned)**: Grounding via textbook curriculum using `pgvector` stored in a `knowledge_base` table.
 
-### 2. WhatsApp Bot Infrastructure (VPS Node App)
+### 2. Stateful Homework Submission & Validation Session
+* **Session Lifecycle**: When a student sends a photo, a session is initialized in state `active`. Subsequent photos append pages to the session.
+* **The `DONE` Signal**: The session stays open until the student types `DONE` (case-insensitive), triggering the validation and evaluation pipelines.
+* **Pre-Grading Validation Check**: Every page is analyzed via Gemini Vision (`validateHomeworkPages`) for:
+  * **Cut-off**: Incomplete page boundaries.
+  * **Unreadable**: Blurred text or illegible handwriting.
+  * **Poor Lighting**: Low contrast or severe shadows.
+  * **Content Balance**: Checks if it's only questions (missing answers) or only answers. If answers-only, the agent attempts to reconstruct questions and grades if confidence is high (>=85%).
+* **Targeted Correction flow**: If page 2 is marked `unreadable`, the session status is updated to `needs_reupload`. The next photo uploaded replaces page 2 directly. The student only re-sends the failed page.
+
+### 3. WhatsApp Bot Infrastructure (VPS Node App)
 * **Deaf-Session Watchdog**: An internal check triggers a WebSocket reconnect if the Baileys connection appears online but fails to process incoming WhatsApp messages for more than 3 minutes.
 * **Anti-Spam Rate-Limiter Outbox**: Messages queued for sending are dispatched with a randomized `1.5s - 3s` delay to prevent WhatsApp anti-spam flags.
 * **Corrupt Character Filter**: Strips Devanagari script and complex emojis to prevent `???` characters on budget cell phones.
