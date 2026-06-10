@@ -693,7 +693,8 @@ export async function processWhatsAppTextSubmission(params: {
                         unreadable: 'Blurry / unreadable',
                         poor_lighting: 'Poor lighting',
                         questions_only: 'Only questions (no answers)',
-                        answers_only: 'Only answers (no questions)'
+                        answers_only: 'Only answers (no questions)',
+                        invalid: 'Invalid homework image (not a question or answer sheet)'
                     }
                     return `• *Page ${p.page}*: ${statusLabel[p.status] || p.status} (${p.reason || 'adjust photo'})`
                 }).join('\n')
@@ -711,7 +712,15 @@ export async function processWhatsAppTextSubmission(params: {
             }
         }
 
-        // Validation Passed! Check scenarios (Questions-Only / Answers-Only)
+        // Validation Passed! Check scenarios (Questions-Only / Answers-Only / Completely Invalid)
+        if (!validation.questionsFound && !validation.answersFound) {
+            await updateSessionStatus(session.id, 'active') // keep active
+            return {
+                success: true,
+                replyText: `❌ Mujhe is photo mein koi school questions ya answers nahi mile. Please school homework book ya question paper ki clean photo send kijiye.`
+            }
+        }
+
         if (validation.questionsFound && !validation.answersFound) {
             await updateSessionStatus(session.id, 'active') // keep active
             return {

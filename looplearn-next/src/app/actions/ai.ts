@@ -1203,16 +1203,17 @@ For each page, evaluate and report on the following quality metrics:
 6. Are answers visible?
 
 **Validation Status Rules for each page:**
-- set status to "cutoff" if the image shows the notebook page but crucial bottom or side sections of the text are cut off.
-- set status to "unreadable" if the handwriting is completely illegible or blurry.
+- set status to "invalid" if the image does not show a school notebook, quiz, question sheet, or homework paper (e.g. it is a photo of a person, animal, screen, keyboard, scenery, or completely irrelevant object).
+- set status to "cutoff" if the text, math formulas, question numbers, or answers are cut off or cropped out at the edges of the image (crucial text is sliced/missing).
+- set status to "unreadable" if the handwriting is completely illegible, blurry, unfocused, or cannot be read.
 - set status to "poor_lighting" if it is too dark or shadowed to read.
 - set status to "questions_only" if that page only contains questions without answers.
 - set status to "answers_only" if that page contains student answers but the corresponding questions are not written.
 - Otherwise, set status to "ok".
 
 **Overall Submission Rules:**
-- "questionsFound": Set to true if questions are present anywhere in the submission.
-- "answersFound": Set to true if answers/solutions are present anywhere in the submission.
+- "questionsFound": Set to true if school/academic questions are present anywhere in the submission.
+- "answersFound": Set to true if handwritten student answers or solutions are present anywhere in the submission.
 - "answers_only": Set to true if the student has provided ONLY answers and completely omitted the questions.
 - "question_reconstruction_confidence": If the student only sent answers, estimate how confidently we can reconstruct the questions from the context of their answers (scale 0.0 to 1.0). If they did not send only answers, set this to 1.0.
 
@@ -1221,7 +1222,7 @@ For each page, evaluate and report on the following quality metrics:
   "pages": [
     {
       "page": 1,
-      "status": "ok | cutoff | unreadable | poor_lighting | questions_only | answers_only",
+      "status": "ok | cutoff | unreadable | poor_lighting | questions_only | answers_only | invalid",
       "reason": "Specify a brief, clear reason in English explaining the issue if not 'ok', otherwise leave empty."
     }
   ],
