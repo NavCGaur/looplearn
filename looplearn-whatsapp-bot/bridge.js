@@ -15,7 +15,11 @@ async function processSendQueue(sock) {
     while (sendQueue.length) {
         const { jid, text } = sendQueue.shift()
         try {
-            await sock.sendMessage(jid, { text })
+            // Race the send operation with a 10s timeout to prevent socket send deadlock
+            await Promise.race([
+                sock.sendMessage(jid, { text }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('WhatsApp send timed out')), 10000))
+            ])
         } catch (e) {
             console.error('Send error:', e.message)
         }

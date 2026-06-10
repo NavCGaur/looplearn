@@ -46,11 +46,19 @@ export async function POST(req: NextRequest) {
             })
         }
         console.log(`[API Webhook] Text message from ${cleanPhone}: "${textBody.slice(0, 80)}"`)
-        const result = await processWhatsAppTextSubmission({
-            phone: cleanPhone,
-            textBody,
-        })
-        return NextResponse.json({ success: result.success, replyText: result.replyText })
+        try {
+            const result = await processWhatsAppTextSubmission({
+                phone: cleanPhone,
+                textBody,
+            })
+            return NextResponse.json({ success: result.success, replyText: result.replyText })
+        } catch (error: any) {
+            console.error('[API Webhook] Text processing error:', error)
+            return NextResponse.json({
+                success: false,
+                replyText: '⚠️ Message process karne mein error aayi. Please dobara try kijiye.',
+            })
+        }
     }
 
     // 3. Reject non-image, non-text messages (video, audio, documents)
@@ -64,29 +72,38 @@ export async function POST(req: NextRequest) {
 
     // 4. Process the image submission (existing flow — unchanged)
     console.log(`[API Webhook] Processing photo submission for ${cleanPhone}...`)
-    const result = await processWhatsAppSubmission({
-        phone: cleanPhone,
-        imageBase64,
-        mimeType: mimeType ?? 'image/jpeg',
-    })
-    console.log(`[API Webhook] Result for ${cleanPhone}:`, JSON.stringify(result))
+    try {
+        const result = await processWhatsAppSubmission({
+            phone: cleanPhone,
+            imageBase64,
+            mimeType: mimeType ?? 'image/jpeg',
+        })
+        console.log(`[API Webhook] Result for ${cleanPhone}:`, JSON.stringify(result))
 
-    if (!result.success) {
-        if (result.error === 'unregistered') {
+        if (!result.success) {
+            if (result.error === 'unregistered') {
+                return NextResponse.json({
+                    success: false,
+                    replyText: '❌ Aapka number registered nahi hai. Apne teacher se contact karo.',
+                })
+            }
             return NextResponse.json({
                 success: false,
-                replyText: '❌ Aapka number registered nahi hai. Apne teacher se contact karo.',
+                replyText: '⚠️ Kuch problem aayi. Thodi der baad dobara try karo.',
             })
         }
+
+        return NextResponse.json({
+            success: true,
+            replyText: result.feedbackText,
+            studentName: result.studentName,
+        })
+    } catch (error: any) {
+        console.error('[API Webhook] Image processing error:', error)
         return NextResponse.json({
             success: false,
-            replyText: '⚠️ Kuch problem aayi. Thodi der baad dobara try karo.',
+            replyText: '⚠️ Photo process karne mein error aayi (Database migrate hua hai?). Please dobara try kijiye.',
         })
     }
-
-    return NextResponse.json({
-        success: true,
-        replyText: result.feedbackText,
-        studentName: result.studentName,
-    })
 }
+
