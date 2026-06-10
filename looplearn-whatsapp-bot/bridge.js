@@ -4,6 +4,8 @@ const axios = require('axios')
 const API_URL = process.env.LOOPLEARN_API_URL   // e.g. https://looplearn.vercel.app
 const BOT_SECRET = process.env.WHATSAPP_BOT_SECRET
 
+const { sendErrorAlert } = require('./email')
+
 // Rate-limited send queue — prevents WhatsApp from banning the number
 // for bulk messaging. Sends one message every 1.5-3s.
 const sendQueue = []
@@ -71,8 +73,9 @@ async function handleIncomingMessage(sock, msg) {
             textBody: textBody.trim(), // Pass the actual message content
         }).then(data => {
             if (data?.replyText) queueMessage(sock, jid, data.replyText)
-        }).catch(() => {
-            queueMessage(sock, jid, 'Kuch problem aayi. Thodi der baad dobara try karo.')
+        }).catch(async (e) => {
+            queueMessage(sock, jid, '⚠️ System error: Please inform your Teacher about this issue.')
+            await sendErrorAlert('Text Processing Failed', `Failed to send text message to API for ${phone}. Error: ${e.message}`)
         })
         return
     }
@@ -88,7 +91,8 @@ async function handleIncomingMessage(sock, msg) {
             imageBuffer = await downloadMediaMessage(msg, 'buffer', {})
         } catch (e) {
             console.error('Image download error:', e.message)
-            queueMessage(sock, jid, 'Photo download nahi hua. Dobara bhejo.')
+            queueMessage(sock, jid, '⚠️ System error: Photo download nahi hua. Please inform your Teacher about this issue.')
+            await sendErrorAlert('Image Download Failed', `Failed to download image from ${phone}. Error: ${e.message}`)
             return
         }
 
@@ -101,11 +105,12 @@ async function handleIncomingMessage(sock, msg) {
             mimeType,
             messageType: 'image',
         }).then(data => {
-            const reply = data?.replyText ?? 'Evaluation failed. Dobara try karo.'
+            const reply = data?.replyText ?? '⚠️ System error: Evaluation failed. Please inform your Teacher about this issue.'
             queueMessage(sock, jid, reply)
-        }).catch(e => {
+        }).catch(async (e) => {
             console.error('API error:', e.message)
-            queueMessage(sock, jid, 'Server se connect nahi hua. Thodi der baad try karo.')
+            queueMessage(sock, jid, '⚠️ System error: Server se connect nahi hua. Please inform your Teacher about this issue.')
+            await sendErrorAlert('API Connection Failed', `Failed to send image to Next.js API for ${phone}. Error: ${e.message}`)
         })
         return
     }

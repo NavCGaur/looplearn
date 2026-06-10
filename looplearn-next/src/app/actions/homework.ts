@@ -815,6 +815,10 @@ export async function processWhatsAppTextSubmission(params: {
                    `💡 *Tip:* ${q.suggestion}`;
         }).join('\n\n') || '';
 
+        const analysisSection = questionFeedbacks
+            ? `📋 *Detailed Analysis:*\n${questionFeedbacks}`
+            : `⚠️ Main questions ko theek se detect nahi kar paya. Please ensure questions are written clearly or contact your teacher.`
+
         const feedbackText = [
             `✅ *${name}, homework submit aur evaluate ho gaya!*`,
             subject ? `📚 ${subject}${hwNum ? ` — ${hwNum}` : ''}` : '',
@@ -822,8 +826,7 @@ export async function processWhatsAppTextSubmission(params: {
             '',
             overallComment ? `📝 *Overall Performance:* ${overallComment}` : '',
             '',
-            `📋 *Detailed Analysis:*`,
-            questionFeedbacks
+            analysisSection
         ].filter(Boolean).join('\n')
 
         return {

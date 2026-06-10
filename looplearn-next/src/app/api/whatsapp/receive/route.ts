@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { processWhatsAppSubmission, processWhatsAppTextSubmission } from '@/app/actions/homework'
+import { sendErrorAlert } from '@/lib/email'
 
 // Shared secret between VPS and Next.js
 const BOT_SECRET = process.env.WHATSAPP_BOT_SECRET
@@ -54,9 +55,10 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: result.success, replyText: result.replyText })
         } catch (error: any) {
             console.error('[API Webhook] Text processing error:', error)
+            await sendErrorAlert('Text Processing Exception', `Exception while processing text message from ${cleanPhone}. Error: ${error.message}\nStack: ${error.stack}`)
             return NextResponse.json({
                 success: false,
-                replyText: '⚠️ Message process karne mein error aayi. Please dobara try kijiye.',
+                replyText: '⚠️ System error: Message process karne mein problem aayi. Please inform your Teacher about this issue.',
             })
         }
     }
@@ -89,7 +91,7 @@ export async function POST(req: NextRequest) {
             }
             return NextResponse.json({
                 success: false,
-                replyText: '⚠️ Kuch problem aayi. Thodi der baad dobara try karo.',
+                replyText: '⚠️ System error: Kuch problem aayi hai. Please inform your Teacher about this issue.',
             })
         }
 
@@ -100,9 +102,10 @@ export async function POST(req: NextRequest) {
         })
     } catch (error: any) {
         console.error('[API Webhook] Image processing error:', error)
+        await sendErrorAlert('Image Processing Exception', `Exception while processing image from ${cleanPhone}. Error: ${error.message}\nStack: ${error.stack}`)
         return NextResponse.json({
             success: false,
-            replyText: '⚠️ Photo process karne mein error aayi (Database migrate hua hai?). Please dobara try kijiye.',
+            replyText: '⚠️ System error: Photo process karne mein problem aayi. Please inform your Teacher about this issue.',
         })
     }
 }

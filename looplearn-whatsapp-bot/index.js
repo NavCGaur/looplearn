@@ -9,6 +9,7 @@ const fs = require('fs')
 const path = require('path')
 const { handleIncomingMessage } = require('./bridge')
 const { startScheduler } = require('./scheduler')
+const { sendErrorAlert } = require('./email')
 
 const logger = pino({ level: 'silent' }) // Quiet Baileys internal logs
 const PORT = process.env.PORT || 3000
@@ -217,6 +218,8 @@ async function connectToWhatsApp() {
 
                 // Wait 3 seconds and restart to present fresh QR code
                 setTimeout(connectToWhatsApp, 3000)
+                
+                await sendErrorAlert('WhatsApp Logged Out', 'The WhatsApp session was completely logged out. A new QR code is required. Please check the VPS status page.')
             }
         }
 
@@ -248,7 +251,8 @@ async function connectToWhatsApp() {
     })
 }
 
-connectToWhatsApp().catch(err => {
+connectToWhatsApp().catch(async (err) => {
     console.error('Fatal Baileys crash:', err)
+    await sendErrorAlert('Fatal Bot Crash', `The Baileys WhatsApp bot crashed and exited. Error: ${err.message}`)
     process.exit(1)
 })
