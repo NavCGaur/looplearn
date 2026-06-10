@@ -100,7 +100,7 @@ export async function generateQuestions(
         }
 
         // 3. Construct Prompt
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
         const systemPrompt = `You are an expert CBSE curriculum teacher for Class 6 to 10 students in India. You specialize in creating clear, accurate, and age-appropriate quiz questions strictly following the NCERT syllabus.`
 
@@ -345,7 +345,7 @@ export async function generateQuestionsFromPDF(
         }
 
         // 2. Build the same prompt schema as generateQuestions
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
         let specificInstructions = ''
         let jsonSchema = ''
@@ -473,7 +473,7 @@ export async function evaluateSubjectiveAnswers(
             throw new Error('Gemini API Key not configured')
         }
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
         // Build question list for the prompt
         // Build per-question instructions based on type — theory questions are NOT checked for Given/To Find
@@ -648,7 +648,7 @@ export async function evaluateQuickPracticeSheet(
             throw new Error('Gemini API Key not configured')
         }
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
         const languageInstructions = feedbackLanguage === 'hinglish'
             ? `Write ALL feedback fields in Hinglish (natural mix of conversational Hindi in Roman script + English). Keep scientific terms, formulas, and CBSE keywords in English. Do NOT use Devanagari script.`
@@ -781,7 +781,7 @@ export async function extractQuestionsFromPaper(
 ): Promise<{ success: boolean; data?: { questions: { q_number: number; question_text: string; marks: number }[]; totalMarks: number }; error?: string }> {
     try {
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-1.5-flash',
             generationConfig: {
                 temperature: 0.0,  // Pure extraction — zero creativity
                 topP: 1,
@@ -846,7 +846,7 @@ export async function evaluateAssignmentAnswers(
 ): Promise<{ success: boolean; data?: QuickPracticeEvalResult; error?: string }> {
     try {
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-1.5-flash',
             generationConfig: {
                 temperature: 0.1,
                 topP: 0.8,
@@ -977,7 +977,7 @@ export async function evaluateTextWithGemini(params: {
         }
 
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-1.5-flash',
             generationConfig: { temperature: 0.4, topP: 0.9 },
         })
 
@@ -1146,7 +1146,7 @@ export async function validateHomeworkPages(
         }
 
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-1.5-flash',
             generationConfig: {
                 temperature: 0.1,
                 topP: 1,

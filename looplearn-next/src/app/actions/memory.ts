@@ -109,7 +109,7 @@ export async function updateStudentMemory(
         if (!recentMessages.length) return { success: false }
 
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-1.5-flash',
             generationConfig: { temperature: 0.2 },
         })
 
