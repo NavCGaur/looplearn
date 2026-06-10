@@ -7,8 +7,42 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createClient } from '@/lib/supabase/server'
 
-// Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '')
+// Initialize Gemini with transient error retries (503 / 429)
+const rawGenAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '')
+const genAI = {
+    getGenerativeModel(options: any) {
+        const rawModel = rawGenAI.getGenerativeModel(options)
+        return new Proxy(rawModel, {
+            get(target, prop, receiver) {
+                if (prop === 'generateContent') {
+                    return async function(contents: any[]) {
+                        let delay = 2000
+                        const maxRetries = 4
+                        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                            try {
+                                return await target.generateContent(contents)
+                            } catch (error: any) {
+                                const isTransient = 
+                                    error.status === 503 || 
+                                    error.status === 429 || 
+                                    (error.message && (error.message.includes('503') || error.message.includes('429') || error.message.includes('Service Unavailable') || error.message.includes('quota') || error.message.includes('high demand') || error.message.includes('fetch failed')))
+
+                                if (isTransient && attempt < maxRetries) {
+                                    console.warn(`[Gemini Retry] Attempt ${attempt} failed with transient error: ${error.message || error}. Retrying in ${delay}ms...`)
+                                    await new Promise(resolve => setTimeout(resolve, delay))
+                                    delay *= 2
+                                } else {
+                                    throw error
+                                }
+                            }
+                        }
+                    }
+                }
+                return Reflect.get(target, prop, receiver)
+            }
+        })
+    }
+}
 
 export type QuestionType = 'mcq' | 'fillblank' | 'truefalse'
 
@@ -100,7 +134,7 @@ export async function generateQuestions(
         }
 
         // 3. Construct Prompt
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
 
         const systemPrompt = `You are an expert CBSE curriculum teacher for Class 6 to 10 students in India. You specialize in creating clear, accurate, and age-appropriate quiz questions strictly following the NCERT syllabus.`
 
@@ -345,7 +379,7 @@ export async function generateQuestionsFromPDF(
         }
 
         // 2. Build the same prompt schema as generateQuestions
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
 
         let specificInstructions = ''
         let jsonSchema = ''
@@ -473,7 +507,7 @@ export async function evaluateSubjectiveAnswers(
             throw new Error('Gemini API Key not configured')
         }
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
 
         // Build question list for the prompt
         // Build per-question instructions based on type — theory questions are NOT checked for Given/To Find
@@ -648,7 +682,7 @@ export async function evaluateQuickPracticeSheet(
             throw new Error('Gemini API Key not configured')
         }
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
 
         const languageInstructions = feedbackLanguage === 'hinglish'
             ? `Write ALL feedback fields in Hinglish (natural mix of conversational Hindi in Roman script + English). Keep scientific terms, formulas, and CBSE keywords in English. Do NOT use Devanagari script.`
@@ -781,7 +815,7 @@ export async function extractQuestionsFromPaper(
 ): Promise<{ success: boolean; data?: { questions: { q_number: number; question_text: string; marks: number }[]; totalMarks: number }; error?: string }> {
     try {
         const model = genAI.getGenerativeModel({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-flash-latest',
             generationConfig: {
                 temperature: 0.0,  // Pure extraction — zero creativity
                 topP: 1,
@@ -846,7 +880,7 @@ export async function evaluateAssignmentAnswers(
 ): Promise<{ success: boolean; data?: QuickPracticeEvalResult; error?: string }> {
     try {
         const model = genAI.getGenerativeModel({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-flash-latest',
             generationConfig: {
                 temperature: 0.1,
                 topP: 0.8,
@@ -977,7 +1011,7 @@ export async function evaluateTextWithGemini(params: {
         }
 
         const model = genAI.getGenerativeModel({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-flash-latest',
             generationConfig: { temperature: 0.4, topP: 0.9 },
         })
 
@@ -1146,7 +1180,7 @@ export async function validateHomeworkPages(
         }
 
         const model = genAI.getGenerativeModel({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-flash-latest',
             generationConfig: {
                 temperature: 0.1,
                 topP: 1,

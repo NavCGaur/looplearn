@@ -14,7 +14,41 @@
 import { createClient as createSupabaseClientDirect } from '@supabase/supabase-js'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '')
+const rawGenAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '')
+const genAI = {
+    getGenerativeModel(options: any) {
+        const rawModel = rawGenAI.getGenerativeModel(options)
+        return new Proxy(rawModel, {
+            get(target, prop, receiver) {
+                if (prop === 'generateContent') {
+                    return async function(contents: any[]) {
+                        let delay = 2000
+                        const maxRetries = 4
+                        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                            try {
+                                return await target.generateContent(contents)
+                            } catch (error: any) {
+                                const isTransient = 
+                                    error.status === 503 || 
+                                    error.status === 429 || 
+                                    (error.message && (error.message.includes('503') || error.message.includes('429') || error.message.includes('Service Unavailable') || error.message.includes('quota') || error.message.includes('high demand') || error.message.includes('fetch failed')))
+
+                                if (isTransient && attempt < maxRetries) {
+                                    console.warn(`[Gemini Retry] Attempt ${attempt} failed with transient error: ${error.message || error}. Retrying in ${delay}ms...`)
+                                    await new Promise(resolve => setTimeout(resolve, delay))
+                                    delay *= 2
+                                } else {
+                                    throw error
+                                }
+                            }
+                        }
+                    }
+                }
+                return Reflect.get(target, prop, receiver)
+            }
+        })
+    }
+}
 
 function createAdminClient() {
     return createSupabaseClientDirect(
@@ -109,7 +143,7 @@ export async function updateStudentMemory(
         if (!recentMessages.length) return { success: false }
 
         const model = genAI.getGenerativeModel({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-flash-latest',
             generationConfig: { temperature: 0.2 },
         })
 
