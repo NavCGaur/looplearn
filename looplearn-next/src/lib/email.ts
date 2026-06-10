@@ -1,7 +1,5 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export async function sendErrorAlert(subject: string, errorMessage: string) {
     if (!process.env.RESEND_API_KEY || !process.env.TEACHER_EMAIL) {
         console.warn('⚠️ [Email Alert] Skipping email alert because RESEND_API_KEY or TEACHER_EMAIL is missing in .env')
@@ -9,6 +7,7 @@ export async function sendErrorAlert(subject: string, errorMessage: string) {
     }
 
     try {
+        const resend = new Resend(process.env.RESEND_API_KEY)
         const { error } = await resend.emails.send({
             from: 'LoopLearn NextJS Alert <onboarding@resend.dev>',
             to: process.env.TEACHER_EMAIL,
