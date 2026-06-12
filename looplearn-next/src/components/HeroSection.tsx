@@ -43,11 +43,11 @@ const FloatingIcon = ({
 
 const AvatarStack = () => {
     const avatars = [
-        "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4",
-        "https://api.dicebear.com/7.x/avataaars/svg?seed=Luna&backgroundColor=d1d4f9",
-        "https://api.dicebear.com/7.x/avataaars/svg?seed=Max&backgroundColor=c0aede",
-        "https://api.dicebear.com/7.x/avataaars/svg?seed=Mia&backgroundColor=ffd5dc",
-        "https://api.dicebear.com/7.x/avataaars/svg?seed=Leo&backgroundColor=ffdfbf",
+        "/avatars/avatar_boy_1.png",
+        "/avatars/avatar_girl_1.png",
+        "/avatars/avatar_boy_2.png",
+        "/avatars/avatar_girl_2.png",
+        "/avatars/avatar_boy_3.png",
     ];
 
     return (

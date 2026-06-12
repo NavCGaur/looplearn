@@ -24,12 +24,16 @@ const fredoka = Fredoka({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://looplearnx.com"),
   title: "LoopLearnX – Fun Learning for Kids",
   description: "Word cards, quizzes, hangman, and spaced repetition for joyful learning.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "LoopLearnX – Fun Learning for Kids",
     description: "Word cards, quizzes, hangman, and spaced repetition for joyful learning.",
-    url: "https://looplearnx.vercel.app/",
+    url: "https://looplearnx.com/",
     siteName: "LoopLearnX",
     images: [
       {
@@ -59,6 +63,10 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+      </head>
       <body
         className={`${inter.variable} ${robotoMono.variable} ${fredoka.variable} antialiased`}
       >

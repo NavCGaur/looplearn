@@ -88,3 +88,26 @@ export async function updateSessionStatus(
         .update(updatePayload)
         .eq('id', sessionId)
 }
+
+export async function checkStudentLockout(studentId: string): Promise<{ locked: boolean; remainingHours?: number }> {
+    const admin = createAdminClient()
+    const { data, error } = await admin
+        .from('whatsapp_submission_sessions')
+        .select('created_at, status')
+        .eq('student_id', studentId)
+        .eq('status', 'failed')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+    if (error || !data) return { locked: false }
+
+    const failedAt = new Date(data.created_at).getTime()
+    const sixHoursMs = 6 * 60 * 60 * 1000
+    const now = Date.now()
+    if (now - failedAt < sixHoursMs) {
+        const remaining = Math.ceil((failedAt + sixHoursMs - now) / (1000 * 60 * 60))
+        return { locked: true, remainingHours: remaining }
+    }
+    return { locked: false }
+}

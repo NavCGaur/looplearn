@@ -45,3 +45,10 @@ next-env.d.ts
 # sensitive data
 docs/FullBackup-14-02-26.json
 docs/duplicate_questions.json
+
+# test scripts, keys and logs
+test_*.js
+get_latest_submissions.js
+set_naveen_phone.js
+*.log
+*.txt

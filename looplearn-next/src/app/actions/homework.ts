@@ -4,7 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { evaluateQuickPracticeSheet, evaluateTextWithGemini, PreviousSubmissionContext, validateHomeworkPages } from './ai'
 import { saveChatMessages, getChatWindow, getStudentMemory, isMemoryStale, updateStudentMemory } from './memory'
-import { getActiveSession, createSession, addPageToSession, updateSessionStatus, SessionPage } from './sessions'
+import { getActiveSession, createSession, addPageToSession, updateSessionStatus, SessionPage, checkStudentLockout } from './sessions'
+import { createNotification } from './notifications'
 
 function createAdminClient() {
     return createSupabaseClient(
@@ -288,6 +289,15 @@ export async function processWhatsAppSubmission(params: {
         })
 
     // 3. Manage multi-image submission session state machine
+    const lockout = await checkStudentLockout(student.id)
+    if (lockout.locked) {
+        return {
+            success: true,
+            feedbackText: `❌ Aapke submission attempts limit (3 times) exceed ho chuke hain security aur rate limit reasons ki wajah se.\n\nApne questions aur answers ki new clear photos kheench kar ${lockout.remainingHours || 6} ghante baad try karein, tab tak ke liye aap block ho chuke hain. Hamne validation issues ke baare mein aapke Teacher ko inform kar diya hai.`,
+            studentName: name
+        }
+    }
+
     const session = await getActiveSession(student.id)
 
     if (!session) {
@@ -612,6 +622,15 @@ export async function processWhatsAppTextSubmission(params: {
 
     // 1.5. Utility command: DONE — process current multi-image submission
     if (command === 'done') {
+        let isAnswersOnlySubmission = false
+        const lockout = await checkStudentLockout(student.id)
+        if (lockout.locked) {
+            return {
+                success: true,
+                replyText: `❌ Aapke submission attempts limit (3 times) exceed ho chuke hain security aur rate limit reasons ki wajah se.\n\nApne questions aur answers ki new clear photos kheench kar ${lockout.remainingHours || 6} ghante baad try karein, tab tak ke liye aap block ho chuke hain. Hamne validation issues ke baare mein aapke Teacher ko inform kar diya hai.`
+            }
+        }
+
         const session = await getActiveSession(student.id)
         if (!session) {
             return {
@@ -628,8 +647,46 @@ export async function processWhatsAppTextSubmission(params: {
             }
         }
 
+        const previousStatus = session.status
+        const firstPage = session.pages[0] as any
+        const currentRetries = firstPage.retry_count || 0
+
+        // Fetch plans to identify the teacher to notify if locked out
+        const today = new Date()
+        const dayOfWeek = today.getDay() === 0 ? 7 : today.getDay()
+        const monday = new Date(today)
+        monday.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1))
+        const weekStart = monday.toISOString().split('T')[0]
+
+        const { data: plans } = await adminClient
+            .from('homework_plans')
+            .select('*')
+            .eq('class_standard', student.class_standard)
+            .eq('week_start', weekStart)
+            .eq('day_of_week', dayOfWeek)
+        const plan = plans?.[0] ?? null
+
+        if (currentRetries >= 3) {
+            await updateSessionStatus(session.id, 'failed')
+            if (plan && plan.teacher_id) {
+                await createNotification({
+                    userId: plan.teacher_id,
+                    title: 'WhatsApp Submission Blocked ⚠️',
+                    message: `Student ${name} was locked out after 3 failed attempts on WhatsApp homework submission.`,
+                    type: 'error'
+                }).catch(err => console.warn('Failed to notify teacher:', err.message))
+            }
+            return {
+                success: true,
+                replyText: `❌ Aapke submission attempts limit (3 times) exceed ho chuke hain security aur rate limit reasons ki wajah se.\n\nApne questions aur answers ki new clear photos kheench kar 6 ghante baad try karein, tab tak ke liye aap block ho chuke hain. Hamne validation issues ke baare mein aapke Teacher ko inform kar diya hai.`
+            }
+        }
+
+        // Increment retry count
+        firstPage.retry_count = currentRetries + 1
+
         // Set session status to processing
-        await updateSessionStatus(session.id, 'processing')
+        await updateSessionStatus(session.id, 'processing', session.pages)
 
         // Fetch all images from storage and convert to base64
         const imagesToValidate: { base64: string; mimeType: string }[] = []
@@ -650,7 +707,7 @@ export async function processWhatsAppTextSubmission(params: {
         }
 
         if (imagesToValidate.length === 0) {
-            await updateSessionStatus(session.id, 'failed')
+            await updateSessionStatus(session.id, previousStatus)
             return {
                 success: true,
                 replyText: `❌ Aapki photos load nahi ho payin. Please dobara bhej kar try kijiye.`
@@ -660,7 +717,7 @@ export async function processWhatsAppTextSubmission(params: {
         // Run Gemini Validation Step
         const validation = await validateHomeworkPages(imagesToValidate)
         if (!validation.success) {
-            await updateSessionStatus(session.id, 'failed')
+            await updateSessionStatus(session.id, previousStatus)
             return {
                 success: true,
                 replyText: `⚠️ AI validation fail ho gaya. Please thodi der baad dobara *DONE* likh kar submit kijiye.`
@@ -689,14 +746,14 @@ export async function processWhatsAppTextSubmission(params: {
                 .filter(p => p.status !== 'ok')
                 .map(p => {
                     const statusLabel: Record<string, string> = {
-                        cutoff: 'Cut-off / incomplete',
-                        unreadable: 'Blurry / unreadable',
-                        poor_lighting: 'Poor lighting',
-                        questions_only: 'Only questions (no answers)',
-                        answers_only: 'Only answers (no questions)',
-                        invalid: 'Invalid homework image (not a question or answer sheet)'
+                        cutoff: 'Photo side se thodi kat rahi hai. Please puri sheet cover kijiye.',
+                        unreadable: 'Photo thodi blurry hai ya handwriting theek se samajh nahi aa rahi.',
+                        poor_lighting: 'Photo mein andhera hai ya shadow aa rahi hai. Please thoda behtar light mein photo kheechiye.',
+                        questions_only: 'Is page par sirf questions dikh rahe hain, answers nahi.',
+                        answers_only: 'Is page par sirf answers dikh rahe hain, questions ka likha hona zaroori hai.',
+                        invalid: 'Ye photo homework sheet ki nahi lag rahi.'
                     }
-                    return `• *Page ${p.page}*: ${statusLabel[p.status] || p.status} (${p.reason || 'adjust photo'})`
+                    return `• *Page ${p.page}*: ${statusLabel[p.status] || 'Photo theek se samajh nahi aa rahi.'}`
                 }).join('\n')
 
             const readablePages = updatedPages
@@ -704,17 +761,17 @@ export async function processWhatsAppTextSubmission(params: {
                 .map(p => p.page)
                 .join(', ')
 
-            const readLine = readablePages ? `Main pages ${readablePages} ko read kar paya.\n\n` : ''
+            const readLine = readablePages ? `✅ Main page(s) ${readablePages} ko theek se samajh paaya.\n\n` : ''
 
             return {
                 success: true,
-                replyText: `⚠️ *Validation failed!*\n\n${readLine}Kuch pages mein problem aayi hai:\n${errorDetails}\n\n*Aapko poora homework dobara bhejne ki zaroorat nahi hai.* Bas upar bataye gaye pages ki new clean photo send kijiye.`
+                replyText: `${readLine}⚠️ Lekin kuch pages mein thodi problem aayi hai:\n${errorDetails}\n\nAapko poora homework dobara bhejne ki zaroorat nahi hai. Bas in pages ki clear photo dobara bhejiye.`
             }
         }
 
         // Validation Passed! Check scenarios (Questions-Only / Answers-Only / Completely Invalid)
         if (!validation.questionsFound && !validation.answersFound) {
-            await updateSessionStatus(session.id, 'active') // keep active
+            await updateSessionStatus(session.id, previousStatus)
             return {
                 success: true,
                 replyText: `❌ Mujhe is photo mein koi school questions ya answers nahi mile. Please school homework book ya question paper ki clean photo send kijiye.`
@@ -722,7 +779,7 @@ export async function processWhatsAppTextSubmission(params: {
         }
 
         if (validation.questionsFound && !validation.answersFound) {
-            await updateSessionStatus(session.id, 'active') // keep active
+            await updateSessionStatus(session.id, previousStatus)
             return {
                 success: true,
                 replyText: `📝 Main questions toh dekh pa raha hoon par aapke *answers* nahi mil rahe. Please answers likh kar page ki photo bhejiye!`
@@ -732,30 +789,17 @@ export async function processWhatsAppTextSubmission(params: {
         if (validation.answers_only || (!validation.questionsFound && validation.answersFound)) {
             const confidence = validation.question_reconstruction_confidence ?? 1.0
             if (confidence < 0.85) {
-                await updateSessionStatus(session.id, 'active') // keep active
+                await updateSessionStatus(session.id, previousStatus) // revert status instead of forcing failed
                 return {
                     success: true,
-                    replyText: `🤔 Main aapke answers dekh pa raha hoon par confidently questions reconstruct nahi kar pa raha (Confidence: ${Math.round(confidence * 100)}%). Please questions ke sath photo bhejiye.`
+                    replyText: `⚠️ Mujhe answers toh mil rahe hain par questions nahi mil rahe. Please photo mein dono question aur answer ko ek sath share kijiye.`
                 }
+            } else {
+                isAnswersOnlySubmission = true
             }
         }
 
         // Proceed to evaluation
-        const today = new Date()
-        const dayOfWeek = today.getDay() === 0 ? 7 : today.getDay()
-        const monday = new Date(today)
-        monday.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1))
-        const weekStart = monday.toISOString().split('T')[0]
-
-        const { data: plans } = await adminClient
-            .from('homework_plans')
-            .select('*')
-            .eq('class_standard', student.class_standard)
-            .eq('week_start', weekStart)
-            .eq('day_of_week', dayOfWeek)
-
-        const plan = plans?.[0] ?? null
-
         let previousSubmission: any = null
         if (plan) {
             const { data: prevSub } = await adminClient
@@ -779,7 +823,7 @@ export async function processWhatsAppTextSubmission(params: {
         )
 
         if (!evalResult.success) {
-            await updateSessionStatus(session.id, 'failed')
+            await updateSessionStatus(session.id, previousStatus)
             return {
                 success: true,
                 replyText: `⚠️ Evaluation step failed. Please try again later by typing *DONE*.`
@@ -828,8 +872,12 @@ export async function processWhatsAppTextSubmission(params: {
             ? `📋 *Detailed Analysis:*\n${questionFeedbacks}`
             : `⚠️ Main questions ko theek se detect nahi kar paya. Please ensure questions are written clearly or contact your teacher.`
 
+        const answersOnlyWarning = isAnswersOnlySubmission
+            ? `⚠️ *Note:* Photo mein question nahi dikh raha hai. Maine question assume/guess karke answers check kiye hain. Next time please question aur answer dono ki photo ek sath send kijiye!\n\n`
+            : ''
+
         const feedbackText = [
-            `✅ *${name}, homework submit aur evaluate ho gaya!*`,
+            answersOnlyWarning + `✅ *${name}, homework submit aur evaluate ho gaya!*`,
             subject ? `📚 ${subject}${hwNum ? ` — ${hwNum}` : ''}` : '',
             marksLine,
             '',
