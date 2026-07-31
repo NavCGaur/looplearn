@@ -10,17 +10,21 @@ async function sendErrorAlert(subject, errorMessage) {
     }
 
     try {
+        const recipient = process.env.TEACHER_EMAIL || 'naveencg070@gmail.com'
         const { data, error } = await resend.emails.send({
             from: 'LoopLearn Bot Alert <onboarding@resend.dev>', // Use a verified domain if you have one, else this sandbox domain works for the verified email
-            to: process.env.TEACHER_EMAIL,
+            to: recipient,
             subject: `🚨 LoopLearn Bot Error: ${subject}`,
             html: `
                 <h2>LoopLearn WhatsApp Bot Alert</h2>
                 <p>An issue was detected in the bot infrastructure.</p>
-                <div style="background-color: #ffebee; padding: 15px; border-left: 4px solid #f44336; margin-top: 15px;">
-                    <p style="font-family: monospace; color: #b71c1c;">${errorMessage}</p>
+                <div style="background-color: #ffebee; padding: 15px; border-left: 4px solid #f44336; margin-top: 15px; border-radius: 8px;">
+                    <p style="font-family: monospace; color: #b71c1c; margin: 0;">${errorMessage}</p>
                 </div>
-                <p style="color: #757575; font-size: 12px; margin-top: 30px;">Time: ${new Date().toISOString()}</p>
+                <div style="margin-top: 20px;">
+                    <a href="http://92.4.80.16:3000" style="display: inline-block; background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 8px; font-weight: bold;">Open Bot Command Center 🚀</a>
+                </div>
+                <p style="color: #757575; font-size: 12px; margin-top: 25px;">Time: ${new Date().toISOString()}</p>
             `,
         })
 

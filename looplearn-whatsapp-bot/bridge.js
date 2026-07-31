@@ -48,12 +48,18 @@ function toJid(phone) {
 
 // ── Incoming message handler ────────────────────────────────
 
+// Debounce buffer for grouping multiple images sent at once
+const imageBatchBuffer = new Map()
+
 async function handleIncomingMessage(sock, msg) {
     const jid = msg.key.remoteJid
     if (!jid || jid.endsWith('@g.us')) return // Skip group messages
 
-    const phone = jid.replace('@s.whatsapp.net', '')
+    const phone = jid.replace(/@.*$/, '')
     const content = msg.message
+
+    // LOG: See exactly what number format WhatsApp sends (critical for student identification)
+    console.log(`[IncomingMsg] Raw JID: ${jid} | Extracted phone: ${phone} | Type: ${Object.keys(content || {}).join(',')}`)
 
     // Determine message type
     const imageMsg = content?.imageMessage
@@ -81,37 +87,60 @@ async function handleIncomingMessage(sock, msg) {
     }
 
     if (imageMsg) {
-        // Send acknowledgement immediately (before Gemini eval which takes 20-40s)
-        queueMessage(sock, jid, 'Photo submit ho rahi hai, please 2 minute wait kariye response ke liye.')
+        // Retrieve or initialize batch buffer for this user
+        let userBatch = imageBatchBuffer.get(jid)
+        if (!userBatch) {
+            userBatch = {
+                images: [],
+                timeoutId: null
+            }
+            imageBatchBuffer.set(jid, userBatch)
+            // Send acknowledgement only once at the beginning of the batch
+            queueMessage(sock, jid, 'Photo(s) receive ho rahi hain, please wait for validation & response...')
+        }
 
-        // Download image
+        // Download image buffer
         let imageBuffer
         try {
             const { downloadMediaMessage } = require('@whiskeysockets/baileys')
             imageBuffer = await downloadMediaMessage(msg, 'buffer', {})
         } catch (e) {
             console.error('Image download error:', e.message)
-            queueMessage(sock, jid, '⚠️ System error: Photo download nahi hua. Please inform your Teacher about this issue.')
-            await sendErrorAlert('Image Download Failed', `Failed to download image from ${phone}. Error: ${e.message}`)
+            queueMessage(sock, jid, '⚠️ Photo download fail ho gaya. Please review connection.')
             return
         }
 
-        const imageBase64 = imageBuffer.toString('base64')
-        const mimeType = imageMsg.mimetype || 'image/jpeg'
-
-        await callApi('/api/whatsapp/receive', {
-            phone,
-            imageBase64,
-            mimeType,
-            messageType: 'image',
-        }).then(data => {
-            const reply = data?.replyText ?? '⚠️ System error: Evaluation failed. Please inform your Teacher about this issue.'
-            queueMessage(sock, jid, reply)
-        }).catch(async (e) => {
-            console.error('API error:', e.message)
-            queueMessage(sock, jid, '⚠️ System error: Server se connect nahi hua. Please inform your Teacher about this issue.')
-            await sendErrorAlert('API Connection Failed', `Failed to send image to Next.js API for ${phone}. Error: ${e.message}`)
+        // Add to batch list
+        userBatch.images.push({
+            base64: imageBuffer.toString('base64'),
+            mimeType: imageMsg.mimetype || 'image/jpeg'
         })
+
+        // Debounce: reset timer so we wait for the last image in the batch to arrive (2.5s delay)
+        if (userBatch.timeoutId) {
+            clearTimeout(userBatch.timeoutId)
+        }
+
+        userBatch.timeoutId = setTimeout(async () => {
+            const batchToSend = [...userBatch.images]
+            imageBatchBuffer.delete(jid) // clear buffer for next upload
+
+            console.log(`[Bridge] Debounce trigger: Sending batch of ${batchToSend.length} images for ${phone}...`)
+
+            await callApi('/api/whatsapp/receive', {
+                phone,
+                messageType: 'image',
+                images: batchToSend,
+            }).then(data => {
+                const reply = data?.replyText ?? '⚠️ System error: Evaluation failed. Please inform your Teacher about this issue.'
+                queueMessage(sock, jid, reply)
+            }).catch(async (e) => {
+                console.error('API error:', e.message)
+                queueMessage(sock, jid, '⚠️ System error: Server se connect nahi hua. Please inform your Teacher about this issue.')
+                await sendErrorAlert('API Connection Failed', `Failed to send batch of ${batchToSend.length} images to Next.js API for ${phone}. Error: ${e.message}`)
+            })
+        }, 2500)
+
         return
     }
 

@@ -7,37 +7,54 @@ const qrcode = require('qrcode')
 const express = require('express')
 const fs = require('fs')
 const path = require('path')
+const axios = require('axios')
+
 const { handleIncomingMessage } = require('./bridge')
 const { startScheduler } = require('./scheduler')
 const { sendErrorAlert } = require('./email')
 
 const logger = pino({ level: 'silent' }) // Quiet Baileys internal logs
 const PORT = process.env.PORT || 3000
+const API_URL = process.env.LOOPLEARN_API_URL || 'https://looplearnx.com'
 
-// Express setup for status and QR monitoring
+// Global Unhandled Exception Guards (Prevents process freezes)
+process.on('unhandledRejection', (reason) => {
+    console.error('⚠️ [Global Guard] Unhandled Rejection:', reason)
+})
+process.on('uncaughtException', (err) => {
+    console.error('🚨 [Global Guard] Uncaught Exception:', err.message)
+})
+
 const app = express()
+app.use(express.json())
+
 let sock = null
 let botStatus = 'starting' // starting, qr_needed, connected, disconnected, logged_out
 let currentQr = null
-let currentQrImage = null // Data URL for the QR code image
+let currentQrImage = null
 let schedulerStarted = false
 
-// ── Deaf-Session Heartbeat Monitor ──────────────────────────────────────────
-// Baileys WebSocket can enter a "deaf" state: appears connected but stops
-// processing incoming messages. This monitor detects that and forces reconnect.
+// Metrics & Activity Tracking
+const startTime = Date.now()
+let totalMessagesProcessed = 0
 let lastMessageProcessedAt = Date.now()
-const DEAF_SESSION_TIMEOUT_MS = 2 * 60 * 60 * 1000 // 2 hours (avoid constant reconnects when idle)
+
+// Reconnection Watchdog Guard
+let reconnectAttempts = 0
+let lastReconnectWindowStart = Date.now()
 
 function updateLastMessageTime() {
     lastMessageProcessedAt = Date.now()
+    totalMessagesProcessed++
 }
 
-// Start heartbeat check every 60 seconds
+// ── Deaf-Session Watchdog Monitor ──────────────────────────────────────────
+const DEAF_SESSION_TIMEOUT_MS = 2 * 60 * 60 * 1000 // 2 hours
 setInterval(() => {
     if (botStatus !== 'connected') return
     const silentFor = Date.now() - lastMessageProcessedAt
     if (silentFor > DEAF_SESSION_TIMEOUT_MS) {
-        console.warn(`⚠️ [Heartbeat] No messages processed in ${Math.round(silentFor / 1000)}s — possible deaf session. Forcing reconnect.`)
+        console.warn(`⚠️ [Heartbeat] Silent for ${Math.round(silentFor / 1000)}s — forcing reconnect.`)
         botStatus = 'disconnected'
         if (sock) {
             try { sock.end(undefined) } catch (_) {}
@@ -46,119 +63,324 @@ setInterval(() => {
     }
 }, 60 * 1000)
 
+// ── REST API Endpoints ──────────────────────────────────────────────────────
 
-app.get('/', (req, res) => {
-    let statusColor = 'text-yellow-500'
-    let statusText = 'Starting...'
-    let actionHtml = ''
+// API: Detailed Health Status
+app.get('/api/status', async (req, res) => {
+    const uptimeSec = Math.floor((Date.now() - startTime) / 1000)
+    const memUsage = Math.round(process.memoryUsage().heapUsed / 1024 / 1024)
 
-    if (botStatus === 'qr_needed') {
-        statusColor = 'text-amber-500 font-bold'
-        statusText = '⚠️ Action Needed: Scan QR Code'
-        actionHtml = `
-            <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl max-w-sm mx-auto">
-                <p class="text-sm text-amber-800">Scan this QR code from WhatsApp Business on your phone to link the bot.</p>
-                <a href="/qr" class="inline-block mt-4 px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold transition-all">View QR Code 📷</a>
-            </div>
-        `
-    } else if (botStatus === 'connected') {
-        statusColor = 'text-green-600 font-bold'
-        statusText = '✅ Connected & Running'
-        actionHtml = `
-            <div class="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl max-w-sm mx-auto">
-                <p class="text-sm text-green-800">Bot is actively monitoring homework submissions 24/7.</p>
-            </div>
-        `
-    } else if (botStatus === 'disconnected') {
-        statusColor = 'text-red-500'
-        statusText = '❌ Temporarily Disconnected'
-        actionHtml = `<p class="text-xs text-gray-500 mt-2">Attempting to auto-reconnect...</p>`
-    } else if (botStatus === 'logged_out') {
-        statusColor = 'text-red-700 font-bold font-fredoka'
-        statusText = '🚨 Logged Out / Session Terminated'
-        actionHtml = `<p class="text-sm text-gray-600 mt-2">Deleting session files and generating new credentials. Please refresh in a moment.</p>`
+    res.json({
+        status: botStatus,
+        hasQr: !!currentQrImage,
+        uptimeSeconds: uptimeSec,
+        memoryUsageMb: memUsage,
+        totalMessagesProcessed,
+        lastMessageProcessedAt: new Date(lastMessageProcessedAt).toISOString(),
+        serverTime: new Date().toISOString(),
+        serverTimeIST: new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' IST',
+    })
+})
+
+// API: Fetch Recent Server Logs
+app.get('/api/logs', (req, res) => {
+    try {
+        const errLogPath = path.join(__dirname, 'logs', 'err-0.log')
+        const outLogPath = path.join(__dirname, 'logs', 'out-0.log')
+
+        let logs = []
+
+        if (fs.existsSync(outLogPath)) {
+            const outContent = fs.readFileSync(outLogPath, 'utf8')
+            const lines = outContent.trim().split('\n').slice(-40)
+            logs.push(...lines.map(line => ({ type: 'out', text: line })))
+        }
+
+        if (fs.existsSync(errLogPath)) {
+            const errContent = fs.readFileSync(errLogPath, 'utf8')
+            const lines = errContent.trim().split('\n').slice(-20)
+            logs.push(...lines.map(line => ({ type: 'err', text: line })))
+        }
+
+        res.json({ success: true, logs })
+    } catch (e) {
+        res.json({ success: false, error: e.message, logs: [] })
+    }
+})
+
+// API: Ping Backend Vercel API
+app.get('/api/ping-backend', async (req, res) => {
+    const start = Date.now()
+    try {
+        const response = await axios.get(`${API_URL}/api/ping`, { timeout: 10000 })
+        const latency = Date.now() - start
+        res.json({ success: true, status: response.status, latencyMs: latency })
+    } catch (e) {
+        const latency = Date.now() - start
+        res.json({ success: false, error: e.message, latencyMs: latency })
+    }
+})
+
+// API: Trigger Restart
+app.post('/api/restart', (req, res) => {
+    console.log('🔄 Manual restart triggered from Command Center UI...')
+    res.json({ success: true, message: 'Restarting bot in 2 seconds...' })
+    setTimeout(() => process.exit(0), 2000)
+})
+
+// API: Purge Credentials & Reset Session
+app.post('/api/reset-session', (req, res) => {
+    console.log('🧹 Purging credentials and generating fresh QR code...')
+    botStatus = 'logged_out'
+    currentQr = null
+    currentQrImage = null
+
+    try {
+        if (sock) { try { sock.end(undefined) } catch (_) {} }
+        fs.rmSync(path.join(__dirname, 'auth_info'), { recursive: true, force: true })
+        console.log('Successfully cleared auth_info session folder.')
+    } catch (e) {
+        console.error('Failed to clear credentials folder:', e.message)
     }
 
+    res.json({ success: true, message: 'Credentials purged. Generating new QR...' })
+    setTimeout(connectToWhatsApp, 2000)
+})
+
+// ── Command Center Dashboard HTML ──────────────────────────────────────────
+
+app.get('/', (req, res) => {
     res.send(`
         <!DOCTYPE html>
-        <html>
+        <html lang="en">
         <head>
-            <title>LoopLearn Bot Status</title>
+            <title>LoopLearn Bot Command Center</title>
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <script src="https://cdn.tailwindcss.com"></script>
-            <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
             <style>
                 body { font-family: 'Inter', sans-serif; }
                 .font-fredoka { font-family: 'Fredoka', sans-serif; }
             </style>
-            ${botStatus === 'qr_needed' || botStatus === 'starting' || botStatus === 'logged_out' ? '<meta http-equiv="refresh" content="10">' : ''}
         </head>
-        <body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
-            <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-lg border border-gray-100 text-center">
-                <h1 class="text-2xl font-bold font-fredoka text-indigo-600">LoopLearn WhatsApp Bot</h1>
-                <p class="text-gray-400 text-xs mt-1">VPS Bridge Infrastructure</p>
+        <body class="bg-slate-900 text-slate-100 min-h-screen p-4 sm:p-6">
+            <div class="max-w-5xl mx-auto space-y-6">
                 
-                <div class="my-8 py-6 border-y border-gray-50">
-                    <p class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Current Status</p>
-                    <p class="text-lg mt-1 ${statusColor}">${statusText}</p>
-                    ${actionHtml}
+                <!-- Top Header -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl gap-4">
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <h1 class="text-2xl font-bold font-fredoka text-indigo-400">LoopLearn Bot Command Center</h1>
+                            <span class="px-3 py-1 bg-indigo-500/20 text-indigo-300 text-xs font-semibold rounded-full border border-indigo-500/30">v1.2 Live</span>
+                        </div>
+                        <p class="text-slate-400 text-xs mt-1">Oracle VPS Mumbai-1 · Infrastructure Control Dashboard</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="refreshData()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold rounded-xl border border-slate-600 transition-all">🔄 Refresh</button>
+                        <button onclick="triggerRestart()" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold rounded-xl shadow-lg transition-all">⚡ Restart Bot</button>
+                    </div>
                 </div>
-                
-                <div class="text-[10px] text-gray-300">
-                    Host: Mumbai-1 VPS · System Time: ${new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
+
+                <!-- Live Status Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-md">
+                        <p class="text-slate-400 text-xs uppercase tracking-wider font-semibold">Bot Status</p>
+                        <p id="botStatusBadge" class="text-lg font-bold mt-2 text-yellow-400">Loading...</p>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-md">
+                        <p class="text-slate-400 text-xs uppercase tracking-wider font-semibold">System Uptime</p>
+                        <p id="uptimeBadge" class="text-lg font-bold mt-2 text-slate-100">--</p>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-md">
+                        <p class="text-slate-400 text-xs uppercase tracking-wider font-semibold">Processed Messages</p>
+                        <p id="msgCountBadge" class="text-lg font-bold mt-2 text-indigo-400">--</p>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-md">
+                        <p class="text-slate-400 text-xs uppercase tracking-wider font-semibold">Vercel API Health</p>
+                        <p id="apiHealthBadge" class="text-lg font-bold mt-2 text-slate-400">Testing...</p>
+                    </div>
                 </div>
+
+                <!-- QR Panel & Controls Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- QR Code Card (Left) -->
+                    <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl text-center flex flex-col justify-center items-center">
+                        <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">WhatsApp Link Status</h2>
+                        
+                        <div id="qrContainer" class="bg-white p-4 rounded-2xl border border-slate-700 my-2 inline-block">
+                            <p class="text-slate-500 text-xs">Checking session status...</p>
+                        </div>
+                        
+                        <p id="qrNotice" class="text-xs text-slate-400 mt-4">Scan using WhatsApp Business → Linked Devices</p>
+                        
+                        <button onclick="triggerResetSession()" class="mt-4 px-4 py-2 bg-red-600/20 hover:bg-red-600/40 text-red-300 border border-red-500/30 text-xs font-semibold rounded-xl transition-all w-full">
+                            🧹 Reset Session & Force New QR
+                        </button>
+                    </div>
+
+                    <!-- 1-Click Operations Panel (Right) -->
+                    <div class="lg:col-span-2 bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl flex flex-col justify-between">
+                        <div>
+                            <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">1-Click Control Operations</h2>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700">
+                                    <h3 class="font-semibold text-sm text-slate-200">🔄 Soft Restart</h3>
+                                    <p class="text-xs text-slate-400 mt-1">Restarts the PM2 process cleanly without dropping linked credentials.</p>
+                                    <button onclick="triggerRestart()" class="mt-3 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition-all">Restart Bot</button>
+                                </div>
+
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700">
+                                    <h3 class="font-semibold text-sm text-slate-200">🧪 Ping Vercel API</h3>
+                                    <p class="text-xs text-slate-400 mt-1">Tests HTTP latency from VPS to looplearnx.com endpoint.</p>
+                                    <button onclick="testApi()" class="mt-3 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition-all">Ping API Now</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-slate-900/40 rounded-xl border border-slate-700 text-xs text-slate-400">
+                            <strong>System Info:</strong> Server IST Time: <span id="istTime" class="text-slate-200">--</span> | Memory: <span id="memUsage" class="text-slate-200">--</span> MB
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Log Viewer -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider">Live Server Logs</h2>
+                        <span class="text-[11px] text-slate-400">Auto-refreshes every 10s</span>
+                    </div>
+                    
+                    <div id="logBox" class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 h-64 overflow-y-auto space-y-1">
+                        <p class="text-slate-500">Loading logs...</p>
+                    </div>
+                </div>
+
             </div>
+
+            <script>
+                async function refreshData() {
+                    try {
+                        const res = await fetch('/api/status');
+                        const data = await res.json();
+
+                        const statusElem = document.getElementById('botStatusBadge');
+                        if (data.status === 'connected') {
+                            statusElem.className = 'text-lg font-bold mt-2 text-emerald-400';
+                            statusElem.innerText = '✅ Connected & Running';
+                        } else if (data.status === 'qr_needed') {
+                            statusElem.className = 'text-lg font-bold mt-2 text-amber-400';
+                            statusElem.innerText = '⚠️ Action Needed: Scan QR';
+                        } else if (data.status === 'disconnected') {
+                            statusElem.className = 'text-lg font-bold mt-2 text-red-400';
+                            statusElem.innerText = '❌ Temporarily Disconnected';
+                        } else {
+                            statusElem.className = 'text-lg font-bold mt-2 text-slate-300';
+                            statusElem.innerText = data.status;
+                        }
+
+                        document.getElementById('uptimeBadge').innerText = Math.floor(data.uptimeSeconds / 60) + ' min';
+                        document.getElementById('msgCountBadge').innerText = data.totalMessagesProcessed;
+                        document.getElementById('istTime').innerText = data.serverTimeIST;
+                        document.getElementById('memUsage').innerText = data.memoryUsageMb;
+
+                        // QR update
+                        const qrBox = document.getElementById('qrContainer');
+                        if (data.hasQr) {
+                            qrBox.innerHTML = '<img src="/qr" class="w-56 h-56 rounded-lg" />';
+                            document.getElementById('qrNotice').innerText = 'Scan QR code with WhatsApp Business to link.';
+                        } else if (data.status === 'connected') {
+                            qrBox.innerHTML = '<div class="w-56 h-56 flex items-center justify-center text-emerald-600 font-bold text-lg">✅ Session Linked</div>';
+                            document.getElementById('qrNotice').innerText = 'WhatsApp session active 24/7.';
+                        } else {
+                            qrBox.innerHTML = '<div class="w-56 h-56 flex items-center justify-center text-slate-400 text-sm">Generating QR...</div>';
+                        }
+                    } catch (e) {
+                        console.error('Failed to fetch status:', e);
+                    }
+
+                    fetchLogs();
+                }
+
+                async function fetchLogs() {
+                    try {
+                        const res = await fetch('/api/logs');
+                        const data = await res.json();
+                        const box = document.getElementById('logBox');
+                        if (data.logs && data.logs.length) {
+                            box.innerHTML = data.logs.map(l => {
+                                const color = l.type === 'err' ? 'text-red-400' : 'text-slate-300';
+                                return '<div class="' + color + '">' + escapeHtml(l.text) + '</div>';
+                            }).join('');
+                            box.scrollTop = box.scrollHeight;
+                        }
+                    } catch (e) {}
+                }
+
+                async function testApi() {
+                    const badge = document.getElementById('apiHealthBadge');
+                    badge.innerText = 'Testing...';
+                    badge.className = 'text-lg font-bold mt-2 text-amber-400';
+                    try {
+                        const res = await fetch('/api/ping-backend');
+                        const data = await res.json();
+                        if (data.success) {
+                            badge.innerText = '✅ Online (' + data.latencyMs + 'ms)';
+                            badge.className = 'text-lg font-bold mt-2 text-emerald-400';
+                        } else {
+                            badge.innerText = '❌ Failed (' + data.error + ')';
+                            badge.className = 'text-lg font-bold mt-2 text-red-400';
+                        }
+                    } catch (e) {
+                        badge.innerText = '❌ Request Failed';
+                        badge.className = 'text-lg font-bold mt-2 text-red-400';
+                    }
+                }
+
+                async function triggerRestart() {
+                    if (!confirm('Are you sure you want to restart the bot?')) return;
+                    await fetch('/api/restart', { method: 'POST' });
+                    alert('Bot is restarting... Page will refresh in 5 seconds.');
+                    setTimeout(() => location.reload(), 5000);
+                }
+
+                async function triggerResetSession() {
+                    if (!confirm('This will purge saved WhatsApp login credentials and generate a NEW QR code. Continue?')) return;
+                    await fetch('/api/reset-session', { method: 'POST' });
+                    alert('Session reset! Generating new QR code...');
+                    setTimeout(refreshData, 3000);
+                }
+
+                function escapeHtml(text) {
+                    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                }
+
+                // Initial Load & Intervals
+                refreshData();
+                testApi();
+                setInterval(refreshData, 10000);
+            </script>
         </body>
         </html>
     `)
 })
 
 app.get('/qr', (req, res) => {
-    if (botStatus !== 'qr_needed' || !currentQrImage) {
-        return res.redirect('/')
+    if (currentQrImage) {
+        const imgBuffer = Buffer.from(currentQrImage.replace(/^data:image\/png;base64,/, ''), 'base64')
+        res.writeHead(200, {
+            'Content-Type': 'image/png',
+            'Content-Length': imgBuffer.length
+        })
+        res.end(imgBuffer)
+    } else {
+        res.status(404).send('No QR available')
     }
-
-    res.send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Scan WhatsApp QR Code</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta http-equiv="refresh" content="15">
-            <script src="https://cdn.tailwindcss.com"></script>
-            <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-            <style>
-                body { font-family: 'Inter', sans-serif; }
-                .font-fredoka { font-family: 'Fredoka', sans-serif; }
-            </style>
-        </head>
-        <body class="bg-indigo-900 min-h-screen flex items-center justify-center p-4 text-white">
-            <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-gray-800 text-center">
-                <a href="/" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold mb-4 block text-left">← Back to Status</a>
-                <h1 class="text-xl font-bold font-fredoka text-indigo-600">Scan QR Code</h1>
-                <p class="text-xs text-gray-400 mt-1 mb-6">Open WhatsApp Business → Linked Devices → Link a Device</p>
-                
-                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 flex justify-center inline-block mx-auto mb-6">
-                    <img src="${currentQrImage}" alt="WhatsApp QR Code" class="w-64 h-64" />
-                </div>
-                
-                <p class="text-[11px] text-gray-400 animate-pulse">This page will automatically refresh every 15s when a new QR code is generated.</p>
-            </div>
-        </body>
-        </html>
-    `)
-})
-
-app.get('/status', (req, res) => {
-    res.json({
-        status: botStatus,
-        hasQr: !!currentQrImage,
-        timestamp: new Date().toISOString()
-    })
 })
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`📡 Status Web Server running on http://0.0.0.0:${PORT}`)
+    console.log(`📡 Command Center Web Server running on http://0.0.0.0:${PORT}`)
 })
 
 // ── WhatsApp Baileys Connection Logic ───────────────────────────────
@@ -177,49 +399,68 @@ async function connectToWhatsApp() {
         getMessage: async () => ({ conversation: '' }),
     })
 
-    // QR code events
+    // Connection events
     sock.ev.on('connection.update', async ({ connection, lastDisconnect, qr }) => {
         if (qr) {
             botStatus = 'qr_needed'
             currentQr = qr
             try {
                 currentQrImage = await qrcode.toDataURL(qr)
-                console.log('\n📱 New WhatsApp QR generated. Visit the web status page to scan it.')
+                console.log('\n📱 New WhatsApp QR generated. Visit the web Command Center to scan it.')
                 qrcodeTerminal.generate(qr, { small: true })
             } catch (err) {
-                console.error('Error generating QR image DataURL:', err)
+                console.error('Error generating QR image:', err)
             }
         }
 
         if (connection === 'close') {
             currentQr = null
             currentQrImage = null
-            
+
             const error = lastDisconnect?.error instanceof Boom ? lastDisconnect.error : null
             const statusCode = error?.output?.statusCode
-            const shouldReconnect = statusCode !== DisconnectReason.loggedOut
+            const shouldReconnect = statusCode !== DisconnectReason.loggedOut && statusCode !== 440 && statusCode !== 403
 
-            console.log(`Connection closed. Status code: ${statusCode}. Reconnecting: ${shouldReconnect}`)
+            console.log(`[Connection] Closed with status code: ${statusCode}. Reconnecting: ${shouldReconnect}`)
+
+            // Auto-Recovery Guard against infinite disconnect loops
+            const now = Date.now()
+            if (now - lastReconnectWindowStart > 2 * 60 * 1000) {
+                reconnectAttempts = 0 // Reset window after 2 mins
+                lastReconnectWindowStart = now
+            }
+            reconnectAttempts++
+
+            if (reconnectAttempts > 3 && shouldReconnect) {
+                console.warn('⚠️ [Auto-Recovery] 3 disconnects within 2 minutes — purging corrupt session tokens...')
+                reconnectAttempts = 0
+                try {
+                    fs.rmSync(path.join(__dirname, 'auth_info'), { recursive: true, force: true })
+                    console.log('Cleared auth_info session folder successfully.')
+                } catch (e) {
+                    console.error('Failed to clear session folder:', e.message)
+                }
+                botStatus = 'qr_needed'
+                setTimeout(connectToWhatsApp, 3000)
+                await sendErrorAlert('Auto-Recovery Triggered', 'Bot purged corrupt session credentials after 3 failed reconnects. A new QR code is ready on the Command Center.')
+                return
+            }
 
             if (shouldReconnect) {
                 botStatus = 'disconnected'
                 setTimeout(connectToWhatsApp, 5000)
             } else {
                 botStatus = 'logged_out'
-                console.error('🚨 Session completely logged out from WhatsApp. Purging credentials...')
-                
-                // Purely delete auth_info to reset state completely
+                console.error('🚨 Session completely logged out. Resetting credentials...')
+
                 try {
                     fs.rmSync(path.join(__dirname, 'auth_info'), { recursive: true, force: true })
-                    console.log('Successfully cleared auth_info session credentials folder.')
                 } catch (e) {
                     console.error('Failed to clear credentials folder:', e.message)
                 }
 
-                // Wait 3 seconds and restart to present fresh QR code
                 setTimeout(connectToWhatsApp, 3000)
-                
-                await sendErrorAlert('WhatsApp Logged Out', 'The WhatsApp session was completely logged out. A new QR code is required. Please check the VPS status page.')
+                await sendErrorAlert('WhatsApp Logged Out', 'The WhatsApp session was logged out. A new QR code is required on the Command Center.')
             }
         }
 
@@ -227,10 +468,10 @@ async function connectToWhatsApp() {
             botStatus = 'connected'
             currentQr = null
             currentQrImage = null
+            reconnectAttempts = 0
             console.log('✅ LoopLearn WhatsApp bot connected successfully!')
-            lastMessageProcessedAt = Date.now() // Reset heartbeat watchdog timer on success
-            
-            // Start cron scheduler once connected (only start once)
+            lastMessageProcessedAt = Date.now()
+
             if (!schedulerStarted) {
                 startScheduler(sock)
                 schedulerStarted = true
@@ -244,8 +485,8 @@ async function connectToWhatsApp() {
     sock.ev.on('messages.upsert', async ({ messages, type }) => {
         if (type !== 'notify') return
         for (const msg of messages) {
-            if (msg.key.fromMe) continue // Skip own messages
-            updateLastMessageTime()      // Reset deaf-session timer
+            if (msg.key.fromMe) continue
+            updateLastMessageTime()
             await handleIncomingMessage(sock, msg)
         }
     })
@@ -253,6 +494,6 @@ async function connectToWhatsApp() {
 
 connectToWhatsApp().catch(async (err) => {
     console.error('Fatal Baileys crash:', err)
-    await sendErrorAlert('Fatal Bot Crash', `The Baileys WhatsApp bot crashed and exited. Error: ${err.message}`)
+    await sendErrorAlert('Fatal Bot Crash', `The Baileys WhatsApp bot crashed. Error: ${err.message}`)
     process.exit(1)
 })
