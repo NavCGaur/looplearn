@@ -1,4 +1,5 @@
-require('dotenv').config()
+const path = require('path')
+require('dotenv').config({ path: path.join(__dirname, '.env') })
 const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion } = require('@whiskeysockets/baileys')
 const { Boom } = require('@hapi/boom')
 const pino = require('pino')
@@ -6,7 +7,6 @@ const qrcodeTerminal = require('qrcode-terminal')
 const qrcode = require('qrcode')
 const express = require('express')
 const fs = require('fs')
-const path = require('path')
 const axios = require('axios')
 
 const { handleIncomingMessage } = require('./bridge')
@@ -387,7 +387,12 @@ app.listen(PORT, '0.0.0.0', () => {
 
 async function connectToWhatsApp() {
     botStatus = 'starting'
-    const { state, saveCreds } = await useMultiFileAuthState('./auth_info')
+    const AUTH_INFO_PATH = path.join(__dirname, 'auth_info')
+    // Ensure auth_info directory always exists before Baileys tries to write to it
+    if (!fs.existsSync(AUTH_INFO_PATH)) {
+        fs.mkdirSync(AUTH_INFO_PATH, { recursive: true })
+    }
+    const { state, saveCreds } = await useMultiFileAuthState(AUTH_INFO_PATH)
     const { version } = await fetchLatestBaileysVersion()
 
     sock = makeWASocket({
@@ -419,48 +424,30 @@ async function connectToWhatsApp() {
 
             const error = lastDisconnect?.error instanceof Boom ? lastDisconnect.error : null
             const statusCode = error?.output?.statusCode
-            const shouldReconnect = statusCode !== DisconnectReason.loggedOut && statusCode !== 440 && statusCode !== 403
+            const isLoggedOut = statusCode === DisconnectReason.loggedOut || statusCode === 401 || statusCode === 403
 
-            console.log(`[Connection] Closed with status code: ${statusCode}. Reconnecting: ${shouldReconnect}`)
+            console.log(`[Connection] Closed with status code: ${statusCode}. Logged out: ${isLoggedOut}`)
 
-            // Auto-Recovery Guard against infinite disconnect loops
-            const now = Date.now()
-            if (now - lastReconnectWindowStart > 2 * 60 * 1000) {
-                reconnectAttempts = 0 // Reset window after 2 mins
-                lastReconnectWindowStart = now
-            }
-            reconnectAttempts++
-
-            if (reconnectAttempts > 3 && shouldReconnect) {
-                console.warn('⚠️ [Auto-Recovery] 3 disconnects within 2 minutes — purging corrupt session tokens...')
-                reconnectAttempts = 0
-                try {
-                    fs.rmSync(path.join(__dirname, 'auth_info'), { recursive: true, force: true })
-                    console.log('Cleared auth_info session folder successfully.')
-                } catch (e) {
-                    console.error('Failed to clear session folder:', e.message)
-                }
-                botStatus = 'qr_needed'
-                setTimeout(connectToWhatsApp, 3000)
-                await sendErrorAlert('Auto-Recovery Triggered', 'Bot purged corrupt session credentials after 3 failed reconnects. A new QR code is ready on the Command Center.')
-                return
-            }
-
-            if (shouldReconnect) {
-                botStatus = 'disconnected'
-                setTimeout(connectToWhatsApp, 5000)
-            } else {
+            if (isLoggedOut) {
                 botStatus = 'logged_out'
-                console.error('🚨 Session completely logged out. Resetting credentials...')
+                console.error('🚨 WhatsApp session logged out by server. Purging credentials...')
 
                 try {
                     fs.rmSync(path.join(__dirname, 'auth_info'), { recursive: true, force: true })
+                    // Recreate empty dir so Baileys can write to it immediately on reconnect
+                    fs.mkdirSync(path.join(__dirname, 'auth_info'), { recursive: true })
                 } catch (e) {
-                    console.error('Failed to clear credentials folder:', e.message)
+                    console.error('Failed to reset credentials folder:', e.message)
                 }
 
-                setTimeout(connectToWhatsApp, 3000)
+                // Wait 10 seconds before reconnecting to avoid WhatsApp rate-limiting QR scans
+                setTimeout(connectToWhatsApp, 10000)
                 await sendErrorAlert('WhatsApp Logged Out', 'The WhatsApp session was logged out. A new QR code is required on the Command Center.')
+            } else {
+                // Temporary network/socket drop (e.g. 408, 515, 428) — PRESERVE credentials!
+                botStatus = 'disconnected'
+                console.log('🔄 Temporary connection drop. Auto-reconnecting in 5s (session preserved)...')
+                setTimeout(connectToWhatsApp, 5000)
             }
         }
 

@@ -1,10 +1,11 @@
-require('dotenv').config()
+const path = require('path')
+require('dotenv').config({ path: path.join(__dirname, '.env') })
 const { Resend } = require('resend')
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 async function sendErrorAlert(subject, errorMessage) {
-    if (!process.env.RESEND_API_KEY || !process.env.TEACHER_EMAIL) {
+    if (!resend || !process.env.TEACHER_EMAIL) {
         console.warn('⚠️ [Email Alert] Skipping email alert because RESEND_API_KEY or TEACHER_EMAIL is missing in .env')
         return
     }

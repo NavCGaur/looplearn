@@ -1,4 +1,5 @@
-require('dotenv').config()
+const path = require('path')
+require('dotenv').config({ path: path.join(__dirname, '.env') })
 const axios = require('axios')
 
 const API_URL = process.env.LOOPLEARN_API_URL   // e.g. https://looplearn.vercel.app
