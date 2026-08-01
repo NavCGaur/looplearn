@@ -17,6 +17,28 @@ const logger = pino({ level: 'silent' }) // Quiet Baileys internal logs
 const PORT = process.env.PORT || 3000
 const API_URL = process.env.LOOPLEARN_API_URL || 'https://looplearnx.com'
 
+// ── Dashboard Basic Auth ────────────────────────────────────────────────────
+const DASHBOARD_USER = process.env.DASHBOARD_USERNAME || 'admin'
+const DASHBOARD_PASS = process.env.DASHBOARD_PASSWORD // If unset, auth is DISABLED (dev mode)
+
+function basicAuth(req, res, next) {
+    if (!DASHBOARD_PASS) return next() // Skip if not configured (local dev)
+    const authHeader = req.headers.authorization
+    if (!authHeader || !authHeader.startsWith('Basic ')) {
+        res.setHeader('WWW-Authenticate', 'Basic realm="LoopLearn Command Center"')
+        return res.status(401).send('Authentication required.')
+    }
+    const decoded = Buffer.from(authHeader.slice(6), 'base64').toString()
+    const colonIdx = decoded.indexOf(':')
+    const user = decoded.slice(0, colonIdx)
+    const pass = decoded.slice(colonIdx + 1)
+    if (user !== DASHBOARD_USER || pass !== DASHBOARD_PASS) {
+        res.setHeader('WWW-Authenticate', 'Basic realm="LoopLearn Command Center"')
+        return res.status(401).send('Invalid credentials.')
+    }
+    next()
+}
+
 // Global Unhandled Exception Guards (Prevents process freezes)
 process.on('unhandledRejection', (reason) => {
     console.error('⚠️ [Global Guard] Unhandled Rejection:', reason)
@@ -39,31 +61,88 @@ const startTime = Date.now()
 let totalMessagesProcessed = 0
 let lastMessageProcessedAt = Date.now()
 
-// Reconnection Watchdog Guard
+// Reconnection state — exponential backoff + circuit breaker
 let reconnectAttempts = 0
-let lastReconnectWindowStart = Date.now()
+const MAX_RECONNECT_ATTEMPTS = 10
+
+// Baileys version cache — fetch once, reuse for 24h
+let cachedBaileysVersion = null
+let versionCachedAt = 0
+
+async function getBaileysVersion() {
+    const ONE_DAY_MS = 24 * 60 * 60 * 1000
+    if (cachedBaileysVersion && (Date.now() - versionCachedAt) < ONE_DAY_MS) {
+        return cachedBaileysVersion
+    }
+    const { version } = await fetchLatestBaileysVersion()
+    cachedBaileysVersion = version
+    versionCachedAt = Date.now()
+    console.log(`[Baileys] Fetched protocol version: ${version.join('.')}`)
+    return version
+}
+
+// Returns exponential backoff delay in ms (5s → 10s → 20s → ... → 120s cap) with jitter
+function getReconnectDelay() {
+    const base = 5000
+    const delay = Math.min(base * Math.pow(2, reconnectAttempts), 120000)
+    return delay + Math.random() * 1000 // add jitter to avoid thundering herd
+}
 
 function updateLastMessageTime() {
     lastMessageProcessedAt = Date.now()
     totalMessagesProcessed++
 }
 
-// ── Deaf-Session Watchdog Monitor ──────────────────────────────────────────
+// ── Session Heartbeat Monitor ───────────────────────────────────────────────
+// Check 1 (every 60s): Is the WebSocket connection actually OPEN at socket level?
+//   readyState 1 = OPEN, anything else = stale/dead connection → force reconnect
+// Check 2 (every 2h): Zombie session — socket says OPEN but no messages received
+//   (WhatsApp "ghost connected" state where messages stop arriving silently)
 const DEAF_SESSION_TIMEOUT_MS = 2 * 60 * 60 * 1000 // 2 hours
 setInterval(() => {
     if (botStatus !== 'connected') return
+
+    // Check 1: Socket-level health (catches dead connections faster than message counting)
+    const wsReadyState = sock?.ws?.readyState
+    if (wsReadyState !== undefined && wsReadyState !== 1) {
+        console.warn(`⚠️ [Heartbeat] WebSocket not OPEN (readyState: ${wsReadyState}) — forcing reconnect.`)
+        botStatus = 'disconnected'
+        if (sock) { try { sock.end(undefined) } catch (_) {} }
+        scheduleReconnect()
+        return
+    }
+
+    // Check 2: Zombie session — connected but no messages for 2 hours
     const silentFor = Date.now() - lastMessageProcessedAt
     if (silentFor > DEAF_SESSION_TIMEOUT_MS) {
-        console.warn(`⚠️ [Heartbeat] Silent for ${Math.round(silentFor / 1000)}s — forcing reconnect.`)
+        console.warn(`⚠️ [Heartbeat] Zombie session detected (silent for ${Math.round(silentFor / 3600000 * 10) / 10}h) — forcing reconnect.`)
         botStatus = 'disconnected'
-        if (sock) {
-            try { sock.end(undefined) } catch (_) {}
-        }
-        setTimeout(connectToWhatsApp, 2000)
+        if (sock) { try { sock.end(undefined) } catch (_) {} }
+        scheduleReconnect()
     }
 }, 60 * 1000)
 
+// ── Reconnect Scheduler (Exponential Backoff + Circuit Breaker) ─────────────
+function scheduleReconnect() {
+    reconnectAttempts++
+    if (reconnectAttempts > MAX_RECONNECT_ATTEMPTS) {
+        botStatus = 'failed'
+        console.error(`🚨 [Reconnect] Circuit breaker triggered after ${MAX_RECONNECT_ATTEMPTS} failed attempts. Manual restart required.`)
+        sendErrorAlert(
+            'Bot Cannot Reconnect — Manual Action Required',
+            `The WhatsApp bot failed to reconnect after ${MAX_RECONNECT_ATTEMPTS} consecutive attempts. Please open the Command Center and click Restart Bot.`
+        ).catch(() => {})
+        return
+    }
+    const delay = getReconnectDelay()
+    console.log(`🔄 [Reconnect] Attempt ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS} in ${Math.round(delay / 1000)}s...`)
+    setTimeout(connectToWhatsApp, delay)
+}
+
 // ── REST API Endpoints ──────────────────────────────────────────────────────
+
+// Apply Basic Auth to ALL routes
+app.use(basicAuth)
 
 // API: Detailed Health Status
 app.get('/api/status', async (req, res) => {
@@ -393,7 +472,7 @@ async function connectToWhatsApp() {
         fs.mkdirSync(AUTH_INFO_PATH, { recursive: true })
     }
     const { state, saveCreds } = await useMultiFileAuthState(AUTH_INFO_PATH)
-    const { version } = await fetchLatestBaileysVersion()
+    const version = await getBaileysVersion() // Uses 24h cache — no network call on every reconnect
 
     sock = makeWASocket({
         version,
@@ -446,8 +525,7 @@ async function connectToWhatsApp() {
             } else {
                 // Temporary network/socket drop (e.g. 408, 515, 428) — PRESERVE credentials!
                 botStatus = 'disconnected'
-                console.log('🔄 Temporary connection drop. Auto-reconnecting in 5s (session preserved)...')
-                setTimeout(connectToWhatsApp, 5000)
+                scheduleReconnect() // Uses exponential backoff (5s → 10s → 20s ... → 120s cap)
             }
         }
 
@@ -455,7 +533,7 @@ async function connectToWhatsApp() {
             botStatus = 'connected'
             currentQr = null
             currentQrImage = null
-            reconnectAttempts = 0
+            reconnectAttempts = 0 // Reset circuit breaker on successful connection
             console.log('✅ LoopLearn WhatsApp bot connected successfully!')
             lastMessageProcessedAt = Date.now()
 

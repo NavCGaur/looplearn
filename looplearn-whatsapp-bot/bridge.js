@@ -66,6 +66,14 @@ async function handleIncomingMessage(sock, msg) {
     const imageMsg = content?.imageMessage
     const isText = !!(content?.conversation || content?.extendedTextMessage?.text)
 
+    // Silently ignore reactions and stickers — no reply sent, no error message
+    const isReaction = !!(content?.reactionMessage)
+    const isSticker = !!(content?.stickerMessage)
+    if (isReaction || isSticker) {
+        console.log(`[Bridge] Silently ignoring ${isReaction ? 'reaction' : 'sticker'} from ${phone}`)
+        return
+    }
+
     if (isText) {
         // Extract the actual text body the student typed
         const textBody = content?.conversation
@@ -149,17 +157,36 @@ async function handleIncomingMessage(sock, msg) {
     queueMessage(sock, jid, 'Sirf photo bhejo. Video, audio ya documents accept nahi hote.')
 }
 
-// ── Call LoopLearnX API ────────────────────────────────────
-
-async function callApi(path, body) {
-    const res = await axios.post(`${API_URL}${path}`, body, {
-        headers: {
-            'Content-Type': 'application/json',
-            'x-bot-secret': BOT_SECRET,
-        },
-        timeout: 90000, // 90s — Gemini can take 30-40s
-    })
-    return res.data
+// ── Call LoopLearnX API (with retry) ───────────────────────────────────────
+// Retries up to 2 times on transient errors (network failures, 5xx responses).
+// Does NOT retry on permanent errors (401 Unauthorized, 400 Bad Request, 403 Forbidden).
+async function callApi(endpoint, body, retries = 2) {
+    let lastError
+    for (let attempt = 0; attempt <= retries; attempt++) {
+        try {
+            const res = await axios.post(`${API_URL}${endpoint}`, body, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-bot-secret': BOT_SECRET,
+                },
+                timeout: 90000, // 90s — Gemini can take 30-40s
+            })
+            return res.data
+        } catch (e) {
+            lastError = e
+            const status = e.response?.status
+            // Never retry auth or bad-request errors— they won't succeed on retry
+            if (status === 400 || status === 401 || status === 403) {
+                console.error(`[API] Permanent error (${status}) for ${endpoint} — not retrying.`)
+                throw e
+            }
+            if (attempt < retries) {
+                console.warn(`[API] Attempt ${attempt + 1}/${retries + 1} failed (${e.message}). Retrying in 5s...`)
+                await new Promise(r => setTimeout(r, 5000))
+            }
+        }
+    }
+    throw lastError
 }
 
 // ── Send messages from scheduler ───────────────────────────

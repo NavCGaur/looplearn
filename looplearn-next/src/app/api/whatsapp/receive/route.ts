@@ -5,6 +5,10 @@ import { sendErrorAlert } from '@/lib/email'
 // Shared secret between VPS and Next.js
 const BOT_SECRET = process.env.WHATSAPP_BOT_SECRET
 
+// Allow up to 120 seconds — needed for Gemini image evaluation on complex homework sheets
+// Without this, Vercel uses the plan default (can be as low as 10s)
+export const maxDuration = 120
+
 export async function POST(req: NextRequest) {
     // 1. Validate shared secret
     const secret = req.headers.get('x-bot-secret')
@@ -18,6 +22,7 @@ export async function POST(req: NextRequest) {
         mimeType?: string
         messageType?: string
         textBody?: string   // Text content from student's typed message
+        images?: { base64: string; mimeType: string }[]
     }
 
     try {
@@ -26,12 +31,12 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
     }
 
-    const { phone, imageBase64, mimeType, messageType } = body
+    const { phone, imageBase64, mimeType, messageType, images } = body
     if (!phone) {
         return NextResponse.json({ error: 'Missing phone' }, { status: 400 })
     }
     const cleanPhone = phone.replace(/@.*$/, '').replace(/\D/g, '')
-    console.log(`[API Webhook] Incoming - Phone: ${cleanPhone}, Type: ${messageType}, HasImage: ${!!imageBase64}`)
+    console.log(`[API Webhook] Incoming - Phone: ${cleanPhone}, Type: ${messageType}, HasImagesArray: ${!!images}, HasSingleImage: ${!!imageBase64}`)
 
     if (!cleanPhone) {
         return NextResponse.json({ error: 'Missing phone' }, { status: 400 })
@@ -48,12 +53,22 @@ export async function POST(req: NextRequest) {
         }
         console.log(`[API Webhook] Text message from ${cleanPhone}: "${textBody.slice(0, 80)}"`)
         try {
-            const result = await processWhatsAppTextSubmission({
-                phone: cleanPhone,
-                textBody,
-            })
+            const timeoutMs = 55000 // 55s — just under Vercel's 60s limit
+            const result = await Promise.race([
+                processWhatsAppTextSubmission({ phone: cleanPhone, textBody }),
+                new Promise<never>((_, reject) =>
+                    setTimeout(() => reject(new Error('EVALUATION_TIMEOUT')), timeoutMs)
+                )
+            ])
             return NextResponse.json({ success: result.success, replyText: result.replyText })
         } catch (error: any) {
+            if (error.message === 'EVALUATION_TIMEOUT') {
+                console.error(`[API Webhook] Text processing timed out for ${cleanPhone}`)
+                return NextResponse.json({
+                    success: false,
+                    replyText: '⏳ Evaluation mein thoda zyada time lag raha hai. Thodi der mein dobara *DONE* type karke submit karo.',
+                })
+            }
             console.error('[API Webhook] Text processing error:', error)
             await sendErrorAlert('Text Processing Exception', `Exception while processing text message from ${cleanPhone}. Error: ${error.message}\nStack: ${error.stack}`)
             return NextResponse.json({
@@ -63,8 +78,12 @@ export async function POST(req: NextRequest) {
         }
     }
 
-    // 3. Reject non-image, non-text messages (video, audio, documents)
-    if (!imageBase64) {
+    // 3. Extract and check images
+    const imageList = images && Array.isArray(images)
+        ? images
+        : (imageBase64 ? [{ base64: imageBase64, mimeType: mimeType ?? 'image/jpeg' }] : [])
+
+    if (imageList.length === 0) {
         console.log(`[API Webhook] Unsupported type from ${cleanPhone}: ${messageType}`)
         return NextResponse.json({
             success: false,
@@ -72,14 +91,18 @@ export async function POST(req: NextRequest) {
         })
     }
 
-    // 4. Process the image submission (existing flow — unchanged)
-    console.log(`[API Webhook] Processing photo submission for ${cleanPhone}...`)
+    // 4. Process the image submission (batch) with a 55s client timeout
+    // (maxDuration=120 gives Vercel 120s, but we race at 55s to send a friendly
+    //  fallback before Vercel hard-kills the function at the platform limit)
+    console.log(`[API Webhook] Processing ${imageList.length} photo(s) for ${cleanPhone}...`)
     try {
-        const result = await processWhatsAppSubmission({
-            phone: cleanPhone,
-            imageBase64,
-            mimeType: mimeType ?? 'image/jpeg',
-        })
+        const timeoutMs = 55000
+        const result = await Promise.race([
+            processWhatsAppSubmission({ phone: cleanPhone, images: imageList }),
+            new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error('EVALUATION_TIMEOUT')), timeoutMs)
+            )
+        ])
         console.log(`[API Webhook] Result for ${cleanPhone}:`, JSON.stringify(result))
 
         if (!result.success) {
@@ -101,6 +124,13 @@ export async function POST(req: NextRequest) {
             studentName: result.studentName,
         })
     } catch (error: any) {
+        if (error.message === 'EVALUATION_TIMEOUT') {
+            console.error(`[API Webhook] Image processing timed out for ${cleanPhone}`)
+            return NextResponse.json({
+                success: false,
+                replyText: '⏳ Evaluation mein thoda zyada time lag raha hai. Thodi der mein dobara *DONE* type karke submit karo.',
+            })
+        }
         console.error('[API Webhook] Image processing error:', error)
         await sendErrorAlert('Image Processing Exception', `Exception while processing image from ${cleanPhone}. Error: ${error.message}\nStack: ${error.stack}`)
         return NextResponse.json({

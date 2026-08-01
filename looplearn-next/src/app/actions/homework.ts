@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { evaluateQuickPracticeSheet, evaluateTextWithGemini, PreviousSubmissionContext, validateHomeworkPages } from './ai'
+import { evaluateEnglishFoundation } from './ai_english'
 import { saveChatMessages, getChatWindow, getStudentMemory, isMemoryStale, updateStudentMemory } from './memory'
 import { getActiveSession, createSession, addPageToSession, updateSessionStatus, SessionPage, checkStudentLockout } from './sessions'
 import { createNotification } from './notifications'
@@ -244,12 +245,75 @@ export async function getStudentPerformanceHistory(studentId: string) {
 }
 
 // ── WhatsApp Bridge: process incoming image submission ────────
-// Called by /api/whatsapp/receive — uses admin client (no session)
+// Helper: Get student by phone (handling optional + prefix) or auto-register a Guest profile
+async function getOrCreateStudentByPhone(phone: string) {
+    const adminClient = createAdminClient()
+    const cleanPhone = phone.replace(/\D/g, '')
+    const phoneWithPlus = `+${cleanPhone}`
+    const phoneWithoutPlus = cleanPhone
+
+    // Try finding by + or no-+ (allow teachers/admins to submit homework for testing as well)
+    const { data: student } = await adminClient
+        .from('profiles')
+        .select('id, display_name, class_standard, whatsapp_phone')
+        .or(`whatsapp_phone.eq.${phoneWithPlus},whatsapp_phone.eq.${phoneWithoutPlus}`)
+        .maybeSingle()
+
+
+    if (student) {
+        return student
+    }
+
+    // Auto-register frictionless guest student for testing/onboarding!
+    console.log(`[WhatsApp Bot] Auto-registering unregistered number: ${phoneWithPlus}`)
+    const guestName = `Guest (${cleanPhone.slice(-4)})`
+    const tempEmail = `guest_${cleanPhone}@looplearn.test`
+
+    try {
+        const { data: newUser, error: createError } = await adminClient.auth.admin.createUser({
+            email: tempEmail,
+            password: `GuestPassword${cleanPhone}!`,
+            email_confirm: true,
+            user_metadata: { display_name: guestName }
+        })
+
+        if (createError) {
+            console.error('[WhatsApp Bot] Failed to create auth user:', createError.message)
+            return null
+        }
+
+        // Wait for DB trigger to create the profiles row
+        await new Promise(resolve => setTimeout(resolve, 1500))
+
+        // Update standard standard, display name, whatsapp phone, etc.
+        const { data: updatedProfile, error: updateErr } = await adminClient
+            .from('profiles')
+            .update({
+                display_name: guestName,
+                role: 'student',
+                class_standard: 6, // Default to class 6
+                whatsapp_phone: phoneWithPlus,
+                bio: 'Auto-created guest student for WhatsApp testing.'
+            })
+            .eq('id', newUser.user.id)
+            .select('id, display_name, class_standard, whatsapp_phone')
+            .single()
+
+        if (updateErr || !updatedProfile) {
+            console.error('[WhatsApp Bot] Failed to update guest profile:', updateErr?.message)
+            return null
+        }
+
+        return updatedProfile
+    } catch (e: any) {
+        console.error('[WhatsApp Bot] Exception during auto-registration:', e.message)
+        return null
+    }
+}
 
 export async function processWhatsAppSubmission(params: {
     phone: string          // Sender's phone number (no +)
-    imageBase64: string    // Base64 of the submitted image
-    mimeType: string       // e.g. 'image/jpeg'
+    images: { base64: string; mimeType: string }[]
 }): Promise<{
     success: boolean
     feedbackText?: string
@@ -258,15 +322,9 @@ export async function processWhatsAppSubmission(params: {
 }> {
     const adminClient = createAdminClient()
 
-    // 1. Lookup student by phone
-    const { data: student, error: studentErr } = await adminClient
-        .from('profiles')
-        .select('id, display_name, class_standard, whatsapp_phone')
-        .eq('whatsapp_phone', params.phone)
-        .eq('role', 'student')
-        .single()
-
-    if (studentErr || !student) {
+    // 1. Lookup or auto-register student
+    const student = await getOrCreateStudentByPhone(params.phone)
+    if (!student) {
         return {
             success: false,
             error: 'unregistered',
@@ -275,91 +333,93 @@ export async function processWhatsAppSubmission(params: {
 
     const name = student.display_name ?? 'Student'
 
-    // 2. Upload image to Supabase Storage
-    const timestamp = Date.now()
-    const ext = params.mimeType.includes('png') ? 'png' : 'jpg'
-    const storagePath = `whatsapp/${student.id}/${timestamp}.${ext}`
-    const imageBytes = Buffer.from(params.imageBase64, 'base64')
-
-    await adminClient.storage
-        .from('assignment-papers')
-        .upload(storagePath, imageBytes, {
-            contentType: params.mimeType,
-            upsert: false,
-        })
-
-    // 3. Manage multi-image submission session state machine
-    const lockout = await checkStudentLockout(student.id)
-    if (lockout.locked) {
+    if (!params.images || params.images.length === 0) {
         return {
-            success: true,
-            feedbackText: `❌ Aapke submission attempts limit (3 times) exceed ho chuke hain security aur rate limit reasons ki wajah se.\n\nApne questions aur answers ki new clear photos kheench kar ${lockout.remainingHours || 6} ghante baad try karein, tab tak ke liye aap block ho chuke hain. Hamne validation issues ke baare mein aapke Teacher ko inform kar diya hai.`,
-            studentName: name
+            success: false,
+            error: 'no_images',
         }
     }
 
-    const session = await getActiveSession(student.id)
+    let activeSession = await getActiveSession(student.id)
+    let addedCount = 0
+    let replacedCount = 0
 
-    if (!session) {
-        // No active session: Start a new submission session
-        const firstPage: SessionPage = {
-            page: 1,
-            path: storagePath,
-            status: 'ok',
-            mimeType: params.mimeType
-        }
-        await createSession(student.id, firstPage)
+    for (let i = 0; i < params.images.length; i++) {
+        const img = params.images[i]
+        const timestamp = Date.now() + i // offset slightly to ensure unique timestamps in DB
+        const ext = img.mimeType.includes('png') ? 'png' : 'jpg'
+        const storagePath = `whatsapp/${student.id}/${timestamp}.${ext}`
+        const imageBytes = Buffer.from(img.base64, 'base64')
 
-        return {
-            success: true,
-            feedbackText: `✅ *Page 1 receive ho gayi.* \n\nAgar aur pages hain toh send kijiye, nahi toh review karke *DONE* type kijiye submit karne ke liye.`,
-            studentName: name
-        }
-    } else {
-        // Active session exists: Check for page corrections
-        const firstReuploadPage = session.pages.find(p => p.status === 'needs_reupload')
-        
-        if (firstReuploadPage) {
-            // Replace the first page requiring correction
-            firstReuploadPage.path = storagePath
-            firstReuploadPage.status = 'ok'
-            firstReuploadPage.reason = null
-            firstReuploadPage.mimeType = params.mimeType
-
-            await updateSessionStatus(session.id, 'active', session.pages)
-
-            const nextReuploadPage = session.pages.find(p => p.status === 'needs_reupload')
-            if (nextReuploadPage) {
-                return {
-                    success: true,
-                    feedbackText: `✅ *Page ${firstReuploadPage.page} ki replacement mil gayi.*\n\nAb please *Page ${nextReuploadPage.page}* ki clean replacement send kijiye.`,
-                    studentName: name
-                }
-            } else {
-                return {
-                    success: true,
-                    feedbackText: `✅ *Saare corrections receive ho gaye!*\n\nHomework evaluate karne ke liye please *DONE* type kijiye.`,
-                    studentName: name
-                }
-            }
-        } else {
-            // Append as a new page
-            const newPageNum = session.pages.length + 1
-            await addPageToSession(session.id, {
-                page: newPageNum,
-                path: storagePath,
-                status: 'ok',
-                mimeType: params.mimeType
+        await adminClient.storage
+            .from('assignment-papers')
+            .upload(storagePath, imageBytes, {
+                contentType: img.mimeType,
+                upsert: false,
             })
 
-            return {
-                success: true,
-                feedbackText: `✅ *Page ${newPageNum} receive ho gayi.*\n\nAgar aur pages hain toh send kijiye, nahi toh homework submit karne ke liye *DONE* type kijiye.`,
-                studentName: name
+        if (!activeSession) {
+            // Start a new session with the first page
+            const firstPage: SessionPage = {
+                page: 1,
+                path: storagePath,
+                status: 'ok',
+                mimeType: img.mimeType
+            }
+            activeSession = await createSession(student.id, firstPage)
+            addedCount++
+        } else {
+            // Session exists, check if there's a page needing reupload
+            const reuploadPage = activeSession.pages.find(p => p.status === 'needs_reupload')
+            if (reuploadPage) {
+                reuploadPage.path = storagePath
+                reuploadPage.status = 'ok'
+                reuploadPage.reason = null
+                reuploadPage.mimeType = img.mimeType
+                
+                await updateSessionStatus(activeSession.id, 'active', activeSession.pages)
+                replacedCount++
+            } else {
+                // Append as a new page
+                const newPageNum = activeSession.pages.length + 1
+                const newPage: SessionPage = {
+                    page: newPageNum,
+                    path: storagePath,
+                    status: 'ok',
+                    mimeType: img.mimeType
+                }
+                await addPageToSession(activeSession.id, newPage)
+                activeSession.pages.push(newPage) // keep local state in sync
+                addedCount++
             }
         }
     }
+
+    // Build reply message based on what happened
+    const totalPages = activeSession?.pages?.length ?? 0
+    let feedbackText = ''
+
+    if (replacedCount > 0 && addedCount > 0) {
+        feedbackText = `✅ *${replacedCount} correction(s) aur ${addedCount} new page(s) receive ho gaye!*\n\nTotal pages: ${totalPages}.\n\nHomework evaluate karne ke liye please *DONE* type kijiye.`
+    } else if (replacedCount > 0) {
+        const nextReuploadPage = activeSession?.pages?.find(p => p.status === 'needs_reupload')
+        if (nextReuploadPage) {
+            feedbackText = `✅ *${replacedCount} correction(s) receive ho gaye.*\n\nAb please *Page ${nextReuploadPage.page}* ki clean replacement send kijiye.`
+        } else {
+            feedbackText = `✅ *Saare corrections receive ho gaye!*\n\nHomework evaluate karne ke liye please *DONE* type kijiye.`
+        }
+    } else {
+        feedbackText = `✅ *${addedCount} page(s) receive ho gaye (Total: ${totalPages} pages).* \n\nAgar aur pages hain toh send kijiye, nahi toh review karke *DONE* type kijiye submit karne ke liye.`
+    }
+
+
+    return {
+        success: true,
+        feedbackText,
+        studentName: name
+    }
 }
+
 
 // ── Teacher: update student WhatsApp phone ───────────────────
 
@@ -602,15 +662,9 @@ export async function processWhatsAppTextSubmission(params: {
 }> {
     const adminClient = createAdminClient()
 
-    // 1. Lookup student by phone
-    const { data: student, error: studentErr } = await adminClient
-        .from('profiles')
-        .select('id, display_name, class_standard, whatsapp_phone')
-        .eq('whatsapp_phone', params.phone)
-        .eq('role', 'student')
-        .single()
-
-    if (studentErr || !student) {
+    // 1. Lookup or auto-register student
+    const student = await getOrCreateStudentByPhone(params.phone)
+    if (!student) {
         return {
             success: false,
             replyText: '❌ Aapka number registered nahi hai. Apne teacher se contact karo.',
@@ -623,13 +677,9 @@ export async function processWhatsAppTextSubmission(params: {
     // 1.5. Utility command: DONE — process current multi-image submission
     if (command === 'done') {
         let isAnswersOnlySubmission = false
-        const lockout = await checkStudentLockout(student.id)
-        if (lockout.locked) {
-            return {
-                success: true,
-                replyText: `❌ Aapke submission attempts limit (3 times) exceed ho chuke hain security aur rate limit reasons ki wajah se.\n\nApne questions aur answers ki new clear photos kheench kar ${lockout.remainingHours || 6} ghante baad try karein, tab tak ke liye aap block ho chuke hain. Hamne validation issues ke baare mein aapke Teacher ko inform kar diya hai.`
-            }
-        }
+        // NOTE: Rate limiting is DISABLED during launch — re-enable after stable launch
+        // const lockout = await checkStudentLockout(student.id)
+        // if (lockout.locked) { return blocked message }
 
         const session = await getActiveSession(student.id)
         if (!session) {
@@ -666,7 +716,9 @@ export async function processWhatsAppTextSubmission(params: {
             .eq('day_of_week', dayOfWeek)
         const plan = plans?.[0] ?? null
 
-        if (currentRetries >= 3) {
+        // NOTE: retry limit DISABLED during launch. Set back to 3 after stable launch.
+        const MAX_RETRIES = 99
+        if (currentRetries >= MAX_RETRIES) {
             await updateSessionStatus(session.id, 'failed')
             if (plan && plan.teacher_id) {
                 await createNotification({
@@ -725,13 +777,20 @@ export async function processWhatsAppTextSubmission(params: {
         }
 
         // Update pages validation status
+        // NOTE: 'answers_only' is NOT a blocking error — the evaluator handles it fine.
+        // Only truly unusable pages (blurry, cut, invalid) block submission.
+        const blockingStatuses = new Set(['cutoff', 'unreadable', 'poor_lighting', 'invalid'])
         let hasErrors = false
         const updatedPages = session.pages.map((p, idx) => {
             const pageVal = validation.pages.find(v => v.page === p.page) || validation.pages[idx]
-            if (pageVal && pageVal.status !== 'ok') {
+            if (pageVal && blockingStatuses.has(pageVal.status)) {
                 hasErrors = true
                 p.status = pageVal.status as any
                 p.reason = pageVal.reason || null
+            } else if (pageVal?.status === 'answers_only') {
+                // Accept answers_only pages — mark with flag, proceed to evaluation
+                p.status = 'answers_only'
+                p.reason = null
             } else {
                 p.status = 'ok'
                 p.reason = null
@@ -743,21 +802,19 @@ export async function processWhatsAppTextSubmission(params: {
             await updateSessionStatus(session.id, 'needs_reupload', updatedPages)
             
             const errorDetails = updatedPages
-                .filter(p => p.status !== 'ok')
+                .filter(p => blockingStatuses.has(p.status))
                 .map(p => {
                     const statusLabel: Record<string, string> = {
                         cutoff: 'Photo side se thodi kat rahi hai. Please puri sheet cover kijiye.',
                         unreadable: 'Photo thodi blurry hai ya handwriting theek se samajh nahi aa rahi.',
                         poor_lighting: 'Photo mein andhera hai ya shadow aa rahi hai. Please thoda behtar light mein photo kheechiye.',
-                        questions_only: 'Is page par sirf questions dikh rahe hain, answers nahi.',
-                        answers_only: 'Is page par sirf answers dikh rahe hain, questions ka likha hona zaroori hai.',
                         invalid: 'Ye photo homework sheet ki nahi lag rahi.'
                     }
                     return `• *Page ${p.page}*: ${statusLabel[p.status] || 'Photo theek se samajh nahi aa rahi.'}`
                 }).join('\n')
 
             const readablePages = updatedPages
-                .filter(p => p.status === 'ok')
+                .filter(p => p.status === 'ok' || p.status === 'answers_only')
                 .map(p => p.page)
                 .join(', ')
 
@@ -767,6 +824,11 @@ export async function processWhatsAppTextSubmission(params: {
                 success: true,
                 replyText: `${readLine}⚠️ Lekin kuch pages mein thodi problem aayi hai:\n${errorDetails}\n\nAapko poora homework dobara bhejne ki zaroorat nahi hai. Bas in pages ki clear photo dobara bhejiye.`
             }
+        }
+
+        // If any page is answers_only, set the flag so feedback shows a note
+        if (updatedPages.some(p => p.status === 'answers_only')) {
+            isAnswersOnlySubmission = true
         }
 
         // Validation Passed! Check scenarios (Questions-Only / Answers-Only / Completely Invalid)
@@ -815,6 +877,65 @@ export async function processWhatsAppTextSubmission(params: {
 
         const base64List = imagesToValidate.map(img => img.base64)
 
+        if (plan && plan.curriculum_mode === 'english_foundation') {
+            let grammarPattern = "I am ___"
+            let targetVocabulary: string[] = []
+            if (plan.curriculum_module_id) {
+                const { data: moduleData } = await adminClient
+                    .from('curriculum_modules')
+                    .select('grammar_pattern, target_vocabulary')
+                    .eq('id', plan.curriculum_module_id)
+                    .single()
+                if (moduleData) {
+                    grammarPattern = moduleData.grammar_pattern
+                    targetVocabulary = Array.isArray(moduleData.target_vocabulary)
+                        ? moduleData.target_vocabulary
+                        : JSON.parse(moduleData.target_vocabulary as any || '[]')
+                }
+            }
+
+            const evalResult = await evaluateEnglishFoundation(
+                base64List,
+                'image/jpeg',
+                grammarPattern,
+                targetVocabulary,
+                student.class_standard,
+                'hinglish'
+            )
+
+            if (!evalResult.success) {
+                await updateSessionStatus(session.id, previousStatus)
+                return {
+                    success: true,
+                    replyText: `⚠️ Evaluation step failed. Please try again later by typing *DONE*.`
+                }
+            }
+
+            await adminClient
+                .from('homework_submissions')
+                .upsert({
+                    plan_id: plan.id,
+                    student_id: student.id,
+                    submission_type: 'whatsapp',
+                    image_path: session.pages[0].path,
+                    marks_obtained: evalResult.marks_obtained,
+                    max_marks: evalResult.max_marks,
+                    ai_feedback: evalResult.ai_feedback,
+                    raw_ai_response: evalResult as any,
+                    status: 'submitted',
+                    submitted_at: new Date().toISOString(),
+                    evaluated_at: new Date().toISOString(),
+                    curriculum_module_id: plan.curriculum_module_id
+                }, { onConflict: 'plan_id,student_id' })
+
+            await updateSessionStatus(session.id, 'completed')
+
+            return {
+                success: true,
+                replyText: evalResult.ai_feedback
+            }
+        }
+
         const evalResult = await evaluateQuickPracticeSheet(
             base64List,
             'image/jpeg',
@@ -835,60 +956,68 @@ export async function processWhatsAppTextSubmission(params: {
         const overallComment = evalResult?.data?.questions?.[0]?.overall_comment ?? null
         const aiFeedback = overallComment ?? evalResult?.data?.detected_subject ?? null
 
+        // Always store submission (plan_id nullable for guest/freeform submissions)
+        const submissionPayload: any = {
+            student_id: student.id,
+            submission_type: 'whatsapp',
+            image_path: session.pages[0].path,
+            marks_obtained: marksObtained,
+            max_marks: maxMarks,
+            ai_feedback: aiFeedback,
+            raw_ai_response: evalResult as any,
+            status: 'submitted',
+            submitted_at: new Date().toISOString(),
+            evaluated_at: new Date().toISOString(),
+        }
         if (plan) {
+            submissionPayload.plan_id = plan.id
             await adminClient
                 .from('homework_submissions')
-                .upsert({
-                    plan_id: plan.id,
-                    student_id: student.id,
-                    submission_type: 'whatsapp',
-                    image_path: session.pages[0].path,
-                    marks_obtained: marksObtained,
-                    max_marks: maxMarks,
-                    ai_feedback: aiFeedback,
-                    raw_ai_response: evalResult as any,
-                    status: 'submitted',
-                    submitted_at: new Date().toISOString(),
-                    evaluated_at: new Date().toISOString(),
-                }, { onConflict: 'plan_id,student_id' })
+                .upsert(submissionPayload, { onConflict: 'plan_id,student_id' })
+        } else {
+            // Freeform / guest submission — insert without conflict key
+            await adminClient
+                .from('homework_submissions')
+                .insert(submissionPayload)
         }
 
-        await updateSessionStatus(session.id, 'completed')
+        // NOTE: bot reply text is stored after feedbackText is built below
 
         const subject = plan?.subject ?? ''
         const hwNum = plan ? `HW #${plan.hw_number}` : ''
         const marksLine = marksObtained != null && maxMarks != null
-            ? `⭐ Marks: ${marksObtained}/${maxMarks}`
+            ? `📊 *Score: ${marksObtained} / ${maxMarks} Marks*`
             : ''
 
         const questionFeedbacks = evalResult?.data?.questions?.map(q => {
-            return `*Q${q.question_number}* (${q.marks_awarded}/${q.max_marks} Marks):\n` +
-                   `✔️ *Correct:* ${q.what_was_correct}\n` +
-                   `❌ *Improve:* ${q.what_was_wrong}\n` +
-                   `💡 *Tip:* ${q.suggestion}`;
+            const isPerfect = q.marks_awarded >= q.max_marks;
+            if (isPerfect) {
+                return `*Q${q.question_number}* (${q.marks_awarded}/${q.max_marks} Marks)\n✓ Perfect Answer!`;
+            } else {
+                return `*Q${q.question_number}* (${q.marks_awarded}/${q.max_marks} Marks)\n` +
+                       `• *Error:* ${q.what_was_wrong}\n` +
+                       `• *Fix:* ${q.suggestion}`;
+            }
         }).join('\n\n') || '';
 
-        const analysisSection = questionFeedbacks
-            ? `📋 *Detailed Analysis:*\n${questionFeedbacks}`
-            : `⚠️ Main questions ko theek se detect nahi kar paya. Please ensure questions are written clearly or contact your teacher.`
-
-        const answersOnlyWarning = isAnswersOnlySubmission
-            ? `⚠️ *Note:* Photo mein question nahi dikh raha hai. Maine question assume/guess karke answers check kiye hain. Next time please question aur answer dono ki photo ek sath send kijiye!\n\n`
+        const answersOnlyNote = isAnswersOnlySubmission
+            ? `⚠️ *Note:* Photo mein question missing tha, isliye answers infer karke evaluate kiya gaya hai.\n\n`
             : ''
 
         const feedbackText = [
-            answersOnlyWarning + `✅ *${name}, homework submit aur evaluate ho gaya!*`,
-            subject ? `📚 ${subject}${hwNum ? ` — ${hwNum}` : ''}` : '',
+            answersOnlyNote + `*${name} — Homework Evaluated* 📝`,
+            subject ? `Subject: ${subject}${hwNum ? ` (${hwNum})` : ''}` : '',
             marksLine,
-            '',
-            overallComment ? `📝 *Overall Performance:* ${overallComment}` : '',
-            '',
-            analysisSection
-        ].filter(Boolean).join('\n')
+            '───────────────────',
+            questionFeedbacks
+        ].filter(Boolean).join('\n\n')
+
+        // Store bot reply text in session for Teacher Dashboard review
+        await updateSessionStatus(session.id, 'completed', undefined, feedbackText)
 
         return {
             success: true,
-            replyText: feedbackText
+            replyText: feedbackText,
         }
     }
 
