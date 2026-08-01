@@ -108,14 +108,23 @@ async function handleIncomingMessage(sock, msg) {
             queueMessage(sock, jid, 'Photo(s) receive ho rahi hain, please wait for validation & response...')
         }
 
-        // Download image buffer
+        // Download image buffer with a strict 30s timeout to prevent silent hangs (Zombie Baileys streams)
         let imageBuffer
         try {
             const { downloadMediaMessage } = require('@whiskeysockets/baileys')
-            imageBuffer = await downloadMediaMessage(msg, 'buffer', {})
+            imageBuffer = await Promise.race([
+                downloadMediaMessage(msg, 'buffer', {}),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('DOWNLOAD_TIMEOUT')), 30000))
+            ])
         } catch (e) {
             console.error('Image download error:', e.message)
-            queueMessage(sock, jid, '⚠️ Photo download fail ho gaya. Please review connection.')
+            if (e.message === 'DOWNLOAD_TIMEOUT') {
+                queueMessage(sock, jid, '⚠️ Photo download nahi ho paayi (Network timeout). Please apni photo wapas bhejiye.')
+            } else {
+                queueMessage(sock, jid, '⚠️ Photo download fail ho gaya. Please review connection.')
+            }
+            // Clear the buffer state if the download fails so it doesn't leave a ghost batch
+            imageBatchBuffer.delete(jid)
             return
         }
 
@@ -175,8 +184,8 @@ async function callApi(endpoint, body, retries = 2) {
         } catch (e) {
             lastError = e
             const status = e.response?.status
-            // Never retry auth or bad-request errors— they won't succeed on retry
-            if (status === 400 || status === 401 || status === 403) {
+            // Never retry auth, bad-request, or payload-too-large errors— they won't succeed on retry
+            if (status === 400 || status === 401 || status === 403 || status === 413) {
                 console.error(`[API] Permanent error (${status}) for ${endpoint} — not retrying.`)
                 throw e
             }
