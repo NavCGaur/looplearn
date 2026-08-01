@@ -54,9 +54,12 @@ const imageBatchBuffer = new Map()
 
 async function handleIncomingMessage(sock, msg) {
     const jid = msg.key.remoteJid
-    if (!jid || jid.endsWith('@g.us')) return // Skip group messages
+    if (!jid || jid.endsWith('@g.us') || jid.endsWith('@broadcast') || jid === 'status@broadcast') return // Skip group messages & broadcast/status updates
 
-    const phone = jid.replace(/@.*$/, '')
+    const cleanDigits = jid.replace(/@.*$/, '').replace(/\D/g, '')
+    if (!cleanDigits) return // Skip non-numeric JIDs (e.g. status updates)
+
+    const phone = cleanDigits
     const content = msg.message
 
     // LOG: See exactly what number format WhatsApp sends (critical for student identification)
