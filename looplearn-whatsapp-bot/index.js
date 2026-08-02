@@ -206,6 +206,30 @@ app.get('/api/ping-backend', async (req, res) => {
     }
 })
 
+let currentPairingCode = null
+
+// API: Request 8-Digit Pairing Code
+app.post('/api/pairing-code', async (req, res) => {
+    const { phone } = req.body
+    const targetPhone = phone || process.env.BOT_PHONE_NUMBER
+    if (!targetPhone) {
+        return res.status(400).json({ success: false, error: 'Phone number required (e.g. 919876543210)' })
+    }
+    if (!sock) {
+        return res.status(500).json({ success: false, error: 'WhatsApp socket not initialized' })
+    }
+    try {
+        const cleanPhone = targetPhone.replace(/\D/g, '')
+        const code = await sock.requestPairingCode(cleanPhone)
+        currentPairingCode = code
+        console.log(`\n🔑 [Pairing Code] Generated code for ${cleanPhone}: ${code}\n`)
+        res.json({ success: true, pairingCode: code })
+    } catch (e) {
+        console.error('Failed to request pairing code:', e.message)
+        res.status(500).json({ success: false, error: e.message })
+    }
+})
+
 // API: Trigger Restart
 app.post('/api/restart', (req, res) => {
     console.log('🔄 Manual restart triggered from Command Center UI...')
@@ -219,6 +243,7 @@ app.post('/api/reset-session', (req, res) => {
     botStatus = 'logged_out'
     currentQr = null
     currentQrImage = null
+    currentPairingCode = null
 
     try {
         if (sock) { try { sock.end(undefined) } catch (_) {} }
@@ -228,7 +253,7 @@ app.post('/api/reset-session', (req, res) => {
         console.error('Failed to clear credentials folder:', e.message)
     }
 
-    res.json({ success: true, message: 'Credentials purged. Generating new QR...' })
+    res.json({ success: true, message: 'Credentials purged. Generating new QR / pairing code...' })
     setTimeout(connectToWhatsApp, 2000)
 })
 
@@ -298,6 +323,16 @@ app.get('/', (req, res) => {
                         </div>
                         
                         <p id="qrNotice" class="text-xs text-slate-400 mt-4">Scan using WhatsApp Business → Linked Devices</p>
+
+                        <!-- Pairing Code Alternative Option -->
+                        <div class="mt-4 p-3 bg-slate-900/80 rounded-xl border border-slate-700 w-full text-left">
+                            <p class="text-[11px] font-semibold text-indigo-300 uppercase tracking-wider mb-2">🔑 Or Link with Pairing Code</p>
+                            <div class="flex gap-2">
+                                <input id="pairingPhoneInput" type="text" placeholder="e.g. 919876543210" class="bg-slate-800 border border-slate-600 rounded-lg px-3 py-1 text-xs text-white w-full focus:outline-none focus:border-indigo-500" />
+                                <button onclick="requestPairingCodeUI()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg whitespace-nowrap">Get Code</button>
+                            </div>
+                            <div id="pairingCodeResult" class="mt-2 text-center text-sm font-mono font-bold text-emerald-400 hidden"></div>
+                        </div>
                         
                         <button onclick="triggerResetSession()" class="mt-4 px-4 py-2 bg-red-600/20 hover:bg-red-600/40 text-red-300 border border-red-500/30 text-xs font-semibold rounded-xl transition-all w-full">
                             🧹 Reset Session & Force New QR
@@ -401,6 +436,37 @@ app.get('/', (req, res) => {
                             box.scrollTop = box.scrollHeight;
                         }
                     } catch (e) {}
+                }
+
+                async function requestPairingCodeUI() {
+                    const input = document.getElementById('pairingPhoneInput');
+                    const resultBox = document.getElementById('pairingCodeResult');
+                    const phone = input.value.trim();
+                    if (!phone) {
+                        alert('Please enter your phone number with country code (e.g. 919876543210)');
+                        return;
+                    }
+                    resultBox.className = 'mt-2 text-center text-xs font-mono font-semibold text-amber-400 block';
+                    resultBox.innerText = 'Requesting Pairing Code...';
+                    try {
+                        const res = await fetch('/api/pairing-code', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ phone })
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                            resultBox.className = 'mt-2 p-2 bg-emerald-950 border border-emerald-500/40 rounded-lg text-center text-sm font-mono font-bold text-emerald-300 block tracking-widest';
+                            resultBox.innerText = 'CODE: ' + data.pairingCode;
+                            alert('Pairing Code Generated: ' + data.pairingCode + '\n\nOpen WhatsApp on your phone -> Linked Devices -> Link with phone number instead, and enter this code!');
+                        } else {
+                            resultBox.className = 'mt-2 text-center text-xs font-mono font-semibold text-red-400 block';
+                            resultBox.innerText = 'Error: ' + data.error;
+                        }
+                    } catch (e) {
+                        resultBox.className = 'mt-2 text-center text-xs font-mono font-semibold text-red-400 block';
+                        resultBox.innerText = 'Request failed: ' + e.message;
+                    }
                 }
 
                 async function testApi() {
