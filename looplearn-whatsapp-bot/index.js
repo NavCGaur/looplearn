@@ -49,6 +49,7 @@ process.on('uncaughtException', (err) => {
 
 const app = express()
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 let sock = null
 let botStatus = 'starting' // starting, qr_needed, connected, disconnected, logged_out
@@ -210,16 +211,16 @@ let currentPairingCode = null
 
 // API: Request 8-Digit Pairing Code
 app.post('/api/pairing-code', async (req, res) => {
-    const { phone } = req.body
-    const targetPhone = phone || process.env.BOT_PHONE_NUMBER
-    if (!targetPhone) {
+    const phone = req.body?.phone || req.query?.phone || process.env.BOT_PHONE_NUMBER
+    if (!phone) {
         return res.status(400).json({ success: false, error: 'Phone number required (e.g. 919876543210)' })
     }
     if (!sock) {
         return res.status(500).json({ success: false, error: 'WhatsApp socket not initialized' })
     }
     try {
-        const cleanPhone = targetPhone.replace(/\D/g, '')
+        const cleanPhone = phone.toString().replace(/\D/g, '')
+        console.log(`[Pairing API] Requesting pairing code for ${cleanPhone}...`)
         const code = await sock.requestPairingCode(cleanPhone)
         currentPairingCode = code
         console.log(`\n🔑 [Pairing Code] Generated code for ${cleanPhone}: ${code}\n`)
