@@ -56,7 +56,9 @@ async function handleIncomingMessage(sock, msg) {
     const jid = msg.key.remoteJid
     if (!jid || jid.endsWith('@g.us') || jid.endsWith('@broadcast') || jid === 'status@broadcast') return // Skip group messages & broadcast/status updates
 
-    const cleanDigits = jid.replace(/@.*$/, '').replace(/\D/g, '')
+    // Synchronously resolve remoteJidAlt if present (converts @lid to real phone JID)
+    const resolvedJid = msg.key.remoteJidAlt || jid
+    const cleanDigits = resolvedJid.replace(/@.*$/, '').replace(/\D/g, '')
     if (!cleanDigits) return // Skip non-numeric JIDs (e.g. status updates)
 
     const phone = cleanDigits

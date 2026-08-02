@@ -2,6 +2,7 @@ module.exports = {
     apps: [{
         name: 'looplearn-bot',
         script: 'index.js',
+        exec_mode: 'fork',     // Force single process fork mode (no cluster socket conflicts)
         instances: 1,          // Must be 1 — Baileys can't run in cluster mode
         autorestart: true,
         watch: false,

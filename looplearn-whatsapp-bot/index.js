@@ -61,9 +61,11 @@ const startTime = Date.now()
 let totalMessagesProcessed = 0
 let lastMessageProcessedAt = Date.now()
 
-// Reconnection state — exponential backoff + circuit breaker
+// Reconnection state — exponential backoff + circuit breaker + reentrancy lock
 let reconnectAttempts = 0
 const MAX_RECONNECT_ATTEMPTS = 10
+let isConnecting = false
+let reconnectTimer = null
 
 // Baileys version cache — fetch once, reuse for 24h
 let cachedBaileysVersion = null
@@ -94,10 +96,6 @@ function updateLastMessageTime() {
 }
 
 // ── Session Heartbeat Monitor ───────────────────────────────────────────────
-// Check 1 (every 60s): Is the WebSocket connection actually OPEN at socket level?
-//   readyState 1 = OPEN, anything else = stale/dead connection → force reconnect
-// Check 2 (every 2h): Zombie session — socket says OPEN but no messages received
-//   (WhatsApp "ghost connected" state where messages stop arriving silently)
 const DEAF_SESSION_TIMEOUT_MS = 2 * 60 * 60 * 1000 // 2 hours
 setInterval(() => {
     if (botStatus !== 'connected') return
@@ -124,9 +122,14 @@ setInterval(() => {
 
 // ── Reconnect Scheduler (Exponential Backoff + Circuit Breaker) ─────────────
 function scheduleReconnect() {
+    if (reconnectTimer) {
+        clearTimeout(reconnectTimer)
+        reconnectTimer = null
+    }
     reconnectAttempts++
     if (reconnectAttempts > MAX_RECONNECT_ATTEMPTS) {
         botStatus = 'failed'
+        isConnecting = false
         console.error(`🚨 [Reconnect] Circuit breaker triggered after ${MAX_RECONNECT_ATTEMPTS} failed attempts. Manual restart required.`)
         sendErrorAlert(
             'Bot Cannot Reconnect — Manual Action Required',
@@ -136,7 +139,10 @@ function scheduleReconnect() {
     }
     const delay = getReconnectDelay()
     console.log(`🔄 [Reconnect] Attempt ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS} in ${Math.round(delay / 1000)}s...`)
-    setTimeout(connectToWhatsApp, delay)
+    reconnectTimer = setTimeout(() => {
+        isConnecting = false
+        connectToWhatsApp()
+    }, delay)
 }
 
 // ── REST API Endpoints ──────────────────────────────────────────────────────
@@ -465,6 +471,11 @@ app.listen(PORT, '0.0.0.0', () => {
 // ── WhatsApp Baileys Connection Logic ───────────────────────────────
 
 async function connectToWhatsApp() {
+    if (isConnecting) {
+        console.log('⚠️ [Connect] Connection attempt already in progress, skipping duplicate call.')
+        return
+    }
+    isConnecting = true
     botStatus = 'starting'
     const AUTH_INFO_PATH = path.join(__dirname, 'auth_info')
     // Ensure auth_info directory always exists before Baileys tries to write to it
@@ -473,6 +484,10 @@ async function connectToWhatsApp() {
     }
     const { state, saveCreds } = await useMultiFileAuthState(AUTH_INFO_PATH)
     const version = await getBaileysVersion() // Uses 24h cache — no network call on every reconnect
+
+    if (sock) {
+        try { sock.end(undefined) } catch (_) {}
+    }
 
     sock = makeWASocket({
         version,
@@ -507,8 +522,12 @@ async function connectToWhatsApp() {
 
             console.log(`[Connection] Closed with status code: ${statusCode}. Logged out: ${isLoggedOut}`)
 
+            // Ensure old socket resources are explicitly released
+            if (sock) { try { sock.end(undefined) } catch (_) {} }
+
             if (isLoggedOut) {
                 botStatus = 'logged_out'
+                isConnecting = false
                 console.error('🚨 WhatsApp session logged out by server. Purging credentials...')
 
                 try {
@@ -520,7 +539,10 @@ async function connectToWhatsApp() {
                 }
 
                 // Wait 10 seconds before reconnecting to avoid WhatsApp rate-limiting QR scans
-                setTimeout(connectToWhatsApp, 10000)
+                setTimeout(() => {
+                    isConnecting = false
+                    connectToWhatsApp()
+                }, 10000)
                 await sendErrorAlert('WhatsApp Logged Out', 'The WhatsApp session was logged out. A new QR code is required on the Command Center.')
             } else {
                 // Temporary network/socket drop (e.g. 408, 515, 428) — PRESERVE credentials!
@@ -531,6 +553,7 @@ async function connectToWhatsApp() {
 
         if (connection === 'open') {
             botStatus = 'connected'
+            isConnecting = false
             currentQr = null
             currentQrImage = null
             reconnectAttempts = 0 // Reset circuit breaker on successful connection
