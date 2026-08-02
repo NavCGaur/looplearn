@@ -560,7 +560,7 @@ async function connectToWhatsApp() {
         logger,
         printQRInTerminal: false,
         auth: state,
-        browser: ['LoopLearn Bot', 'Chrome', '120.0'],
+        browser: ['Ubuntu', 'Chrome', '20.0.04'],
         getMessage: async () => ({ conversation: '' }),
     })
 
