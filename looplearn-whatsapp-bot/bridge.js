@@ -65,7 +65,7 @@ async function handleIncomingMessage(sock, msg) {
     const content = msg.message
 
     // LOG: See exactly what number format WhatsApp sends (critical for student identification)
-    console.log(`[IncomingMsg] Raw JID: ${jid} | Extracted phone: ${phone} | Type: ${Object.keys(content || {}).join(',')}`)
+    console.log(`[IncomingMsg] Raw JID: ${jid} | Resolved phone: ${phone} | Type: ${Object.keys(content || {}).join(',')}`)
 
     // Determine message type
     const imageMsg = content?.imageMessage
@@ -91,6 +91,7 @@ async function handleIncomingMessage(sock, msg) {
             phone,
             messageType: 'text',
             textBody: textBody.trim(), // Pass the actual message content
+            isLid: jid.endsWith('@lid')
         }).then(data => {
             if (data?.replyText) queueMessage(sock, jid, data.replyText)
         }).catch(async (e) => {
@@ -154,6 +155,7 @@ async function handleIncomingMessage(sock, msg) {
                 phone,
                 messageType: 'image',
                 images: batchToSend,
+                isLid: jid.endsWith('@lid')
             }).then(data => {
                 const reply = data?.replyText ?? '⚠️ System error: Evaluation failed. Please inform your Teacher about this issue.'
                 queueMessage(sock, jid, reply)
