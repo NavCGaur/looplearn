@@ -245,75 +245,11 @@ export async function getStudentPerformanceHistory(studentId: string) {
 }
 
 // ── WhatsApp Bridge: process incoming image submission ────────
-// Helper: Get student by phone (handling optional + prefix) or auto-register a Guest profile
-async function getOrCreateStudentByPhone(phone: string) {
-    const adminClient = createAdminClient()
-    const cleanPhone = phone.replace(/\D/g, '')
-    const phoneWithPlus = `+${cleanPhone}`
-    const phoneWithoutPlus = cleanPhone
-
-    // Try finding by + or no-+ (allow teachers/admins to submit homework for testing as well)
-    const { data: student } = await adminClient
-        .from('profiles')
-        .select('id, display_name, class_standard, whatsapp_phone')
-        .or(`whatsapp_phone.eq.${phoneWithPlus},whatsapp_phone.eq.${phoneWithoutPlus}`)
-        .maybeSingle()
-
-
-    if (student) {
-        return student
-    }
-
-    // Auto-register frictionless guest student for testing/onboarding!
-    console.log(`[WhatsApp Bot] Auto-registering unregistered number: ${phoneWithPlus}`)
-    const guestName = `Guest (${cleanPhone.slice(-4)})`
-    const tempEmail = `guest_${cleanPhone}@looplearn.test`
-
-    try {
-        const { data: newUser, error: createError } = await adminClient.auth.admin.createUser({
-            email: tempEmail,
-            password: `GuestPassword${cleanPhone}!`,
-            email_confirm: true,
-            user_metadata: { display_name: guestName }
-        })
-
-        if (createError) {
-            console.error('[WhatsApp Bot] Failed to create auth user:', createError.message)
-            return null
-        }
-
-        // Wait for DB trigger to create the profiles row
-        await new Promise(resolve => setTimeout(resolve, 1500))
-
-        // Update standard standard, display name, whatsapp phone, etc.
-        const { data: updatedProfile, error: updateErr } = await adminClient
-            .from('profiles')
-            .update({
-                display_name: guestName,
-                role: 'student',
-                class_standard: 6, // Default to class 6
-                whatsapp_phone: phoneWithPlus,
-                bio: 'Auto-created guest student for WhatsApp testing.'
-            })
-            .eq('id', newUser.user.id)
-            .select('id, display_name, class_standard, whatsapp_phone')
-            .single()
-
-        if (updateErr || !updatedProfile) {
-            console.error('[WhatsApp Bot] Failed to update guest profile:', updateErr?.message)
-            return null
-        }
-
-        return updatedProfile
-    } catch (e: any) {
-        console.error('[WhatsApp Bot] Exception during auto-registration:', e.message)
-        return null
-    }
-}
 
 export async function processWhatsAppSubmission(params: {
     phone: string          // Sender's phone number (no +)
     images: { base64: string; mimeType: string }[]
+    isLid?: boolean
 }): Promise<{
     success: boolean
     feedbackText?: string
@@ -322,9 +258,35 @@ export async function processWhatsAppSubmission(params: {
 }> {
     const adminClient = createAdminClient()
 
-    // 1. Lookup or auto-register student
-    const student = await getOrCreateStudentByPhone(params.phone)
+    let student = null
+    const cleanPhone = params.phone.replace(/\D/g, '')
+
+    if (params.isLid) {
+        const { data } = await adminClient
+            .from('profiles')
+            .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
+            .eq('whatsapp_lid', cleanPhone)
+            .maybeSingle()
+        student = data
+    } else {
+        const phoneWithPlus = `+${cleanPhone}`
+        const phoneWithoutPlus = cleanPhone
+        const { data } = await adminClient
+            .from('profiles')
+            .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
+            .or(`whatsapp_phone.eq.${phoneWithPlus},whatsapp_phone.eq.${phoneWithoutPlus}`)
+            .maybeSingle()
+        student = data
+    }
+
     if (!student) {
+        if (params.isLid) {
+            return {
+                success: false,
+                error: 'unregistered',
+                feedbackText: '👋 Welcome! Account link karne ke liye apna registered 10-digit phone number type karke bhejiye (e.g. 9876543210).'
+            }
+        }
         return {
             success: false,
             error: 'unregistered',
@@ -656,14 +618,75 @@ export async function getWeeklySummaryMessages(weekStart: string): Promise<{
 export async function processWhatsAppTextSubmission(params: {
     phone: string     // Student's phone number (no +)
     textBody: string  // Raw text from student's WhatsApp message
+    isLid?: boolean
 }): Promise<{
     success: boolean
     replyText: string
 }> {
     const adminClient = createAdminClient()
+    const cleanPhone = params.phone.replace(/\D/g, '')
+    let student = null
 
-    // 1. Lookup or auto-register student
-    const student = await getOrCreateStudentByPhone(params.phone)
+    if (params.isLid) {
+        const { data } = await adminClient
+            .from('profiles')
+            .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
+            .eq('whatsapp_lid', cleanPhone)
+            .maybeSingle()
+        
+        if (data) {
+            student = data
+        } else {
+            const textTrimmed = params.textBody.trim()
+            if (/^\d{10}$/.test(textTrimmed)) {
+                const inputPhone = `+91${textTrimmed}`
+                const { data: matchedProfile } = await adminClient
+                    .from('profiles')
+                    .select('id, display_name, whatsapp_phone, whatsapp_lid')
+                    .or(`whatsapp_phone.eq.${inputPhone},whatsapp_phone.eq.91${textTrimmed}`)
+                    .maybeSingle()
+
+                if (!matchedProfile) {
+                    return {
+                        success: false,
+                        replyText: `❌ Number *${textTrimmed}* system me registered nahi hai. Apne Teacher se contact karke register karwayein.`
+                    }
+                }
+
+                if (matchedProfile.whatsapp_lid && matchedProfile.whatsapp_lid !== cleanPhone) {
+                    return {
+                        success: false,
+                        replyText: `⚠️ Student *${matchedProfile.display_name}* ka account pehle se linked hai. Apne Teacher se contact kijiye.`
+                    }
+                }
+
+                await adminClient
+                    .from('profiles')
+                    .update({ whatsapp_lid: cleanPhone })
+                    .eq('id', matchedProfile.id)
+                
+                return {
+                    success: true,
+                    replyText: `✅ Account linked for *${matchedProfile.display_name}*! Ab aap apni homework photo dobara bhej sakte hain.`
+                }
+            }
+
+            return {
+                success: false,
+                replyText: `👋 Welcome! Account link karne ke liye apna registered 10-digit phone number type karke bhejiye (e.g. 9876543210).`
+            }
+        }
+    } else {
+        const phoneWithPlus = `+${cleanPhone}`
+        const phoneWithoutPlus = cleanPhone
+        const { data } = await adminClient
+            .from('profiles')
+            .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
+            .or(`whatsapp_phone.eq.${phoneWithPlus},whatsapp_phone.eq.${phoneWithoutPlus}`)
+            .maybeSingle()
+        student = data
+    }
+
     if (!student) {
         return {
             success: false,

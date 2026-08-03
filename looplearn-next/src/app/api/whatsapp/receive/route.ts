@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
         messageType?: string
         textBody?: string   // Text content from student's typed message
         images?: { base64: string; mimeType: string }[]
+        isLid?: boolean
     }
 
     try {
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
     }
 
-    const { phone, imageBase64, mimeType, messageType, images } = body
+    const { phone, imageBase64, mimeType, messageType, images, isLid } = body
     if (!phone) {
         return NextResponse.json({ error: 'Missing phone' }, { status: 400 })
     }
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
         try {
             const timeoutMs = 55000 // 55s — just under Vercel's 60s limit
             const result = await Promise.race([
-                processWhatsAppTextSubmission({ phone: cleanPhone, textBody }),
+                processWhatsAppTextSubmission({ phone: cleanPhone, textBody, isLid }),
                 new Promise<never>((_, reject) =>
                     setTimeout(() => reject(new Error('EVALUATION_TIMEOUT')), timeoutMs)
                 )
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest) {
     try {
         const timeoutMs = 55000
         const result = await Promise.race([
-            processWhatsAppSubmission({ phone: cleanPhone, images: imageList }),
+            processWhatsAppSubmission({ phone: cleanPhone, images: imageList, isLid }),
             new Promise<never>((_, reject) =>
                 setTimeout(() => reject(new Error('EVALUATION_TIMEOUT')), timeoutMs)
             )
@@ -109,7 +110,7 @@ export async function POST(req: NextRequest) {
             if (result.error === 'unregistered') {
                 return NextResponse.json({
                     success: false,
-                    replyText: '❌ Aapka number registered nahi hai. Apne teacher se contact karo.',
+                    replyText: result.feedbackText || '❌ Aapka number registered nahi hai. Apne teacher se contact karo.',
                 })
             }
             return NextResponse.json({
