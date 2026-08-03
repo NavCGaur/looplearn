@@ -286,13 +286,13 @@ export async function processWhatsAppSubmission(params: {
      * FUTURE PLAN: Restore strict secure self-linking and LID binding when onboarding larger cohorts of students.
      */
     if (!student) {
-        const { data: defaultProfile } = await adminClient
+        const { data: defaultProfiles } = await adminClient
             .from('profiles')
             .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
+            .order('created_at', { ascending: true })
             .limit(1)
-            .maybeSingle()
 
-        student = defaultProfile || {
+        student = defaultProfiles?.[0] || {
             id: process.env.TEACHER_UUID || 'ad6b0b1c-55f6-46a6-8c17-9f544caf06f3',
             display_name: 'Student',
             class_standard: 9,
@@ -641,56 +641,14 @@ export async function processWhatsAppTextSubmission(params: {
             .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
             .eq('whatsapp_lid', cleanPhone)
             .maybeSingle()
-        
-        if (data) {
-            student = data
-        } else {
-            const textTrimmed = params.textBody.trim()
-            if (/^\d{10}$/.test(textTrimmed)) {
-                const inputPhone = `+91${textTrimmed}`
-                const { data: matchedProfile } = await adminClient
-                    .from('profiles')
-                    .select('id, display_name, whatsapp_phone, whatsapp_lid')
-                    .or(`whatsapp_phone.eq.${inputPhone},whatsapp_phone.eq.91${textTrimmed}`)
-                    .maybeSingle()
-
-                if (!matchedProfile) {
-                    return {
-                        success: false,
-                        replyText: `❌ Number *${textTrimmed}* system me registered nahi hai. Apne Teacher se contact karke register karwayein.`
-                    }
-                }
-
-                if (matchedProfile.whatsapp_lid && matchedProfile.whatsapp_lid !== cleanPhone) {
-                    return {
-                        success: false,
-                        replyText: `⚠️ Student *${matchedProfile.display_name}* ka account pehle se linked hai. Apne Teacher se contact kijiye.`
-                    }
-                }
-
-                await adminClient
-                    .from('profiles')
-                    .update({ whatsapp_lid: cleanPhone })
-                    .eq('id', matchedProfile.id)
-                
-                return {
-                    success: true,
-                    replyText: `✅ Account linked for *${matchedProfile.display_name}*! Ab aap apni homework photo dobara bhej sakte hain.`
-                }
-            }
-
-            return {
-                success: false,
-                replyText: `👋 Welcome! Account link karne ke liye apna registered 10-digit phone number type karke bhejiye (e.g. 9876543210).`
-            }
-        }
+        student = data
     } else {
-        const phoneWithPlus = `+${cleanPhone}`
-        const phoneWithoutPlus = cleanPhone
+        const last10 = cleanPhone.slice(-10)
+        const candidates = [`+91${last10}`, `91${last10}`, last10, `+${cleanPhone}`, cleanPhone]
         const { data } = await adminClient
             .from('profiles')
             .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
-            .or(`whatsapp_phone.eq.${phoneWithPlus},whatsapp_phone.eq.${phoneWithoutPlus}`)
+            .in('whatsapp_phone', candidates)
             .maybeSingle()
         student = data
     }
@@ -702,13 +660,13 @@ export async function processWhatsAppTextSubmission(params: {
      * FUTURE PLAN: Restore strict secure self-linking and LID binding when onboarding larger cohorts of students.
      */
     if (!student) {
-        const { data: defaultProfile } = await adminClient
+        const { data: defaultProfiles } = await adminClient
             .from('profiles')
             .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
+            .order('created_at', { ascending: true })
             .limit(1)
-            .maybeSingle()
 
-        student = defaultProfile || {
+        student = defaultProfiles?.[0] || {
             id: process.env.TEACHER_UUID || 'ad6b0b1c-55f6-46a6-8c17-9f544caf06f3',
             display_name: 'Student',
             class_standard: 9,
