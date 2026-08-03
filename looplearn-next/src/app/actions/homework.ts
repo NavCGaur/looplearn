@@ -269,12 +269,12 @@ export async function processWhatsAppSubmission(params: {
             .maybeSingle()
         student = data
     } else {
-        const phoneWithPlus = `+${cleanPhone}`
-        const phoneWithoutPlus = cleanPhone
+        const last10 = cleanPhone.slice(-10)
+        const candidates = [`+91${last10}`, `91${last10}`, last10, `+${cleanPhone}`, cleanPhone]
         const { data } = await adminClient
             .from('profiles')
             .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
-            .or(`whatsapp_phone.eq.${phoneWithPlus},whatsapp_phone.eq.${phoneWithoutPlus}`)
+            .in('whatsapp_phone', candidates)
             .maybeSingle()
         student = data
     }
