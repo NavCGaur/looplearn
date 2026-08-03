@@ -279,17 +279,25 @@ export async function processWhatsAppSubmission(params: {
         student = data
     }
 
+    /*
+     * TEMPORARY LAUNCH OVERRIDE:
+     * Phone/LID validation disabled for launch to allow immediate evaluation for testing.
+     * WHY: To prioritize immediate launch and allow closed beta testing without blocking users due to phone format or LID privacy mismatches.
+     * FUTURE PLAN: Restore strict secure self-linking and LID binding when onboarding larger cohorts of students.
+     */
     if (!student) {
-        if (params.isLid) {
-            return {
-                success: false,
-                error: 'unregistered',
-                feedbackText: '👋 Welcome! Account link karne ke liye apna registered 10-digit phone number type karke bhejiye (e.g. 9876543210).'
-            }
-        }
-        return {
-            success: false,
-            error: 'unregistered',
+        const { data: defaultProfile } = await adminClient
+            .from('profiles')
+            .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
+            .limit(1)
+            .maybeSingle()
+
+        student = defaultProfile || {
+            id: process.env.TEACHER_UUID || 'ad6b0b1c-55f6-46a6-8c17-9f544caf06f3',
+            display_name: 'Student',
+            class_standard: 9,
+            whatsapp_phone: null,
+            whatsapp_lid: null
         }
     }
 
@@ -687,10 +695,25 @@ export async function processWhatsAppTextSubmission(params: {
         student = data
     }
 
+    /*
+     * TEMPORARY LAUNCH OVERRIDE:
+     * Phone/LID validation disabled for launch to allow immediate text responses.
+     * WHY: To prioritize immediate launch and allow closed beta testing without blocking users.
+     * FUTURE PLAN: Restore strict secure self-linking and LID binding when onboarding larger cohorts of students.
+     */
     if (!student) {
-        return {
-            success: false,
-            replyText: '❌ Aapka number registered nahi hai. Apne teacher se contact karo.',
+        const { data: defaultProfile } = await adminClient
+            .from('profiles')
+            .select('id, display_name, class_standard, whatsapp_phone, whatsapp_lid')
+            .limit(1)
+            .maybeSingle()
+
+        student = defaultProfile || {
+            id: process.env.TEACHER_UUID || 'ad6b0b1c-55f6-46a6-8c17-9f544caf06f3',
+            display_name: 'Student',
+            class_standard: 9,
+            whatsapp_phone: null,
+            whatsapp_lid: null
         }
     }
 
