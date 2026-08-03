@@ -109,8 +109,8 @@ export async function POST(req: NextRequest) {
         if (!result.success) {
             if (result.error === 'unregistered') {
                 return NextResponse.json({
-                    success: false,
-                    replyText: result.feedbackText || '❌ Aapka number registered nahi hai. Apne teacher se contact karo.',
+                    success: true,
+                    replyText: result.feedbackText || '✅ Photo(s) receive ho gaye. Evaluation process ho raha hai...',
                 })
             }
             return NextResponse.json({
