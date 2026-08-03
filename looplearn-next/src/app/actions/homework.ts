@@ -1,5 +1,5 @@
 // Plain server module (no 'use server' directive to allow direct imports in api routes)
-
+// Force Vercel rebuild trigger: 2026-08-03-12-35
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { evaluateQuickPracticeSheet, evaluateTextWithGemini, PreviousSubmissionContext, validateHomeworkPages } from './ai'
