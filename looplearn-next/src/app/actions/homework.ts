@@ -835,33 +835,38 @@ export async function processWhatsAppTextSubmission(params: {
             isAnswersOnlySubmission = true
         }
 
-        // Validation Passed! Check scenarios (Questions-Only / Answers-Only / Completely Invalid)
-        if (!validation.questionsFound && !validation.answersFound) {
-            await updateSessionStatus(session.id, previousStatus)
-            return {
-                success: true,
-                replyText: `❌ Mujhe is photo mein koi school questions ya answers nahi mile. Please school homework book ya question paper ki clean photo send kijiye.`
-            }
-        }
-
-        if (validation.questionsFound && !validation.answersFound) {
-            await updateSessionStatus(session.id, previousStatus)
-            return {
-                success: true,
-                replyText: `📝 Main questions toh dekh pa raha hoon par aapke *answers* nahi mil rahe. Please answers likh kar page ki photo bhejiye!`
-            }
-        }
-
-        if (validation.answers_only || (!validation.questionsFound && validation.answersFound)) {
-            const confidence = validation.question_reconstruction_confidence ?? 1.0
-            if (confidence < 0.85) {
-                await updateSessionStatus(session.id, previousStatus) // revert status instead of forcing failed
+        // ── Dictation bypass: skip all Q&A scenario checks — go straight to evaluation ──
+        // A dictation sheet has no Q&A format, so it would otherwise hit the
+        // "answers without questions" error. Jump past all Q&A checks here.
+        if (!validation.isDictation) {
+            // Validation Passed! Check scenarios (Questions-Only / Answers-Only / Completely Invalid)
+            if (!validation.questionsFound && !validation.answersFound) {
+                await updateSessionStatus(session.id, previousStatus)
                 return {
                     success: true,
-                    replyText: `⚠️ Mujhe answers toh mil rahe hain par questions nahi mil rahe. Please photo mein dono question aur answer ko ek sath share kijiye.`
+                    replyText: `❌ Mujhe is photo mein koi school questions ya answers nahi mile. Please school homework book ya question paper ki clean photo send kijiye.`
                 }
-            } else {
-                isAnswersOnlySubmission = true
+            }
+
+            if (validation.questionsFound && !validation.answersFound) {
+                await updateSessionStatus(session.id, previousStatus)
+                return {
+                    success: true,
+                    replyText: `📝 Main questions toh dekh pa raha hoon par aapke *answers* nahi mil rahe. Please answers likh kar page ki photo bhejiye!`
+                }
+            }
+
+            if (validation.answers_only || (!validation.questionsFound && validation.answersFound)) {
+                const confidence = validation.question_reconstruction_confidence ?? 1.0
+                if (confidence < 0.85) {
+                    await updateSessionStatus(session.id, previousStatus)
+                    return {
+                        success: true,
+                        replyText: `⚠️ Mujhe answers toh mil rahe hain par questions nahi mil rahe. Please photo mein dono question aur answer ko ek sath share kijiye.`
+                    }
+                } else {
+                    isAnswersOnlySubmission = true
+                }
             }
         }
 
