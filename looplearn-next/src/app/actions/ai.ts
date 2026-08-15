@@ -1157,7 +1157,7 @@ HCF aur LCM mein difference yeh hai...`
 // ─────────────────────────────────────────────────────────────────────────────
 export interface ValidationResult {
     page: number
-    status: 'ok' | 'cutoff' | 'unreadable' | 'poor_lighting' | 'questions_only' | 'answers_only'
+    status: 'ok' | 'cutoff' | 'unreadable' | 'poor_lighting' | 'questions_only' | 'answers_only' | 'invalid'
     reason?: string
 }
 
@@ -1167,8 +1167,28 @@ export interface HomeworkValidationResponse {
     questionsFound: boolean
     answersFound: boolean
     answers_only: boolean
+    isDictation: boolean   // true when the sheet is a dictation word list, not a Q&A homework
     question_reconstruction_confidence?: number
     error?: string
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Dictation Evaluation Result Types
+// ─────────────────────────────────────────────────────────────────────────────
+export interface DictationWordResult {
+    word_written: string        // Exactly what the student wrote (even if wrong)
+    correct_spelling: string    // The correct English spelling
+    is_correct: boolean         // true if word_written matches correct_spelling (ignoring case)
+    marks: number               // +1 if correct, -1 if wrong
+}
+
+export interface DictationEvalResult {
+    words: DictationWordResult[]
+    total_words: number
+    correct_count: number
+    wrong_count: number
+    score: number               // sum of marks (can be negative)
+    topic_detected: string | null
 }
 
 export async function validateHomeworkPages(
@@ -1194,16 +1214,19 @@ export async function validateHomeworkPages(
         const validationPrompt = `
 Analyze the attached ${images.length} page(s) of handwritten student homework. The images are sent in chronological order (Page 1 first, Page 2 second, etc.).
 
+**FIRST — Detect if this is a DICTATION sheet:**
+A dictation sheet has a heading like "Dictation" at the top and contains a list of individual vocabulary words (one per line), NOT numbered Q&A questions. If this is a dictation sheet, set "isDictation" to true.
+
 For each page, evaluate and report on the following quality metrics:
 1. Is the image readable and clear?
 2. Is the handwriting readable?
 3. Is the page cut off or incomplete (bottom/sides missing)?
 4. Is the lighting sufficient (not too dark or heavily shadowed)?
-5. Are questions visible?
-6. Are answers visible?
+5. Are questions visible? (N/A for dictation)
+6. Are answers visible? (N/A for dictation)
 
 **Validation Status Rules for each page:**
-- set status to "invalid" if the image does not show a school notebook, quiz, question sheet, or homework paper (e.g. it is a photo of a person, animal, screen, keyboard, scenery, or completely irrelevant object).
+- set status to "invalid" if the image does not show a school notebook, quiz, question sheet, homework paper, or dictation sheet (e.g. it is a photo of a person, animal, screen, keyboard, scenery, or completely irrelevant object).
 - set status to "cutoff" if the text, math formulas, question numbers, or answers are cut off or cropped out at the edges of the image (crucial text is sliced/missing).
 - set status to "unreadable" if the handwriting is completely illegible, blurry, unfocused, or cannot be read.
 - set status to "poor_lighting" if it is too dark or shadowed to read.
@@ -1212,13 +1235,15 @@ For each page, evaluate and report on the following quality metrics:
 - Otherwise, set status to "ok".
 
 **Overall Submission Rules:**
-- "questionsFound": Set to true if school/academic questions are present anywhere in the submission.
-- "answersFound": Set to true if handwritten student answers or solutions are present anywhere in the submission.
-- "answers_only": Set to true if the student has provided ONLY answers and completely omitted the questions.
+- "questionsFound": Set to true if school/academic questions are present anywhere in the submission. For dictation sheets, set to true.
+- "answersFound": Set to true if handwritten student answers or solutions are present anywhere in the submission. For dictation sheets, set to true.
+- "answers_only": Set to false for dictation sheets.
+- "isDictation": Set to true if the sheet is a dictation word list (not a Q&A homework sheet).
 - "question_reconstruction_confidence": If the student only sent answers, estimate how confidently we can reconstruct the questions from the context of their answers (scale 0.0 to 1.0). If they did not send only answers, set this to 1.0.
 
 **CRITICAL: Return ONLY a valid JSON object matching this schema:**
 {
+  "isDictation": true | false,
   "pages": [
     {
       "page": 1,
@@ -1256,6 +1281,7 @@ For each page, evaluate and report on the following quality metrics:
             questionsFound: parsed.questionsFound ?? true,
             answersFound: parsed.answersFound ?? true,
             answers_only: parsed.answers_only ?? false,
+            isDictation: parsed.isDictation ?? false,
             question_reconstruction_confidence: parsed.question_reconstruction_confidence ?? 1.0,
         }
 
@@ -1267,8 +1293,98 @@ For each page, evaluate and report on the following quality metrics:
             questionsFound: false,
             answersFound: false,
             answers_only: false,
+            isDictation: false,
             error: error.message,
         }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Dictation Sheet Evaluation
+// Marking: +1 for each correctly spelled word, -1 for each wrong spelling.
+// No teacher reference needed — Gemini evaluates against general English knowledge.
+// ─────────────────────────────────────────────────────────────────────────────
+export async function evaluateDictationSheet(
+    images: { base64: string; mimeType: string }[]
+): Promise<{ success: boolean; data?: DictationEvalResult; error?: string }> {
+    try {
+        if (!process.env.GOOGLE_GEMINI_API_KEY) {
+            throw new Error('Gemini API Key not configured')
+        }
+
+        const model = genAI.getGenerativeModel({
+            model: 'gemini-flash-latest',
+            generationConfig: {
+                temperature: 0.1,
+                topP: 1,
+                topK: 1,
+                responseMimeType: 'application/json',
+            },
+        })
+
+        const imageParts = images.map(img => ({
+            inlineData: { data: img.base64, mimeType: img.mimeType }
+        }))
+
+        const prompt = `You are an English language teacher evaluating a student's dictation sheet.
+
+The image shows a handwritten dictation sheet where the student has written a list of vocabulary words (one per line).
+
+Your tasks:
+1. Read every word the student has written, exactly as written (including any spelling mistakes).
+2. Determine the correct English spelling of each word using your general English knowledge.
+3. Mark each word as correct (true) if it matches the correct spelling (case-insensitive), or incorrect (false) if it does not.
+4. Assign marks: +1 for each correctly spelled word, -1 for each incorrectly spelled word.
+5. If a word is ambiguous (could be a valid variant), prefer to mark it correct.
+6. Detect the topic/chapter name if written at the top of the sheet (e.g. "Iron Pebbles", "Metals and Non-metals"). If not found, set to null.
+7. Do NOT penalize for capitalization errors on common words — focus only on spelling.
+
+Return ONLY a valid JSON object matching this exact schema:
+{
+  "topic_detected": "<topic/chapter name from the sheet header, or null>",
+  "words": [
+    {
+      "word_written": "<exactly what the student wrote>",
+      "correct_spelling": "<the correct English spelling>",
+      "is_correct": true,
+      "marks": 1
+    },
+    {
+      "word_written": "evathering",
+      "correct_spelling": "weathering",
+      "is_correct": false,
+      "marks": -1
+    }
+  ]
+}`
+
+        const result = await model.generateContent([...imageParts, prompt])
+        let text = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim()
+        const parsed = JSON.parse(text)
+
+        if (!Array.isArray(parsed.words)) {
+            throw new Error('Gemini returned invalid dictation format')
+        }
+
+        const correctCount = parsed.words.filter((w: DictationWordResult) => w.is_correct).length
+        const wrongCount = parsed.words.filter((w: DictationWordResult) => !w.is_correct).length
+        const score = parsed.words.reduce((sum: number, w: DictationWordResult) => sum + (w.marks ?? (w.is_correct ? 1 : -1)), 0)
+
+        return {
+            success: true,
+            data: {
+                words: parsed.words,
+                total_words: parsed.words.length,
+                correct_count: correctCount,
+                wrong_count: wrongCount,
+                score,
+                topic_detected: parsed.topic_detected ?? null,
+            }
+        }
+
+    } catch (error: any) {
+        console.error('Dictation Evaluation Error:', error)
+        return { success: false, error: error.message }
     }
 }
 

@@ -2,7 +2,7 @@
 // Force Vercel rebuild trigger: 2026-08-03-12-35
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
-import { evaluateQuickPracticeSheet, evaluateTextWithGemini, PreviousSubmissionContext, validateHomeworkPages } from './ai'
+import { evaluateQuickPracticeSheet, evaluateTextWithGemini, PreviousSubmissionContext, validateHomeworkPages, evaluateDictationSheet } from './ai'
 import { evaluateEnglishFoundation } from './ai_english'
 import { saveChatMessages, getChatWindow, getStudentMemory, isMemoryStale, updateStudentMemory } from './memory'
 import { getActiveSession, createSession, addPageToSession, updateSessionStatus, SessionPage, checkStudentLockout } from './sessions'
@@ -938,6 +938,65 @@ export async function processWhatsAppTextSubmission(params: {
                 success: true,
                 replyText: evalResult.ai_feedback
             }
+        }
+
+        // ── Dictation Sheet detected: skip Q&A evaluation, run dictation check instead ──
+        if (validation.isDictation) {
+            const dictResult = await evaluateDictationSheet(imagesToValidate)
+
+            if (!dictResult.success || !dictResult.data) {
+                await updateSessionStatus(session.id, previousStatus)
+                return {
+                    success: true,
+                    replyText: `⚠️ Dictation evaluation fail ho gaya. Thodi der baad dobara *DONE* likh kar try kijiye.`
+                }
+            }
+
+            const d = dictResult.data
+            const displayName = student.display_name ?? student.whatsapp_phone ?? 'Student'
+            const topicLine = d.topic_detected ? `📚 *Topic:* ${d.topic_detected}\n` : ''
+
+            // Build per-word feedback — only show wrong words to keep message short
+            const wrongWords = d.words.filter(w => !w.is_correct)
+            const wrongSection = wrongWords.length > 0
+                ? `\n\n❌ *Galat Words (${wrongWords.length}):*\n` +
+                  wrongWords.map(w => `  • *${w.word_written}* → ${w.correct_spelling}`).join('\n')
+                : ''
+
+            const scoreEmoji = d.score >= d.total_words * 0.8 ? '🌟' : d.score >= d.total_words * 0.5 ? '👍' : '💪'
+
+            const replyText = [
+                `${scoreEmoji} *${displayName} — Dictation Result* ✏️`,
+                ``,
+                topicLine.trim(),
+                `📊 *Score: ${d.score} / ${d.total_words}*`,
+                `✅ Sahi: ${d.correct_count}   ❌ Galat: ${d.wrong_count}`,
+                wrongSection,
+                ``,
+                d.wrong_count === 0
+                    ? `🎉 Wah! Sab words sahi likhe — perfect dictation!`
+                    : `📝 Galat words ki spelling yaad kar lo — agle baar zaroor sahi likhna!`
+            ].filter(line => line !== null && line !== undefined).join('\n').replace(/\n{3,}/g, '\n\n').trim()
+
+            // Store as a freeform submission so teacher can see it
+            await adminClient
+                .from('homework_submissions')
+                .insert({
+                    student_id: student.id,
+                    submission_type: 'whatsapp',
+                    image_path: session.pages[0].path,
+                    marks_obtained: d.score,
+                    max_marks: d.total_words,
+                    ai_feedback: `Dictation: ${d.correct_count}/${d.total_words} correct`,
+                    raw_ai_response: dictResult as any,
+                    status: 'submitted',
+                    submitted_at: new Date().toISOString(),
+                    evaluated_at: new Date().toISOString(),
+                })
+
+            await updateSessionStatus(session.id, 'completed')
+
+            return { success: true, replyText }
         }
 
         const evalResult = await evaluateQuickPracticeSheet(
