@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter, Roboto_Mono, Fredoka } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/ui/navbar";
 import Footer from "@/components/Footer";
@@ -7,21 +6,9 @@ import { getUser } from "@/lib/supabase/server";
 import { OfflineBanner } from "@/components/ui/offline-banner";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
-const inter = Inter({
-  variable: "--font-geist-sans", // Keeping variable name to avoid breaking css
-  subsets: ["latin"],
-});
-
-const robotoMono = Roboto_Mono({
-  variable: "--font-geist-mono", // Keeping variable name
-  subsets: ["latin"],
-});
-
-const fredoka = Fredoka({
-  variable: "--font-fredoka",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
+const inter = { variable: "--font-geist-sans" };
+const robotoMono = { variable: "--font-geist-mono" };
+const fredoka = { variable: "--font-fredoka" };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://looplearnx.com"),

@@ -744,23 +744,26 @@ export async function processWhatsAppTextSubmission(params: {
         // Set session status to processing
         await updateSessionStatus(session.id, 'processing', session.pages)
 
-        // Fetch all images from storage and convert to base64
-        const imagesToValidate: { base64: string; mimeType: string }[] = []
-        for (const page of session.pages) {
+        // Fetch all images from storage in parallel and convert to base64
+        const downloadPromises = session.pages.map(async (page) => {
             const { data, error } = await adminClient.storage
                 .from('assignment-papers')
                 .download(page.path)
             
             if (error || !data) {
                 console.error(`[Session] Failed to download path ${page.path}:`, error?.message)
-                continue
+                return null
             }
             const buffer = Buffer.from(await data.arrayBuffer())
-            imagesToValidate.push({
+            return {
                 base64: buffer.toString('base64'),
                 mimeType: page.mimeType || 'image/jpeg'
-            })
-        }
+            }
+        })
+
+        const downloadedImages = await Promise.all(downloadPromises)
+        const imagesToValidate = downloadedImages.filter((img): img is { base64: string; mimeType: string } => img !== null)
+
 
         if (imagesToValidate.length === 0) {
             await updateSessionStatus(session.id, previousStatus)

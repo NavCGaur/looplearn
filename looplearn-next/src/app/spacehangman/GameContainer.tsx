@@ -25,6 +25,11 @@ const GameContainer = () => {
   const [showHint, setShowHint] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
   const [shakeGauge, setShakeGauge] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (wrongAttempts > 0) {
@@ -65,7 +70,7 @@ const GameContainer = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-purple-950/10 via-transparent to-blue-950/10 z-0" />
 
       {/* Animated starfield effect */}
-      {[...Array(20)].map((_, i) => (
+      {mounted && [...Array(20)].map((_, i) => (
         <motion.div
           key={`star-${i}`}
           className="absolute rounded-full bg-white blur-[0.5px]"
@@ -89,7 +94,7 @@ const GameContainer = () => {
       ))}
 
       {/* Floating particles with varied motion */}
-      {[...Array(15)].map((_, i) => (
+      {mounted && [...Array(15)].map((_, i) => (
         <motion.div
           key={`particle-${i}`}
           className="absolute rounded-full bg-white/25 blur-[1.5px]"

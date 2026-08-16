@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS subjective_tests (
   title TEXT NOT NULL,
   subject TEXT NOT NULL CHECK (subject IN ('mathematics', 'science', 'physics', 'chemistry', 'biology')),
   chapter TEXT,
-  class_standard INT NOT NULL CHECK (class_standard BETWEEN 6 AND 12),
+  class_standard INT NOT NULL CHECK (class_standard BETWEEN 1 AND 12),
   total_marks INT NOT NULL DEFAULT 0,
   instructions TEXT, -- optional teacher notes shown to student
   is_active BOOLEAN DEFAULT true,

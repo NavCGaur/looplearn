@@ -11,7 +11,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   role TEXT NOT NULL CHECK (role IN ('student', 'teacher', 'admin')) DEFAULT 'student',
-  class_standard INT CHECK (class_standard BETWEEN 6 AND 12),
+  class_standard INT CHECK (class_standard BETWEEN 1 AND 12),
   points INT DEFAULT 0,
   display_name TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -24,13 +24,15 @@ CREATE INDEX idx_profiles_class_points ON profiles(class_standard, points DESC);
 -- ============================================
 -- 2. QUESTIONS TABLE (Content)
 -- ============================================
+-- Note: schema.sql contains the schema definition.
+-- Let's update class_standard check constraints to BETWEEN 1 AND 12
 CREATE TABLE questions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   question_text TEXT NOT NULL,
   question_type TEXT NOT NULL CHECK (question_type IN ('mcq', 'fillblank', 'truefalse')),
   
   -- Classification
-  class_standard INT NOT NULL CHECK (class_standard BETWEEN 6 AND 12),
+  class_standard INT NOT NULL CHECK (class_standard BETWEEN 1 AND 12),
   subject TEXT NOT NULL CHECK (subject IN ('mathematics', 'physics', 'chemistry', 'biology', 'science')),
   chapter TEXT,
   difficulty TEXT CHECK (difficulty IN ('easy', 'medium', 'hard')) DEFAULT 'medium',

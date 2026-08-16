@@ -18,7 +18,7 @@ CREATE INDEX IF NOT EXISTS idx_profiles_whatsapp_phone
 CREATE TABLE IF NOT EXISTS homework_plans (
   id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   teacher_id      UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  class_standard  INT  NOT NULL CHECK (class_standard BETWEEN 6 AND 12),
+  class_standard  INT  NOT NULL CHECK (class_standard BETWEEN 1 AND 12),
   subject         TEXT NOT NULL,
   day_of_week     INT  NOT NULL CHECK (day_of_week BETWEEN 1 AND 6), -- 1=Mon 6=Sat
   week_start      DATE NOT NULL,  -- Always a Monday

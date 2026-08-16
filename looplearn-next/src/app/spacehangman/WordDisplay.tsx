@@ -17,10 +17,9 @@ const WordDisplay = ({ word, guessedLetters }: WordDisplayProps) => (
             scale: [1, 1.25, 1],
           } : {}}
           transition={{ 
-            type: "spring", 
-            stiffness: 600,
-            damping: 15,
-            duration: 0.4
+            type: "tween",
+            duration: 0.4,
+            ease: "easeOut"
           }}
         >
           {/* Multi-layer glow when revealed */}

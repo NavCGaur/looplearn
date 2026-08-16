@@ -26,6 +26,28 @@ export interface SubmissionSession {
 
 export async function getActiveSession(studentId: string): Promise<SubmissionSession | null> {
     const admin = createAdminClient()
+
+    // Auto-abandon any sessions stuck in 'processing' for > 5 minutes
+    // (These happen when a DONE attempt failed mid-way and never cleaned up)
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString()
+    await admin
+        .from('whatsapp_submission_sessions')
+        .update({ status: 'completed' })
+        .eq('student_id', studentId)
+        .eq('status', 'processing')
+        .lt('updated_at', fiveMinutesAgo)
+
+    // Auto-complete any active/needs_reupload sessions that have been idle for > 2 hours
+    // (This prevents students from accumulating pages indefinitely if they forget to type DONE)
+    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+    await admin
+        .from('whatsapp_submission_sessions')
+        .update({ status: 'completed' })
+        .eq('student_id', studentId)
+        .in('status', ['active', 'needs_reupload'])
+        .lt('updated_at', twoHoursAgo)
+
+
     const { data, error } = await admin
         .from('whatsapp_submission_sessions')
         .select('*')
@@ -76,12 +98,16 @@ export async function addPageToSession(sessionId: string, newPage: SessionPage):
 export async function updateSessionStatus(
     sessionId: string,
     status: 'active' | 'processing' | 'needs_reupload' | 'completed' | 'failed',
-    pages?: SessionPage[]
+    pages?: SessionPage[],
+    botReplyText?: string
 ): Promise<void> {
     const admin = createAdminClient()
     const updatePayload: any = { status }
     if (pages) {
         updatePayload.pages = pages
+    }
+    if (botReplyText !== undefined) {
+        updatePayload.bot_reply_text = botReplyText
     }
     await admin
         .from('whatsapp_submission_sessions')

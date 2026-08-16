@@ -1,21 +1,30 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export type GameStatus = "playing" | "won" | "lost";
 export type MascotMood = "neutral" | "happy" | "worried" | "excited" | "thoughtful";
 
-const WORDS = [
-    { word: "GRAVITY", category: "Physics", hint: "What keeps us grounded" },
-    { word: "PLANET", category: "Space", hint: "Earth is one of these" },
-    { word: "OXYGEN", category: "Chemistry", hint: "We breathe this gas" },
-    { word: "NEBULA", category: "Space", hint: "A cloud of gas in space" },
-    { word: "PHOTON", category: "Physics", hint: "A particle of light" },
-    { word: "QUASAR", category: "Space", hint: "An extremely bright galactic nucleus" },
+interface GameWord {
+    word: string;
+    category: string;
+    hint: string;
+}
+
+const STATIC_WORDS: GameWord[] = [
+    { word: "HAPPY", category: "Vocabulary", hint: "Opposite of sad" },
+    { word: "SAD", category: "Vocabulary", hint: "Opposite of happy" },
+    { word: "HUNGRY", category: "Vocabulary", hint: "Need to eat food" },
+    { word: "TIRED", category: "Vocabulary", hint: "Need to sleep / Rest" },
+    { word: "STUDENT", category: "Vocabulary", hint: "One who studies in class" },
+    { word: "BROTHER", category: "Vocabulary", hint: "Male sibling" },
+    { word: "SISTER", category: "Vocabulary", hint: "Female sibling" },
+    { word: "FRIEND", category: "Vocabulary", hint: "A close companion" },
 ];
 
 const MAX_WRONG_ATTEMPTS = 6;
 const FUEL_STEP = 15;
 
 export const useSpaceHangman = () => {
+    const [words, setWords] = useState<GameWord[]>(STATIC_WORDS);
     const [wordIndex, setWordIndex] = useState(0);
     const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
     const [fuelLevel, setFuelLevel] = useState(0);
@@ -24,7 +33,31 @@ export const useSpaceHangman = () => {
     const [mascotMood, setMascotMood] = useState<MascotMood>("neutral");
     const [score, setScore] = useState(0);
 
-    const { word, category, hint } = WORDS[wordIndex];
+    // Fetch active vocabulary from DB endpoint
+    useEffect(() => {
+        const fetchActiveVocab = async () => {
+            try {
+                const res = await fetch('/api/student/active-vocabulary');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && data.vocabulary && data.vocabulary.length > 0) {
+                        const mapped: GameWord[] = data.vocabulary.map((w: string) => ({
+                            word: w.trim().toUpperCase(),
+                            category: `Week ${data.week_number} Vocab`,
+                            hint: `Complete the week's practice word: "${w.trim().toLowerCase()}"`
+                        }));
+                        setWords(mapped);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch dynamic vocabulary list for Space Hangman:", err);
+            }
+        };
+        fetchActiveVocab();
+    }, []);
+
+    const activeWord = words[wordIndex] || STATIC_WORDS[0];
+    const { word, category, hint } = activeWord;
 
     const guessLetter = useCallback(
         (letter: string) => {
@@ -71,9 +104,9 @@ export const useSpaceHangman = () => {
     }, []);
 
     const nextMission = useCallback(() => {
-        setWordIndex((i) => (i + 1) % WORDS.length);
+        setWordIndex((i) => (i + 1) % words.length);
         resetGame();
-    }, [resetGame]);
+    }, [resetGame, words.length]);
 
     return {
         word,
