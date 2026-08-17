@@ -101,17 +101,21 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
         const data = dictResult.data
 
         // Save to DB
-        await adminClient.from('web_submissions').insert({
-            student_name: studentName.trim(),
-            class_standard: classStandard,
-            submission_type: 'dictation',
-            image_path: imagePath,
-            ai_result: data,
-            score: data.score,
-            max_score: data.total_words,   // max possible = 1 per word
-            total_words: data.total_words,
-            status: 'ok',
-        }).catch((e: any) => console.warn('[WebSubmit] DB insert failed (non-fatal):', e.message))
+        try {
+            await adminClient.from('web_submissions').insert({
+                student_name: studentName.trim(),
+                class_standard: classStandard,
+                submission_type: 'dictation',
+                image_path: imagePath,
+                ai_result: data,
+                score: data.score,
+                max_score: data.total_words,
+                total_words: data.total_words,
+                status: 'ok',
+            })
+        } catch (e: any) {
+            console.warn('[WebSubmit] DB insert failed (non-fatal):', e.message)
+        }
 
         return {
             success: true,
@@ -125,14 +129,16 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
 
     if (!hwResult.success || !hwResult.data) {
         // Save error to DB
-        await adminClient.from('web_submissions').insert({
-            student_name: studentName.trim(),
-            class_standard: classStandard,
-            submission_type: 'homework',
-            image_path: imagePath,
-            status: 'error',
-            error_message: hwResult.error || 'Evaluation failed',
-        }).catch(() => {})
+        try {
+            await adminClient.from('web_submissions').insert({
+                student_name: studentName.trim(),
+                class_standard: classStandard,
+                submission_type: 'homework',
+                image_path: imagePath,
+                status: 'error',
+                error_message: hwResult.error || 'Evaluation failed',
+            })
+        } catch (_) {}
 
         return {
             success: false,
@@ -143,16 +149,20 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
     const evalData = hwResult.data
 
     // Save to DB
-    await adminClient.from('web_submissions').insert({
-        student_name: studentName.trim(),
-        class_standard: classStandard,
-        submission_type: 'homework',
-        image_path: imagePath,
-        ai_result: evalData,
-        score: evalData.totalMarks,
-        max_score: evalData.maxMarks,
-        status: 'ok',
-    }).catch((e: any) => console.warn('[WebSubmit] DB insert failed (non-fatal):', e.message))
+    try {
+        await adminClient.from('web_submissions').insert({
+            student_name: studentName.trim(),
+            class_standard: classStandard,
+            submission_type: 'homework',
+            image_path: imagePath,
+            ai_result: evalData,
+            score: evalData.totalMarks,
+            max_score: evalData.maxMarks,
+            status: 'ok',
+        })
+    } catch (e: any) {
+        console.warn('[WebSubmit] DB insert failed (non-fatal):', e.message)
+    }
 
     return {
         success: true,
