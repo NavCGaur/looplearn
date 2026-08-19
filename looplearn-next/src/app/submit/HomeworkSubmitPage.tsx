@@ -27,9 +27,10 @@ function DictationResult({ result, onReset }: { result: NonNullable<WebSubmitRes
     const percent = result.total_words > 0 ? Math.round((result.correct_count / result.total_words) * 100) : 0
     const scoreColor = percent >= 80 ? 'text-green-600' : percent >= 50 ? 'text-yellow-600' : 'text-red-500'
     const bgColor = percent >= 80 ? 'from-green-50 to-emerald-50 border-green-200' : percent >= 50 ? 'from-yellow-50 to-orange-50 border-yellow-200' : 'from-red-50 to-pink-50 border-red-200'
+    const wrongWords = result.words.filter(w => !w.is_correct)
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-5">
             {/* Score header */}
             <div className={`rounded-3xl border-2 bg-gradient-to-br ${bgColor} p-6 text-center`}>
                 <div className="text-5xl mb-2">{percent >= 80 ? '🏆' : percent >= 50 ? '👍' : '📚'}</div>
@@ -37,53 +38,56 @@ function DictationResult({ result, onReset }: { result: NonNullable<WebSubmitRes
                 {result.topic_detected && (
                     <p className="text-sm text-gray-500 mb-3">Topic: <span className="font-semibold text-gray-700">{result.topic_detected}</span></p>
                 )}
-                <div className="flex justify-center gap-6 mt-4">
+                <div className="flex justify-center gap-8 mt-4">
                     <div className="text-center">
                         <div className={`text-4xl font-black ${scoreColor}`}>{result.score > 0 ? `+${result.score}` : result.score}</div>
-                        <div className="text-xs text-gray-500 mt-1">Net Score</div>
+                        <div className="text-xs text-gray-500 mt-1">Score</div>
                     </div>
                     <div className="text-center">
                         <div className="text-4xl font-black text-green-600">{result.correct_count}</div>
-                        <div className="text-xs text-gray-500 mt-1">Correct ✅</div>
+                        <div className="text-xs text-gray-500 mt-1">Correct</div>
                     </div>
                     <div className="text-center">
                         <div className="text-4xl font-black text-red-500">{result.wrong_count}</div>
-                        <div className="text-xs text-gray-500 mt-1">Wrong ❌</div>
+                        <div className="text-xs text-gray-500 mt-1">Wrong</div>
                     </div>
                 </div>
-                <div className="mt-4 bg-white/70 rounded-full h-3 overflow-hidden">
+                <div className="mt-4 bg-white/60 rounded-full h-2.5 overflow-hidden">
                     <div
-                        className={`h-3 rounded-full transition-all duration-700 ${percent >= 80 ? 'bg-green-500' : percent >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                        className={`h-2.5 rounded-full transition-all duration-700 ${percent >= 80 ? 'bg-green-500' : percent >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
                         style={{ width: `${percent}%` }}
                     />
                 </div>
-                <p className="text-sm text-gray-600 mt-2">{percent}% correct ({result.total_words} words)</p>
+                <p className="text-sm text-gray-600 mt-2">{percent}% correct · {result.total_words} words</p>
             </div>
 
-            {/* Word-by-word breakdown */}
-            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-                <div className="px-5 py-3 bg-gray-50 border-b border-gray-100">
-                    <h3 className="font-bold text-gray-700 text-sm">Word-by-Word Breakdown</h3>
+            {/* Wrong words only — numbered list */}
+            {wrongWords.length === 0 ? (
+                <div className="bg-green-50 border border-green-200 rounded-2xl p-5 text-center">
+                    <div className="text-3xl mb-1">🎉</div>
+                    <p className="font-bold text-green-700">Perfect dictation! All words correct.</p>
                 </div>
-                <div className="divide-y divide-gray-50">
-                    {result.words.map((w, i) => (
-                        <div key={i} className={`flex items-center justify-between px-5 py-3 ${w.is_correct ? 'bg-white' : 'bg-red-50/50'}`}>
-                            <div className="flex items-center gap-3">
-                                <span className="text-lg">{w.is_correct ? '✅' : '❌'}</span>
-                                <span className="font-medium text-gray-800">{w.word_written}</span>
-                                {!w.is_correct && (
-                                    <span className="text-sm text-gray-500">
-                                        → <span className="font-semibold text-blue-600">{w.correct_spelling}</span>
-                                    </span>
-                                )}
+            ) : (
+                <div className="bg-white rounded-2xl border border-red-100 overflow-hidden shadow-sm">
+                    <div className="px-5 py-3 bg-red-50 border-b border-red-100 flex items-center gap-2">
+                        <span className="text-red-500 text-base">✏️</span>
+                        <h3 className="font-bold text-red-700 text-sm">Words to Correct ({wrongWords.length})</h3>
+                    </div>
+                    <div className="divide-y divide-red-50">
+                        {wrongWords.map((w, i) => (
+                            <div key={i} className="flex items-center gap-4 px-5 py-3.5">
+                                <span className="text-sm font-black text-red-400 w-6 shrink-0">{i + 1}.</span>
+                                <div className="flex-1">
+                                    <span className="font-medium text-red-600 line-through mr-2">{w.word_written}</span>
+                                    <span className="text-gray-400 text-sm mr-2">→</span>
+                                    <span className="font-bold text-gray-900">{w.correct_spelling}</span>
+                                </div>
+                                <span className="text-xs font-bold text-red-500 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full shrink-0">{w.marks}</span>
                             </div>
-                            <span className={`font-bold text-sm px-2 py-0.5 rounded-full ${w.is_correct ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
-                                {w.marks > 0 ? `+${w.marks}` : w.marks}
-                            </span>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
 
             <button
                 onClick={onReset}
@@ -101,8 +105,16 @@ function HomeworkResult({ result, onReset }: { result: NonNullable<WebSubmitResu
     const scoreColor = percent >= 75 ? 'text-green-600' : percent >= 50 ? 'text-yellow-600' : 'text-red-500'
     const bgColor = percent >= 75 ? 'from-green-50 to-emerald-50 border-green-200' : percent >= 50 ? 'from-yellow-50 to-orange-50 border-yellow-200' : 'from-red-50 to-pink-50 border-red-200'
 
+    // Only show questions where marks were deducted
+    const imperfectQuestions = result.questions.filter(q => q.marks_awarded < q.max_marks)
+    const perfectCount = result.questions.length - imperfectQuestions.length
+
+    // Overall comment lives on the first question object from the AI
+    const overallComment = result.questions[0]?.overall_comment
+
     return (
-        <div className="space-y-6">
+        <div className="space-y-5">
+            {/* Score header */}
             <div className={`rounded-3xl border-2 bg-gradient-to-br ${bgColor} p-6 text-center`}>
                 <div className="text-5xl mb-2">{percent >= 75 ? '🌟' : percent >= 50 ? '👍' : '📖'}</div>
                 <h2 className="text-2xl font-bold text-gray-800 mb-1">Homework Result</h2>
@@ -115,34 +127,60 @@ function HomeworkResult({ result, onReset }: { result: NonNullable<WebSubmitResu
                 <div className={`text-5xl font-black mt-3 ${scoreColor}`}>
                     {result.totalMarks} <span className="text-2xl text-gray-400 font-medium">/ {result.maxMarks}</span>
                 </div>
-                <div className="mt-3 bg-white/70 rounded-full h-3 overflow-hidden">
+                <div className="mt-3 bg-white/60 rounded-full h-2.5 overflow-hidden">
                     <div
-                        className={`h-3 rounded-full transition-all duration-700 ${percent >= 75 ? 'bg-green-500' : percent >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                        className={`h-2.5 rounded-full transition-all duration-700 ${percent >= 75 ? 'bg-green-500' : percent >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
                         style={{ width: `${percent}%` }}
                     />
                 </div>
                 <p className="text-sm text-gray-600 mt-2">{percent}%</p>
+                {/* Summary comment from AI */}
+                {overallComment && (
+                    <p className="text-sm text-gray-600 mt-3 italic">{overallComment}</p>
+                )}
             </div>
 
-            {/* Q&A breakdown */}
-            {result.questions.length > 0 && (
+            {/* Perfect questions badge — simple acknowledgement */}
+            {perfectCount > 0 && imperfectQuestions.length > 0 && (
+                <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-3 flex items-center gap-3">
+                    <span className="text-xl">✅</span>
+                    <p className="text-sm text-green-700 font-medium">
+                        {perfectCount} question{perfectCount > 1 ? 's' : ''} answered perfectly — well done!
+                    </p>
+                </div>
+            )}
+
+            {/* All perfect */}
+            {imperfectQuestions.length === 0 && (
+                <div className="bg-green-50 border border-green-200 rounded-2xl p-5 text-center">
+                    <div className="text-3xl mb-1">🎉</div>
+                    <p className="font-bold text-green-700">All questions answered perfectly!</p>
+                </div>
+            )}
+
+            {/* Only imperfect questions */}
+            {imperfectQuestions.length > 0 && (
                 <div className="space-y-3">
-                    {result.questions.map((q, i) => (
-                        <div key={i} className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="font-bold text-gray-700">Q{q.question_number}</span>
-                                <span className={`font-bold px-3 py-1 rounded-full text-sm ${q.marks_awarded >= q.max_marks ? 'bg-green-100 text-green-700' : q.marks_awarded > 0 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-600'}`}>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide px-1">Needs Improvement</p>
+                    {imperfectQuestions.map((q) => (
+                        <div key={q.question_number} className={`bg-white rounded-2xl border-l-4 ${
+                            q.marks_awarded === 0 ? 'border-red-400' : 'border-orange-400'
+                        } border border-gray-100 p-4 shadow-sm`}>
+                            <div className="flex items-center justify-between mb-2.5">
+                                <span className="font-bold text-gray-800 text-base">Q{q.question_number}</span>
+                                <span className={`font-bold px-3 py-1 rounded-full text-sm ${
+                                    q.marks_awarded === 0 ? 'bg-red-100 text-red-600' : 'bg-orange-100 text-orange-700'
+                                }`}>
                                     {q.marks_awarded} / {q.max_marks}
                                 </span>
                             </div>
-                            {q.what_was_correct && (
-                                <p className="text-sm text-green-700 mb-1">✅ {q.what_was_correct}</p>
+                            {/* What was wrong — primary focus */}
+                            {q.what_was_wrong && q.what_was_wrong !== 'Nothing — full marks!' && (
+                                <p className="text-sm text-red-700 font-medium mb-2">❌ {q.what_was_wrong}</p>
                             )}
-                            {q.what_was_wrong && (
-                                <p className="text-sm text-red-600 mb-1">❌ {q.what_was_wrong}</p>
-                            )}
+                            {/* Tip */}
                             {q.suggestion && (
-                                <p className="text-sm text-blue-600 mt-1">💡 {q.suggestion}</p>
+                                <p className="text-sm text-blue-600">💡 {q.suggestion}</p>
                             )}
                         </div>
                     ))}
