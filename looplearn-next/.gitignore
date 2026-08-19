@@ -52,3 +52,5 @@ get_latest_submissions.js
 set_naveen_phone.js
 *.log
 *.txt
+
+.env*.local

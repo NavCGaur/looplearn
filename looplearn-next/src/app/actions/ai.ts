@@ -597,7 +597,7 @@ ${questionList}
     "marks_awarded": <integer, 0 to max_marks inclusive>,
     "max_marks": <the question's max marks>,
     "what_was_correct": "<specific: which points/facts/steps the student got right>",
-    "what_was_wrong": "<specific: which points/facts/steps were missing or incomplete. Write 'Nothing \u2014 full marks!' if perfect.>",
+    "what_was_wrong": "<specific: which points/facts/steps were missing or incomplete. Write 'Nothing \u2014 full marks!' ONLY if the student got full marks (marks_awarded equals max_marks). If the student lost ANY marks (marks_awarded < max_marks), explain exactly what was wrong or missing, and NEVER write 'Nothing \u2014 full marks!'>",
     "suggestion": "<one concrete, encouraging improvement tip>",
     "diagram_present": <true or false \u2014 ONLY include this field for diagram-type questions>,
     "diagram_labeled": <true or false \u2014 ONLY include this field for diagram-type questions>,
@@ -743,9 +743,9 @@ ${memorySection}**Feedback Language:** ${languageInstructions}
       "marks_awarded": <integer or .5 step, 0 to max_marks>,
       "max_marks": <marks written beside the question>,
       "what_was_correct": "<specific points the student got right>",
-      "what_was_wrong": "<specific points missing or wrong in terms of SCIENTIFIC content only. Write 'Nothing — full marks!' if perfect.>",
+      "what_was_wrong": "<specific points missing or wrong. Write 'Nothing — full marks!' ONLY if the student got full marks (marks_awarded equals max_marks). If the student lost ANY marks (marks_awarded < max_marks), explain exactly what was wrong/missing and NEVER write 'Nothing — full marks!'>",
       "suggestion": "<one concrete improvement tip for scientific content>",
-      "teacher_summary": "<Q[N]: one line direct to student, saying specifically what was missing or wrong. If full marks, write 'Q[N]: Full marks — well done!'. Examples: 'Q1: Mentioned only wind dispersal, missed birds and water as agents' or 'Q2: Formula correct but forgot to include units in final answer'>",
+      "teacher_summary": "<Q[N]: one line direct to student. If the student got full marks (marks_awarded equals max_marks), write 'Q[N]: Full marks — well done!'. If the student lost ANY marks (marks_awarded < max_marks), specify what was missing or wrong and NEVER write 'Full marks — well done!'. Examples: 'Q1: Mentioned only wind dispersal, missed birds and water as agents' or 'Q2: Formula correct but forgot to include units in final answer'>",
       "overall_comment": "<ONLY on question 1: 1-2 sentence warm summary of the student's overall performance>"
     }
   ]
@@ -920,9 +920,9 @@ The following ${answerImages.length} image(s) are the STUDENT'S HANDWRITTEN ANSW
       "marks_awarded": <0 to max_marks in 0.5 steps>,
       "max_marks": <from question paper>,
       "what_was_correct": "<specific points correct, or null if marks_awarded is 0>",
-      "what_was_wrong": "<specific errors, or 'Nothing — full marks!' if perfect>",
+      "what_was_wrong": "<specific errors, or 'Nothing — full marks!' ONLY if the student got full marks (marks_awarded equals max_marks). If the student lost ANY marks (marks_awarded < max_marks), explain exactly what was wrong/missing and NEVER write 'Nothing — full marks!'>",
       "suggestion": "<one specific tip>",
-      "teacher_summary": "<Q[N]: one line direct to student about gap, or 'Q[N]: Full marks — well done!' if perfect>",
+      "teacher_summary": "<Q[N]: one line direct to student. If the student got full marks (marks_awarded equals max_marks), write 'Q[N]: Full marks — well done!'. If the student lost ANY marks (marks_awarded < max_marks), specify what was missing or wrong and NEVER write 'Full marks — well done!'>",
       "overall_comment": "<ONLY on question_number 1: 1-2 sentence warm summary of overall performance>"
     }
   ]
