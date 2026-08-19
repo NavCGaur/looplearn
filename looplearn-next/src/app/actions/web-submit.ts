@@ -89,7 +89,7 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
     // ── Step 2: Try dictation evaluator first ─────────────────────────
     const dictResult = await evaluateDictationSheet(imageData)
 
-    if (dictResult.success && dictResult.data && dictResult.data.total_words >= 3) {
+    if (dictResult.success && dictResult.data && dictResult.data.total_words >= 1) {
         // Looks like a dictation sheet
         const data = dictResult.data
 

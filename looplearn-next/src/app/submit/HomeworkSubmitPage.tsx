@@ -22,6 +22,16 @@ function getFriendlyError(raw: string): string {
     return raw || 'Something went wrong. Please try again.'
 }
 
+// ── Helper to split mistakes into single-line points ────────────────────────
+function parseMistakesLines(raw: string): string[] {
+    if (!raw || raw.includes('Nothing — full marks!') || raw.includes('Nothing - full marks!')) return []
+    const lines = raw
+        .split(/(?:\r?\n|;\s*|\.\s+|\s+aur\s+)/i)
+        .map(s => s.trim())
+        .filter(s => s.length > 0)
+    return lines.length > 0 ? lines : [raw]
+}
+
 // ── Dictation Results Panel ────────────────────────────────────────────────
 function DictationResult({ result, onReset }: { result: NonNullable<WebSubmitResult['dictationResult']>; onReset: () => void }) {
     const percent = result.total_words > 0 ? Math.round((result.correct_count / result.total_words) * 100) : 0
@@ -65,7 +75,7 @@ function DictationResult({ result, onReset }: { result: NonNullable<WebSubmitRes
             {wrongWords.length === 0 ? (
                 <div className="bg-green-50 border border-green-200 rounded-2xl p-5 text-center">
                     <div className="text-3xl mb-1">🎉</div>
-                    <p className="font-bold text-green-700">Perfect dictation! All words correct.</p>
+                    <p className="font-bold text-green-700">All words correct.</p>
                 </div>
             ) : (
                 <div className="bg-white rounded-2xl border border-red-100 overflow-hidden shadow-sm">
@@ -75,11 +85,11 @@ function DictationResult({ result, onReset }: { result: NonNullable<WebSubmitRes
                     </div>
                     <div className="divide-y divide-red-50">
                         {wrongWords.map((w, i) => (
-                            <div key={i} className="flex items-center gap-4 px-5 py-3.5">
+                            <div key={i} className="flex items-center gap-3 px-5 py-3">
                                 <span className="text-sm font-black text-red-400 w-6 shrink-0">{i + 1}.</span>
-                                <div className="flex-1">
-                                    <span className="font-medium text-red-600 line-through mr-2">{w.word_written}</span>
-                                    <span className="text-gray-400 text-sm mr-2">→</span>
+                                <div className="flex-1 flex items-center gap-2 text-sm">
+                                    <span className="font-medium text-red-600 line-through">{w.word_written}</span>
+                                    <span className="text-gray-400">→</span>
                                     <span className="font-bold text-gray-900">{w.correct_spelling}</span>
                                 </div>
                                 <span className="text-xs font-bold text-red-500 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full shrink-0">{w.marks}</span>
@@ -109,9 +119,6 @@ function HomeworkResult({ result, onReset }: { result: NonNullable<WebSubmitResu
     const imperfectQuestions = result.questions.filter(q => q.marks_awarded < q.max_marks)
     const perfectCount = result.questions.length - imperfectQuestions.length
 
-    // Overall comment lives on the first question object from the AI
-    const overallComment = result.questions[0]?.overall_comment
-
     return (
         <div className="space-y-5">
             {/* Score header */}
@@ -134,18 +141,14 @@ function HomeworkResult({ result, onReset }: { result: NonNullable<WebSubmitResu
                     />
                 </div>
                 <p className="text-sm text-gray-600 mt-2">{percent}%</p>
-                {/* Summary comment from AI */}
-                {overallComment && (
-                    <p className="text-sm text-gray-600 mt-3 italic">{overallComment}</p>
-                )}
             </div>
 
-            {/* Perfect questions badge — simple acknowledgement */}
+            {/* Perfect questions badge */}
             {perfectCount > 0 && imperfectQuestions.length > 0 && (
                 <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-3 flex items-center gap-3">
                     <span className="text-xl">✅</span>
                     <p className="text-sm text-green-700 font-medium">
-                        {perfectCount} question{perfectCount > 1 ? 's' : ''} answered perfectly — well done!
+                        {perfectCount} question{perfectCount > 1 ? 's' : ''} answered correctly
                     </p>
                 </div>
             )}
@@ -154,14 +157,14 @@ function HomeworkResult({ result, onReset }: { result: NonNullable<WebSubmitResu
             {imperfectQuestions.length === 0 && (
                 <div className="bg-green-50 border border-green-200 rounded-2xl p-5 text-center">
                     <div className="text-3xl mb-1">🎉</div>
-                    <p className="font-bold text-green-700">All questions answered perfectly!</p>
+                    <p className="font-bold text-green-700">All questions answered correctly.</p>
                 </div>
             )}
 
             {/* Only imperfect questions */}
             {imperfectQuestions.length > 0 && (
                 <div className="space-y-3">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide px-1">Needs Improvement</p>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide px-1">Mistakes to Correct</p>
                     {imperfectQuestions.map((q) => (
                         <div key={q.question_number} className={`bg-white rounded-2xl border-l-4 ${
                             q.marks_awarded === 0 ? 'border-red-400' : 'border-orange-400'
@@ -174,14 +177,15 @@ function HomeworkResult({ result, onReset }: { result: NonNullable<WebSubmitResu
                                     {q.marks_awarded} / {q.max_marks}
                                 </span>
                             </div>
-                            {/* What was wrong — primary focus */}
-                            {q.what_was_wrong && q.what_was_wrong !== 'Nothing — full marks!' && (
-                                <p className="text-sm text-red-700 font-medium mb-2">❌ {q.what_was_wrong}</p>
-                            )}
-                            {/* Tip */}
-                            {q.suggestion && (
-                                <p className="text-sm text-blue-600">💡 {q.suggestion}</p>
-                            )}
+                            {/* Mistakes list — line by line */}
+                            <div className="space-y-1.5">
+                                {parseMistakesLines(q.what_was_wrong).map((line, idx) => (
+                                    <div key={idx} className="flex items-start gap-2 text-sm text-red-700 font-medium">
+                                        <span className="shrink-0">❌</span>
+                                        <span>{line}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     ))}
                 </div>

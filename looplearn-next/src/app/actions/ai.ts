@@ -729,7 +729,7 @@ The image contains a self-written practice sheet where the student has written:
 
 ${memorySection}**Feedback Language:** ${languageInstructions}
 
-**Tone:** Supportive, encouraging, and DIRECT. Address the student directly in the second person (e.g., use "Aapne", "Aapka", "Aap" in Hinglish, or "You", "Your" in English). NEVER address them in the third person (do NOT use "Student", "Student ne", "Student ko", "He", "She", or "They"). Talk to them as if you are their personal friendly tutor! Acknowledge what was right before pointing out mistakes. Phrase missing marks as a learning opportunity, not a failure.
+**Tone:** DIRECT, CONCISE, and PURELY FACTUAL. Do NOT include encouraging intro sentences, praise, or polite filler (e.g. do NOT write "Bahut accha effort hai!", "Aapki vocabulary strong hai", "Good try", etc.). State ONLY the exact mistakes and corrections.
 
 **CRITICAL: Return ONLY a valid JSON object. No markdown, no prose outside the JSON. Use this exact schema:**
 {
@@ -743,10 +743,10 @@ ${memorySection}**Feedback Language:** ${languageInstructions}
       "marks_awarded": <integer or .5 step, 0 to max_marks>,
       "max_marks": <marks written beside the question>,
       "what_was_correct": "<specific points the student got right>",
-      "what_was_wrong": "<specific points missing or wrong. Write 'Nothing — full marks!' ONLY if the student got full marks (marks_awarded equals max_marks). If the student lost ANY marks (marks_awarded < max_marks), explain exactly what was wrong/missing and NEVER write 'Nothing — full marks!'>",
-      "suggestion": "<one concrete improvement tip for scientific content>",
-      "teacher_summary": "<Q[N]: one line direct to student. If the student got full marks (marks_awarded equals max_marks), write 'Q[N]: Full marks — well done!'. If the student lost ANY marks (marks_awarded < max_marks), specify what was missing or wrong and NEVER write 'Full marks — well done!'. Examples: 'Q1: Mentioned only wind dispersal, missed birds and water as agents' or 'Q2: Formula correct but forgot to include units in final answer'>",
-      "overall_comment": "<ONLY on question 1: 1-2 sentence warm summary of the student's overall performance>"
+      "what_was_wrong": "<concise list of errors. If multiple mistakes or spelling errors exist, separate each mistake onto a NEW line (e.g. \"Corosion -> Corrosion\\nevathering -> Weathering\"). Write 'Nothing — full marks!' ONLY if marks_awarded equals max_marks.>",
+      "suggestion": "",
+      "teacher_summary": "<Q[N]: one line direct to student specifying exact missing/wrong points>",
+      "overall_comment": ""
     }
   ]
 }`
