@@ -905,7 +905,7 @@ The following ${answerImages.length} image(s) are the STUDENT'S HANDWRITTEN ANSW
 4. Unattempted questions are NOT included in the output at all.
 5. Marks: full if correct, partial if partially correct, 0 if clearly wrong.
 6. If marks_awarded is 0, set what_was_correct to null (student got nothing right).
-7. what_was_wrong: if full marks, write exactly "Nothing — full marks!". Otherwise explain the scientific error.
+7. what_was_wrong: Write "Nothing — full marks!" ONLY if marks_awarded equals max_marks. If the student lost ANY marks (marks_awarded < max_marks), explain exactly what was wrong or missing — NEVER write "Nothing — full marks!" for a partial-mark answer.
 8. suggestion: one concrete, specific improvement tip.
 
 **Return ONLY valid JSON, no markdown:**
