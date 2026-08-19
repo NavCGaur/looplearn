@@ -8,7 +8,7 @@
 // ============================================================
 
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
-import { evaluateDictationSheet, evaluateQuickPracticeSheet, DictationEvalResult } from './ai'
+import { evaluateDictationSheet, evaluateQuickPracticeSheet, DictationEvalResult, QuestionEvalResult } from './ai'
 
 function createAdminClient() {
     return createSupabaseClient(
@@ -35,14 +35,7 @@ export interface WebSubmitResult {
         detected_chapter: string
         totalMarks: number
         maxMarks: number
-        questions: {
-            question_number: number
-            marks_awarded: number
-            max_marks: number
-            what_was_correct: string
-            what_was_wrong: string
-            suggestion: string
-        }[]
+        questions: QuestionEvalResult[]
     }
     error?: string
 }
