@@ -141,7 +141,7 @@ export function LeaderboardClient({ topFive, totalCount, hasError }: Leaderboard
                                     initial={{ opacity: 0, x: -20 }}
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 0.4, delay: index * 0.08 }}
+                                    transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.4) }}
                                     whileHover={{ scale: 1.02, x: 5 }}
                                 >
                                     {/* Rank */}
