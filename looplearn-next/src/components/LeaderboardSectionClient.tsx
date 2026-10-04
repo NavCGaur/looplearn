@@ -73,11 +73,6 @@ const getInitials = (name: string) => {
     return name.slice(0, 2).toUpperCase()
 }
 
-const getInitialScore = (score: number, max: number) => {
-    if (max <= 0) return 0
-    return Math.round((score / max) * 100)
-}
-
 export function LeaderboardClient({ topFive, totalCount, hasError }: LeaderboardClientProps) {
     return (
         <section id="leaderboard" className="py-20 md:py-28 relative overflow-hidden">
@@ -127,8 +122,8 @@ export function LeaderboardClient({ topFive, totalCount, hasError }: Leaderboard
                     <div className="grid grid-cols-12 gap-2 px-4 py-3 mb-2 text-sm font-semibold text-muted-foreground font-fredoka">
                         <div className="col-span-1 text-center">#</div>
                         <div className="col-span-5 md:col-span-5">Student</div>
-                        <div className="col-span-2 text-center">Class</div>
-                        <div className="col-span-4 md:col-span-4 text-center">Score</div>
+                        <div className="col-span-3 text-center">Class</div>
+                        <div className="col-span-3 text-right pr-4">Score</div>
                     </div>
 
                     {/* Leaderboard Rows */}
@@ -171,19 +166,17 @@ export function LeaderboardClient({ topFive, totalCount, hasError }: Leaderboard
                                     </div>
 
                                     {/* Class */}
-                                    <div className="col-span-2 text-center">
-                                        <span className="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
-                                            Cl. {player.class_standard}
+                                    <div className="col-span-3 text-center">
+                                        <span className="text-xs font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">
+                                            Class {player.class_standard}
                                         </span>
                                     </div>
 
                                     {/* Score */}
-                                    <div className="col-span-4 md:col-span-4 text-center">
-                                        <span className="font-bold font-fredoka text-primary">
+                                    <div className="col-span-3 text-right pr-4">
+                                        <span className="font-bold font-fredoka text-xl text-primary">
                                             {player.score}
                                         </span>
-                                        <span className="text-xs text-muted-foreground ml-1">/ {player.max_score}</span>
-                                        <div className="text-xs text-gray-400">{player.percent}%</div>
                                     </div>
                                 </motion.div>
                             ))

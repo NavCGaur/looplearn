@@ -4,8 +4,7 @@
 // Web Homework Submit — Public Server Action
 // Handles submissions from /submit (no auth required).
 // Students explicitly choose: 'dictation' | 'homework'
-// so we skip the double-API-call fallback.
-// Saves result to web_submissions table.
+// Saves result to web_submissions table & accumulates leaderboard scores.
 // ============================================================
 
 import { headers } from 'next/headers'
@@ -44,10 +43,6 @@ export interface WebSubmitResult {
 }
 
 // ── IP Rate Limiter ────────────────────────────────────────────────────────
-// Max 3 submissions per IP in a 2-minute sliding window.
-// Uses a simple in-process Map to avoid extra DB round-trips.
-// Note: On Vercel each cold start gets a fresh Map, so this is best-effort.
-// A Supabase-based check is more reliable for production at scale.
 const ipSubmissionLog = new Map<string, number[]>()
 const RATE_WINDOW_MS = 2 * 60 * 1000  // 2 minutes
 const RATE_LIMIT = 3                   // max submissions per window
@@ -132,7 +127,6 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
         const dictResult = await evaluateDictationSheet(imageData)
 
         if (!dictResult.success || !dictResult.data) {
-            // Save error to DB (non-fatal) and return error to user
             try {
                 await adminClient.from('web_submissions').insert({
                     student_name: studentName.trim(),
@@ -168,13 +162,23 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
             console.error('[WebSubmit] DB insert failed for dictation result:', dbErr.message)
         }
 
-        // Upsert into exam_scores leaderboard (dictation: score = correct words)
+        // Upsert into exam_scores leaderboard (accumulate score on multiple test submissions)
         try {
+            const { data: existingDictScore } = await adminClient
+                .from('exam_scores')
+                .select('score, max_score')
+                .eq('student_name', studentName.trim())
+                .eq('class_standard', classStandard)
+                .maybeSingle()
+
+            const cumulativeScore = (existingDictScore?.score ? Number(existingDictScore.score) : 0) + (data.score || 0)
+            const cumulativeMax = (existingDictScore?.max_score ? Number(existingDictScore.max_score) : 0) + (data.total_words || 1)
+
             await adminClient.from('exam_scores').upsert({
                 student_name: studentName.trim(),
                 class_standard: classStandard,
-                score: data.score,
-                max_score: data.total_words || 1,
+                score: cumulativeScore,
+                max_score: cumulativeMax,
                 submission_type: 'dictation',
                 updated_at: new Date().toISOString(),
             }, { onConflict: 'student_name,class_standard' })
@@ -193,7 +197,6 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
     const hwResult = await evaluateQuickPracticeSheet(imageBase64, imageMimeType, 'hinglish')
 
     if (!hwResult.success || !hwResult.data) {
-        // Save error to DB (non-fatal)
         try {
             await adminClient.from('web_submissions').insert({
                 student_name: studentName.trim(),
@@ -229,13 +232,23 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
         console.error('[WebSubmit] DB insert failed for homework result:', dbErr.message)
     }
 
-    // Upsert into exam_scores leaderboard (homework: score = totalMarks out of maxMarks)
+    // Upsert into exam_scores leaderboard (accumulate score on multiple test submissions)
     try {
+        const { data: existingHwScore } = await adminClient
+            .from('exam_scores')
+            .select('score, max_score')
+            .eq('student_name', studentName.trim())
+            .eq('class_standard', classStandard)
+            .maybeSingle()
+
+        const cumulativeScore = (existingHwScore?.score ? Number(existingHwScore.score) : 0) + (evalData.totalMarks || 0)
+        const cumulativeMax = (existingHwScore?.max_score ? Number(existingHwScore.max_score) : 0) + (evalData.maxMarks || 100)
+
         await adminClient.from('exam_scores').upsert({
             student_name: studentName.trim(),
             class_standard: classStandard,
-            score: evalData.totalMarks,
-            max_score: evalData.maxMarks || 100,
+            score: cumulativeScore,
+            max_score: cumulativeMax,
             submission_type: 'homework',
             updated_at: new Date().toISOString(),
         }, { onConflict: 'student_name,class_standard' })
