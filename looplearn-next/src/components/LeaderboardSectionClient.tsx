@@ -1,15 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Flame, Trophy, Medal, Crown, Sparkles } from "lucide-react";
+import { Trophy, Medal, Crown, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 
 interface LeaderboardPlayer {
     id: string
-    display_name: string
-    points: number
+    student_name: string
+    score: number
+    max_score: number
+    class_standard: number
+    percent: number
     rank: number
 }
 
@@ -70,8 +73,9 @@ const getInitials = (name: string) => {
     return name.slice(0, 2).toUpperCase()
 }
 
-const getStreak = (points: number) => {
-    return Math.floor(points / 100)
+const getInitialScore = (score: number, max: number) => {
+    if (max <= 0) return 0
+    return Math.round((score / max) * 100)
 }
 
 export function LeaderboardClient({ topFive, totalCount, hasError }: LeaderboardClientProps) {
@@ -122,9 +126,9 @@ export function LeaderboardClient({ topFive, totalCount, hasError }: Leaderboard
                     {/* Table Header */}
                     <div className="grid grid-cols-12 gap-2 px-4 py-3 mb-2 text-sm font-semibold text-muted-foreground font-fredoka">
                         <div className="col-span-1 text-center">#</div>
-                        <div className="col-span-5 md:col-span-6">Player</div>
-                        <div className="col-span-3 text-center">Points</div>
-                        <div className="col-span-3 md:col-span-2 text-center">Streak</div>
+                        <div className="col-span-5 md:col-span-5">Student</div>
+                        <div className="col-span-2 text-center">Class</div>
+                        <div className="col-span-4 md:col-span-4 text-center">Score</div>
                     </div>
 
                     {/* Leaderboard Rows */}
@@ -151,33 +155,35 @@ export function LeaderboardClient({ topFive, totalCount, hasError }: Leaderboard
                                     </div>
 
                                     {/* Avatar & Name */}
-                                    <div className="col-span-5 md:col-span-6 flex items-center gap-3">
+                                    <div className="col-span-5 md:col-span-5 flex items-center gap-3">
                                         <Avatar className={`w-10 h-10 ${player.rank <= 3 ? "ring-2 ring-offset-2" : ""} ${player.rank === 1 ? "ring-loop-yellow" : player.rank === 2 ? "ring-gray-400" : player.rank === 3 ? "ring-amber-500" : ""}`}>
                                             <AvatarImage src="" />
                                             <AvatarFallback className={`${getAvatarGradient(player.rank)} text-white font-bold text-sm`}>
-                                                {getInitials(player.display_name)}
+                                                {getInitials(player.student_name)}
                                             </AvatarFallback>
                                         </Avatar>
                                         <span className="font-semibold font-fredoka text-foreground truncate">
-                                            {player.display_name}
+                                            {player.student_name}
                                             {player.rank === 1 && (
                                                 <Sparkles className="inline w-4 h-4 ml-1 text-loop-yellow" />
                                             )}
                                         </span>
                                     </div>
 
-                                    {/* Points */}
-                                    <div className="col-span-3 text-center">
-                                        <span className="font-bold font-fredoka text-primary">
-                                            {player.points.toLocaleString()}
+                                    {/* Class */}
+                                    <div className="col-span-2 text-center">
+                                        <span className="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
+                                            Cl. {player.class_standard}
                                         </span>
-                                        <span className="text-xs text-muted-foreground ml-1">pts</span>
                                     </div>
 
-                                    {/* Streak */}
-                                    <div className="col-span-3 md:col-span-2 flex items-center justify-center gap-1">
-                                        <Flame className={`w-5 h-5 ${getStreak(player.points) >= 30 ? "text-orange-500 fill-orange-400" : getStreak(player.points) >= 15 ? "text-orange-400 fill-orange-300" : "text-orange-300 fill-orange-200"}`} />
-                                        <span className="font-bold font-fredoka text-foreground">{getStreak(player.points)}</span>
+                                    {/* Score */}
+                                    <div className="col-span-4 md:col-span-4 text-center">
+                                        <span className="font-bold font-fredoka text-primary">
+                                            {player.score}
+                                        </span>
+                                        <span className="text-xs text-muted-foreground ml-1">/ {player.max_score}</span>
+                                        <div className="text-xs text-gray-400">{player.percent}%</div>
                                     </div>
                                 </motion.div>
                             ))

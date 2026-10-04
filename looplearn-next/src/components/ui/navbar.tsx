@@ -70,8 +70,8 @@ export function Navbar({ user, profile }: NavbarProps) {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // Hide Navbar on dashboard and teacher routes (but NOT leaderboard)
-    if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/teacher')) {
+    // Hide Navbar on dashboard, teacher, web-submissions, and submit routes
+    if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/teacher') || pathname?.startsWith('/web-submissions') || pathname?.startsWith('/submit')) {
         return null;
     }
 

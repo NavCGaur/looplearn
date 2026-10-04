@@ -1,80 +1,108 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { logSupabaseError } from '@/lib/utils/error-logger'
 
+function createAdminClient() {
+    return createSupabaseClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        { auth: { persistSession: false } }
+    )
+}
+
+export interface ExamLeaderboardEntry {
+    id: string
+    student_name: string
+    class_standard: number
+    score: number
+    max_score: number
+    submission_type: string
+    submitted_at: string
+    rank: number
+    class_rank: number | null
+    percent: number
+}
+
+export interface ExamLeaderboardData {
+    leaderboard: ExamLeaderboardEntry[]
+    hasError?: boolean
+}
+
 /**
- * Get leaderboard data
+ * Get leaderboard data from exam_scores table
  */
-export async function getLeaderboardData(classStandard?: number) {
-    const supabase = await createClient()
+export async function getLeaderboardData(classStandard?: number): Promise<ExamLeaderboardData> {
+    const adminClient = createAdminClient()
 
-    // Get current user
-    const { data: { user } } = await supabase.auth.getUser()
+    let query = adminClient
+        .from('exam_scores')
+        .select('id, student_name, class_standard, score, max_score, submission_type, submitted_at')
+        .order('score', { ascending: false })
+        .order('updated_at', { ascending: true }) // tie-break: earlier submission ranks higher
 
-    // Query profiles directly for real-time data (better than materialized view)
-    let query = supabase
-        .from('profiles')
-        .select('id, display_name, points, class_standard, role')
-        .eq('role', 'student') // Only show students on leaderboard
-        .order('points', { ascending: false })
-
-    // If classStandard is provided, filter by class
     if (classStandard) {
         query = query.eq('class_standard', classStandard)
     }
 
-    const { data: profiles, error } = await query.limit(100)
+    const { data, error } = await query.limit(200)
 
     if (error) {
         logSupabaseError('Leaderboard error', error)
-        return {
-            leaderboard: [],
-            currentUser: null,
-            userRank: null,
-            hasError: true
-        }
+        return { leaderboard: [], hasError: true }
     }
 
-    // Add ranks to the leaderboard
-    const leaderboard = (profiles || []).map((profile, index) => ({
-        ...profile,
+    const entries = (data || []).map((row: any, index: number) => ({
+        id: row.id,
+        student_name: row.student_name,
+        class_standard: row.class_standard,
+        score: Number(row.score),
+        max_score: Number(row.max_score) || 100,
+        submission_type: row.submission_type || 'homework',
+        submitted_at: row.submitted_at,
         rank: index + 1,
-        class_rank: null as number | null, // Will be calculated if filtering by class
+        class_rank: classStandard ? index + 1 : null,
+        percent: row.max_score > 0 ? Math.round((Number(row.score) / Number(row.max_score)) * 100) : 0,
     }))
 
-    // If filtering by class, recalculate class ranks
-    if (classStandard) {
-        leaderboard.forEach((entry, index) => {
-            entry.class_rank = index + 1
-        })
-    }
-
-    // Find current user in leaderboard
-    const currentUserEntry = user ? leaderboard.find(entry => entry.id === user.id) || null : null
-    const userRank = currentUserEntry ? (classStandard ? currentUserEntry.class_rank : currentUserEntry.rank) : null
-
-    return {
-        leaderboard,
-        currentUser: currentUserEntry,
-        userRank,
-    }
+    return { leaderboard: entries }
 }
 
 /**
- * Get available classes for filtering
+ * Get available classes that have submitted exam scores
  */
-export async function getAvailableClasses() {
-    const supabase = await createClient()
+export async function getAvailableClasses(): Promise<number[]> {
+    const adminClient = createAdminClient()
 
-    const { data } = await supabase
-        .from('profiles')
+    const { data } = await adminClient
+        .from('exam_scores')
         .select('class_standard')
         .not('class_standard', 'is', null)
         .order('class_standard', { ascending: true })
 
-    // Get unique classes
-    const classes = [...new Set(data?.map(p => p.class_standard) || [])]
+    const classes = [...new Set((data || []).map((r: any) => r.class_standard))]
+    return classes.filter((c): c is number => c !== null)
+}
 
-    return classes.filter(c => c !== null) as number[]
+/**
+ * Reset all exam scores (teacher action — clean slate)
+ */
+export async function resetExamScores(): Promise<{ success: boolean; error?: string }> {
+    try {
+        const adminClient = createAdminClient()
+        // Delete all rows (service role bypasses RLS)
+        const { error } = await adminClient
+            .from('exam_scores')
+            .delete()
+            .neq('id', '00000000-0000-0000-0000-000000000000') // delete all
+
+        if (error) {
+            console.error('[resetExamScores]', error.message)
+            return { success: false, error: error.message }
+        }
+        return { success: true }
+    } catch (err: any) {
+        console.error('[resetExamScores] exception:', err.message)
+        return { success: false, error: err.message }
+    }
 }

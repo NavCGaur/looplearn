@@ -1,8 +1,14 @@
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { getLeaderboardData, getAvailableClasses } from '@/app/actions/leaderboard'
 import { LeaderboardClient } from '@/components/leaderboard/leaderboard-client'
 import { getUser } from '@/app/actions/auth'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
+
+export const metadata: Metadata = {
+    title: 'Leaderboard — LoopLearnX',
+    description: 'See top student scores from the English Foundation Test. Track performance by class and rank.',
+}
 
 function LeaderboardLoading() {
     return (
@@ -12,8 +18,9 @@ function LeaderboardLoading() {
     )
 }
 
-async function LeaderboardContent({ searchParams }: { searchParams: { class?: string } }) {
-    const classFilter = searchParams.class ? parseInt(searchParams.class) : undefined
+async function LeaderboardContent({ searchParams }: { searchParams: Promise<{ class?: string }> }) {
+    const params = await searchParams
+    const classFilter = params.class ? parseInt(params.class) : undefined
     const data = await getLeaderboardData(classFilter)
     const availableClasses = await getAvailableClasses()
     const userData = await getUser()
@@ -22,7 +29,7 @@ async function LeaderboardContent({ searchParams }: { searchParams: { class?: st
         <LeaderboardClient
             data={data}
             availableClasses={availableClasses}
-            user={userData}
+            user={userData || null}
             profile={userData?.profile || null}
         />
     )
@@ -31,7 +38,7 @@ async function LeaderboardContent({ searchParams }: { searchParams: { class?: st
 export default async function LeaderboardPage({
     searchParams,
 }: {
-    searchParams: { class?: string }
+    searchParams: Promise<{ class?: string }>
 }) {
     return (
         <Suspense fallback={<LeaderboardLoading />}>

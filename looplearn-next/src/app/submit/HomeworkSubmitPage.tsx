@@ -4,6 +4,8 @@ import { useState, useRef, useCallback } from 'react'
 import { submitHomeworkFromWeb, WebSubmitResult } from '@/app/actions/web-submit'
 import { stitchImages } from '@/lib/utils/image-stitcher'
 
+type SubmissionType = 'homework' | 'dictation'
+
 // ── Constants ──────────────────────────────────────────────────────────────
 const MAX_IMAGES = 6
 const CLASS_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -205,6 +207,7 @@ function HomeworkResult({ result, onReset }: { result: NonNullable<WebSubmitResu
 export function HomeworkSubmitPage() {
     const [studentName, setStudentName] = useState('')
     const [classStandard, setClassStandard] = useState<number | ''>('')
+    const [submissionType, setSubmissionType] = useState<SubmissionType>('homework')
     const [files, setFiles] = useState<File[]>([])
     const [previews, setPreviews] = useState<string[]>([])
     const [stitchedPreview, setStitchedPreview] = useState<string | null>(null)
@@ -255,6 +258,7 @@ export function HomeworkSubmitPage() {
                 classStandard: Number(classStandard),
                 imageBase64: base64,
                 imageMimeType: mimeType,
+                submissionType,
             })
             if (!res.success) {
                 setError(getFriendlyError(res.error || ''))
@@ -356,10 +360,47 @@ export function HomeworkSubmitPage() {
                         </select>
                     </div>
 
+                    {/* Submission type toggle */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            📋 What are you submitting?
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                            <button
+                                type="button"
+                                id="type-homework"
+                                onClick={() => setSubmissionType('homework')}
+                                className={`flex flex-col items-center gap-1.5 py-3 px-3 rounded-xl border-2 text-sm font-semibold transition-all ${
+                                    submissionType === 'homework'
+                                        ? 'border-indigo-500 bg-indigo-50 text-indigo-700 shadow-sm'
+                                        : 'border-gray-200 bg-white text-gray-500 hover:border-indigo-200 hover:bg-indigo-50/30'
+                                }`}
+                            >
+                                <span className="text-xl">📝</span>
+                                <span>Q&A Homework</span>
+                                <span className="text-xs font-normal opacity-70">Questions &amp; answers</span>
+                            </button>
+                            <button
+                                type="button"
+                                id="type-dictation"
+                                onClick={() => setSubmissionType('dictation')}
+                                className={`flex flex-col items-center gap-1.5 py-3 px-3 rounded-xl border-2 text-sm font-semibold transition-all ${
+                                    submissionType === 'dictation'
+                                        ? 'border-purple-500 bg-purple-50 text-purple-700 shadow-sm'
+                                        : 'border-gray-200 bg-white text-gray-500 hover:border-purple-200 hover:bg-purple-50/30'
+                                }`}
+                            >
+                                <span className="text-xl">✏️</span>
+                                <span>Dictation Sheet</span>
+                                <span className="text-xs font-normal opacity-70">Word spelling list</span>
+                            </button>
+                        </div>
+                    </div>
+
                     {/* Upload area */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                            📸 Upload Homework Photo(s)
+                            📸 Upload {submissionType === 'dictation' ? 'Dictation Sheet' : 'Homework'} Photo(s)
                         </label>
                         <p className="text-xs text-gray-400 mb-2">
                             Up to {MAX_IMAGES} photos · JPG, PNG, WEBP · Good lighting = better results
@@ -368,7 +409,9 @@ export function HomeworkSubmitPage() {
                             onClick={() => inputRef.current?.click()}
                             className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all
                                 ${files.length > 0
-                                    ? 'border-indigo-400 bg-indigo-50'
+                                    ? submissionType === 'dictation'
+                                        ? 'border-purple-400 bg-purple-50'
+                                        : 'border-indigo-400 bg-indigo-50'
                                     : 'border-gray-300 hover:border-indigo-400 hover:bg-indigo-50/40'
                                 }`}
                         >
@@ -376,7 +419,11 @@ export function HomeworkSubmitPage() {
                             <p className="text-gray-600 font-medium text-sm">
                                 {files.length > 0 ? `${files.length} photo(s) selected` : 'Tap to select photo(s)'}
                             </p>
-                            <p className="text-gray-400 text-xs mt-1">Works for dictation sheets and Q&A homework</p>
+                            <p className="text-gray-400 text-xs mt-1">
+                                {submissionType === 'dictation'
+                                    ? 'Photo of your dictation word list'
+                                    : 'Photo of your Q&A answer sheet'}
+                            </p>
                             <input
                                 ref={inputRef}
                                 type="file"
@@ -442,9 +489,20 @@ export function HomeworkSubmitPage() {
                     id="submit-btn"
                     onClick={handleSubmit}
                     disabled={submitting || stitching || files.length === 0}
-                    className="w-full py-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold rounded-2xl text-lg shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
+                    className={`w-full py-4 text-white font-bold rounded-2xl text-lg shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100 ${
+                        submissionType === 'dictation'
+                            ? 'bg-gradient-to-r from-purple-600 to-violet-600'
+                            : 'bg-gradient-to-r from-indigo-600 to-blue-600'
+                    }`}
                 >
-                    {submitting ? '🔍 AI is evaluating your sheet...' : '🚀 Submit for Evaluation'}
+                    {submitting
+                        ? submissionType === 'dictation'
+                            ? '🔍 Checking your dictation...'
+                            : '🔍 AI is evaluating your sheet...'
+                        : submissionType === 'dictation'
+                            ? '🚀 Submit Dictation'
+                            : '🚀 Submit for Evaluation'
+                    }
                 </button>
 
                 {submitting && (
@@ -455,7 +513,7 @@ export function HomeworkSubmitPage() {
 
                 {/* Footer note */}
                 <p className="text-center text-xs text-gray-400 pb-4">
-                    Powered by LoopLearnX · Works for dictation sheets &amp; Q&amp;A homework
+                    Powered by LoopLearnX · {submissionType === 'dictation' ? 'Dictation evaluation' : 'Q&A homework evaluation'}
                 </p>
             </div>
         </div>

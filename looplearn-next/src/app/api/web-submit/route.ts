@@ -7,7 +7,7 @@ export const maxDuration = 120
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json()
-        const { studentName, classStandard, imageBase64, imageMimeType } = body
+        const { studentName, classStandard, imageBase64, imageMimeType, submissionType } = body
 
         if (!studentName || !classStandard || !imageBase64) {
             return NextResponse.json(
@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
             classStandard: parseInt(classStandard, 10),
             imageBase64,
             imageMimeType: imageMimeType || 'image/jpeg',
+            submissionType: submissionType === 'dictation' ? 'dictation' : 'homework',
         })
 
         return NextResponse.json(result)

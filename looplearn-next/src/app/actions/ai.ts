@@ -7,7 +7,11 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createClient } from '@/lib/supabase/server'
 
-// Initialize Gemini with transient error retries (503 / 429)
+// Initialize Gemini with separate retry strategies for 429 (rate-limit) vs 503 (server overload)
+// IMPORTANT: On Vercel Hobby, all retries run inside the same 60s function window.
+// 503 retries: max 2 attempts, 5s → 10s wait  (adds ~15s overhead)
+// 429 retries: max 2 attempts, 15s → 30s wait (adds ~45s overhead — risky on Hobby, but necessary)
+// Total max retries = 2 per error type to avoid function timeout.
 const rawGenAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '')
 const genAI = {
     getGenerativeModel(options: any) {
@@ -16,22 +20,43 @@ const genAI = {
             get(target, prop, receiver) {
                 if (prop === 'generateContent') {
                     return async function(contents: any[]) {
-                        let delay = 2000
-                        const maxRetries = 4
-                        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                        const MAX_RETRIES = 2 // max 2 retries (3 total attempts)
+                        for (let attempt = 1; attempt <= MAX_RETRIES + 1; attempt++) {
                             try {
                                 return await target.generateContent(contents)
                             } catch (error: any) {
-                                const isTransient = 
-                                    error.status === 503 || 
-                                    error.status === 429 || 
-                                    (error.message && (error.message.includes('503') || error.message.includes('429') || error.message.includes('Service Unavailable') || error.message.includes('quota') || error.message.includes('high demand') || error.message.includes('fetch failed')))
+                                const msg = error.message ?? ''
+                                const is429 =
+                                    error.status === 429 ||
+                                    msg.includes('429') ||
+                                    msg.includes('quota') ||
+                                    msg.includes('RESOURCE_EXHAUSTED') ||
+                                    msg.includes('Too Many Requests')
+                                const is503 =
+                                    error.status === 503 ||
+                                    msg.includes('503') ||
+                                    msg.includes('Service Unavailable') ||
+                                    msg.includes('high demand') ||
+                                    msg.includes('overloaded') ||
+                                    msg.includes('fetch failed')
 
-                                if (isTransient && attempt < maxRetries) {
-                                    console.warn(`[Gemini Retry] Attempt ${attempt} failed with transient error: ${error.message || error}. Retrying in ${delay}ms...`)
-                                    await new Promise(resolve => setTimeout(resolve, delay))
-                                    delay *= 2
+                                if (attempt > MAX_RETRIES) {
+                                    // All retries exhausted — rethrow
+                                    throw error
+                                }
+
+                                if (is429) {
+                                    // Rate-limited: wait longer (15s first retry, 30s second)
+                                    const waitMs = attempt === 1 ? 15000 : 30000
+                                    console.warn(`[Gemini 429] Rate limit hit on attempt ${attempt}. Waiting ${waitMs / 1000}s before retry...`)
+                                    await new Promise(resolve => setTimeout(resolve, waitMs))
+                                } else if (is503) {
+                                    // Server overloaded: shorter wait (5s first retry, 10s second)
+                                    const waitMs = attempt === 1 ? 5000 : 10000
+                                    console.warn(`[Gemini 503] Server overloaded on attempt ${attempt}. Waiting ${waitMs / 1000}s before retry...`)
+                                    await new Promise(resolve => setTimeout(resolve, waitMs))
                                 } else {
+                                    // Non-transient error (auth, bad request, etc.) — do not retry
                                     throw error
                                 }
                             }
@@ -134,7 +159,7 @@ export async function generateQuestions(
         }
 
         // 3. Construct Prompt
-        const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-3.5-flash-lite' })
 
         const systemPrompt = `You are an expert CBSE curriculum teacher for Class 6 to 10 students in India. You specialize in creating clear, accurate, and age-appropriate quiz questions strictly following the NCERT syllabus.`
 
@@ -379,7 +404,7 @@ export async function generateQuestionsFromPDF(
         }
 
         // 2. Build the same prompt schema as generateQuestions
-        const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-3.5-flash-lite' })
 
         let specificInstructions = ''
         let jsonSchema = ''
@@ -507,7 +532,7 @@ export async function evaluateSubjectiveAnswers(
             throw new Error('Gemini API Key not configured')
         }
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-3.5-flash-lite' })
 
         // Build question list for the prompt
         // Build per-question instructions based on type — theory questions are NOT checked for Given/To Find
@@ -682,7 +707,7 @@ export async function evaluateQuickPracticeSheet(
             throw new Error('Gemini API Key not configured')
         }
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
+        const model = genAI.getGenerativeModel({ model: 'gemini-3.5-flash-lite' })
 
         const languageInstructions = feedbackLanguage === 'hinglish'
             ? `Write ALL feedback fields in Hinglish (natural mix of conversational Hindi in Roman script + English). Keep scientific terms, formulas, and CBSE keywords in English. Do NOT use Devanagari script.`
@@ -815,7 +840,7 @@ export async function extractQuestionsFromPaper(
 ): Promise<{ success: boolean; data?: { questions: { q_number: number; question_text: string; marks: number }[]; totalMarks: number }; error?: string }> {
     try {
         const model = genAI.getGenerativeModel({
-            model: 'gemini-flash-latest',
+            model: 'gemini-3.5-flash-lite',
             generationConfig: {
                 temperature: 0.0,  // Pure extraction — zero creativity
                 topP: 1,
@@ -880,7 +905,7 @@ export async function evaluateAssignmentAnswers(
 ): Promise<{ success: boolean; data?: QuickPracticeEvalResult; error?: string }> {
     try {
         const model = genAI.getGenerativeModel({
-            model: 'gemini-flash-latest',
+            model: 'gemini-3.5-flash-lite',
             generationConfig: {
                 temperature: 0.1,
                 topP: 0.8,
@@ -1011,7 +1036,7 @@ export async function evaluateTextWithGemini(params: {
         }
 
         const model = genAI.getGenerativeModel({
-            model: 'gemini-flash-latest',
+            model: 'gemini-3.5-flash-lite',
             generationConfig: { temperature: 0.4, topP: 0.9 },
         })
 
@@ -1200,7 +1225,7 @@ export async function validateHomeworkPages(
         }
 
         const model = genAI.getGenerativeModel({
-            model: 'gemini-flash-latest',
+            model: 'gemini-3.5-flash-lite',
             generationConfig: {
                 temperature: 0.1,
                 topP: 1,
@@ -1313,7 +1338,7 @@ export async function evaluateDictationSheet(
         }
 
         const model = genAI.getGenerativeModel({
-            model: 'gemini-flash-latest',
+            model: 'gemini-3.5-flash-lite',
             generationConfig: {
                 temperature: 0.1,
                 topP: 1,
@@ -1360,21 +1385,36 @@ Return ONLY a valid JSON object matching this exact schema:
 
         const result = await model.generateContent([...imageParts, prompt])
         let text = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim()
-        const parsed = JSON.parse(text)
 
-        if (!Array.isArray(parsed.words)) {
+        let parsed: { topic_detected?: string | null; words: DictationWordResult[] }
+        try {
+            parsed = JSON.parse(text)
+        } catch {
+            console.error('Dictation: JSON parse failed. Snippet:', text.slice(0, 300))
+            throw new Error('AI returned an unreadable response for dictation. Try a clearer, well-lit photo.')
+        }
+
+        let wordsArray: DictationWordResult[] | null = Array.isArray(parsed.words) ? parsed.words : null
+
+        if (!wordsArray && typeof parsed === 'object' && parsed !== null) {
+            const obj = parsed as Record<string, any>
+            wordsArray = obj.dictation?.words || obj.data?.words || obj.words_list || 
+                         (Object.values(obj).find(val => Array.isArray(val)) as DictationWordResult[]) || null
+        }
+
+        if (!wordsArray || !Array.isArray(wordsArray)) {
             throw new Error('Gemini returned invalid dictation format')
         }
 
-        const correctCount = parsed.words.filter((w: DictationWordResult) => w.is_correct).length
-        const wrongCount = parsed.words.filter((w: DictationWordResult) => !w.is_correct).length
-        const score = parsed.words.reduce((sum: number, w: DictationWordResult) => sum + (w.marks ?? (w.is_correct ? 1 : -1)), 0)
+        const correctCount = wordsArray.filter((w: DictationWordResult) => w.is_correct).length
+        const wrongCount = wordsArray.filter((w: DictationWordResult) => !w.is_correct).length
+        const score = wordsArray.reduce((sum: number, w: DictationWordResult) => sum + (w.marks ?? (w.is_correct ? 1 : -1)), 0)
 
         return {
             success: true,
             data: {
-                words: parsed.words,
-                total_words: parsed.words.length,
+                words: wordsArray,
+                total_words: wordsArray.length,
                 correct_count: correctCount,
                 wrong_count: wrongCount,
                 score,

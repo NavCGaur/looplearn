@@ -4,12 +4,14 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 export async function proxy(request: NextRequest) {
     // Skip auth check for public routes
-    const publicPaths = ['/', '/auth/login', '/auth/signup', '/about', '/quiz', '/submit', '/api/web-submit']
+    const publicPaths = ['/', '/auth/login', '/auth/signup', '/about', '/quiz', '/submit', '/api/web-submit', '/web-submissions', '/teacher/web-submissions']
     const isPublicPath = publicPaths.some(path =>
         request.nextUrl.pathname === path ||
         request.nextUrl.pathname.startsWith('/auth/') ||
         request.nextUrl.pathname.startsWith('/submit') ||
-        request.nextUrl.pathname.startsWith('/api/web-submit')
+        request.nextUrl.pathname.startsWith('/api/web-submit') ||
+        request.nextUrl.pathname.startsWith('/web-submissions') ||
+        request.nextUrl.pathname.startsWith('/teacher/web-submissions')
     )
 
     if (isPublicPath) {

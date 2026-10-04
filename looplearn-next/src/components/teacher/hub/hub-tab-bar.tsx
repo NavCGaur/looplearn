@@ -2,18 +2,19 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Calendar, BarChart2, Users } from 'lucide-react'
+import { Calendar, BarChart2, Users, Globe } from 'lucide-react'
 
 const TABS = [
     { href: '/teacher/hub/planner',     label: 'Weekly Planner', icon: Calendar },
     { href: '/teacher/hub/tracker',     label: 'Daily Tracker',  icon: Users },
+    { href: '/teacher/web-submissions',  label: 'Web Submissions',icon: Globe },
     { href: '/teacher/hub/performance', label: 'Performance',    icon: BarChart2 },
 ]
 
 export function HubTabBar() {
     const path = usePathname()
     return (
-        <div className="flex gap-1 bg-white border border-gray-200 rounded-2xl p-1 shadow-sm w-full max-w-lg">
+        <div className="flex gap-1 bg-white border border-gray-200 rounded-2xl p-1 shadow-sm w-full max-w-xl">
             {TABS.map(({ href, label, icon: Icon }) => {
                 const active = path.startsWith(href)
                 return (
