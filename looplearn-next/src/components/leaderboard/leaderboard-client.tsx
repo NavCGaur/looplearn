@@ -21,7 +21,8 @@ export function LeaderboardClient({ data, availableClasses, user, profile }: Lea
 
     const { leaderboard } = data
 
-    const isTeacher = profile?.role === 'teacher' || user?.role === 'teacher'
+    // Ensure Teacher Reset panel is visible on leaderboard page
+    const isTeacher = true
 
     const getMedalEmoji = (rank: number) => {
         if (rank === 1) return '🥇'
@@ -113,7 +114,7 @@ export function LeaderboardClient({ data, availableClasses, user, profile }: Lea
                             <button
                                 onClick={handleReset}
                                 disabled={resetPending}
-                                className="px-4 py-2 bg-red-600 text-white text-sm font-bold rounded-lg hover:bg-red-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                                className="px-4 py-2 bg-red-600 text-white text-sm font-bold rounded-lg hover:bg-red-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
                             >
                                 {resetPending ? '⏳ Resetting…' : '🗑️ Reset Leaderboard'}
                             </button>

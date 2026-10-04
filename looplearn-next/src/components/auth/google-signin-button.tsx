@@ -18,15 +18,13 @@ export function GoogleSignInButton({ className = '', redirectTo = '/dashboard' }
         const supabase = createClient()
 
         try {
-            // Use environment variable first, fallback to window location
-            // This ensures production uses the correct URL even if window.location is weird
-            const origin = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+            // Always use current window location origin so PKCE verifier cookie domain matches redirect URL
+            const origin = window.location.origin
             const finalRedirectUrl = `${origin}/auth/callback?next=${redirectTo}`
 
             console.log('Google Sign In Debug:', {
                 origin,
                 finalRedirectUrl,
-                envSiteUrl: process.env.NEXT_PUBLIC_SITE_URL,
                 windowLocation: window.location.href
             })
 
