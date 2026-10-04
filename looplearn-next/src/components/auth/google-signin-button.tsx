@@ -18,8 +18,9 @@ export function GoogleSignInButton({ className = '', redirectTo = '/dashboard' }
         const supabase = createClient()
 
         try {
-            // Always use current window location origin so PKCE verifier cookie domain matches redirect URL
-            const origin = window.location.origin
+            // Use canonical production domain (looplearnx.com) or localhost for dev
+            const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            const origin = isLocalhost ? window.location.origin : 'https://looplearnx.com'
             const finalRedirectUrl = `${origin}/auth/callback?next=${redirectTo}`
 
             console.log('Google Sign In Debug:', {
