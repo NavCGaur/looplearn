@@ -3,12 +3,29 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function proxy(request: NextRequest) {
-    // Skip auth check for public routes
-    const publicPaths = ['/', '/auth/login', '/auth/signup', '/about', '/quiz', '/submit', '/api/web-submit', '/web-submissions', '/teacher/web-submissions']
+    // Skip auth check for public routes and policy pages
+    const publicPaths = [
+        '/',
+        '/auth/login',
+        '/auth/signup',
+        '/about',
+        '/contact',
+        '/privacy',
+        '/terms',
+        '/leaderboard',
+        '/quiz',
+        '/submit',
+        '/ads.txt',
+        '/api/web-submit',
+        '/web-submissions',
+        '/teacher/web-submissions',
+    ]
+
     const isPublicPath = publicPaths.some(path =>
         request.nextUrl.pathname === path ||
         request.nextUrl.pathname.startsWith('/auth/') ||
         request.nextUrl.pathname.startsWith('/submit') ||
+        request.nextUrl.pathname.startsWith('/leaderboard') ||
         request.nextUrl.pathname.startsWith('/api/web-submit') ||
         request.nextUrl.pathname.startsWith('/web-submissions') ||
         request.nextUrl.pathname.startsWith('/teacher/web-submissions')
@@ -32,17 +49,14 @@ export async function proxy(request: NextRequest) {
                     return request.cookies.getAll()
                 },
                 setAll(cookiesToSet) {
-                    // CRITICAL: Update request cookies
                     cookiesToSet.forEach(({ name, value }) => {
                         request.cookies.set(name, value)
                     })
 
-                    // CRITICAL: Recreate response with updated request
                     supabaseResponse = NextResponse.next({
                         request,
                     })
 
-                    // CRITICAL: Set all cookies on the new response
                     cookiesToSet.forEach(({ name, value, options }) => {
                         supabaseResponse.cookies.set(name, value, options)
                     })
@@ -51,7 +65,6 @@ export async function proxy(request: NextRequest) {
         }
     )
 
-    // IMPORTANT: Don't add ANY logic here - session refresh happens in getUser()
     const { data: { user } } = await supabase.auth.getUser()
 
     // Redirect to login if not authenticated (except for auth callback)
@@ -61,12 +74,11 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(url)
     }
 
-    // CRITICAL: Return the supabaseResponse with all cookies
     return supabaseResponse
 }
 
 export const config = {
     matcher: [
-        '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        '/((?!api|_next/static|_next/image|favicon.ico|ads.txt|manifest.webmanifest|sw.js|.*\\.(?:svg|png|jpg|jpeg|gif|webp|txt)$).*)',
     ],
 }
