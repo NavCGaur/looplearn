@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { Navbar } from "@/components/ui/navbar";
 import Footer from "@/components/Footer";
@@ -53,6 +54,15 @@ export default async function RootLayout({
       <head>
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+        {/* Google AdSense Script */}
+        <Script
+          id="google-adsense"
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8989689535170282"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </head>
       <body
         className={`${inter.variable} ${robotoMono.variable} ${fredoka.variable} antialiased`}
