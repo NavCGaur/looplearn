@@ -10,6 +10,7 @@
 import { headers } from 'next/headers'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { evaluateDictationSheet, evaluateQuickPracticeSheet, DictationEvalResult, QuestionEvalResult } from './ai'
+import { formatStudentName } from '@/lib/utils/format-name'
 
 function createAdminClient() {
     return createSupabaseClient(
@@ -61,10 +62,11 @@ function checkIpRateLimit(ip: string): { allowed: boolean; waitSeconds: number }
 }
 
 export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<WebSubmitResult> {
-    const { studentName, classStandard, imageBase64, imageMimeType, submissionType } = params
+    const { classStandard, imageBase64, imageMimeType, submissionType } = params
+    const studentName = formatStudentName(params.studentName)
 
     // ── Input validation ──────────────────────────────────────────────────
-    if (!studentName?.trim()) {
+    if (!studentName) {
         return { success: false, error: 'Student name is required.' }
     }
     if (!classStandard || classStandard < 1 || classStandard > 12) {
@@ -129,7 +131,7 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
         if (!dictResult.success || !dictResult.data) {
             try {
                 await adminClient.from('web_submissions').insert({
-                    student_name: studentName.trim(),
+                    student_name: studentName,
                     class_standard: classStandard,
                     submission_type: 'dictation',
                     image_path: imagePath,
@@ -148,7 +150,7 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
         // Save to web_submissions — log error but still return result to student
         try {
             await adminClient.from('web_submissions').insert({
-                student_name: studentName.trim(),
+                student_name: studentName,
                 class_standard: classStandard,
                 submission_type: 'dictation',
                 image_path: imagePath,
@@ -162,26 +164,36 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
             console.error('[WebSubmit] DB insert failed for dictation result:', dbErr.message)
         }
 
-        // Upsert into exam_scores leaderboard (accumulate score on multiple test submissions)
+        // Upsert into exam_scores leaderboard (accumulate score on multiple test submissions case-insensitively)
         try {
             const { data: existingDictScore } = await adminClient
                 .from('exam_scores')
-                .select('score, max_score')
-                .eq('student_name', studentName.trim())
+                .select('id, score, max_score, student_name')
+                .ilike('student_name', studentName)
                 .eq('class_standard', classStandard)
                 .maybeSingle()
 
             const cumulativeScore = (existingDictScore?.score ? Number(existingDictScore.score) : 0) + (data.score || 0)
             const cumulativeMax = (existingDictScore?.max_score ? Number(existingDictScore.max_score) : 0) + (data.total_words || 1)
 
-            await adminClient.from('exam_scores').upsert({
-                student_name: studentName.trim(),
-                class_standard: classStandard,
-                score: cumulativeScore,
-                max_score: cumulativeMax,
-                submission_type: 'dictation',
-                updated_at: new Date().toISOString(),
-            }, { onConflict: 'student_name,class_standard' })
+            if (existingDictScore?.id) {
+                await adminClient.from('exam_scores').update({
+                    student_name: studentName,
+                    score: cumulativeScore,
+                    max_score: cumulativeMax,
+                    submission_type: 'dictation',
+                    updated_at: new Date().toISOString(),
+                }).eq('id', existingDictScore.id)
+            } else {
+                await adminClient.from('exam_scores').upsert({
+                    student_name: studentName,
+                    class_standard: classStandard,
+                    score: cumulativeScore,
+                    max_score: cumulativeMax,
+                    submission_type: 'dictation',
+                    updated_at: new Date().toISOString(),
+                }, { onConflict: 'student_name,class_standard' })
+            }
         } catch (scoreErr: any) {
             console.warn('[WebSubmit] exam_scores upsert failed (non-fatal):', scoreErr.message)
         }
@@ -199,7 +211,7 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
     if (!hwResult.success || !hwResult.data) {
         try {
             await adminClient.from('web_submissions').insert({
-                student_name: studentName.trim(),
+                student_name: studentName,
                 class_standard: classStandard,
                 submission_type: 'homework',
                 image_path: imagePath,
@@ -219,7 +231,7 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
     // Save to web_submissions — log error but still return result to student
     try {
         await adminClient.from('web_submissions').insert({
-            student_name: studentName.trim(),
+            student_name: studentName,
             class_standard: classStandard,
             submission_type: 'homework',
             image_path: imagePath,
@@ -232,26 +244,36 @@ export async function submitHomeworkFromWeb(params: WebSubmitParams): Promise<We
         console.error('[WebSubmit] DB insert failed for homework result:', dbErr.message)
     }
 
-    // Upsert into exam_scores leaderboard (accumulate score on multiple test submissions)
+    // Upsert into exam_scores leaderboard (accumulate score on multiple test submissions case-insensitively)
     try {
         const { data: existingHwScore } = await adminClient
             .from('exam_scores')
-            .select('score, max_score')
-            .eq('student_name', studentName.trim())
+            .select('id, score, max_score, student_name')
+            .ilike('student_name', studentName)
             .eq('class_standard', classStandard)
             .maybeSingle()
 
         const cumulativeScore = (existingHwScore?.score ? Number(existingHwScore.score) : 0) + (evalData.totalMarks || 0)
         const cumulativeMax = (existingHwScore?.max_score ? Number(existingHwScore.max_score) : 0) + (evalData.maxMarks || 100)
 
-        await adminClient.from('exam_scores').upsert({
-            student_name: studentName.trim(),
-            class_standard: classStandard,
-            score: cumulativeScore,
-            max_score: cumulativeMax,
-            submission_type: 'homework',
-            updated_at: new Date().toISOString(),
-        }, { onConflict: 'student_name,class_standard' })
+        if (existingHwScore?.id) {
+            await adminClient.from('exam_scores').update({
+                student_name: studentName,
+                score: cumulativeScore,
+                max_score: cumulativeMax,
+                submission_type: 'homework',
+                updated_at: new Date().toISOString(),
+            }).eq('id', existingHwScore.id)
+        } else {
+            await adminClient.from('exam_scores').upsert({
+                student_name: studentName,
+                class_standard: classStandard,
+                score: cumulativeScore,
+                max_score: cumulativeMax,
+                submission_type: 'homework',
+                updated_at: new Date().toISOString(),
+            }, { onConflict: 'student_name,class_standard' })
+        }
     } catch (scoreErr: any) {
         console.warn('[WebSubmit] exam_scores upsert failed (non-fatal):', scoreErr.message)
     }
