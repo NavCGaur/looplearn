@@ -37,7 +37,8 @@ export const useSpaceHangman = () => {
     useEffect(() => {
         const fetchActiveVocab = async () => {
             try {
-                const res = await fetch('/api/student/active-vocabulary');
+                const search = typeof window !== 'undefined' ? window.location.search : '';
+                const res = await fetch(`/api/student/active-vocabulary${search}`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data.success && data.vocabulary && data.vocabulary.length > 0) {

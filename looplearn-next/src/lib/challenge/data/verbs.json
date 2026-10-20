@@ -1,0 +1,1602 @@
+[
+  {
+    "id": 1,
+    "day": 1,
+    "v1_base_form": "be",
+    "v2_past_form": "was/were",
+    "hindi_meaning": "होना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 2,
+    "day": 1,
+    "v1_base_form": "have",
+    "v2_past_form": "had",
+    "hindi_meaning": "रखना/होना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 3,
+    "day": 1,
+    "v1_base_form": "do",
+    "v2_past_form": "did",
+    "hindi_meaning": "करना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 4,
+    "day": 1,
+    "v1_base_form": "go",
+    "v2_past_form": "went",
+    "hindi_meaning": "जाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 5,
+    "day": 1,
+    "v1_base_form": "come",
+    "v2_past_form": "came",
+    "hindi_meaning": "आना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 6,
+    "day": 1,
+    "v1_base_form": "eat",
+    "v2_past_form": "ate",
+    "hindi_meaning": "खाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 7,
+    "day": 1,
+    "v1_base_form": "drink",
+    "v2_past_form": "drank",
+    "hindi_meaning": "पीना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 8,
+    "day": 1,
+    "v1_base_form": "see",
+    "v2_past_form": "saw",
+    "hindi_meaning": "देखना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 9,
+    "day": 1,
+    "v1_base_form": "look",
+    "v2_past_form": "looked",
+    "hindi_meaning": "देखना/नज़र डालना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 10,
+    "day": 1,
+    "v1_base_form": "watch",
+    "v2_past_form": "watched",
+    "hindi_meaning": "ध्यान से देखना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 11,
+    "day": 1,
+    "v1_base_form": "hear",
+    "v2_past_form": "heard",
+    "hindi_meaning": "सुनाई देना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 12,
+    "day": 1,
+    "v1_base_form": "listen",
+    "v2_past_form": "listened",
+    "hindi_meaning": "ध्यान से सुनना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 13,
+    "day": 1,
+    "v1_base_form": "speak",
+    "v2_past_form": "spoke",
+    "hindi_meaning": "बोलना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 14,
+    "day": 1,
+    "v1_base_form": "say",
+    "v2_past_form": "said",
+    "hindi_meaning": "कहना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 15,
+    "day": 1,
+    "v1_base_form": "tell",
+    "v2_past_form": "told",
+    "hindi_meaning": "बताना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 16,
+    "day": 1,
+    "v1_base_form": "ask",
+    "v2_past_form": "asked",
+    "hindi_meaning": "पूछना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 17,
+    "day": 1,
+    "v1_base_form": "answer",
+    "v2_past_form": "answered",
+    "hindi_meaning": "उत्तर देना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 18,
+    "day": 1,
+    "v1_base_form": "read",
+    "v2_past_form": "read",
+    "hindi_meaning": "पढ़ना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 19,
+    "day": 1,
+    "v1_base_form": "write",
+    "v2_past_form": "wrote",
+    "hindi_meaning": "लिखना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 20,
+    "day": 1,
+    "v1_base_form": "learn",
+    "v2_past_form": "learned",
+    "hindi_meaning": "सीखना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 21,
+    "day": 1,
+    "v1_base_form": "study",
+    "v2_past_form": "studied",
+    "hindi_meaning": "पढ़ाई करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 22,
+    "day": 1,
+    "v1_base_form": "teach",
+    "v2_past_form": "taught",
+    "hindi_meaning": "पढ़ाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 23,
+    "day": 1,
+    "v1_base_form": "play",
+    "v2_past_form": "played",
+    "hindi_meaning": "खेलना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 24,
+    "day": 1,
+    "v1_base_form": "work",
+    "v2_past_form": "worked",
+    "hindi_meaning": "काम करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 25,
+    "day": 1,
+    "v1_base_form": "help",
+    "v2_past_form": "helped",
+    "hindi_meaning": "मदद करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 26,
+    "day": 1,
+    "v1_base_form": "make",
+    "v2_past_form": "made",
+    "hindi_meaning": "बनाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 27,
+    "day": 1,
+    "v1_base_form": "get",
+    "v2_past_form": "got",
+    "hindi_meaning": "पाना/प्राप्त करना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 28,
+    "day": 1,
+    "v1_base_form": "give",
+    "v2_past_form": "gave",
+    "hindi_meaning": "देना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 29,
+    "day": 1,
+    "v1_base_form": "take",
+    "v2_past_form": "took",
+    "hindi_meaning": "लेना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 30,
+    "day": 1,
+    "v1_base_form": "bring",
+    "v2_past_form": "brought",
+    "hindi_meaning": "लाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 31,
+    "day": 1,
+    "v1_base_form": "carry",
+    "v2_past_form": "carried",
+    "hindi_meaning": "ले जाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 32,
+    "day": 1,
+    "v1_base_form": "put",
+    "v2_past_form": "put",
+    "hindi_meaning": "रखना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 33,
+    "day": 1,
+    "v1_base_form": "keep",
+    "v2_past_form": "kept",
+    "hindi_meaning": "रखना/संभालना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 34,
+    "day": 1,
+    "v1_base_form": "find",
+    "v2_past_form": "found",
+    "hindi_meaning": "ढूँढ़ना/पाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 35,
+    "day": 2,
+    "v1_base_form": "lose",
+    "v2_past_form": "lost",
+    "hindi_meaning": "खोना/हारना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 36,
+    "day": 2,
+    "v1_base_form": "buy",
+    "v2_past_form": "bought",
+    "hindi_meaning": "खरीदना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 37,
+    "day": 2,
+    "v1_base_form": "sell",
+    "v2_past_form": "sold",
+    "hindi_meaning": "बेचना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 38,
+    "day": 2,
+    "v1_base_form": "pay",
+    "v2_past_form": "paid",
+    "hindi_meaning": "भुगतान करना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 39,
+    "day": 2,
+    "v1_base_form": "spend",
+    "v2_past_form": "spent",
+    "hindi_meaning": "खर्च करना/समय बिताना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 40,
+    "day": 2,
+    "v1_base_form": "save",
+    "v2_past_form": "saved",
+    "hindi_meaning": "बचाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 41,
+    "day": 2,
+    "v1_base_form": "use",
+    "v2_past_form": "used",
+    "hindi_meaning": "इस्तेमाल करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 42,
+    "day": 2,
+    "v1_base_form": "need",
+    "v2_past_form": "needed",
+    "hindi_meaning": "ज़रूरत होना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 43,
+    "day": 2,
+    "v1_base_form": "want",
+    "v2_past_form": "wanted",
+    "hindi_meaning": "चाहना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 44,
+    "day": 2,
+    "v1_base_form": "like",
+    "v2_past_form": "liked",
+    "hindi_meaning": "पसंद करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 45,
+    "day": 2,
+    "v1_base_form": "love",
+    "v2_past_form": "loved",
+    "hindi_meaning": "प्यार करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 46,
+    "day": 2,
+    "v1_base_form": "enjoy",
+    "v2_past_form": "enjoyed",
+    "hindi_meaning": "आनंद लेना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 47,
+    "day": 2,
+    "v1_base_form": "feel",
+    "v2_past_form": "felt",
+    "hindi_meaning": "महसूस करना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 48,
+    "day": 2,
+    "v1_base_form": "think",
+    "v2_past_form": "thought",
+    "hindi_meaning": "सोचना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 49,
+    "day": 2,
+    "v1_base_form": "know",
+    "v2_past_form": "knew",
+    "hindi_meaning": "जानना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 50,
+    "day": 2,
+    "v1_base_form": "understand",
+    "v2_past_form": "understood",
+    "hindi_meaning": "समझना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 51,
+    "day": 2,
+    "v1_base_form": "remember",
+    "v2_past_form": "remembered",
+    "hindi_meaning": "याद रखना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 52,
+    "day": 2,
+    "v1_base_form": "forget",
+    "v2_past_form": "forgot",
+    "hindi_meaning": "भूलना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 53,
+    "day": 2,
+    "v1_base_form": "believe",
+    "v2_past_form": "believed",
+    "hindi_meaning": "विश्वास करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 54,
+    "day": 2,
+    "v1_base_form": "hope",
+    "v2_past_form": "hoped",
+    "hindi_meaning": "आशा करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 55,
+    "day": 2,
+    "v1_base_form": "wish",
+    "v2_past_form": "wished",
+    "hindi_meaning": "इच्छा करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 56,
+    "day": 2,
+    "v1_base_form": "decide",
+    "v2_past_form": "decided",
+    "hindi_meaning": "निर्णय लेना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 57,
+    "day": 2,
+    "v1_base_form": "choose",
+    "v2_past_form": "chose",
+    "hindi_meaning": "चुनना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 58,
+    "day": 2,
+    "v1_base_form": "try",
+    "v2_past_form": "tried",
+    "hindi_meaning": "कोशिश करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 59,
+    "day": 2,
+    "v1_base_form": "practice",
+    "v2_past_form": "practiced",
+    "hindi_meaning": "अभ्यास करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 60,
+    "day": 2,
+    "v1_base_form": "improve",
+    "v2_past_form": "improved",
+    "hindi_meaning": "सुधारना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 61,
+    "day": 2,
+    "v1_base_form": "explain",
+    "v2_past_form": "explained",
+    "hindi_meaning": "समझाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 62,
+    "day": 2,
+    "v1_base_form": "describe",
+    "v2_past_form": "described",
+    "hindi_meaning": "वर्णन करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 63,
+    "day": 2,
+    "v1_base_form": "show",
+    "v2_past_form": "showed",
+    "hindi_meaning": "दिखाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 64,
+    "day": 2,
+    "v1_base_form": "call",
+    "v2_past_form": "called",
+    "hindi_meaning": "बुलाना/फ़ोन करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 65,
+    "day": 2,
+    "v1_base_form": "talk",
+    "v2_past_form": "talked",
+    "hindi_meaning": "बात करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 66,
+    "day": 2,
+    "v1_base_form": "discuss",
+    "v2_past_form": "discussed",
+    "hindi_meaning": "चर्चा करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 67,
+    "day": 2,
+    "v1_base_form": "agree",
+    "v2_past_form": "agreed",
+    "hindi_meaning": "सहमत होना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 68,
+    "day": 2,
+    "v1_base_form": "disagree",
+    "v2_past_form": "disagreed",
+    "hindi_meaning": "असहमत होना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 69,
+    "day": 3,
+    "v1_base_form": "meet",
+    "v2_past_form": "met",
+    "hindi_meaning": "मिलना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 70,
+    "day": 3,
+    "v1_base_form": "visit",
+    "v2_past_form": "visited",
+    "hindi_meaning": "मिलने जाना/घूमने जाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 71,
+    "day": 3,
+    "v1_base_form": "invite",
+    "v2_past_form": "invited",
+    "hindi_meaning": "निमंत्रण देना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 72,
+    "day": 3,
+    "v1_base_form": "thank",
+    "v2_past_form": "thanked",
+    "hindi_meaning": "धन्यवाद देना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 73,
+    "day": 3,
+    "v1_base_form": "smile",
+    "v2_past_form": "smiled",
+    "hindi_meaning": "मुस्कुराना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 74,
+    "day": 3,
+    "v1_base_form": "laugh",
+    "v2_past_form": "laughed",
+    "hindi_meaning": "हँसना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 75,
+    "day": 3,
+    "v1_base_form": "cry",
+    "v2_past_form": "cried",
+    "hindi_meaning": "रोना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 76,
+    "day": 3,
+    "v1_base_form": "shout",
+    "v2_past_form": "shouted",
+    "hindi_meaning": "चिल्लाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 77,
+    "day": 3,
+    "v1_base_form": "sing",
+    "v2_past_form": "sang",
+    "hindi_meaning": "गाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 78,
+    "day": 3,
+    "v1_base_form": "dance",
+    "v2_past_form": "danced",
+    "hindi_meaning": "नाचना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 79,
+    "day": 3,
+    "v1_base_form": "draw",
+    "v2_past_form": "drew",
+    "hindi_meaning": "चित्र बनाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 80,
+    "day": 3,
+    "v1_base_form": "paint",
+    "v2_past_form": "painted",
+    "hindi_meaning": "रंग करना/चित्र बनाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 81,
+    "day": 3,
+    "v1_base_form": "build",
+    "v2_past_form": "built",
+    "hindi_meaning": "बनाना/निर्माण करना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 82,
+    "day": 3,
+    "v1_base_form": "break",
+    "v2_past_form": "broke",
+    "hindi_meaning": "तोड़ना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 83,
+    "day": 3,
+    "v1_base_form": "cut",
+    "v2_past_form": "cut",
+    "hindi_meaning": "काटना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 84,
+    "day": 3,
+    "v1_base_form": "cook",
+    "v2_past_form": "cooked",
+    "hindi_meaning": "खाना पकाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 85,
+    "day": 3,
+    "v1_base_form": "wash",
+    "v2_past_form": "washed",
+    "hindi_meaning": "धोना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 86,
+    "day": 3,
+    "v1_base_form": "clean",
+    "v2_past_form": "cleaned",
+    "hindi_meaning": "साफ़ करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 87,
+    "day": 3,
+    "v1_base_form": "dry",
+    "v2_past_form": "dried",
+    "hindi_meaning": "सुखाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 88,
+    "day": 3,
+    "v1_base_form": "open",
+    "v2_past_form": "opened",
+    "hindi_meaning": "खोलना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 89,
+    "day": 3,
+    "v1_base_form": "close",
+    "v2_past_form": "closed",
+    "hindi_meaning": "बंद करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 90,
+    "day": 3,
+    "v1_base_form": "start",
+    "v2_past_form": "started",
+    "hindi_meaning": "शुरू करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 91,
+    "day": 3,
+    "v1_base_form": "finish",
+    "v2_past_form": "finished",
+    "hindi_meaning": "खत्म करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 92,
+    "day": 3,
+    "v1_base_form": "stop",
+    "v2_past_form": "stopped",
+    "hindi_meaning": "रोकना/रुकना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 93,
+    "day": 3,
+    "v1_base_form": "wait",
+    "v2_past_form": "waited",
+    "hindi_meaning": "इंतज़ार करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 94,
+    "day": 3,
+    "v1_base_form": "stay",
+    "v2_past_form": "stayed",
+    "hindi_meaning": "ठहरना/रहना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 95,
+    "day": 3,
+    "v1_base_form": "live",
+    "v2_past_form": "lived",
+    "hindi_meaning": "रहना/निवास करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 96,
+    "day": 3,
+    "v1_base_form": "move",
+    "v2_past_form": "moved",
+    "hindi_meaning": "हिलना/स्थान बदलना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 97,
+    "day": 3,
+    "v1_base_form": "walk",
+    "v2_past_form": "walked",
+    "hindi_meaning": "चलना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 98,
+    "day": 3,
+    "v1_base_form": "run",
+    "v2_past_form": "ran",
+    "hindi_meaning": "दौड़ना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 99,
+    "day": 3,
+    "v1_base_form": "jump",
+    "v2_past_form": "jumped",
+    "hindi_meaning": "कूदना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 100,
+    "day": 3,
+    "v1_base_form": "climb",
+    "v2_past_form": "climbed",
+    "hindi_meaning": "चढ़ना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 101,
+    "day": 3,
+    "v1_base_form": "fall",
+    "v2_past_form": "fell",
+    "hindi_meaning": "गिरना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 102,
+    "day": 4,
+    "v1_base_form": "sit",
+    "v2_past_form": "sat",
+    "hindi_meaning": "बैठना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 103,
+    "day": 4,
+    "v1_base_form": "stand",
+    "v2_past_form": "stood",
+    "hindi_meaning": "खड़ा होना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 104,
+    "day": 4,
+    "v1_base_form": "rise",
+    "v2_past_form": "rose",
+    "hindi_meaning": "उठना/बढ़ना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 105,
+    "day": 4,
+    "v1_base_form": "wake",
+    "v2_past_form": "woke",
+    "hindi_meaning": "जागना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 106,
+    "day": 4,
+    "v1_base_form": "sleep",
+    "v2_past_form": "slept",
+    "hindi_meaning": "सोना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 107,
+    "day": 4,
+    "v1_base_form": "rest",
+    "v2_past_form": "rested",
+    "hindi_meaning": "आराम करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 108,
+    "day": 4,
+    "v1_base_form": "wear",
+    "v2_past_form": "wore",
+    "hindi_meaning": "पहनना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 109,
+    "day": 4,
+    "v1_base_form": "change",
+    "v2_past_form": "changed",
+    "hindi_meaning": "बदलना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 110,
+    "day": 4,
+    "v1_base_form": "brush",
+    "v2_past_form": "brushed",
+    "hindi_meaning": "ब्रश करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 111,
+    "day": 4,
+    "v1_base_form": "bathe",
+    "v2_past_form": "bathed",
+    "hindi_meaning": "नहाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 112,
+    "day": 4,
+    "v1_base_form": "travel",
+    "v2_past_form": "travelled",
+    "hindi_meaning": "यात्रा करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 113,
+    "day": 4,
+    "v1_base_form": "arrive",
+    "v2_past_form": "arrived",
+    "hindi_meaning": "पहुँचना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 114,
+    "day": 4,
+    "v1_base_form": "leave",
+    "v2_past_form": "left",
+    "hindi_meaning": "छोड़ना/रवाना होना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 115,
+    "day": 4,
+    "v1_base_form": "return",
+    "v2_past_form": "returned",
+    "hindi_meaning": "लौटना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 116,
+    "day": 4,
+    "v1_base_form": "reach",
+    "v2_past_form": "reached",
+    "hindi_meaning": "पहुँचना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 117,
+    "day": 4,
+    "v1_base_form": "enter",
+    "v2_past_form": "entered",
+    "hindi_meaning": "प्रवेश करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 118,
+    "day": 4,
+    "v1_base_form": "follow",
+    "v2_past_form": "followed",
+    "hindi_meaning": "अनुसरण करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 119,
+    "day": 4,
+    "v1_base_form": "lead",
+    "v2_past_form": "led",
+    "hindi_meaning": "नेतृत्व करना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 120,
+    "day": 4,
+    "v1_base_form": "send",
+    "v2_past_form": "sent",
+    "hindi_meaning": "भेजना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 121,
+    "day": 4,
+    "v1_base_form": "receive",
+    "v2_past_form": "received",
+    "hindi_meaning": "प्राप्त करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 122,
+    "day": 4,
+    "v1_base_form": "borrow",
+    "v2_past_form": "borrowed",
+    "hindi_meaning": "उधार लेना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 123,
+    "day": 4,
+    "v1_base_form": "lend",
+    "v2_past_form": "lent",
+    "hindi_meaning": "उधार देना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 124,
+    "day": 4,
+    "v1_base_form": "share",
+    "v2_past_form": "shared",
+    "hindi_meaning": "साझा करना/बाँटना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 125,
+    "day": 4,
+    "v1_base_form": "hold",
+    "v2_past_form": "held",
+    "hindi_meaning": "पकड़ना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 126,
+    "day": 4,
+    "v1_base_form": "catch",
+    "v2_past_form": "caught",
+    "hindi_meaning": "पकड़ना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 127,
+    "day": 4,
+    "v1_base_form": "throw",
+    "v2_past_form": "threw",
+    "hindi_meaning": "फेंकना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 128,
+    "day": 4,
+    "v1_base_form": "kick",
+    "v2_past_form": "kicked",
+    "hindi_meaning": "लात मारना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 129,
+    "day": 4,
+    "v1_base_form": "hit",
+    "v2_past_form": "hit",
+    "hindi_meaning": "मारना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 130,
+    "day": 4,
+    "v1_base_form": "push",
+    "v2_past_form": "pushed",
+    "hindi_meaning": "धक्का देना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 131,
+    "day": 4,
+    "v1_base_form": "pull",
+    "v2_past_form": "pulled",
+    "hindi_meaning": "खींचना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 132,
+    "day": 4,
+    "v1_base_form": "lift",
+    "v2_past_form": "lifted",
+    "hindi_meaning": "उठाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 133,
+    "day": 4,
+    "v1_base_form": "drop",
+    "v2_past_form": "dropped",
+    "hindi_meaning": "गिरा देना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 134,
+    "day": 4,
+    "v1_base_form": "pick",
+    "v2_past_form": "picked",
+    "hindi_meaning": "उठाना/चुनना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 135,
+    "day": 5,
+    "v1_base_form": "touch",
+    "v2_past_form": "touched",
+    "hindi_meaning": "छूना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 136,
+    "day": 5,
+    "v1_base_form": "turn",
+    "v2_past_form": "turned",
+    "hindi_meaning": "मुड़ना/घुमाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 137,
+    "day": 5,
+    "v1_base_form": "drive",
+    "v2_past_form": "drove",
+    "hindi_meaning": "गाड़ी चलाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 138,
+    "day": 5,
+    "v1_base_form": "ride",
+    "v2_past_form": "rode",
+    "hindi_meaning": "सवारी करना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 139,
+    "day": 5,
+    "v1_base_form": "fly",
+    "v2_past_form": "flew",
+    "hindi_meaning": "उड़ना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 140,
+    "day": 5,
+    "v1_base_form": "swim",
+    "v2_past_form": "swam",
+    "hindi_meaning": "तैरना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 141,
+    "day": 5,
+    "v1_base_form": "cross",
+    "v2_past_form": "crossed",
+    "hindi_meaning": "पार करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 142,
+    "day": 5,
+    "v1_base_form": "pass",
+    "v2_past_form": "passed",
+    "hindi_meaning": "गुज़रना/उत्तीर्ण होना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 143,
+    "day": 5,
+    "v1_base_form": "win",
+    "v2_past_form": "won",
+    "hindi_meaning": "जीतना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 144,
+    "day": 5,
+    "v1_base_form": "beat",
+    "v2_past_form": "beat",
+    "hindi_meaning": "हराना/पीटना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 145,
+    "day": 5,
+    "v1_base_form": "compete",
+    "v2_past_form": "competed",
+    "hindi_meaning": "प्रतिस्पर्धा करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 146,
+    "day": 5,
+    "v1_base_form": "score",
+    "v2_past_form": "scored",
+    "hindi_meaning": "अंक बनाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 147,
+    "day": 5,
+    "v1_base_form": "exercise",
+    "v2_past_form": "exercised",
+    "hindi_meaning": "व्यायाम करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 148,
+    "day": 5,
+    "v1_base_form": "plan",
+    "v2_past_form": "planned",
+    "hindi_meaning": "योजना बनाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 149,
+    "day": 5,
+    "v1_base_form": "prepare",
+    "v2_past_form": "prepared",
+    "hindi_meaning": "तैयारी करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 150,
+    "day": 5,
+    "v1_base_form": "check",
+    "v2_past_form": "checked",
+    "hindi_meaning": "जाँच करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 151,
+    "day": 5,
+    "v1_base_form": "count",
+    "v2_past_form": "counted",
+    "hindi_meaning": "गिनना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 152,
+    "day": 5,
+    "v1_base_form": "add",
+    "v2_past_form": "added",
+    "hindi_meaning": "जोड़ना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 153,
+    "day": 5,
+    "v1_base_form": "subtract",
+    "v2_past_form": "subtracted",
+    "hindi_meaning": "घटाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 154,
+    "day": 5,
+    "v1_base_form": "measure",
+    "v2_past_form": "measured",
+    "hindi_meaning": "मापना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 155,
+    "day": 5,
+    "v1_base_form": "compare",
+    "v2_past_form": "compared",
+    "hindi_meaning": "तुलना करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 156,
+    "day": 5,
+    "v1_base_form": "solve",
+    "v2_past_form": "solved",
+    "hindi_meaning": "हल करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 157,
+    "day": 5,
+    "v1_base_form": "complete",
+    "v2_past_form": "completed",
+    "hindi_meaning": "पूरा करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 158,
+    "day": 5,
+    "v1_base_form": "correct",
+    "v2_past_form": "corrected",
+    "hindi_meaning": "सुधारना/सही करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 159,
+    "day": 5,
+    "v1_base_form": "copy",
+    "v2_past_form": "copied",
+    "hindi_meaning": "नकल करना/उतारना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 160,
+    "day": 5,
+    "v1_base_form": "spell",
+    "v2_past_form": "spelled",
+    "hindi_meaning": "वर्तनी बताना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 161,
+    "day": 5,
+    "v1_base_form": "pronounce",
+    "v2_past_form": "pronounced",
+    "hindi_meaning": "उच्चारण करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 162,
+    "day": 5,
+    "v1_base_form": "translate",
+    "v2_past_form": "translated",
+    "hindi_meaning": "अनुवाद करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 163,
+    "day": 5,
+    "v1_base_form": "repeat",
+    "v2_past_form": "repeated",
+    "hindi_meaning": "दोहराना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 164,
+    "day": 5,
+    "v1_base_form": "revise",
+    "v2_past_form": "revised",
+    "hindi_meaning": "दोहराकर पढ़ना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 165,
+    "day": 5,
+    "v1_base_form": "test",
+    "v2_past_form": "tested",
+    "hindi_meaning": "जाँचना/परीक्षा लेना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 166,
+    "day": 5,
+    "v1_base_form": "fail",
+    "v2_past_form": "failed",
+    "hindi_meaning": "असफल होना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 167,
+    "day": 5,
+    "v1_base_form": "grow",
+    "v2_past_form": "grew",
+    "hindi_meaning": "बढ़ना/उगना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 168,
+    "day": 6,
+    "v1_base_form": "plant",
+    "v2_past_form": "planted",
+    "hindi_meaning": "पौधा लगाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 169,
+    "day": 6,
+    "v1_base_form": "water",
+    "v2_past_form": "watered",
+    "hindi_meaning": "पानी देना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 170,
+    "day": 6,
+    "v1_base_form": "bloom",
+    "v2_past_form": "bloomed",
+    "hindi_meaning": "खिलना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 171,
+    "day": 6,
+    "v1_base_form": "rain",
+    "v2_past_form": "rained",
+    "hindi_meaning": "बारिश होना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 172,
+    "day": 6,
+    "v1_base_form": "shine",
+    "v2_past_form": "shone",
+    "hindi_meaning": "चमकना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 173,
+    "day": 6,
+    "v1_base_form": "blow",
+    "v2_past_form": "blew",
+    "hindi_meaning": "बहना/फूँक मारना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 174,
+    "day": 6,
+    "v1_base_form": "burn",
+    "v2_past_form": "burned",
+    "hindi_meaning": "जलना/जलाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 175,
+    "day": 6,
+    "v1_base_form": "freeze",
+    "v2_past_form": "froze",
+    "hindi_meaning": "जमना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 176,
+    "day": 6,
+    "v1_base_form": "melt",
+    "v2_past_form": "melted",
+    "hindi_meaning": "पिघलना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 177,
+    "day": 6,
+    "v1_base_form": "feed",
+    "v2_past_form": "fed",
+    "hindi_meaning": "खिलाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 178,
+    "day": 6,
+    "v1_base_form": "bite",
+    "v2_past_form": "bit",
+    "hindi_meaning": "काटना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 179,
+    "day": 6,
+    "v1_base_form": "smell",
+    "v2_past_form": "smelled",
+    "hindi_meaning": "सूँघना/महकना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 180,
+    "day": 6,
+    "v1_base_form": "taste",
+    "v2_past_form": "tasted",
+    "hindi_meaning": "स्वाद लेना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 181,
+    "day": 6,
+    "v1_base_form": "happen",
+    "v2_past_form": "happened",
+    "hindi_meaning": "होना/घटित होना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 182,
+    "day": 6,
+    "v1_base_form": "become",
+    "v2_past_form": "became",
+    "hindi_meaning": "बन जाना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 183,
+    "day": 6,
+    "v1_base_form": "seem",
+    "v2_past_form": "seemed",
+    "hindi_meaning": "लगना/प्रतीत होना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 184,
+    "day": 6,
+    "v1_base_form": "appear",
+    "v2_past_form": "appeared",
+    "hindi_meaning": "दिखाई देना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 185,
+    "day": 6,
+    "v1_base_form": "mean",
+    "v2_past_form": "meant",
+    "hindi_meaning": "अर्थ होना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 186,
+    "day": 6,
+    "v1_base_form": "allow",
+    "v2_past_form": "allowed",
+    "hindi_meaning": "अनुमति देना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 187,
+    "day": 6,
+    "v1_base_form": "promise",
+    "v2_past_form": "promised",
+    "hindi_meaning": "वादा करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 188,
+    "day": 6,
+    "v1_base_form": "refuse",
+    "v2_past_form": "refused",
+    "hindi_meaning": "मना करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 189,
+    "day": 6,
+    "v1_base_form": "accept",
+    "v2_past_form": "accepted",
+    "hindi_meaning": "स्वीकार करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 190,
+    "day": 6,
+    "v1_base_form": "offer",
+    "v2_past_form": "offered",
+    "hindi_meaning": "प्रस्ताव देना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 191,
+    "day": 6,
+    "v1_base_form": "order",
+    "v2_past_form": "ordered",
+    "hindi_meaning": "आदेश देना/मँगाना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 192,
+    "day": 6,
+    "v1_base_form": "serve",
+    "v2_past_form": "served",
+    "hindi_meaning": "परोसना/सेवा करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 193,
+    "day": 6,
+    "v1_base_form": "protect",
+    "v2_past_form": "protected",
+    "hindi_meaning": "रक्षा करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 194,
+    "day": 6,
+    "v1_base_form": "care",
+    "v2_past_form": "cared",
+    "hindi_meaning": "देखभाल करना/परवाह करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 195,
+    "day": 6,
+    "v1_base_form": "worry",
+    "v2_past_form": "worried",
+    "hindi_meaning": "चिंता करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 196,
+    "day": 6,
+    "v1_base_form": "fear",
+    "v2_past_form": "feared",
+    "hindi_meaning": "डरना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 197,
+    "day": 6,
+    "v1_base_form": "forgive",
+    "v2_past_form": "forgave",
+    "hindi_meaning": "माफ़ करना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 198,
+    "day": 6,
+    "v1_base_form": "fight",
+    "v2_past_form": "fought",
+    "hindi_meaning": "लड़ना",
+    "verb_type": "irregular"
+  },
+  {
+    "id": 199,
+    "day": 6,
+    "v1_base_form": "argue",
+    "v2_past_form": "argued",
+    "hindi_meaning": "बहस करना",
+    "verb_type": "regular"
+  },
+  {
+    "id": 200,
+    "day": 6,
+    "v1_base_form": "complain",
+    "v2_past_form": "complained",
+    "hindi_meaning": "शिकायत करना",
+    "verb_type": "regular"
+  }
+]

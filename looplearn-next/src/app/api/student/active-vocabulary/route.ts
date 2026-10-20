@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { getVerbsForDay } from '@/lib/challenge/verbs'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,10 +12,28 @@ function createAdminClient() {
     )
 }
 
-export async function GET() {
-    const supabase = createAdminClient()
-
+export async function GET(req: NextRequest) {
     try {
+        const { searchParams } = new URL(req.url)
+        const challengeDayParam = searchParams.get('challenge_day') || searchParams.get('day')
+
+        if (challengeDayParam) {
+            const day = parseInt(challengeDayParam, 10)
+            if (!isNaN(day) && day >= 1 && day <= 6) {
+                const dayVerbs = getVerbsForDay(day)
+                // Return verbs base form for hangman game
+                const vocabulary = dayVerbs.map(v => v.v1_base_form)
+                return NextResponse.json({
+                    success: true,
+                    week_number: day,
+                    theme: `Day ${day} Verb Challenge`,
+                    vocabulary
+                })
+            }
+        }
+
+        const supabase = createAdminClient()
+
         // 1. Get the active progress for the main pilot cohort
         const { data: progress, error: progError } = await supabase
             .from('cohort_active_progress')
@@ -49,3 +68,4 @@ export async function GET() {
         return NextResponse.json({ success: false, error: e.message || 'Server error' }, { status: 500 })
     }
 }
+

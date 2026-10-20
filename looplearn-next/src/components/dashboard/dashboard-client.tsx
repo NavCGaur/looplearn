@@ -156,6 +156,17 @@ export function DashboardClient({ data }: { data: DashboardData }) {
                                 </Link>
 
                                 <Link
+                                    href="/challenge"
+                                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg hover:shadow-md transition-shadow cursor-pointer border border-amber-200"
+                                >
+                                    <span className="text-2xl">⚡</span>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-800 text-sm">6-Day English Challenge</h3>
+                                        <p className="text-xs text-gray-600">200 Verbs, Hangman &amp; AI Writing</p>
+                                    </div>
+                                </Link>
+
+                                <Link
                                     href="/student/subjective-test"
                                     className="flex items-center gap-3 p-3 bg-gradient-to-r from-teal-50 to-emerald-50 rounded-lg hover:shadow-md transition-shadow cursor-pointer border border-teal-200"
                                 >
