@@ -19,6 +19,9 @@ export async function proxy(request: NextRequest) {
         '/api/web-submit',
         '/web-submissions',
         '/teacher/web-submissions',
+        '/challenge',
+        '/spacehangman',
+        '/teacher/challenge',
     ]
 
     const isPublicPath = publicPaths.some(path =>
@@ -28,7 +31,10 @@ export async function proxy(request: NextRequest) {
         request.nextUrl.pathname.startsWith('/leaderboard') ||
         request.nextUrl.pathname.startsWith('/api/web-submit') ||
         request.nextUrl.pathname.startsWith('/web-submissions') ||
-        request.nextUrl.pathname.startsWith('/teacher/web-submissions')
+        request.nextUrl.pathname.startsWith('/teacher/web-submissions') ||
+        request.nextUrl.pathname.startsWith('/challenge') ||
+        request.nextUrl.pathname.startsWith('/spacehangman') ||
+        request.nextUrl.pathname.startsWith('/teacher/challenge')
     )
 
     if (isPublicPath) {
